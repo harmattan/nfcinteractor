@@ -1,0 +1,89 @@
+Nfc Interactor
+==============
+The Java ME-based Nfc Interactor can write many different NFC Forum NDEF message formats to all supported tag formats, delete the existing message from a tag (by overwriting it with an empty message) and read the contents of an NDEF-formatted tag.
+
+The following message types are currently supported for writing:
+- Smart Poster with URI, title*, action* and image* (* optional)
+- URI record, automatically encoded with all defined URI abbreviations
+- Text record; the default English language / UTF-8 encoding can be adapted in the source code
+- MIME record for PNG images; the image can be switched in the source code
+
+A simple reading functionality shows basic information about the tag but doesn't parse the record's contents. For Smart Poster, URI and Text records, the type and its payload are shown on the screen. For all other message types, the format and name are shown.
+
+Deleting a tag (over)writes the tag contents with an empty record.
+
+The app is made in a way so that it is ideal for quickly writing various messages to tags, or as a starting point for own development tests and NFC experiments.
+
+Therefore, the structure of the application has to be modified to be suitable for a rich tag reader / writer app - e.g., the individual record handling should be externalized into separate classes, and the UI should be modularized for the different writing modes.
+
+
+PREREQUISITES
+-------------------------------------------------------------------------------
+
+- Java ME basics.
+
+
+IMPORTANT FILES/CLASSES
+-------------------------------------------------------------------------------
+
+- NFCinteractor.h : includes the MIDlet handling, UI and NFC interaction.
+
+
+KNOWN ISSUES & LIMITATIONS
+-------------------------------------------------------------------------------
+
+- The app is a flexible starting point for NDEF message experiments. For other usecases, you should extend the app to separate the MIDlet, the UI, the NFC interaction and the various NDEF message types into extra classes.
+
+
+BUILD & INSTALLATION INSTRUCTIONS
+-------------------------------------------------------------------------------
+
+Preparations
+~~~~~~~~~~~~
+The download includes a NetBeans 7.0 project, but you can also import the app with Eclipse Pulsar. If you choose NetBeans, make sure you download the full installation package. At install-time, select at least the Java ME target (including its required dependencies on standard Java SE development).
+
+For compiling and testing, get the Series 40 Nokia 6212 NFC SDK from:
+http://www.forum.nokia.com/Library/Tools_and_downloads/Archive.xhtml 
+
+Make sure you have a C7-00 with Symbian Anna Firmware or one of the previous NFC capable Nokia devices to test.
+
+Build & installation instructions using NetBeans
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+1. Open the NFCinteractor project
+   File > Open Project, select the project directory.
+
+2. Make sure you select the Series 40 Nokia 6212 NFC SDK as the target,
+   especially in case NetBeans reports missing references.
+
+3. Press the Build button to build the project and create the 
+   NFCinteractor.jar / .jad installation files. 
+   Install the application to the device using the Nokia Ovi Suite 
+   or by using NetBean's built-in deployment functionalities.
+
+
+COMPATIBILITY
+-------------------------------------------------------------------------------
+
+- NetBeans 7.0 or Eclipse Pulsar
+- Series 40 Nokia 6212 NFC SDK
+
+Tested on: 
+- Nokia C7-00 with Symbian Anna Firmware
+
+
+CHANGE HISTORY
+--------------------------------------------------------------------------------
+
+1.0 First version
+
+
+RELATED DOCUMENTATION
+-------------------------------------------------------------------------------
+
+NFC 
+http://www.forum.nokia.com/NFC
+
+Java ME Development
+http://www.forum.nokia.com/Develop/Java/
+
