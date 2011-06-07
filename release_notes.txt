@@ -6,7 +6,9 @@ The following message types are currently supported for writing:
 - Smart Poster with URI, title*, action* and image* (* optional)
 - URI record, automatically encoded with all defined URI abbreviations
 - Text record; the default English language / UTF-8 encoding can be adapted in the source code
+- SMS: stored as a URI record if it contains a number and body text, or as a Smart Poster if the optional title and action are selected as well
 - MIME record for PNG images; the image can be switched in the source code
+- Custom record: user-definable record type and payload
 
 A simple reading functionality shows basic information about the tag but doesn't parse the record's contents. For Smart Poster, URI and Text records, the type and its payload are shown on the screen. For all other message types, the format and name are shown.
 
@@ -26,7 +28,7 @@ PREREQUISITES
 IMPORTANT FILES/CLASSES
 -------------------------------------------------------------------------------
 
-- NFCinteractor.h : includes the MIDlet handling, UI and NFC interaction.
+- NFCinteractor.java : includes the MIDlet handling, UI and NFC interaction.
 
 
 KNOWN ISSUES & LIMITATIONS
@@ -42,7 +44,12 @@ Preparations
 ~~~~~~~~~~~~
 The download includes a NetBeans 7.0 project, but you can also import the app with Eclipse Pulsar. If you choose NetBeans, make sure you download the full installation package. At install-time, select at least the Java ME target (including its required dependencies on standard Java SE development).
 
-For compiling and testing, get the Series 40 Nokia 6212 NFC SDK from:
+For compiling and testing, get the Symbian^3 SDK:
+http://www.forum.nokia.com/info/sw.nokia.com/id/571baaf2-042a-4662-9d43-a5a68eb42d9d/Symbian_3_SDK_v1_0_en.zip.html
+Plus the NFC plug-in for the Symbian^3 SDK:
+http://www.forum.nokia.com/info/sw.nokia.com/id/fb8e0f5a-75db-4459-a82e-6eee9e569a90/NFC_Plug_in_Symbian_3_SDK.html
+
+Alternatively, you can use the Series 40 Nokia 6212 NFC SDK from:
 http://www.forum.nokia.com/Library/Tools_and_downloads/Archive.xhtml 
 
 Make sure you have a C7-00 with Symbian Anna Firmware or one of the previous NFC capable Nokia devices to test.
@@ -53,7 +60,7 @@ Build & installation instructions using NetBeans
 1. Open the NFCinteractor project
    File > Open Project, select the project directory.
 
-2. Make sure you select the Series 40 Nokia 6212 NFC SDK as the target,
+2. Make sure you select the Symbian^3 / Series 40 Nokia 6212 NFC SDK as the target,
    especially in case NetBeans reports missing references.
 
 3. Press the Build button to build the project and create the 
@@ -66,6 +73,7 @@ COMPATIBILITY
 -------------------------------------------------------------------------------
 
 - NetBeans 7.0 or Eclipse Pulsar
+- Symbian^3 SDK with NFC plug-in
 - Series 40 Nokia 6212 NFC SDK
 
 Tested on: 
@@ -75,6 +83,7 @@ Tested on:
 CHANGE HISTORY
 --------------------------------------------------------------------------------
 
+4.0 Added support for sms records and custom records. Code improvements.
 1.0 First version
 
 
