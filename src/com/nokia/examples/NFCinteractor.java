@@ -1,46 +1,45 @@
 /****************************************************************************
-**
-** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
-** All rights reserved.
-** Contact: Andreas Jakl (andreas.jakl@nokia.com)
-**
-** The Java ME-based Nfc Interactor can write many different 
-** NFC Forum NDEF message formats to all supported tag formats, 
-** delete the existing message from a tag (by overwriting it with 
-** an empty message) and read the contents of an NDEF-formatted tag.
-**
-** $QT_BEGIN_LICENSE:BSD$
-** You may use this file under the terms of the BSD license as follows:
-**
-** "Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions are
-** met:
-**   * Redistributions of source code must retain the above copyright
-**     notice, this list of conditions and the following disclaimer.
-**   * Redistributions in binary form must reproduce the above copyright
-**     notice, this list of conditions and the following disclaimer in
-**     the documentation and/or other materials provided with the
-**     distribution.
-**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
-**     the names of its contributors may be used to endorse or promote
-**     products derived from this software without specific prior written
-**     permission.
-**
-** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
-** $QT_END_LICENSE$
-**
-****************************************************************************/
-
+ **
+ ** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
+ ** All rights reserved.
+ ** Contact: Andreas Jakl (andreas.jakl@nokia.com)
+ **
+ ** The Java ME-based Nfc Interactor can write many different 
+ ** NFC Forum NDEF message formats to all supported tag formats, 
+ ** delete the existing message from a tag (by overwriting it with 
+ ** an empty message) and read the contents of an NDEF-formatted tag.
+ **
+ ** $QT_BEGIN_LICENSE:BSD$
+ ** You may use this file under the terms of the BSD license as follows:
+ **
+ ** "Redistribution and use in source and binary forms, with or without
+ ** modification, are permitted provided that the following conditions are
+ ** met:
+ **   * Redistributions of source code must retain the above copyright
+ **     notice, this list of conditions and the following disclaimer.
+ **   * Redistributions in binary form must reproduce the above copyright
+ **     notice, this list of conditions and the following disclaimer in
+ **     the documentation and/or other materials provided with the
+ **     distribution.
+ **   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
+ **     the names of its contributors may be used to endorse or promote
+ **     products derived from this software without specific prior written
+ **     permission.
+ **
+ ** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ ** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+ ** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+ ** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+ ** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ ** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+ ** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ ** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ ** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ ** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ ** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
+ ** $QT_END_LICENSE$
+ **
+ ****************************************************************************/
 package com.nokia.examples;
 
 // Packages for contactless Communcation
@@ -77,6 +76,7 @@ import javax.microedition.lcdui.TextField;
 import javax.microedition.midlet.*;
 
 public class NFCinteractor extends MIDlet implements TargetListener, CommandListener, ItemStateListener, Runnable {
+
     /** To determine the first app start. */
     private boolean initialized = false;
     /** Manager for discovering targets. */
@@ -91,39 +91,55 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
     // Operation mode UI
     /** Selection UI element to choose the current interaction mode. */
     private ChoiceGroup operationModeSelector;
+    /** Names of the operating modes, to be used in the UI element. */
+    private static final String operatingModeNames[] = {
+        "Read",
+        "Write Smart Poster",
+        "Write URI",
+        "Write Text",
+        "Write SMS",
+        "Write Image",
+        "Write Custom",
+        "Delete"
+    };
     /** Current operation mode. Can be either READ_TAG, WRITE_TAG or DELETE_TAG. */
     private int operationMode = READ_TAG;
     /** When touching an NFC tag: the tag will be read. */
     private static final int READ_TAG = 0;
     /** When touching an NFC tag: the Smart Poster info currently visible in the form is written to the tag. */
     private static final int WRITE_SP_TAG = 1;
-    /** When touching an NFC tag: the an image to the tag. */
-    private static final int WRITE_IMAGE_TAG = 2;
-    /** When touching an NFC tag: the an uri to the tag. */
-    private static final int WRITE_URI_TAG = 3;
-    /** When touching an NFC tag: the an uri to the tag. */
-    private static final int WRITE_TEXT_TAG = 4;
+    /** When touching an NFC tag: write a uri to the tag. */
+    private static final int WRITE_URI_TAG = 2;
+    /** When touching an NFC tag: write text to the tag. */
+    private static final int WRITE_TEXT_TAG = 3;
+    /** When touching an NFC tag: write an sms link to the tag. */
+    private static final int WRITE_SMS_TAG = 4;
+    /** When touching an NFC tag: write an image to the tag. */
+    private static final int WRITE_IMAGE_TAG = 5;
+    /** When touching an NFC tag: write a custom tag format. */
+    private static final int WRITE_CUSTOM_TAG = 6;
     /** When touching an NFC tag: the record currently present on the tag is overwritten with an empty record. */
-    private static final int DELETE_TAG = 5;
+    private static final int DELETE_TAG = 7;
     
-    // Settings for the Smart Poster writing mode
+    // Settings for the writing modes
     /** UI element to choose which messages to write to the tag. */
-    private ChoiceGroup posterEnabledMessages;    
-    /** ID of the enabled messages choice UI element in the form. */
-    private int posterEnabledItemNum = -1;
+    private ChoiceGroup posterEnabledMessages;
     /** UI element to choose the action associated with the Smart Poster. Only visible when in WRITE_TAG operation mode. */
     private ChoiceGroup posterAction;
     /** ID of the action element in the form. */
-    private int posterActionItemNum = -1;
-    /** UI element to enter the URL of a record. */
     private TextField tagUrl;
-    /** ID of the element in the form. */
-    private int tagUrlItemNum = -1;
     /** UI element to enter the text of a record. */
     private TextField tagText;
-    /** ID of the title UI element in the form. */
-    private int tagTextItemNum = -1;
-    
+    /** UI element to enter the URI of a record. */
+    private TextField tagTypeUri;
+    /** UI element to enter the URI of a record. */
+    private TextField tagCustomPayload;
+    /** UI element to choose which parts to write for an sms tag. */
+    private ChoiceGroup tagSmsEnabledMessages;
+    /** UI element to enter the SMS recipient number. */
+    private TextField tagSmsNumber;
+    /** UI element to enter the SMS body. */
+    private TextField tagSmsBody;
     private static final String uriAbbreviations[] = {
         "",
         "http://www.",
@@ -160,9 +176,7 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
         "urn:epc:pat:",
         "urn:epc:raw:",
         "urn:epc:",
-        "urn:nfc:",
-    };
-
+        "urn:nfc:"};
 
     /**
      * Constructor of the MIDlet. Initializes the UI.
@@ -174,31 +188,46 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
 
         // Choice group to choose the operation mode
         form.addCommand(exitCommand);
-        operationModeSelector = new ChoiceGroup("Choose Mode", ChoiceGroup.EXCLUSIVE);
-        operationModeSelector.append("Read", null);
-        operationModeSelector.append("Write Smart Poster", null);
-        operationModeSelector.append("Write Image", null);
-        operationModeSelector.append("Write URI", null);
-        operationModeSelector.append("Write Text", null);
-        operationModeSelector.append("Delete", null);
+        operationModeSelector = new ChoiceGroup("Choose Mode", ChoiceGroup.EXCLUSIVE, operatingModeNames, null);
         operationModeSelector.setSelectedIndex(READ_TAG, true);
         form.append(operationModeSelector);
 
         // Prepare the UI elements that are only visible and relevant when writing a tag
+        // URL field (URI tag, Smart Poster)
         tagUrl = new TextField("URL", "http://nokia.com/", 255, TextField.URL);
+        //tagUrl = new TextField("URL", "file:///C/sys/bin/journey2.exe", 255, TextField.URL);
+        
+        // Text field (Text only tag, Smart Poster)
         tagText = new TextField("Text", "Nokia", 255, TextField.ANY);
+        
+        // Action (Smart Poster)
         posterAction = new ChoiceGroup("Action", ChoiceGroup.EXCLUSIVE);
         posterAction.append("Do the action", null);
         posterAction.append("Save for later", null);
         posterAction.append("Open for editing", null);
         posterAction.setSelectedIndex(0, true);
+        
+        // Selection which messages to write (Smart Poster)
         posterEnabledMessages = new ChoiceGroup("Messages", ChoiceGroup.MULTIPLE);
         posterEnabledMessages.append("URL", null);
         posterEnabledMessages.append("Title", null);
         posterEnabledMessages.append("Action", null);
         posterEnabledMessages.append("Icon", null);
-        boolean[] enabledFlags = {true, true, false, false};
-        posterEnabledMessages.setSelectedFlags(enabledFlags);
+        boolean[] posterEnabledFlags = {true, true, false, false};
+        posterEnabledMessages.setSelectedFlags(posterEnabledFlags);
+        
+        // Custom tag
+        tagTypeUri = new TextField("Tag URI", "urn:nfc:ext:nokia:custom", 255, TextField.URL);
+        tagCustomPayload = new TextField("Payload", "Nokia", 255, TextField.ANY);
+
+        // SMS
+        tagSmsEnabledMessages = new ChoiceGroup("SMS Options", ChoiceGroup.MULTIPLE);
+        tagSmsEnabledMessages.append("Title text (-> Sp)", null);
+        tagSmsEnabledMessages.append("Action (-> Sp)", null);
+        boolean[] smsEnabledFlags = {false, false};
+        tagSmsEnabledMessages.setSelectedFlags(smsEnabledFlags);
+        tagSmsNumber = new TextField("SMS Recipient", "+1234", 255, TextField.PHONENUMBER);
+        tagSmsBody = new TextField("SMS Body", "Hello", 255, TextField.ANY);
     }
 
     /**
@@ -210,15 +239,7 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
         if (!initialized) {
             form.setItemStateListener(this);
             form.setCommandListener(this);
-            // Registration of the TargetListener for external contactless
-            // Targets (in this RFID_TAG).
-            try {
-                dm = DiscoveryManager.getInstance();
-                dm.addTargetListener(this, TargetType.NDEF_TAG);
-
-            } catch (ContactlessException ce) {
-                displayAlert("ContactlessException", "Unable to register TargetListener: " + ce.toString(), AlertType.ERROR);
-            }
+            createNfcDiscoveryManager();
         }
     }
 
@@ -226,17 +247,7 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
     }
 
     public void destroyApp(boolean unconditional) {
-        if (dm != null) {
-            dm.removeTargetListener(this, TargetType.NDEF_TAG);
-            dm = null;
-        }
-        if (ndconn != null) {
-            try {
-                ndconn.close();
-                ndconn = null;
-            } catch (IOException ex) {
-            }
-        }
+        deleteNfcInstances(true);
     }
 
     /**
@@ -244,30 +255,9 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
      */
     public void itemStateChanged(Item item) {
         if (item == operationModeSelector) {
-            // Get the name of the new operation mode
-            final String selectedAction = operationModeSelector.getString(operationModeSelector.getSelectedIndex());
-            // Translate the operation mode text to our self-designed constants
-            int newOperationMode = -1;
-            if (selectedAction.equals("Read")) {
-                newOperationMode = READ_TAG;
-            } else if (selectedAction.equals("Write Smart Poster")) {
-                newOperationMode = WRITE_SP_TAG;
-            } else if (selectedAction.equals("Write Image")) {
-                newOperationMode = WRITE_IMAGE_TAG;
-            } else if (selectedAction.equals("Write URI")) {
-                newOperationMode = WRITE_URI_TAG;
-            } else if (selectedAction.equals("Write Text")) {
-                newOperationMode = WRITE_TEXT_TAG;
-            } else if (selectedAction.equals("Delete")) {
-                newOperationMode = DELETE_TAG;
-            } else {
-                displayAlert("Illegal Action", "", AlertType.ERROR);
-            }
-            if (newOperationMode != -1) {
-                // If the new text was valid (should always be the case),
-                // activate the new operation mode.
-                activateOperationMode(newOperationMode);
-            }
+            final int newOperationMode = operationModeSelector.getSelectedIndex();
+            // Activate the new operation mode.
+            activateOperationMode(newOperationMode);
         }
     }
 
@@ -279,58 +269,70 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
      */
     private void activateOperationMode(final int newOperationMode) {
         if (operationMode != newOperationMode) {
-            if (operationMode == WRITE_SP_TAG) {
-                // Previous operation mode was writing tags
-                // -> now switched to something different, so remove the UI
-                // elements (in reverse order of adding them)
-                if (posterActionItemNum != -1) {
-                    form.delete(posterActionItemNum);
-                    posterActionItemNum = -1;
-                }
-                if (tagUrlItemNum != -1) {
-                    form.delete(tagUrlItemNum);
-                    tagUrlItemNum = -1;
-                }
-                if (tagTextItemNum != -1) {
-                    form.delete(tagTextItemNum);
-                    tagTextItemNum = -1;
-                }
-                if (posterEnabledItemNum != -1) {
-                    form.delete(posterEnabledItemNum);
-                    posterEnabledItemNum = -1;
-                }
-            } else if (operationMode == WRITE_URI_TAG)
+            // Clean up UI elements - everything except the first element
+            // (-> which is the operation mode choice group)
+            final int numChoiceElements = form.size();
+            for (int i = numChoiceElements - 1; i > 0; i--)
             {
-                if (tagUrlItemNum != -1) {
-                    form.delete(tagUrlItemNum);
-                    tagUrlItemNum = -1;
-                }
-            } else if (operationMode == WRITE_TEXT_TAG)
-            {
-                if (tagTextItemNum != -1) {
-                    form.delete(tagTextItemNum);
-                    tagTextItemNum = -1;
-                }
+                form.delete(i);
             }
             // The new operation mode is writing tags (previously, something
-            // different was active): make the two input items visible for
-            // entering the smart poster info.
+            // different was active): make the input items visible for
+            // entering the tag type specific info.
             if (newOperationMode == WRITE_SP_TAG) {
-                posterEnabledItemNum = form.append(posterEnabledMessages);
-                tagTextItemNum = form.append(tagText);
-                tagUrlItemNum = form.append(tagUrl);
-                posterActionItemNum = form.append(posterAction);
-            } else if (newOperationMode == WRITE_URI_TAG)
-            {
-                tagUrlItemNum = form.append(tagUrl);
-            } else if (newOperationMode == WRITE_TEXT_TAG)
-            {
-                tagTextItemNum = form.append(tagText);
+                form.append(posterEnabledMessages);
+                form.append(tagText);
+                form.append(tagUrl);
+                form.append(posterAction);
+            } else if (newOperationMode == WRITE_URI_TAG) {
+                form.append(tagUrl);
+            } else if (newOperationMode == WRITE_TEXT_TAG) {
+                form.append(tagText);
+            } else if (newOperationMode == WRITE_SMS_TAG) {
+                form.append(tagSmsEnabledMessages);
+                form.append(tagSmsNumber);
+                form.append(tagSmsBody);
+                form.append(tagText);
+                form.append(posterAction);
+            } else if (newOperationMode == WRITE_CUSTOM_TAG) {
+                form.append(tagTypeUri);
+                form.append(tagCustomPayload);
             }
             operationMode = newOperationMode;
         }
     }
 
+    // ---------------------------------------------------------------------------------------------------------
+    // NFC releated control code
+    
+    private void deleteNfcInstances(boolean alsoRemoveDiscoveryManager) {
+        if (ndconn != null) {
+            try {
+                ndconn.close();
+                ndconn = null;
+            } catch (IOException ex) {
+                displayAlert("IOException during close", ex.toString(), AlertType.ERROR);
+            }
+        }
+        if (alsoRemoveDiscoveryManager && dm != null) {
+            dm.removeTargetListener(this, TargetType.NDEF_TAG);
+            dm = null;
+        }
+    }
+
+    private void createNfcDiscoveryManager() {
+        deleteNfcInstances(true);
+        // Registration of the TargetListener for external contactless
+        // Targets (in this RFID_TAG).
+        try {
+            dm = DiscoveryManager.getInstance();
+            dm.addTargetListener(this, TargetType.NDEF_TAG);
+
+        } catch (ContactlessException ce) {
+            displayAlert("ContactlessException", "Unable to register TargetListener: " + ce.toString(), AlertType.ERROR);
+        }
+    }
+    
     /**
      * Implementation of the call-back function of the TargetListener.
      * @param targetProperties array of targets found by the phone
@@ -344,24 +346,17 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
         }
 
         // Make sure no connection is already open
-        if (ndconn != null) {
-            try {
-                ndconn.close();
-            } catch (Throwable t) {
-                // Ignore
-            }
-            ndconn = null;
-        }
-        
+        deleteNfcInstances(false);
+
         // NDEF Connection for write Operation
         ndconn = getNDEFTAGConnection(targetProperties);
-        
+
         // Start a new thread for processing the tag, as recommended by the API specs.
         Thread t = new Thread(this);
         t.start();
 
     }
-    
+
     /**
      * Open the connection to the NDEF tag when a target was found.
      * Shows an alert if there is an issue opening the connection.
@@ -391,30 +386,38 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
     public void run() {
         if (ndconn != null) {
             try {
+                /*if (operationMode != READ_TAG)
+                {
+                    // Especially in case there was an issue with writing before, reading the current
+                    // contents once before writing makes the successive writing successful again.
+                    // Disadvantage: the example doesn't attempt to write to the target in case reading
+                    // doesn't succeed at all.
+                    ndconn.readNDEF();
+                }*/
                 // Call the handling method depending on the current operation mode.
                 switch (operationMode) {
                     case READ_TAG:
-                        displayAlert("Reading tag...", "", AlertType.INFO);
                         readNDEFMessage(ndconn);
                         break;
                     case WRITE_SP_TAG:
-                        displayAlert("Writing Smart Poster msg...", "", AlertType.INFO);
                         writeSmartPoster(ndconn);
                         break;
                     case WRITE_IMAGE_TAG:
-                        displayAlert("Writing Image msg...", "", AlertType.INFO);
                         writeImage(ndconn);
                         break;
                     case WRITE_URI_TAG:
-                        displayAlert("Writing URI msg...", "", AlertType.INFO);
                         writeUri(ndconn);
                         break;
                     case WRITE_TEXT_TAG:
-                        displayAlert("Writing Text msg...", "", AlertType.INFO);
                         writeText(ndconn);
                         break;
+                    case WRITE_SMS_TAG:
+                        writeSms(ndconn);
+                        break;
+                    case WRITE_CUSTOM_TAG:
+                        writeCustom(ndconn);
+                        break;
                     case DELETE_TAG:
-                        displayAlert("Deleting tag...", "", AlertType.INFO);
                         deleteNDEFMessage(ndconn);
                         break;
                     default:
@@ -424,37 +427,36 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
 
             } catch (IOException e) {
                 if (e.toString().indexOf("-36") > -1) {
-                    displayAlert("IOException", "-36: Communication problem", AlertType.ERROR);
+                    // KErrDisconnected == -36
+                    displayAlert("IOException", "-36: Communication problem / " + e.getMessage(), AlertType.ERROR);
                 } else {
                     displayAlert("IOException", e.toString(), AlertType.ERROR);
                 }
             } catch (ContactlessException e) {
                 if (e.toString().indexOf("-9") > -1) {
-                    displayAlert("ContactlessException", "-9: Not enough space on the tag", AlertType.ERROR);
+                    // KErrOverflow == -9
+                    displayAlert("ContactlessException", "-9: Not enough space on the tag / " + e.getMessage(), AlertType.ERROR);
                 } else if (e.toString().indexOf("-2") > -1) {
-                    displayAlert("ContactlessException", "-2: Unable to read tag. Format not supported", AlertType.ERROR);
+                    // KErrGeneral == -2
+                    // Often for unable to read tag - format not supported
+                    displayAlert("ContactlessException", "-2: General error / " + e.getMessage(), AlertType.ERROR);
                 } else {
                     displayAlert("ContactlessException", e.toString(), AlertType.ERROR);
                 }
             } catch (Exception e) {
                 displayAlert("Exception", e.toString(), AlertType.ERROR);
-            } 
-            finally {
+            } finally {
                 // In case of an exception, close the connection properly
-                if (ndconn != null) {
-                    try {
-                        ndconn.close();
-                        ndconn = null;
-                    } catch (IOException ex) {
-                        displayAlert("IOException during close", ex.toString(), AlertType.ERROR);
-                    }
-                }
+                deleteNfcInstances(false);
             }
         } else {
             displayAlert("Connection not found", "Lost NDEF Connection", AlertType.ERROR);
         }
     }
 
+    // ---------------------------------------------------------------------------------------------------------
+    // Read messages
+    
     /**
      * Processing method to read an NDEF message from a pre-established tag connection.
      * @param ndconn established connection to the NDEF tag.
@@ -506,6 +508,9 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
         }
     }
 
+    // ---------------------------------------------------------------------------------------------------------
+    // Delete messages (-> write empty message)
+    
     /**
      * Processing method to delete an NDEF message from a pre-established tag connection.
      * Writes an empty message if a message already exists on the tag. Doesn't 
@@ -527,100 +532,39 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
         }
 
     }
-    
-    private void writeImage(NDEFTagConnection ndconn) throws IOException, ContactlessException {
-        
-        // Create NDEFMessage
-        NDEFMessage message = new NDEFMessage();
-        
-        message.appendRecord(createImageRecord("/minimal.png"));
-        
-        // Write message to the tag
-        ndconn.writeNDEF(message);
 
-        displayAlert(form.getTitle(), "Image written", AlertType.CONFIRMATION);
-        
-    }
-    
+    // ---------------------------------------------------------------------------------------------------------
+    // Write messages to tags
+
     private void writeUri(NDEFTagConnection ndconn) throws IOException, ContactlessException {
         // Create NDEFMessage
         NDEFMessage message = new NDEFMessage();
-        
+
         String fullUrl = tagUrl.getString();
-        
-            // Append the record to the message
+
+        // Append the record to the message
         message.appendRecord(createUriRecord(fullUrl));
-        
+
         // Write message to the tag
         ndconn.writeNDEF(message);
 
         displayAlert(form.getTitle(), "URI written", AlertType.CONFIRMATION);
     }
     
-    private NDEFRecord createUriRecord(String fullUri) throws UnsupportedEncodingException
-    {
-        byte[] urlPrefix = new byte[1];
-        byte[] url = null;
-        
-        boolean foundAbbreviation = false;
-        for (int i = 1; i < uriAbbreviations.length; i++)
-        {
-            if (fullUri.startsWith(uriAbbreviations[i]))
-            {
-                urlPrefix[0] = (byte) i;
-                url = fullUri.substring(uriAbbreviations[i].length(), fullUri.length()).getBytes("utf-8");
-                foundAbbreviation = true;
-            }
-        }
-        if (!foundAbbreviation)
-        {
-            // Store the full URL to the tag
-            urlPrefix[0] = (byte) 0x00;
-            url = fullUri.getBytes("utf-8");
-        }
-                
-
-        // Create the record for the URL
-        NDEFRecord recordUrl = new NDEFRecord(new NDEFRecordType(NDEFRecordType.NFC_FORUM_RTD, "urn:nfc:wkt:U"), null, null);
-        recordUrl.appendPayload(urlPrefix);
-        recordUrl.appendPayload(url);
-
-        // Create NDEF Record to be added to NDEF Message
-        return recordUrl;
-    }
-    
-    
     private void writeText(NDEFTagConnection ndconn) throws IOException, ContactlessException {
         // Create NDEFMessage
         NDEFMessage message = new NDEFMessage();
-        
+
         String fullText = tagText.getString();
-        
-            // Append the record to the message
+
+        // Append the record to the message
         message.appendRecord(createTextRecord(fullText, "en"));
-        
+
         // Write message to the tag
         ndconn.writeNDEF(message);
 
         displayAlert(form.getTitle(), "Text written", AlertType.CONFIRMATION);
     }
-    
-    private NDEFRecord createTextRecord(String text, String lang) throws UnsupportedEncodingException
-    {
-        byte[] lang_bytes = lang.getBytes("US-ASCII");
-        byte[] status_lang_len = {(byte) (lang_bytes.length & 0x3f)};
-        // Bit at 0x80 of status_lang_len would need to be set to 1 for UTF-16 text.
-        // We always use UTF-8 here in this example.
-        byte[] title = text.getBytes("utf-8");
-
-        NDEFRecord recordText = new NDEFRecord(new NDEFRecordType(NDEFRecordType.NFC_FORUM_RTD, "urn:nfc:wkt:T"), null, null);
-        recordText.appendPayload(status_lang_len);
-        recordText.appendPayload(lang_bytes);
-        recordText.appendPayload(title);
-        
-        return recordText;
-    }
-    
     
     /**
      * Processing method to write a Smart Poster NDEF message to a pre-established tag connection.
@@ -633,55 +577,15 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
 
         boolean writeMessages[] = new boolean[posterEnabledMessages.size()];
         posterEnabledMessages.getSelectedFlags(writeMessages);
-      
-        // Create NDEFMessage
-        NDEFMessage message = new NDEFMessage();
-
-        // Compile the URL
-        if (writeMessages[0])
-        {
-            String fullUrl = tagUrl.getString();
-            // Append the record to the message
-            message.appendRecord(createUriRecord(fullUrl));
-        }
-        
-        // Title  
-        if (writeMessages[1])
-        {
-            String fullText = tagText.getString();
-            // Append the record to the message
-            message.appendRecord(createTextRecord(fullText, "en"));
-        }
-        
-        // Action
-        if (writeMessages[2])
-        {
-            byte action = (byte) posterAction.getSelectedIndex();
-            byte[] actionRecord = { 0x11, 0x03, 0x01, 'a', 'c', 't', action };
-
-            NDEFRecord recordAction = new NDEFRecord(actionRecord, 0);
-
-            // Append the record to the message
-            message.appendRecord(recordAction);
-        }
-        
-        if (writeMessages[3])
-        {
-            // Icon
-            // Append the record to the message
-            message.appendRecord(createImageRecord("/minimal.png"));
-        }
-
-        // Create the Smart Poster record
-        NDEFRecord recordSmartPoster = new NDEFRecord(new NDEFRecordType(NDEFRecordType.NFC_FORUM_RTD, "urn:nfc:wkt:Sp"), null, null);
-        // Add the URL and the title as a payload to the Smart Poster record.
-        recordSmartPoster.appendPayload(message.toByteArray()); // add content of previously created NDEFMessage
 
         // Create the final Smart Poster meta-message
         NDEFMessage messageSmartPoster = new NDEFMessage();
-        
+
+        // Create the record containing all selected smart poster details
+        NDEFRecord spRecord = createSpRecord(writeMessages, tagUrl.getString(), tagText.getString(), (byte) posterAction.getSelectedIndex(), "/minimal.png");
+
         // Append the smart poster record to the meta-message
-        messageSmartPoster.appendRecord(recordSmartPoster);
+        messageSmartPoster.appendRecord(spRecord);
 
         // Write message to the tag
         ndconn.writeNDEF(messageSmartPoster);
@@ -689,35 +593,176 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
         displayAlert(form.getTitle(), "Smart Poster written", AlertType.CONFIRMATION);
     }
     
+    private void writeSms(NDEFTagConnection ndconn) throws IOException, ContactlessException {
+
+        // Assemble SMS URL (contains phone number and body text)
+        String smsUrl = "sms:" + tagSmsNumber.getString() + "?body=" + tagSmsBody.getString();
+
+        NDEFRecord smsRecord;
+        // Check if to write a smart poster or a URL tag
+        boolean writeMessages[] = new boolean[tagSmsEnabledMessages.size()];
+        tagSmsEnabledMessages.getSelectedFlags(writeMessages);
+
+        if (writeMessages[0] || writeMessages[1]) {
+            // Write a smart poster
+            boolean writeSpMessages[] = new boolean[4];
+            writeSpMessages[0] = true;              // Write URL & body -> always true
+            writeSpMessages[1] = writeMessages[0];  // Write title text?
+            writeSpMessages[2] = writeMessages[1];  // Write action?
+            writeSpMessages[3] = false;             // No image
+            smsRecord = createSpRecord(writeSpMessages, smsUrl, tagText.getString(), (byte) posterAction.getSelectedIndex(), null);
+        } else {
+            // No title or action set -> write a URI tag
+            smsRecord = createUriRecord(smsUrl);
+        }
+
+        // Create the final SMS message
+        NDEFMessage messageSms = new NDEFMessage();
+        messageSms.appendRecord(smsRecord);
+        // Write message to the tag
+        ndconn.writeNDEF(messageSms);
+
+        displayAlert(form.getTitle(), "Sms tag written", AlertType.CONFIRMATION);
+    }
     
-    private NDEFRecord createImageRecord(String filename) throws IOException
-    {
+    private void writeImage(NDEFTagConnection ndconn) throws IOException, ContactlessException {
+
+        // Create NDEFMessage
+        NDEFMessage message = new NDEFMessage();
+
+        message.appendRecord(createImageRecord("/minimal.png"));
+
+        // Write message to the tag
+        ndconn.writeNDEF(message);
+
+        displayAlert(form.getTitle(), "Image written", AlertType.CONFIRMATION);
+    }
+    
+    private void writeCustom(NDEFTagConnection ndconn) throws IOException, ContactlessException {
+        // Create NDEFMessage
+        NDEFMessage message = new NDEFMessage();
+
+        String tagUri = tagTypeUri.getString();
+
+        // Append the record to the message
+        message.appendRecord(createCustomRecord(tagUri, tagCustomPayload.getString().getBytes("utf-8")));
+
+        // Write message to the tag
+        ndconn.writeNDEF(message);
+
+        displayAlert(form.getTitle(), "Custom tag written", AlertType.CONFIRMATION);
+    }
+    
+    // ---------------------------------------------------------------------------------------------------------
+    // Create individual records
+
+    private NDEFRecord createUriRecord(final String fullUri) throws UnsupportedEncodingException {
+        byte[] urlPrefix = new byte[1];
+        byte[] url = null;
+
+        boolean foundAbbreviation = false;
+        for (int i = 1; i < uriAbbreviations.length; i++) {
+            if (fullUri.startsWith(uriAbbreviations[i])) {
+                urlPrefix[0] = (byte) i;
+                url = fullUri.substring(uriAbbreviations[i].length(), fullUri.length()).getBytes("utf-8");
+                foundAbbreviation = true;
+                break;
+            }
+        }
+        if (!foundAbbreviation) {
+            // Store the full URL to the tag - always using UTF-8
+            urlPrefix[0] = (byte) 0x00;
+            url = fullUri.getBytes("utf-8");
+        }
+
+        // Create the record for the URL
+        NDEFRecord recordUrl = new NDEFRecord(new NDEFRecordType(NDEFRecordType.NFC_FORUM_RTD, "urn:nfc:wkt:U"), null, null);
+        recordUrl.appendPayload(urlPrefix);
+        recordUrl.appendPayload(url);
+
+        // Create NDEF Record to be added to NDEF Message
+        return recordUrl;
+    }
+
+
+    private NDEFRecord createTextRecord(final String text, final String lang) throws UnsupportedEncodingException {
+        byte[] lang_bytes = lang.getBytes("US-ASCII");
+        byte[] status_lang_len = {(byte) (lang_bytes.length & 0x3f)};
+        // Bit at 0x80 of status_lang_len would need to be set to 1 for UTF-16 text.
+        // We always use UTF-8 here in this example.
+        byte[] textContents = text.getBytes("utf-8");
+
+        NDEFRecord recordText = new NDEFRecord(new NDEFRecordType(NDEFRecordType.NFC_FORUM_RTD, "urn:nfc:wkt:T"), null, null);
+        recordText.appendPayload(status_lang_len);
+        recordText.appendPayload(lang_bytes);
+        recordText.appendPayload(textContents);
+
+        return recordText;
+    }
+    
+    
+    private NDEFRecord createSpRecord(final boolean[] writeDetails, final String fullUrl, final String title, final byte action, final String imageFilename) throws UnsupportedEncodingException, IOException {
+        if (writeDetails.length != 4) {
+            return null;
+        }
+
+        // Create NDEFMessage
+        NDEFMessage message = new NDEFMessage();
+
+        if (writeDetails[0]) {
+            // Url
+            message.appendRecord(createUriRecord(fullUrl));
+        }
+        if (writeDetails[1]) {
+            // Title
+            message.appendRecord(createTextRecord(title, "en"));
+        }
+        if (writeDetails[2]) {
+            // Action
+            message.appendRecord(createActionRecord(action));
+        }
+        if (writeDetails[3]) {
+            // Image
+            message.appendRecord(createImageRecord(imageFilename));
+        }
+
+        // Create the Smart Poster record
+        NDEFRecord recordSmartPoster = new NDEFRecord(new NDEFRecordType(NDEFRecordType.NFC_FORUM_RTD, "urn:nfc:wkt:Sp"), null, null);
+        // Add the URL and the title as a payload to the Smart Poster record.
+        recordSmartPoster.appendPayload(message.toByteArray()); // add content of previously created NDEFMessage
+
+        return recordSmartPoster;
+    }
+    
+    private NDEFRecord createActionRecord(final byte action) {
+        byte[] actionRecord = {0x11, 0x03, 0x01, 'a', 'c', 't', action};
+
+        return new NDEFRecord(actionRecord, 0);
+    }
+
+    private NDEFRecord createImageRecord(final String filename) throws IOException {
         // Read image from phone to ByteArrayOutputStream
         ByteArrayOutputStream baos = getImage(filename);
-        
+
         final String fileExt = filename.substring(filename.lastIndexOf('.') + 1, filename.length());
         String mimeType = "";
-        if (fileExt.equalsIgnoreCase("png")) 
-        {
+        if (fileExt.equalsIgnoreCase("png")) {
             mimeType = "image/png";
-        } else if (fileExt.equalsIgnoreCase("jpg") || fileExt.equalsIgnoreCase("jpeg"))
-        {
+        } else if (fileExt.equalsIgnoreCase("jpg") || fileExt.equalsIgnoreCase("jpeg")) {
             mimeType = "image/jpeg";
-        } else 
-        {
+        } else {
             displayAlert("Image", "Unrecognized file type", AlertType.WARNING);
         }
 
         // Create NDEF Record to be added to NDEF Message
         return new NDEFRecord(new NDEFRecordType(
-                NDEFRecordType.MIME, mimeType), null, baos
-                .toByteArray());
+                NDEFRecordType.MIME, mimeType), null, baos.toByteArray());
     }
     
     /**
-     * Read image from phone to ByteArrayOutputStream
-     */ 
-    private ByteArrayOutputStream getImage(String filename) throws IOException {
+     * Read image from phone to a ByteArrayOutputStream
+     */
+    private ByteArrayOutputStream getImage(final String filename) throws IOException {
         InputStream is = getClass().getResourceAsStream(filename);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         int c;
@@ -726,6 +771,18 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
         }
         return baos;
     }
+    
+    private NDEFRecord createCustomRecord(final String tagUri, final byte[] payload) throws UnsupportedEncodingException {
+        // Create NDEF Record to be added to NDEF Message
+        NDEFRecord recordCustom = new NDEFRecord(new NDEFRecordType(NDEFRecordType.EXTERNAL_RTD, tagUri), null, null);
+        recordCustom.appendPayload(payload);
+
+        return recordCustom;
+    }
+
+
+    // ---------------------------------------------------------------------------------------------------------
+    // UI Handling code
 
     /**
      * Implementation of the call-back function of the CommandListener
@@ -748,7 +805,7 @@ public class NFCinteractor extends MIDlet implements TargetListener, CommandList
      * @param type one of the available alert types, defining the icon, sound
      * and display length.
      */
-    private void displayAlert(String title, String text, AlertType type) {
+    private void displayAlert(final String title, final String text, final AlertType type) {
         Alert al = new Alert(title, text, null, type);
         Display.getDisplay(this).setCurrent(al, form);
     }
