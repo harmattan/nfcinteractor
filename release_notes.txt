@@ -1,6 +1,6 @@
 Nfc Interactor
 ==============
-The Java ME-based Nfc Interactor can write many different NFC Forum NDEF message formats to all supported tag formats, delete the existing message from a tag (by overwriting it with an empty message) and read the contents of an NDEF-formatted tag.
+The Java ME-based NFC Interactor can write many different NFC Forum NDEF message formats to all supported tag formats, delete the existing message from a tag (by overwriting it with an empty message) and read the contents of an NDEF-formatted tag. The application checks the device for NFC availability.
 
 The following message types are currently supported for writing:
 - Smart Poster with URI, title*, action* and image* (* optional)
@@ -83,6 +83,8 @@ Tested on:
 CHANGE HISTORY
 --------------------------------------------------------------------------------
 
+5.0 Refactoring to move NFC functionality into separate NfcManager class.
+Checks for NFC support at application startup. If the Nokia C7 without NFC is detected, a firmware update is recommended.
 4.0 Added support for sms records and custom records. Code improvements.
 1.0 First version
 
