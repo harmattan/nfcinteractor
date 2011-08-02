@@ -86,6 +86,7 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
         "Write SMS",
         "Write Image",
         "Write Custom",
+        "Write Combination",
         "Delete"
     };
     /** Current operation mode. Can be either READ_TAG, WRITE_TAG or DELETE_TAG. */
@@ -104,8 +105,13 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
     private static final int WRITE_IMAGE_TAG = 5;
     /** When touching an NFC tag: write a custom tag format. */
     private static final int WRITE_CUSTOM_TAG = 6;
+    /** When touching an NFC tag: write a combination tag format:
+     * 1. Custom record (for handling with a custom content handler plug-in) & 
+     * 2. URL (e.g., a link to the Nokia Store to download the app including
+     * the content-handler plug-in). */
+    private static final int WRITE_COMBINATION_TAG = 7;
     /** When touching an NFC tag: the record currently present on the tag is overwritten with an empty record. */
-    private static final int DELETE_TAG = 7;
+    private static final int DELETE_TAG = 8;
     // Settings for the writing modes
     /** UI element to choose which messages to write to the tag. */
     private ChoiceGroup posterEnabledMessages;
@@ -273,6 +279,12 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
             } else if (newOperationMode == WRITE_CUSTOM_TAG) {
                 form.append(tagTypeUri);
                 form.append(tagCustomPayload);
+            } else if (newOperationMode == WRITE_COMBINATION_TAG) {
+                form.append("First Record (Custom)");
+                form.append(tagTypeUri);
+                form.append(tagCustomPayload);
+                form.append("Second Record (URI)");
+                form.append(tagUrl);
             }
             operationMode = newOperationMode;
         }
@@ -321,6 +333,9 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
                 }
                 case WRITE_CUSTOM_TAG:
                     nfcManager.writeCustom(tagTypeUri.getString(), tagCustomPayload.getString().getBytes("utf-8"));
+                    break;
+                case WRITE_COMBINATION_TAG:
+                    nfcManager.writeCombination(tagUrl.getString(), tagTypeUri.getString(), tagCustomPayload.getString().getBytes("utf-8"));
                     break;
                 case DELETE_TAG:
                     nfcManager.deleteNDEFMessage();

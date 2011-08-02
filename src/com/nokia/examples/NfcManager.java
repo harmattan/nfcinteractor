@@ -424,6 +424,24 @@ public class NfcManager implements TargetListener, Runnable {
             callback.tagSuccess("Custom tag written");
         }
     }
+    
+    
+    public void writeCombination(String tagUrl, String tagTypeUri, byte[] tagPayload) throws UnsupportedEncodingException {
+        if (!checkNdefConnection()) {
+            return;
+        }
+        // Create NDEFMessage
+        NDEFMessage message = new NDEFMessage();
+
+        // Append the record to the message
+        message.appendRecord(createCustomRecord(tagTypeUri, tagPayload));
+        message.appendRecord(createUriRecord(tagUrl));
+
+        // Write message to the tag
+        if (writeMessageToTag(message)) {
+            callback.tagSuccess("Combination tag written");
+        }
+    }
 
     // ---------------------------------------------------------------------------------------------------------
     // Create individual records
