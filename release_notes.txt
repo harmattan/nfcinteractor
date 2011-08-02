@@ -9,6 +9,9 @@ The following message types are currently supported for writing:
 - SMS: stored as a URI record if it contains a number and body text, or as a Smart Poster if the optional title and action are selected as well
 - MIME record for PNG images; the image can be switched in the source code
 - Custom record: user-definable record type and payload
+- Combination tag format: creates a message consisting of two records:
+  1. Custom record (for handling with a custom content handler plug-in) & 
+  2. URL (e.g., a link to the Nokia Store to download the app including the content-handler plug-in).
 
 A simple reading functionality shows basic information about the tag but doesn't parse the record's contents. For Smart Poster, URI and Text records, the type and its payload are shown on the screen. For all other message types, the format and name are shown.
 
@@ -28,7 +31,8 @@ PREREQUISITES
 IMPORTANT FILES/CLASSES
 -------------------------------------------------------------------------------
 
-- NFCinteractor.java : includes the MIDlet handling, UI and NFC interaction.
+- NFCinteractor.java : includes the MIDlet handling and UI.
+- NfcManager.java : encapsulates the NFC interaction.
 
 
 KNOWN ISSUES & LIMITATIONS
@@ -83,6 +87,7 @@ Tested on:
 CHANGE HISTORY
 --------------------------------------------------------------------------------
 
+5.1 New feature to write a combination tag type (custom record + URI record)
 5.0 Refactoring to move NFC functionality into separate NfcManager class.
 Checks for NFC support at application startup. If the Nokia C7 without NFC is detected, a firmware update is recommended.
 4.0 Added support for sms records and custom records. Code improvements.
