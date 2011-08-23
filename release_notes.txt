@@ -7,7 +7,7 @@ The following message types are currently supported for writing:
 - URI record, automatically encoded with all defined URI abbreviations
 - Text record; the default English language / UTF-8 encoding can be adapted in the source code
 - SMS: stored as a URI record if it contains a number and body text, or as a Smart Poster if the optional title and action are selected as well
-- MIME record for PNG images; the image can be switched in the source code
+- MIME record for PNG and GIF images; the image can be selected from provided samples
 - Custom record: user-definable record type and payload
 - Combination tag format: creates a message consisting of two records:
   1. Custom record (for handling with a custom content handler plug-in) & 
@@ -46,7 +46,7 @@ BUILD & INSTALLATION INSTRUCTIONS
 
 Preparations
 ~~~~~~~~~~~~
-The download includes a NetBeans 7.0 project, but you can also import the app with Eclipse Pulsar. If you choose NetBeans, make sure you download the full installation package. At install-time, select at least the Java ME target (including its required dependencies on standard Java SE development).
+The download includes a NetBeans 7 project, but you can also import the app with Eclipse Pulsar. If you choose NetBeans, make sure you download the full installation package. At install-time, select at least the Java ME target (including its required dependencies on standard Java SE development).
 
 For compiling and testing, get the Symbian^3 SDK:
 http://www.forum.nokia.com/info/sw.nokia.com/id/571baaf2-042a-4662-9d43-a5a68eb42d9d/Symbian_3_SDK_v1_0_en.zip.html
@@ -56,7 +56,7 @@ http://www.forum.nokia.com/info/sw.nokia.com/id/fb8e0f5a-75db-4459-a82e-6eee9e56
 Alternatively, you can use the Series 40 Nokia 6212 NFC SDK from:
 http://www.forum.nokia.com/Library/Tools_and_downloads/Archive.xhtml 
 
-Make sure you have a C7-00 with Symbian Anna Firmware or one of the previous NFC capable Nokia devices to test.
+Make sure you have a Symbian phone with NFC support (C7-00: Symbian Anna firmware or newer) or one of the previous NFC capable Nokia Series 40 devices to test.
 
 Build & installation instructions using NetBeans
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -78,7 +78,7 @@ COMPATIBILITY
 
 - NetBeans 7.0 or Eclipse Pulsar
 - Symbian^3 SDK with NFC plug-in
-- Series 40 Nokia 6212 NFC SDK
+  or Series 40 Nokia 6212 NFC SDK
 
 Tested on: 
 - Nokia C7-00 with Symbian Anna Firmware
@@ -87,6 +87,7 @@ Tested on:
 CHANGE HISTORY
 --------------------------------------------------------------------------------
 
+5.2 Selection of image to write, additional small GIF sample image.
 5.1 New feature to write a combination tag type (custom record + URI record)
 5.0 Refactoring to move NFC functionality into separate NfcManager class.
 Checks for NFC support at application startup. If the Nokia C7 without NFC is detected, a firmware update is recommended.

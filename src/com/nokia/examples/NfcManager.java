@@ -537,6 +537,8 @@ public class NfcManager implements TargetListener, Runnable {
             mimeType = "image/png";
         } else if (fileExt.equalsIgnoreCase("jpg") || fileExt.equalsIgnoreCase("jpeg")) {
             mimeType = "image/jpeg";
+        } else if (fileExt.equalsIgnoreCase("gif")) {
+            mimeType = "image/gif";
         } else {
             callback.displayAlert("Image", "Unrecognized file type", AlertType.WARNING);
         }

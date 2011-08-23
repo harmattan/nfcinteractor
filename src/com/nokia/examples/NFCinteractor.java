@@ -121,10 +121,12 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
     private TextField tagUrl;
     /** UI element to enter the text of a record. */
     private TextField tagText;
-    /** UI element to enter the URI of a record. */
+    /** UI element to enter the Type Uri of a record. */
     private TextField tagTypeUri;
-    /** UI element to enter the URI of a record. */
+    /** UI element to enter the payload of a record. */
     private TextField tagCustomPayload;
+    /** UI element to choose which image to store on the tag. */
+    private ChoiceGroup tagChooseImage;
     /** UI element to choose which parts to write for an sms tag. */
     private ChoiceGroup tagSmsEnabledMessages;
     /** UI element to enter the SMS recipient number. */
@@ -194,6 +196,13 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
             // Custom tag
             tagTypeUri = new TextField("Tag URI", "urn:nfc:ext:nokia:custom", 255, TextField.URL);
             tagCustomPayload = new TextField("Payload", "Nokia", 255, TextField.ANY);
+            
+            // Image chooser
+            tagChooseImage = new ChoiceGroup("Choose image", ChoiceGroup.EXCLUSIVE);
+            tagChooseImage.append("Minimal GIF (48 bytes)", null);
+            tagChooseImage.append("Minimal PNG (80 bytes)", null);
+            tagChooseImage.append("Nokia PNG (225 bytes)", null);
+            tagChooseImage.setSelectedIndex(1, true);
 
             // SMS
             tagSmsEnabledMessages = new ChoiceGroup("SMS Options", ChoiceGroup.MULTIPLE);
@@ -266,6 +275,7 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
                 form.append(tagText);
                 form.append(tagUrl);
                 form.append(posterAction);
+                form.append(tagChooseImage);
             } else if (newOperationMode == WRITE_URI_TAG) {
                 form.append(tagUrl);
             } else if (newOperationMode == WRITE_TEXT_TAG) {
@@ -276,6 +286,8 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
                 form.append(tagSmsBody);
                 form.append(tagText);
                 form.append(posterAction);
+            } else if (newOperationMode == WRITE_IMAGE_TAG) {
+                form.append(tagChooseImage);
             } else if (newOperationMode == WRITE_CUSTOM_TAG) {
                 form.append(tagTypeUri);
                 form.append(tagCustomPayload);
@@ -313,11 +325,11 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
                 case WRITE_SP_TAG: {
                     boolean writeMessages[] = new boolean[posterEnabledMessages.size()];
                     posterEnabledMessages.getSelectedFlags(writeMessages);
-                    nfcManager.writeSmartPoster(writeMessages, tagUrl.getString(), tagText.getString(), (byte) posterAction.getSelectedIndex(), "/minimal.png");
+                    nfcManager.writeSmartPoster(writeMessages, tagUrl.getString(), tagText.getString(), (byte) posterAction.getSelectedIndex(), getSelectedImageName());
                     break;
                 }
                 case WRITE_IMAGE_TAG:
-                    nfcManager.writeImage("/minimal.png");
+                    nfcManager.writeImage(getSelectedImageName());
                     break;
                 case WRITE_URI_TAG:
                     nfcManager.writeUri(tagUrl.getString());
@@ -349,6 +361,17 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
             displayAlert("IOException", "Error loading image" + ex.toString(), AlertType.ERROR);
         } 
 
+    }
+    
+    private String getSelectedImageName() {
+        switch (tagChooseImage.getSelectedIndex()) {
+            case 0:
+                return "/minimal.gif";
+            case 1:
+                return "/minimal.png";
+            default:
+                return "/nokia.png";
+        }
     }
 
     // ---------------------------------------------------------------------------------------------------------
