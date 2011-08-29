@@ -21,6 +21,9 @@ The app is made in a way so that it is ideal for quickly writing various message
 
 Therefore, the structure of the application has to be modified to be suitable for a rich tag reader / writer app - e.g., the individual record handling should be externalized into separate classes, and the UI should be modularized for the different writing modes.
 
+More information:
+https://projects.developer.nokia.com/nfcinteractor
+
 
 PREREQUISITES
 -------------------------------------------------------------------------------
@@ -97,6 +100,14 @@ Checks for NFC support at application startup. If the Nokia C7 without NFC is de
 
 RELATED DOCUMENTATION
 -------------------------------------------------------------------------------
+
+Project page
+https://projects.developer.nokia.com/nfcinteractor
+
+Related example projects
+https://projects.developer.nokia.com/nfccorkboards
+https://projects.developer.nokia.com/nfcinfo
+https://projects.developer.nokia.com/nfcchat
 
 NFC 
 http://www.forum.nokia.com/NFC
