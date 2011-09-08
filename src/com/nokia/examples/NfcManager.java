@@ -392,6 +392,20 @@ public class NfcManager implements TargetListener, Runnable {
             callback.tagSuccess("Sms tag written");
         }
     }
+    
+    public void writeAnnotatedUrl(String fullUrl, String fullText) throws UnsupportedEncodingException {
+        // Create individual records (Uri + Text)
+        NDEFRecord urlRecord = createUriRecord(fullUrl);
+        NDEFRecord textRecord = createTextRecord(fullText, "en");
+        // Create the final Annotated URL message
+        NDEFMessage messageAnnotatedUrl = new NDEFMessage();
+        messageAnnotatedUrl.appendRecord(urlRecord);
+        messageAnnotatedUrl.appendRecord(textRecord);
+        // Write message to the tag
+        if (writeMessageToTag(messageAnnotatedUrl)) {
+            callback.tagSuccess("Annotated URL tag written");
+        }
+    }
 
     public void writeImage(String imageUri) throws IOException {
         if (!checkNdefConnection()) {
@@ -406,6 +420,30 @@ public class NfcManager implements TargetListener, Runnable {
         // Write message to the tag
         if (writeMessageToTag(message)) {
             callback.tagSuccess("Image written");
+        }
+    }
+    
+    /**
+     * 
+     * @param latitude
+     * @param longitude
+     * @param geoType 0 ... geo: URI scheme, according to http://geouri.org/
+     * 1 ... Nokia Maps link
+     * @throws IOException 
+     */
+    public void writeGeo(final double latitude, final double longitude, final int geoType) throws IOException {
+        if (!checkNdefConnection()) {
+            return;
+        }
+
+        // Create NDEFMessage
+        NDEFMessage message = new NDEFMessage();
+
+        message.appendRecord(createGeoRecord(latitude, longitude, geoType));
+
+        // Write message to the tag
+        if (writeMessageToTag(message)) {
+            callback.tagSuccess("Geo URI written");
         }
     }
 
@@ -561,6 +599,26 @@ public class NfcManager implements TargetListener, Runnable {
         return baos;
     }
 
+    private NDEFRecord createGeoRecord(final double latitude, final double longitude, final int geoType) throws UnsupportedEncodingException {
+        // Convert latitude and longitude to strings.
+        // Decimal separator: .
+        final String latString = Double.toString(latitude);
+        final String longString = Double.toString(longitude);
+        // Create NDEF Record to be added to NDEF Message
+        String uriString;
+        switch (geoType)
+        {
+            case 1: // Nokia Maps link
+                uriString = "http://m.ovi.me/?c=" + latString + "," + longString;
+                break;
+            case 0: // Geo URI
+            default:
+                uriString = "geo:" + latString + "," + longString;
+                break;
+        }
+        return createUriRecord(uriString);
+    }
+    
     private NDEFRecord createCustomRecord(final String tagUri, final byte[] payload) throws UnsupportedEncodingException {
         // Create NDEF Record to be added to NDEF Message
         NDEFRecord recordCustom = new NDEFRecord(new NDEFRecordType(NDEFRecordType.EXTERNAL_RTD, tagUri), null, null);

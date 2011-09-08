@@ -4,11 +4,13 @@ The Java ME-based NFC Interactor can write many different NFC Forum NDEF message
 
 The following message types are currently supported for writing:
 - Smart Poster with URI, title*, action* and image* (* optional)
-- URI record, automatically encoded with all defined URI abbreviations
-- Text record; the default English language / UTF-8 encoding can be adapted in the source code
-- SMS: stored as a URI record if it contains a number and body text, or as a Smart Poster if the optional title and action are selected as well
-- MIME record for PNG and GIF images; the image can be selected from provided samples
-- Custom record: user-definable record type and payload
+- URI record, automatically encoded with all defined URI abbreviations.
+- Text record; the default English language / UTF-8 encoding can be adapted in the source code.
+- SMS: stored as a URI record if it contains a number and body text, or as a Smart Poster if the optional title and action are selected as well.
+- Annotated URL: NDEF message containing an URL and a text record. Similar to the Smart poster, but without the meta-record to save a few bytes.
+- MIME record for PNG and GIF images; the image can be selected from provided samples.
+- Geo record: URL record containing a link to coordinates specified by longitude and latitude. Can either be written in the "geo:" URI scheme (http://geouri.org/) or as a link to Ovi Maps (starts the Nokia Maps client on Symbian)
+- Custom record: user-definable record type and payload.
 - Combination tag format: creates a message consisting of two records:
   1. Custom record (for handling with a custom content handler plug-in) & 
   2. URL (e.g., a link to the Nokia Store to download the app including the content-handler plug-in).
@@ -90,6 +92,8 @@ Tested on:
 CHANGE HISTORY
 --------------------------------------------------------------------------------
 
+5.3 Support for GEO URL records
+    Support for Annotated URL messages
 5.2 Selection of image to write, additional small GIF sample image.
 5.1 New feature to write a combination tag type (custom record + URI record)
 5.0 Refactoring to move NFC functionality into separate NfcManager class.

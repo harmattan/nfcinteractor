@@ -43,7 +43,6 @@
 package com.nokia.examples;
 
 // Packages for contactless Communcation
-import javax.microedition.contactless.ContactlessException;
 import java.io.IOException;
 
 // Packages for GUI
@@ -84,10 +83,12 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
         "Write URI",
         "Write Text",
         "Write SMS",
+        "Write Annotated URL",
         "Write Image",
+        "Write Geo",
         "Write Custom",
         "Write Combination",
-        "Delete"
+        "Delete (Empty Msg)"
     };
     /** Current operation mode. Can be either READ_TAG, WRITE_TAG or DELETE_TAG. */
     private int operationMode = READ_TAG;
@@ -101,23 +102,28 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
     private static final int WRITE_TEXT_TAG = 3;
     /** When touching an NFC tag: write an sms link to the tag. */
     private static final int WRITE_SMS_TAG = 4;
+    /** When touching an NFC tag: write an annotated url (url record and text record 
+     * without Smart Poster meta-record) to the tag. Used by some Qt Mobility examples. */
+    private static final int WRITE_ANNOTATED_URL_TAG = 5;
     /** When touching an NFC tag: write an image to the tag. */
-    private static final int WRITE_IMAGE_TAG = 5;
+    private static final int WRITE_IMAGE_TAG = 6;
+    /** When touching an NFC tag: write a geo URI to the tag. Specs: http://tools.ietf.org/rfc/rfc5870 */
+    private static final int WRITE_GEO_TAG = 7;
     /** When touching an NFC tag: write a custom tag format. */
-    private static final int WRITE_CUSTOM_TAG = 6;
+    private static final int WRITE_CUSTOM_TAG = 8;
     /** When touching an NFC tag: write a combination tag format:
      * 1. Custom record (for handling with a custom content handler plug-in) & 
      * 2. URL (e.g., a link to the Nokia Store to download the app including
      * the content-handler plug-in). */
-    private static final int WRITE_COMBINATION_TAG = 7;
+    private static final int WRITE_COMBINATION_TAG = 9;
     /** When touching an NFC tag: the record currently present on the tag is overwritten with an empty record. */
-    private static final int DELETE_TAG = 8;
+    private static final int DELETE_TAG = 10;
     // Settings for the writing modes
     /** UI element to choose which messages to write to the tag. */
     private ChoiceGroup posterEnabledMessages;
     /** UI element to choose the action associated with the Smart Poster. Only visible when in WRITE_TAG operation mode. */
     private ChoiceGroup posterAction;
-    /** ID of the action element in the form. */
+    /** UI element to enter the URL of a record. */
     private TextField tagUrl;
     /** UI element to enter the text of a record. */
     private TextField tagText;
@@ -133,6 +139,12 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
     private TextField tagSmsNumber;
     /** UI element to enter the SMS body. */
     private TextField tagSmsBody;
+    /** UI element to enter the latitude. */
+    private TextField tagLatitude;
+    /** UI element to enter the longitude. */
+    private TextField tagLongitude;
+    /** Choose mechanism to write geo tag. */
+    private ChoiceGroup tagGeoType;
 
     /**
      * Constructor of the MIDlet. Initializes the UI.
@@ -170,9 +182,8 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
             form.append(operationModeSelector);
 
             // Prepare the UI elements that are only visible and relevant when writing a tag
-            // URL field (URI tag, Smart Poster)
+            // URL field (URI tag, Smart Poster, Annotated URL)
             tagUrl = new TextField("URL", "http://nokia.com/", 255, TextField.URL);
-            //tagUrl = new TextField("URL", "file:///C/sys/bin/journey2.exe", 255, TextField.URL);
 
             // Text field (Text only tag, Smart Poster)
             tagText = new TextField("Text", "Nokia", 255, TextField.ANY);
@@ -194,7 +205,7 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
             posterEnabledMessages.setSelectedFlags(posterEnabledFlags);
 
             // Custom tag
-            tagTypeUri = new TextField("Tag URI", "urn:nfc:ext:nokia:custom", 255, TextField.URL);
+            tagTypeUri = new TextField("Tag URI", "urn:nfc:ext:nokia.com:custom", 255, TextField.URL);
             tagCustomPayload = new TextField("Payload", "Nokia", 255, TextField.ANY);
             
             // Image chooser
@@ -212,6 +223,14 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
             tagSmsEnabledMessages.setSelectedFlags(smsEnabledFlags);
             tagSmsNumber = new TextField("SMS Recipient", "+1234", 255, TextField.PHONENUMBER);
             tagSmsBody = new TextField("SMS Body", "Hello", 255, TextField.ANY);
+            
+            // Geo Uri
+            tagLatitude = new TextField("Latitude (dec deg., WGS-84)", "60.17", 255, TextField.DECIMAL);
+            tagLongitude = new TextField("Longitude (dec deg., WGS-84)", "24.829", 255, TextField.DECIMAL);
+            tagGeoType = new ChoiceGroup("Choose Geo tag type", ChoiceGroup.EXCLUSIVE);
+            tagGeoType.append("geo: URI scheme", null); // http://geouri.org/
+            tagGeoType.append("Nokia Maps link", null);
+            tagGeoType.setSelectedIndex(0, true);
         }
 
     }
@@ -270,33 +289,50 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
             // The new operation mode is writing tags (previously, something
             // different was active): make the input items visible for
             // entering the tag type specific info.
-            if (newOperationMode == WRITE_SP_TAG) {
-                form.append(posterEnabledMessages);
-                form.append(tagText);
-                form.append(tagUrl);
-                form.append(posterAction);
-                form.append(tagChooseImage);
-            } else if (newOperationMode == WRITE_URI_TAG) {
-                form.append(tagUrl);
-            } else if (newOperationMode == WRITE_TEXT_TAG) {
-                form.append(tagText);
-            } else if (newOperationMode == WRITE_SMS_TAG) {
-                form.append(tagSmsEnabledMessages);
-                form.append(tagSmsNumber);
-                form.append(tagSmsBody);
-                form.append(tagText);
-                form.append(posterAction);
-            } else if (newOperationMode == WRITE_IMAGE_TAG) {
-                form.append(tagChooseImage);
-            } else if (newOperationMode == WRITE_CUSTOM_TAG) {
-                form.append(tagTypeUri);
-                form.append(tagCustomPayload);
-            } else if (newOperationMode == WRITE_COMBINATION_TAG) {
-                form.append("First Record (Custom)");
-                form.append(tagTypeUri);
-                form.append(tagCustomPayload);
-                form.append("Second Record (URI)");
-                form.append(tagUrl);
+            switch (newOperationMode) {
+                case WRITE_SP_TAG:
+                    form.append(posterEnabledMessages);
+                    form.append(tagText);
+                    form.append(tagUrl);
+                    form.append(posterAction);
+                    form.append(tagChooseImage);
+                    break;
+                case WRITE_URI_TAG:
+                    form.append(tagUrl);
+                    break;
+                case WRITE_TEXT_TAG:
+                    form.append(tagText);
+                    break;
+                case WRITE_SMS_TAG:
+                    form.append(tagSmsEnabledMessages);
+                    form.append(tagSmsNumber);
+                    form.append(tagSmsBody);
+                    form.append(tagText);
+                    form.append(posterAction);
+                    break;
+                case WRITE_ANNOTATED_URL_TAG:
+                    form.append(tagText);
+                    form.append(tagUrl);
+                    break;
+                case WRITE_IMAGE_TAG:
+                    form.append(tagChooseImage);
+                    break;
+                case WRITE_GEO_TAG:
+                    form.append(tagLatitude);
+                    form.append(tagLongitude);
+                    form.append(tagGeoType);
+                    break;
+                case WRITE_CUSTOM_TAG:
+                    form.append(tagTypeUri);
+                    form.append(tagCustomPayload);
+                    break;
+                case WRITE_COMBINATION_TAG:
+                    form.append("First Record (Custom)");
+                    form.append(tagTypeUri);
+                    form.append(tagCustomPayload);
+                    form.append("Second Record (URI)");
+                    form.append(tagUrl);
+                    break;
             }
             operationMode = newOperationMode;
         }
@@ -343,6 +379,12 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
                     nfcManager.writeSms(writeMessages, tagSmsNumber.getString(), tagSmsBody.getString(), tagText.getString(), (byte) posterAction.getSelectedIndex());
                     break;
                 }
+                case WRITE_ANNOTATED_URL_TAG:
+                    nfcManager.writeAnnotatedUrl(tagUrl.getString(), tagText.getString());
+                    break;
+                case WRITE_GEO_TAG:
+                    nfcManager.writeGeo(Double.parseDouble(tagLatitude.getString()), Double.parseDouble(tagLongitude.getString()), tagGeoType.getSelectedIndex());
+                    break;
                 case WRITE_CUSTOM_TAG:
                     nfcManager.writeCustom(tagTypeUri.getString(), tagCustomPayload.getString().getBytes("utf-8"));
                     break;
