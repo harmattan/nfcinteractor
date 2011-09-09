@@ -92,6 +92,8 @@ Tested on:
 CHANGE HISTORY
 --------------------------------------------------------------------------------
 
+6.0 Improved UI with instructions and slim popup-sytle operation mode list when in a write operation mode.
+    Additional input field to specify text tag language from the UI.
 5.3 Support for GEO URL records
     Support for Annotated URL messages
 5.2 Selection of image to write, additional small GIF sample image.

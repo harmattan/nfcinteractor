@@ -56,6 +56,7 @@ import javax.microedition.lcdui.CommandListener;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.ItemStateListener;
+import javax.microedition.lcdui.StringItem;
 import javax.microedition.lcdui.TextField;
 
 import javax.microedition.midlet.*;
@@ -127,6 +128,8 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
     private TextField tagUrl;
     /** UI element to enter the text of a record. */
     private TextField tagText;
+    /** UI element to enter the text language of a record. */
+    private TextField tagTextLanguage;
     /** UI element to enter the Type Uri of a record. */
     private TextField tagTypeUri;
     /** UI element to enter the payload of a record. */
@@ -176,61 +179,7 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
         {
             // NFC is supported - construct full UI and NFC manager class.
             nfcSupported = true;
-            // Choice group to choose the operation mode
-            operationModeSelector = new ChoiceGroup("Choose Mode", ChoiceGroup.EXCLUSIVE, operatingModeNames, null);
-            operationModeSelector.setSelectedIndex(READ_TAG, true);
-            form.append(operationModeSelector);
-
-            // Prepare the UI elements that are only visible and relevant when writing a tag
-            // URL field (URI tag, Smart Poster, Annotated URL)
-            tagUrl = new TextField("URL", "http://nokia.com/", 255, TextField.URL);
-
-            // Text field (Text only tag, Smart Poster)
-            tagText = new TextField("Text", "Nokia", 255, TextField.ANY);
-
-            // Action (Smart Poster)
-            posterAction = new ChoiceGroup("Action", ChoiceGroup.EXCLUSIVE);
-            posterAction.append("Do the action", null);
-            posterAction.append("Save for later", null);
-            posterAction.append("Open for editing", null);
-            posterAction.setSelectedIndex(0, true);
-
-            // Selection which messages to write (Smart Poster)
-            posterEnabledMessages = new ChoiceGroup("Messages", ChoiceGroup.MULTIPLE);
-            posterEnabledMessages.append("URL", null);
-            posterEnabledMessages.append("Title", null);
-            posterEnabledMessages.append("Action", null);
-            posterEnabledMessages.append("Icon", null);
-            boolean[] posterEnabledFlags = {true, true, false, false};
-            posterEnabledMessages.setSelectedFlags(posterEnabledFlags);
-
-            // Custom tag
-            tagTypeUri = new TextField("Tag URI", "urn:nfc:ext:nokia.com:custom", 255, TextField.URL);
-            tagCustomPayload = new TextField("Payload", "Nokia", 255, TextField.ANY);
-            
-            // Image chooser
-            tagChooseImage = new ChoiceGroup("Choose image", ChoiceGroup.EXCLUSIVE);
-            tagChooseImage.append("Minimal GIF (48 bytes)", null);
-            tagChooseImage.append("Minimal PNG (80 bytes)", null);
-            tagChooseImage.append("Nokia PNG (225 bytes)", null);
-            tagChooseImage.setSelectedIndex(1, true);
-
-            // SMS
-            tagSmsEnabledMessages = new ChoiceGroup("SMS Options", ChoiceGroup.MULTIPLE);
-            tagSmsEnabledMessages.append("Title text (-> Sp)", null);
-            tagSmsEnabledMessages.append("Action (-> Sp)", null);
-            boolean[] smsEnabledFlags = {false, false};
-            tagSmsEnabledMessages.setSelectedFlags(smsEnabledFlags);
-            tagSmsNumber = new TextField("SMS Recipient", "+1234", 255, TextField.PHONENUMBER);
-            tagSmsBody = new TextField("SMS Body", "Hello", 255, TextField.ANY);
-            
-            // Geo Uri
-            tagLatitude = new TextField("Latitude (dec deg., WGS-84)", "60.17", 255, TextField.DECIMAL);
-            tagLongitude = new TextField("Longitude (dec deg., WGS-84)", "24.829", 255, TextField.DECIMAL);
-            tagGeoType = new ChoiceGroup("Choose Geo tag type", ChoiceGroup.EXCLUSIVE);
-            tagGeoType.append("geo: URI scheme", null); // http://geouri.org/
-            tagGeoType.append("Nokia Maps link", null);
-            tagGeoType.setSelectedIndex(0, true);
+            createMainUi();
         }
 
     }
@@ -246,7 +195,7 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
             form.setCommandListener(this);
             if (nfcSupported) {
                 nfcManager = new NfcManager(this);
-                nfcManager.createNfcDiscoveryManager();
+                nfcSupported = nfcManager.createNfcDiscoveryManager();
             }
         }
     }
@@ -259,6 +208,63 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
         {
             nfcManager.deleteNfcInstances(true);
         }
+    }
+    
+    private void createMainUi() {
+        // Choice group to choose the operation mode
+        setupFormHeader(WRITE_URI_TAG, READ_TAG);
+
+        // Prepare the UI elements that are only visible and relevant when writing a tag
+        // URL field (URI tag, Smart Poster, Annotated URL)
+        tagUrl = new TextField("URL", "http://nokia.com/", 255, TextField.URL);
+
+        // Text field (Text only tag, Smart Poster)
+        tagText = new TextField("Text", "Nokia", 255, TextField.ANY);
+        tagTextLanguage = new TextField("Language", "en", 5, TextField.ANY);
+
+        // Action (Smart Poster)
+        posterAction = new ChoiceGroup("Action", ChoiceGroup.EXCLUSIVE);
+        posterAction.append("Do the action", null);
+        posterAction.append("Save for later", null);
+        posterAction.append("Open for editing", null);
+        posterAction.setSelectedIndex(0, true);
+
+        // Selection which messages to write (Smart Poster)
+        posterEnabledMessages = new ChoiceGroup("Messages", ChoiceGroup.MULTIPLE);
+        posterEnabledMessages.append("URL", null);
+        posterEnabledMessages.append("Title", null);
+        posterEnabledMessages.append("Action", null);
+        posterEnabledMessages.append("Icon", null);
+        boolean[] posterEnabledFlags = {true, true, false, false};
+        posterEnabledMessages.setSelectedFlags(posterEnabledFlags);
+
+        // Custom tag
+        tagTypeUri = new TextField("Tag URI", "urn:nfc:ext:nokia.com:custom", 255, TextField.URL);
+        tagCustomPayload = new TextField("Payload", "Nokia", 255, TextField.ANY);
+
+        // Image chooser
+        tagChooseImage = new ChoiceGroup("Choose image", ChoiceGroup.EXCLUSIVE);
+        tagChooseImage.append("Minimal GIF (48 bytes)", null);
+        tagChooseImage.append("Minimal PNG (80 bytes)", null);
+        tagChooseImage.append("Nokia PNG (225 bytes)", null);
+        tagChooseImage.setSelectedIndex(1, true);
+
+        // SMS
+        tagSmsEnabledMessages = new ChoiceGroup("SMS Options", ChoiceGroup.MULTIPLE);
+        tagSmsEnabledMessages.append("Title text (-> Sp)", null);
+        tagSmsEnabledMessages.append("Action (-> Sp)", null);
+        boolean[] smsEnabledFlags = {false, false};
+        tagSmsEnabledMessages.setSelectedFlags(smsEnabledFlags);
+        tagSmsNumber = new TextField("SMS Recipient", "+1234", 255, TextField.PHONENUMBER);
+        tagSmsBody = new TextField("SMS Body", "Hello", 255, TextField.ANY);
+
+        // Geo Uri
+        tagLatitude = new TextField("Latitude (dec deg., WGS-84)", "60.17", 255, TextField.DECIMAL);
+        tagLongitude = new TextField("Longitude (dec deg., WGS-84)", "24.829", 255, TextField.DECIMAL);
+        tagGeoType = new ChoiceGroup("Choose Geo tag type", ChoiceGroup.EXCLUSIVE);
+        tagGeoType.append("geo: URI scheme", null); // http://geouri.org/
+        tagGeoType.append("Nokia Maps link", null);
+        tagGeoType.setSelectedIndex(0, true);
     }
 
     /**
@@ -279,13 +285,9 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
      * (READ_TAG, WRITE_TAG or DELETE_TAG) that should be activated.
      */
     private void activateOperationMode(final int newOperationMode) {
-        if (operationMode != newOperationMode) {
-            // Clean up UI elements - everything except the first element
-            // (-> which is the operation mode choice group)
-            final int numChoiceElements = form.size();
-            for (int i = numChoiceElements - 1; i > 0; i--) {
-                form.delete(i);
-            }
+        if (operationMode != newOperationMode) {            
+            setupFormHeader(operationMode, newOperationMode);
+            
             // The new operation mode is writing tags (previously, something
             // different was active): make the input items visible for
             // entering the tag type specific info.
@@ -302,6 +304,7 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
                     break;
                 case WRITE_TEXT_TAG:
                     form.append(tagText);
+                    form.append(tagTextLanguage);
                     break;
                 case WRITE_SMS_TAG:
                     form.append(tagSmsEnabledMessages);
@@ -371,7 +374,7 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
                     nfcManager.writeUri(tagUrl.getString());
                     break;
                 case WRITE_TEXT_TAG:
-                    nfcManager.writeText(tagText.getString());
+                    nfcManager.writeText(tagText.getString(), tagTextLanguage.getString());
                     break;
                 case WRITE_SMS_TAG: {
                     boolean writeMessages[] = new boolean[tagSmsEnabledMessages.size()];
@@ -403,6 +406,78 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
             displayAlert("IOException", "Error loading image" + ex.toString(), AlertType.ERROR);
         } 
 
+    }
+    
+    /**
+     * Setup the UI for the new operation mode. Will show the correct selection
+     * UI element and the according instructions. All other UI elements are cleared
+     * from the screen.
+     * @param oldOperationMode operation mode that was active before.
+     * @param newOperationMode operation mode to be activated.
+     */
+    private void setupFormHeader(final int oldOperationMode, final int newOperationMode) {
+
+        if (!isWriteOperationMode(oldOperationMode) && 
+                isWriteOperationMode(newOperationMode)) {
+            // Switched from a read/delete mode to a write mode:
+            // Make operation mode selector small and add instructions
+            form.deleteAll();
+            operationModeSelector = new ChoiceGroup("Choose Mode", ChoiceGroup.POPUP, operatingModeNames, null);
+            operationModeSelector.setSelectedIndex(newOperationMode, true);
+            form.append(operationModeSelector);
+            StringItem instructions = new StringItem("Touch a tag to write the currently visible settings", null);
+            form.append(instructions);
+        } else if (isWriteOperationMode(oldOperationMode) &&
+                isWriteOperationMode(newOperationMode)) {
+            // Was write before and is write now - leave first two elements
+            // Clean up UI elements - everything except the first two elements
+            // (-> which is the operation mode choice group and the instructions)
+            resetFormExceptFirstX(2);
+        } else if (isWriteOperationMode(oldOperationMode) &&
+                !isWriteOperationMode(newOperationMode)) {
+            // Switched from write operation mode to read/delete
+            // Make selector big again
+            form.deleteAll();
+            operationModeSelector = new ChoiceGroup("Choose Mode", ChoiceGroup.EXCLUSIVE, operatingModeNames, null);
+            operationModeSelector.setSelectedIndex(newOperationMode, true);
+            form.append(operationModeSelector);
+        }
+        if (!isWriteOperationMode(newOperationMode)) {
+            // Make sure the correct instructions are set for read / delete
+            resetFormExceptFirstX(1);
+            if (newOperationMode == READ_TAG) {
+                StringItem instructions = new StringItem("Touch a tag to read its contents", null);
+                form.append(instructions);
+            } else if (newOperationMode == DELETE_TAG) {
+                StringItem instructions = new StringItem("Touch a tag to delete its contents (-> write an empty NDEF message)", null);
+                form.append(instructions);
+            }
+        }
+    }
+    
+    /**
+     * Clear all elements of the Form UI-element except the first few.
+     * @param numRemainingElements how many UI elements should remain from the
+     * beginning of the UI.
+     */
+    private void resetFormExceptFirstX(final int numRemainingElements) {
+        final int numChoiceElements = form.size();
+        if (numChoiceElements > numRemainingElements) {
+            for (int i = numChoiceElements - 1; i > numRemainingElements - 1; i--) {
+                form.delete(i);
+            }
+        }
+    }
+    
+    /**
+     * Check if the specified operating mode is one that would write a tag 
+     * (-> true) or one that reads / deletes a tag (-> false).
+     * @param operationMode operation mode to check
+     * @return true if the operation mode will write user-specified data to the
+     * tag, false if it reads / deletes the tag.
+     */
+    private boolean isWriteOperationMode(final int operationMode) {
+        return !(operationMode == READ_TAG || operationMode == DELETE_TAG);
     }
     
     private String getSelectedImageName() {

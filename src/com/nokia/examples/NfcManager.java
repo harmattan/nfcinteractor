@@ -90,16 +90,34 @@ public class NfcManager implements TargetListener, Runnable {
 
     // ---------------------------------------------------------------------------------------------------------
     // NFC releated control code
-    public void createNfcDiscoveryManager() {
+    public boolean createNfcDiscoveryManager() {
         deleteNfcInstances(true);
+        
         // Registration of the TargetListener for external contactless
         // Targets (in this RFID_TAG).
-        try {
-            dm = DiscoveryManager.getInstance();
-            dm.addTargetListener(this, TargetType.NDEF_TAG);
+        try {        
+            // Check that NDEF_TAG target is supported
+            TargetType[] targets = DiscoveryManager.getSupportedTargetTypes();
+            boolean supported = false;
+
+            for (int i=0; i<targets.length; i++) {
+                if (targets[i].equals(TargetType.NDEF_TAG)) {
+                    supported = true;
+                }
+            }
+
+            if (supported) {
+                dm = DiscoveryManager.getInstance();
+                dm.addTargetListener(this, TargetType.NDEF_TAG);
+                return true;
+            } else {
+                callback.displayAlert("Error registering for NDEF targets", "NDEF Tag type not supported", AlertType.ERROR);
+                return false;
+            }
         } catch (ContactlessException ce) {
             callback.displayAlert("ContactlessException", "Unable to register TargetListener: " + ce.toString(), AlertType.ERROR);
         }
+        return false;
     }
 
     /**
@@ -107,7 +125,6 @@ public class NfcManager implements TargetListener, Runnable {
      * @param targetProperties array of targets found by the phone
      */
     public void targetDetected(TargetProperties[] targetProperties) {
-
         // In case no targets were found, exit the method
         if (targetProperties.length == 0) {
             callback.displayAlert("Target detected", "No targets found", AlertType.WARNING);
@@ -301,6 +318,13 @@ public class NfcManager implements TargetListener, Runnable {
     // ---------------------------------------------------------------------------------------------------------
     // Write messages to tags
     
+    /**
+     * Processing method to write an NDEF message containing a URI record
+     * to a pre-established tag connection.
+     * @param fullUrl URI to be written into the URI record of the NDEF message.
+     * Any possible abbreviations of the URL are done automatically.
+     * @throws UnsupportedEncodingException 
+     */
     public void writeUri(String fullUrl) throws UnsupportedEncodingException {
         if (!checkNdefConnection()) {
             return;
@@ -316,8 +340,15 @@ public class NfcManager implements TargetListener, Runnable {
             callback.tagSuccess("URI written");
         }
     }
-
-    public void writeText(String fullText) throws UnsupportedEncodingException {
+    
+    /**
+     * Processing method to write an NDEF message containing a text record
+     * to a pre-established tag connection.
+     * @param fullText text to be written into the text record of the NDEF message.
+     * @param language language to use for the text record
+     * @throws UnsupportedEncodingException 
+     */
+    public void writeText(String fullText, String language) throws UnsupportedEncodingException {
         if (!checkNdefConnection()) {
             return;
         }
@@ -325,7 +356,7 @@ public class NfcManager implements TargetListener, Runnable {
         NDEFMessage message = new NDEFMessage();
 
         // Append the record to the message
-        message.appendRecord(createTextRecord(fullText, "en"));
+        message.appendRecord(createTextRecord(fullText, language));
 
         // Write message to the tag
         if (writeMessageToTag(message)) {
@@ -334,8 +365,11 @@ public class NfcManager implements TargetListener, Runnable {
     }
 
     /**
-     * Processing method to write a Smart Poster NDEF message to a pre-established tag connection.
-     * Will take the title and the URL from the UI elements in the form.
+     * Processing method to write a Smart Poster NDEF message to a 
+     * pre-established tag connection.
+     * Which parts of the possible information has to be specified in the
+     * boolean array writeMessages[]. Note that the URL is mandatory
+     * according to the Smart Poster specification.
      * @throws IOException
      * @throws ContactlessException 
      */
@@ -424,7 +458,8 @@ public class NfcManager implements TargetListener, Runnable {
     }
     
     /**
-     * 
+     * Write geo-coordinates to a URL NDEF message to a 
+     * pre-established tag connection.
      * @param latitude
      * @param longitude
      * @param geoType 0 ... geo: URI scheme, according to http://geouri.org/
