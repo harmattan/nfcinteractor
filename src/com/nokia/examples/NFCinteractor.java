@@ -72,6 +72,8 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
     
     /** Command to exit the app. */
     private Command exitCommand;
+    /** Command to go back to the big selection screen. */
+    private Command backCommand;
     /** Main UI form. */
     private Form form;
     // Operation mode UI
@@ -157,6 +159,7 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
         form = new Form("NFCinteractor");
         exitCommand = new Command("Exit", Command.EXIT, 1);
         form.addCommand(exitCommand);
+        backCommand = new Command("Back", Command.BACK, 1);
         
         // Check NFC availability
         String nfcVersion = System.getProperty("microedition.contactless.version");
@@ -452,6 +455,13 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
                 StringItem instructions = new StringItem("Touch a tag to delete its contents (-> write an empty NDEF message)", null);
                 form.append(instructions);
             }
+            // Use the exit command
+            form.removeCommand(backCommand);
+            form.addCommand(exitCommand);
+        } else {
+            // Writable mode: use the back command.
+            form.removeCommand(exitCommand);
+            form.addCommand(backCommand);
         }
     }
     
@@ -503,6 +513,9 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
             // Exit the application
             destroyApp(false);
             notifyDestroyed();
+        } else if (command == backCommand) {
+            // Go back to read mode
+            activateOperationMode(READ_TAG);
         }
     }
 
