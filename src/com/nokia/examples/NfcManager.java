@@ -31,6 +31,9 @@ public class NfcManager implements TargetListener, Runnable {
     private DiscoveryManager dm = null;
     /** Connection to the tag is saved here, as the actual processing is happening in a thread. */
     private NDEFTagConnection ndconn = null;
+    /** When cloning a tag, cache the NDEF message in memory. */
+    private NDEFMessage cachedMessage = null;
+    
     private static final String uriAbbreviations[] = {
         "",
         "http://www.",
@@ -289,6 +292,22 @@ public class NfcManager implements TargetListener, Runnable {
         }
     }
     
+    /**
+     * Read the message and cache it in memory. The message is not parsed.
+     * @return true on success, false when there was a problem reading a valid message.
+     */
+    public boolean readAndCacheMessage() {
+        if (!checkNdefConnection()) {
+            return false;
+        }
+        cachedMessage = readMessageFromTag();
+        if (cachedMessage != null) {
+            callback.tagSuccess("Learned message from tag");
+            return true;
+        }
+        return false;
+    }
+    
 
     // ---------------------------------------------------------------------------------------------------------
     // Delete messages (-> write empty message)
@@ -513,6 +532,16 @@ public class NfcManager implements TargetListener, Runnable {
         // Write message to the tag
         if (writeMessageToTag(message)) {
             callback.tagSuccess("Combination tag written");
+        }
+    }
+    
+    public void writeCachedMessage() {
+        if (!checkNdefConnection() || cachedMessage == null) {
+            return;
+        }
+        // Write message to the tag
+        if (writeMessageToTag(cachedMessage)) {
+            callback.tagSuccess("Tag clone written");
         }
     }
 

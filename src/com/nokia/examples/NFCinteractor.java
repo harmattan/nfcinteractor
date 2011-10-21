@@ -46,6 +46,7 @@ package com.nokia.examples;
 import java.io.IOException;
 
 // Packages for GUI
+import javax.microedition.contactless.ndef.NDEFMessage;
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.AlertType;
 import javax.microedition.lcdui.ChoiceGroup;
@@ -91,6 +92,7 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
         "Write Geo",
         "Write Custom",
         "Write Combination",
+        "Clone Tag",
         "Delete (Empty Msg)"
     };
     /** Current operation mode. Can be either READ_TAG, WRITE_TAG or DELETE_TAG. */
@@ -119,8 +121,10 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
      * 2. URL (e.g., a link to the Nokia Store to download the app including
      * the content-handler plug-in). */
     private static final int WRITE_COMBINATION_TAG = 9;
+    /** Copy NDEF message contents of one tag to another tag. */
+    private static final int CLONE_TAG = 10;
     /** When touching an NFC tag: the record currently present on the tag is overwritten with an empty record. */
-    private static final int DELETE_TAG = 10;
+    private static final int DELETE_TAG = 11;
     // Settings for the writing modes
     /** UI element to choose which messages to write to the tag. */
     private ChoiceGroup posterEnabledMessages;
@@ -150,6 +154,10 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
     private TextField tagLongitude;
     /** Choose mechanism to write geo tag. */
     private ChoiceGroup tagGeoType;
+    /** Status text when cloning a tag. */
+    private StringItem cloneTagStatus;
+    /** Status code when cloning a tag. */
+    private int cloneStatus = 1;
 
     /**
      * Constructor of the MIDlet. Initializes the UI.
@@ -268,6 +276,10 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
         tagGeoType.append("geo: URI scheme", null); // http://geouri.org/
         tagGeoType.append("Nokia Maps link", null);
         tagGeoType.setSelectedIndex(0, true);
+        
+        // Clone Tag
+        cloneTagStatus = new StringItem(null, null);
+        cloneStatus = 1;
     }
 
     /**
@@ -339,6 +351,11 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
                     form.append("Second Record (URI)");
                     form.append(tagUrl);
                     break;
+                case CLONE_TAG:
+                    cloneTagStatus.setLabel("Touch a tag to learn its contents");
+                    cloneStatus = 1;
+                    form.append(cloneTagStatus);
+                    break;
             }
             operationMode = newOperationMode;
         }
@@ -396,6 +413,18 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
                     break;
                 case WRITE_COMBINATION_TAG:
                     nfcManager.writeCombination(tagUrl.getString(), tagTypeUri.getString(), tagCustomPayload.getString().getBytes("utf-8"));
+                    break;
+                case CLONE_TAG:
+                    if (cloneStatus == 1) {
+                        // Read tag
+                        if (nfcManager.readAndCacheMessage()) {
+                            cloneStatus = 2;
+                            cloneTagStatus.setLabel("Touch another tag to write the cached NDEF message.");
+                        }
+                    } else if (cloneStatus == 2) {
+                        // Write tag
+                        nfcManager.writeCachedMessage();
+                    }
                     break;
                 case DELETE_TAG:
                     nfcManager.deleteNDEFMessage();
@@ -487,7 +516,7 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
      * tag, false if it reads / deletes the tag.
      */
     private boolean isWriteOperationMode(final int operationMode) {
-        return !(operationMode == READ_TAG || operationMode == DELETE_TAG);
+        return !(operationMode == READ_TAG || operationMode == DELETE_TAG || operationMode == CLONE_TAG);
     }
     
     private String getSelectedImageName() {

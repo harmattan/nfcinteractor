@@ -17,7 +17,7 @@ The following message types are currently supported for writing:
 
 A simple reading functionality shows basic information about the tag but doesn't parse the record's contents. For Smart Poster, URI and Text records, the type and its payload are shown on the screen. For all other message types, the format and name are shown.
 
-Deleting a tag (over)writes the tag contents with an empty record.
+Deleting a tag (over)writes the tag contents with an empty record. Cloning a tag first reads the NDEF message from a tag, and then writes the cached message to any number of additional tags. Note that cloning just copies the NDEF message, it does not alter the ID of the tags.
 
 The app is made in a way so that it is ideal for quickly writing various messages to tags, or as a starting point for own development tests and NFC experiments.
 
@@ -86,12 +86,14 @@ COMPATIBILITY
   or Series 40 Nokia 6212 NFC SDK
 
 Tested on: 
-- Nokia C7-00 with Symbian Anna Firmware
+- Nokia C7-00 with Symbian Anna and Belle
+- Nokia 600 with Symbian Belle
 
 
 CHANGE HISTORY
 --------------------------------------------------------------------------------
 
+6.1 Added feature to clone tags
 6.0 Improved UI with instructions and slim popup-sytle operation mode list when in a write operation mode.
     Additional input field to specify text tag language from the UI.
 5.3 Support for GEO URL records
