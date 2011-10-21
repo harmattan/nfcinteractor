@@ -1,6 +1,6 @@
 Nfc Interactor
 ==============
-The Java ME-based NFC Interactor can write many different NFC Forum NDEF message formats to all supported tag formats, delete the existing message from a tag (by overwriting it with an empty message) and read the contents of an NDEF-formatted tag. The application checks the device for NFC availability.
+The Java ME-based NFC Interactor can write many different NFC Forum NDEF message formats to all supported tag formats, delete the existing message from a tag (by overwriting it with an empty message), read the contents of an NDEF-formatted tag and clone the message to other tags. The application checks the device for NFC availability.
 
 The following message types are currently supported for writing:
 - Smart Poster with URI, title*, action* and image* (* optional)
