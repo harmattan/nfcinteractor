@@ -14,6 +14,7 @@ The following message types are currently supported for writing:
 - Combination tag format: creates a message consisting of two records:
   1. Custom record (for handling with a custom content handler plug-in) & 
   2. URL (e.g., a link to the Nokia Store to download the app including the content-handler plug-in).
+- vCalendar record: event in iCalendar format (uses the text/x-vCalendar MIME type), supporting summary (= subject), starting and ending date/time.
 
 A simple reading functionality shows basic information about the tag but doesn't parse the record's contents. For Smart Poster, URI and Text records, the type and its payload are shown on the screen. For all other message types, the format and name are shown.
 
@@ -87,12 +88,13 @@ COMPATIBILITY
 
 Tested on: 
 - Nokia C7-00 with Symbian Anna and Belle
-- Nokia 600 with Symbian Belle
+- Nokia 701 with Symbian Belle
 
 
 CHANGE HISTORY
 --------------------------------------------------------------------------------
 
+6.2 Added support for writing vCalendar tags
 6.1 Added feature to clone tags
 6.0 Improved UI with instructions and slim popup-sytle operation mode list when in a write operation mode.
     Additional input field to specify text tag language from the UI.

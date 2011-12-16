@@ -46,6 +46,7 @@ package com.nokia.examples;
 import java.io.IOException;
 
 // Packages for GUI
+import java.util.Date;
 import javax.microedition.contactless.ndef.NDEFMessage;
 import javax.microedition.lcdui.Alert;
 import javax.microedition.lcdui.AlertType;
@@ -54,6 +55,7 @@ import javax.microedition.lcdui.Command;
 import javax.microedition.lcdui.Display;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.CommandListener;
+import javax.microedition.lcdui.DateField;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.Item;
 import javax.microedition.lcdui.ItemStateListener;
@@ -92,6 +94,7 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
         "Write Geo",
         "Write Custom",
         "Write Combination",
+        "Write vCalendar",
         "Clone Tag",
         "Delete (Empty Msg)"
     };
@@ -121,10 +124,13 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
      * 2. URL (e.g., a link to the Nokia Store to download the app including
      * the content-handler plug-in). */
     private static final int WRITE_COMBINATION_TAG = 9;
+    /** When touching an NFC tag: write a simple, customizable vCalendar entry.
+     * Specifications: http://tools.ietf.org/html/rfc2445 */
+    private static final int WRITE_VCALENDAR_TAG = 10;
     /** Copy NDEF message contents of one tag to another tag. */
-    private static final int CLONE_TAG = 10;
+    private static final int CLONE_TAG = 11;
     /** When touching an NFC tag: the record currently present on the tag is overwritten with an empty record. */
-    private static final int DELETE_TAG = 11;
+    private static final int DELETE_TAG = 12;
     // Settings for the writing modes
     /** UI element to choose which messages to write to the tag. */
     private ChoiceGroup posterEnabledMessages;
@@ -154,7 +160,12 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
     private TextField tagLongitude;
     /** Choose mechanism to write geo tag. */
     private ChoiceGroup tagGeoType;
-    /** Status text when cloning a tag. */
+    /** UI element to enter the summary of the vCalendar entry. */
+    private TextField tagCalSummary;
+    /** UI element to enter the starting date & time for a vCalendar entry. */
+    private DateField tagCalStart;
+    /** UI element to enter the ending date & time for a vCalendar entry. */
+    private DateField tagCalEnd;
     private StringItem cloneTagStatus;
     /** Status code when cloning a tag. */
     private int cloneStatus = 1;
@@ -277,6 +288,14 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
         tagGeoType.append("Nokia Maps link", null);
         tagGeoType.setSelectedIndex(0, true);
         
+        // vCalendar
+        tagCalSummary = new TextField("Summary", "Develop NFC app", 255, TextField.ANY);
+        tagCalStart = new DateField("Start", DateField.DATE_TIME);
+        tagCalEnd = new DateField("End", DateField.DATE_TIME);
+        Date now = new Date();
+        tagCalStart.setDate(now);
+        tagCalEnd.setDate(new Date(now.getTime() + 3600000));   // 3 600 000 milliseconds = 60 minutes
+        
         // Clone Tag
         cloneTagStatus = new StringItem(null, null);
         cloneStatus = 1;
@@ -351,6 +370,11 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
                     form.append("Second Record (URI)");
                     form.append(tagUrl);
                     break;
+                case WRITE_VCALENDAR_TAG:
+                    form.append(tagCalSummary);
+                    form.append(tagCalStart);
+                    form.append(tagCalEnd);
+                    break;
                 case CLONE_TAG:
                     cloneTagStatus.setLabel("Touch a tag to learn its contents");
                     cloneStatus = 1;
@@ -413,6 +437,9 @@ public class NFCinteractor extends MIDlet implements CommandListener, ItemStateL
                     break;
                 case WRITE_COMBINATION_TAG:
                     nfcManager.writeCombination(tagUrl.getString(), tagTypeUri.getString(), tagCustomPayload.getString().getBytes("utf-8"));
+                    break;
+                case WRITE_VCALENDAR_TAG:
+                    nfcManager.writeVcalendar(tagCalSummary.getString(), tagCalStart.getDate(), tagCalEnd.getDate(), false);
                     break;
                 case CLONE_TAG:
                     if (cloneStatus == 1) {

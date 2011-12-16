@@ -8,6 +8,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
+import java.util.Date;
 import javax.microedition.contactless.ContactlessException;
 import javax.microedition.contactless.DiscoveryManager;
 import javax.microedition.contactless.TargetListener;
@@ -535,6 +537,23 @@ public class NfcManager implements TargetListener, Runnable {
         }
     }
     
+    public void writeVcalendar(String tagCalSummary, Date tagCalStart, Date tagCalEnd, boolean useUtcTime) throws IOException {
+        if (!checkNdefConnection()) {
+            return;
+        }
+
+        // Create NDEFMessage
+        NDEFMessage message = new NDEFMessage();
+        
+        // Append the record to the message
+        message.appendRecord(createVcalendarRecord(tagCalSummary, tagCalStart, tagCalEnd, useUtcTime));
+
+        // Write message to the tag
+        if (writeMessageToTag(message)) {
+            callback.tagSuccess("vCalendar written");
+        }
+    }
+    
     public void writeCachedMessage() {
         if (!checkNdefConnection() || cachedMessage == null) {
             return;
@@ -689,6 +708,45 @@ public class NfcManager implements TargetListener, Runnable {
         recordCustom.appendPayload(payload);
 
         return recordCustom;
+    }
+    
+    private NDEFRecord createVcalendarRecord(String tagCalSummary, Date tagCalStart, Date tagCalEnd, boolean useUtcTime) throws UnsupportedEncodingException {
+        String vCalEntry = "BEGIN:VCALENDAR\nVERSION:1.0\nBEGIN:VEVENT\nDTSTART:" + convertToVcalTime(tagCalStart, useUtcTime) + 
+                "\nDTEND:" + convertToVcalTime(tagCalEnd, useUtcTime)+ "\nSUMMARY:" + tagCalSummary + "\nEND:VEVENT\nEND:VCALENDAR";
+        
+        // Two MIME types are most common: text/x-vCalendar and text/Calendar
+        // Create NDEF Record to be added to NDEF Message
+        // Default character set for iCalendar (RFC 2445) is UTF-8
+        return new NDEFRecord(new NDEFRecordType(
+                NDEFRecordType.MIME, "text/x-vCalendar"), null, vCalEntry.getBytes("utf-8"));
+    }
+    
+    /**
+     * Convert a Date object to the representation required by the vCalendar standard.
+     * Resulting format: yyyymmddThhmmss
+     * (uppercase T character as separator between date and time).
+     * This method isn't time zone aware.
+     * @param datetime date and time to convert
+     * @return date and time as string suitable for a vCalendar entry.
+     */
+    private String convertToVcalTime(Date datetime, boolean useUtcTime) {
+        // Summary from the iCalendar specifications:
+        // DATE-TIME = date "T" time: YYYYMMDDTHHMMSS
+        // Example: DTSTART:19980118T230000
+        // UTC time has latin captial letter Z suffix: DTSTART:19980119T070000Z
+        // Other time zones, e.g.: DTSTART;TZID=US-Eastern:19980119T020000
+        // UTC offset MUST NOT be used (= invalid), e.g.: 230000-0800
+        Calendar c = Calendar.getInstance();
+        c.setTime(datetime);
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        String d = year + (month < 10 ? "0" : "") + month + (day < 10 ? "0" : "") + day;
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int min = c.get(Calendar.MINUTE);
+        int sec = c.get(Calendar.SECOND);
+        String t = (hour < 10 ? "0" : "") + hour + (min < 10 ? "0" : "") + min + (sec < 10 ? "0" : "") + sec;
+        return d + "T" + t + (useUtcTime ? "Z" : "");
     }
 
     public void run() {
