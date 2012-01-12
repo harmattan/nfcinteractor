@@ -2,7 +2,7 @@ Nfc Interactor Professional
 ===========================
 View low level information about NFC tags and their contents, and write your own tags with a dynamic NDEF message editor UI.
 
-Touch an NFC tag to analyze its format and its contents. Nfc Interactor parses and shows many different NDEF messages and extends the offering of Qt through  reusable convenience classes for handling additional record types: Smart Poster, Mime/Image, vCard, SMS, Social Networks, Geo-Tags, Smart URI and custom records.
+Touch an NFC tag to analyze its format and its contents. Nfc Interactor parses and shows many different NDEF messages and extends the offering of Qt through reusable convenience classes for handling additional record types: Smart Poster, Mime/Image, vCard, SMS, Social Networks, Geo-Tags, Smart URI and custom records.
 
 Compose your own NDEF messages by combining one or more NDEF records using the dynamic editor interface. Various templates assist you, allowing you to concentrate on the content instead of the format. While editing, Nfc Interactor will always show you the current size. Once your message is finalized, write it to as many tags as you like.
 
@@ -10,6 +10,8 @@ Nfc Interactor is written in Qt and works on Symbian Anna / Belle as well as on 
 
 More information:
 https://projects.developer.nokia.com/nfcinteractor
+
+Note: this version of Nfc Interactor replaces the previous Java ME-based NFCinteractor. The new Qt-version is more powerful and introduces a wealth of new features, plus improved reading support. The Java ME-based project is still useful as a code example and has therefore been renamed to Nfc Creator and is available here: https://projects.developer.nokia.com/nfccreator . This Qt-based Nfc Interactor also succeeds the "Nfc Info" project, which was only capable of reading tags.
 
 
 FEATURES
@@ -30,11 +32,11 @@ Tag writing:
 - NDEF message size calculation
 - Specialized editors for each message type:
   - Social Network record: enter the username and choose the network to create a link to follow you. Creates a URI or Smart Poster, depending on if you add an optional title
-  - Business card record: select the data to include from a wealth of available fields, and create your own business card based on the universal vCard standard. Note: usually large tag size requirements
-  - Geo record: enter coordinates and select the Geo Tag type. Supports Geo URI (RFC 5870), Nokia Maps links and a generic redirection script that enables Geo tags on Symbian and MeeGo, hosted at nfcinteractor.com*. Creates a URI or Smart Poster, depending on if you add an optional title
+  - Business card record: select the data to include from a wealth of available fields, and create your own business card based on the universal vCard standard. Integrates with the Qt Mobility Contacts APIs. Note: usually large tag size requirements
+  - Geo record: enter coordinates and select the Geo Tag type. Supports Geo URI (RFC 5870), Nokia Maps links and a generic redirection script that enables Geo tags on Symbian and MeeGo, hosted at nfcinteractor.com*. Integrates with the Qt Mobility Location APIs for the coordinates. Creates a URI or Smart Poster, depending on if you add an optional title
   - SMS record: enter number and body to create a working SMS link, useful for example to request information services or for payment via SMS. Creates a URI or Smart Poster, depending on if you add an optional title
   - Smart Posters: has to contain at least a URI, optionally an unlimited amount of titles in different languages, a recommended action and information about the linked content (size and MIME type)
-  - URI records: automatically shortens URIs according to the specification to save tag space (e.g., won't save "http://www.", but encode that in a singly byte)
+  - URI records: automatically shortens URIs according to the specification to save tag space (e.g., won't save "http://www.", but encode that in a single byte)
   - Text records: set text and language
   - Custom records: Choose the type name format and optionally add a type name and payload. Also useful for application autostart tags.
 
