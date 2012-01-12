@@ -2,23 +2,47 @@ Nfc Interactor Professional
 ===========================
 View low level information about NFC tags and their contents, and write your own tags with a dynamic NDEF message editor UI.
 
-Shows all information about Near Field Communication (NFC) tags available through Qt Mobility APIs. It parses and shows the contents of NDEF messages and extends the offering of Qt through reusable convenience classes for handling additional record types: Smart Poster, Image and vCard. The app is also showcasing Qt Quick Components and works on Symbian and MeeGo Harmattan. 
+Touch an NFC tag to analyze its format and its contents. Nfc Interactor parses and shows many different NDEF messages and extends the offering of Qt through  reusable convenience classes for handling additional record types: Smart Poster, Mime/Image, vCard, SMS, Social Networks, Geo-Tags, Smart URI and custom records.
 
-When touching an Nfc tag, the application will show general information about the tag and parse the contents of the Ndef message. The contained records are presented on the screen in the form of a list. 
+Compose your own NDEF messages by combining one or more NDEF records using the dynamic editor interface. Various templates assist you, allowing you to concentrate on the content instead of the format. While editing, Nfc Interactor will always show you the current size. Once your message is finalized, write it to as many tags as you like.
 
-Parsing support is included for URI, Text, Smart Poster, Mime / Image and Mime / vCard records. Any images stored in the message are shown on the screen.
-
-This tool is mainly aimed at developers. While Qt Mobility provides convenience classes for parsing Uri and Text records, this example adds further ready-made classes for working with Smart Poster, Mime / Image, Mime / vCard, SMS and Geo-records. These can easily be reused in any Nfc tag reading project.
-
-Note for Symbian: The project requires Qt 4.7.4, Qt Mobility 1.2 and Qt Quick Components 1.1 to be present on your device. On the C7, Symbian Anna (or newer) is required to use this application, as it enables the NFC capabilities of the device. Please read the build & installation instructions for more details.
+Nfc Interactor is written in Qt and works on Symbian Anna / Belle as well as on MeeGo Harmattan. As an open source example project, it also showcases the use of Qt Quick Components, as well as the integration of C++ with QML.
 
 More information:
-https://projects.developer.nokia.com/NfcInteractor
+https://projects.developer.nokia.com/nfcinteractor
 
-Known issues:
-- MeeGo UI not up-to-date
 
-Planned additional features for first release:
+FEATURES
+-------------------------------------------------------------------------------
+Tag reading:
+- Tag type (NFC Forum Tag Type 1, 2, 3, 4 and Mifare)
+- Tag UID
+- Tag version
+- Tag memory size, static vs. dynamic memory (for Tag Types 1 + 2, Symbian only)
+- Lock bits and Capability Container access level (for Tag Types 1 + 2, Symbian only)
+- NDEF message size
+- List of all individual NDEF records
+- Parses Smart Poster, URI, text, image and business card (vCard) records
+
+Tag writing:
+- Dynamic UI to create a message consisting of multiple NDEF records, and to add information to each record
+- Help for all supported message types
+- NDEF message size calculation
+- Specialized editors for each message type:
+  - Social Network record: enter the username and choose the network to create a link to follow you. Creates a URI or Smart Poster, depending on if you add an optional title
+  - Business card record: select the data to include from a wealth of available fields, and create your own business card based on the universal vCard standard. Note: usually large tag size requirements
+  - Geo record: enter coordinates and select the Geo Tag type. Supports Geo URI (RFC 5870), Nokia Maps links and a generic redirection script that enables Geo tags on Symbian and MeeGo, hosted at nfcinteractor.com*. Creates a URI or Smart Poster, depending on if you add an optional title
+  - SMS record: enter number and body to create a working SMS link, useful for example to request information services or for payment via SMS. Creates a URI or Smart Poster, depending on if you add an optional title
+  - Smart Posters: has to contain at least a URI, optionally an unlimited amount of titles in different languages, a recommended action and information about the linked content (size and MIME type)
+  - URI records: automatically shortens URIs according to the specification to save tag space (e.g., won't save "http://www.", but encode that in a singly byte)
+  - Text records: set text and language
+  - Custom records: Choose the type name format and optionally add a type name and payload. Also useful for application autostart tags.
+
+Easily reusable code for developers including:
+- NDEF record classes for: Smart Poster, Mime/vCard (Business Cards), Mime/Image, Geo, Social Networks (Twitter, LinkedIn, Facebook, Xing, vKontakte), SMS, Smart URI (depending on content requirements uses Smart Poster or URI to create the smallest possible message)
+- Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2, Symbian only)
+
+Planned additional features for the final release:
 - Nokia Store link (specify content ID)
 
 Ideas for future updates:
@@ -32,24 +56,7 @@ Ideas for future updates:
 - Faster startup-time by loading application screens on demand
 - App autostart on tag touch of nokia.com:nfcinteractor tags (external RTD)
 
-IMPORTANT FILES/CLASSES
--------------------------------------------------------------------------------
-
-- nfcinfo.h : encapsulates NFC target detection and NDEF tag reading / writing.
-- main.qml : Setup for the UI and the page using Qt Quick Components.
-- NfcInfoPage.qml : Handles interaction with the NfcInfo class instance and
-glues it to the QML user interface to show the information on the screen.
-- ndefnfcsprecord.h : Convenience class for interacting with Nfc Forum 
-Smart Poster records.
-- ndefnfcmimevcardrecord.h : Convenience class for interacting with Mime / vCard
-records. Supports parsing the versit documents stored on a tag to Qt Mobility's
-QContact class, as well as converting QContacts to versit documents for writing
-them to a tag.
-- ndefnfcmimeimagerecord.h : Convenience class for interacting with any image 
-mime type record where encoding and decoding support is provided by Qt.
-- tagimagecache.h : Caches any images found on tags in memory, for retrieval
-and display in the QML user interface.
-
+* Disclaimer: The services hosted on nfcinteractor.com (e.g., the generic geo-tag redirection script) have no service or uptime guarantee. They are intended for testing purposes only and could be removed at any point. You should host the required server-side scripts on your own webserver for real-world deployment.
 
 SECURITY
 --------------------------------------------------------------------------------
@@ -87,12 +94,13 @@ on your Nokia N9. The Nokia N950 doesn't support NFC.
 
 Symbian
 ~~~~~~~
-Compatible devices:
-C7-00/Oro/Astound with Symbian Anna/Belle,
-Nokia 603, 700 and 701 (plus all upcoming NFC capable devices).
+Compatible phones:
+C7-00/Oro/Astound and 801T with Symbian Anna/Belle,
+Nokia 603, 700 and 701 with Belle
+(plus all upcoming NFC capable phones)
 
 Device Preparation:
-C7-00 with Symbian Anna: additionally install Qt 4.7.4, Qt Mobility 1.2 
+C7-00/801T with Symbian Anna: additionally install Qt 4.7.4, Qt Mobility 1.2 
 and Qt Quick Components 1.1 from the Qt SDK:
 C:\QtSDK\Symbian\sis\Symbian_Anna\Qt\4.7.4\Qt-4.7.403-for-Anna.sis
 C:\QtSDK\Symbian\sis\Symbian_Anna\Qt\4.7.4\QtWebKit-4.8.1-for-Anna.sis
@@ -139,7 +147,7 @@ Tested on:
 CHANGE HISTORY
 --------------------------------------------------------------------------------
 
-2.0 Renamed from previous "Nfc Info" name to "Nfc Master" due to the bigger
+2.0 Renamed from previous "Nfc Info" name to "Nfc Interactor" due to the bigger
 	scope of the new version that also supports writing.
 	Tag write support with dynamic tag editor UI.
 	Switched to platform specific Qt Quick Components.
@@ -151,12 +159,12 @@ RELATED DOCUMENTATION
 -------------------------------------------------------------------------------
 
 Project page
-https://projects.developer.nokia.com/NfcInteractor
+https://projects.developer.nokia.com/nfcinteractor
 
 Related example projects
 https://projects.developer.nokia.com/nfccorkboards
 https://projects.developer.nokia.com/nfcchat
-https://projects.developer.nokia.com/NfcInteractor
+https://projects.developer.nokia.com/nfccreator
 
 NFC 
 http://www.developer.nokia.com/NFC
