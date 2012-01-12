@@ -345,35 +345,6 @@ bool NfcInfo::nfcWriteTag(const bool writeOneTagOnly)
     m_pendingWriteNdef = true;
     m_writeOneTagOnly = writeOneTagOnly;
     return writeCachedNdefMessage();
-
-//    // Create a new NDEF message
-//    QNdefMessage message;
-
-//    // Try to convert the String to a URL and check if it is
-//    // valid. This is only a rather simple conversion:
-//    // We additionally check if the URL contains a '.' character,
-//    // as otherwise a word like "hello" would be converted to
-//    // "http://hello". Obviously, this assumption doesn't work when
-//    // you want to store telephone numbers as URIs; but this example is
-//    // only intended for URLs and plain text.
-//    QUrl convertedUrl = QUrl::fromUserInput(nfcTagText);
-//    if (convertedUrl.isValid() && nfcTagText.contains('.'))
-//    {
-//        // The string was a URL, so create a URL record
-//        QNdefNfcUriRecord uriRecord;
-//        uriRecord.setUri(convertedUrl);
-//        message.append(uriRecord);
-//        qDebug() << "Creating URI message ...";
-//    } else {
-//        // Write a text record to the tag
-//        QNdefNfcTextRecord textRecord;
-//        textRecord.setText(nfcTagText);
-//        // Use the English locale.
-//        textRecord.setLocale("en");
-//        message.append(textRecord);
-//        qDebug() << "Creating Text message ...";
-    //    }
-
 }
 
 void NfcInfo::nfcStopWritingTags()
