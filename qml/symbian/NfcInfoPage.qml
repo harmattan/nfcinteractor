@@ -82,7 +82,7 @@ Page {
         Item {
             width: parent.width
             //height: row.height + 10
-            height: Math.max(infoImg.height, infoTxt.paintedHeight) + platformStyle.paddingMedium
+            height: Math.max(infoImg.height, infoTxt.paintedHeight) + customPlatformStyle.paddingMedium
             Item {
                 id: row
                 //spacing: 5
@@ -98,17 +98,37 @@ Page {
                     id: infoTxt
                     text: infoMsg
                     color: textColor
-                    font.pixelSize: platformStyle.fontSizeMedium // 18
+                    font.pixelSize: customPlatformStyle.fontSizeMedium // 18
                     wrapMode: Text.Wrap
                     anchors.left: infoImg.right
-                    anchors.leftMargin: platformStyle.paddingMedium
+                    anchors.leftMargin: customPlatformStyle.paddingMedium
                     anchors.right: parent.right
-                    anchors.rightMargin: platformStyle.paddingSmall
+                    anchors.rightMargin: customPlatformStyle.paddingSmall
                 }
             }
         }
     }
 
+    // -------------------------------------------------------------------------
+    // Working indicator
+    function showHideBusy(showBusy) {
+        busySpinner.visible = showBusy;
+        busySpinner.running = showBusy;
+    }
+    BusyIndicator {
+        id: busySpinner
+        visible: false
+        running: false
+        width: 50
+        height: 50
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: customPlatformStyle.paddingMedium
+        anchors.right: parent.right
+        anchors.rightMargin: customPlatformStyle.paddingMedium
+    }
+
+    // -------------------------------------------------------------------------
+    // Toolbar
     tools: ToolBarLayout {
         ToolButton {
             flat: true

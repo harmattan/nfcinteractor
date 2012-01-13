@@ -13,8 +13,8 @@ Page {
     Item {
         id: instructionsItem
         anchors.fill: parent
-        anchors.leftMargin: platformStyle.paddingLarge
-        anchors.rightMargin: platformStyle.paddingLarge
+        anchors.leftMargin: customPlatformStyle.paddingLarge
+        anchors.rightMargin: customPlatformStyle.paddingLarge
 
         Flickable {
             id: instructionsFlickable
@@ -36,9 +36,9 @@ Page {
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     wrapMode: Text.WordWrap
-                    //color: platformStyle.colorNormalLight
+                    //color: customPlatformStyle.colorNormalLight
                     color: "aliceblue";
-                    font.pixelSize: platformStyle.fontSizeLarge
+                    font.pixelSize: customPlatformStyle.fontSizeLarge
                 }
                 Image {
                     id: instructionsImage
@@ -53,8 +53,8 @@ Page {
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     wrapMode: Text.WordWrap
-                    color: platformStyle.colorNormalLight
-                    font.pixelSize: platformStyle.fontSizeMedium
+                    color: customPlatformStyle.colorNormalLight
+                    font.pixelSize: customPlatformStyle.fontSizeMedium
                 }
             }
 

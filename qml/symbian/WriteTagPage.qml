@@ -125,20 +125,20 @@ Page {
         source: "nfcTouchTag.svg"
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.leftMargin: platformStyle.paddingMedium
+        anchors.leftMargin: customPlatformStyle.paddingMedium
     }
     Text {
         id: writeInstructions
         text: "Please touch a tag to write the NDEF message"
         //horizontalAlignment: Text.AlignHCenter
-        font.pixelSize: platformStyle.fontSizeLarge
-        color: platformStyle.colorNormalLight
+        font.pixelSize: customPlatformStyle.fontSizeLarge
+        color: customPlatformStyle.colorNormalLight
         anchors.top: parent.top
-        anchors.topMargin: platformStyle.paddingLarge
+        anchors.topMargin: customPlatformStyle.paddingLarge
         anchors.left: writeInstructionsImage.right
-        anchors.leftMargin: platformStyle.paddingLarge
+        anchors.leftMargin: customPlatformStyle.paddingLarge
         anchors.right: parent.right
-        anchors.rightMargin: platformStyle.paddingMedium
+        anchors.rightMargin: customPlatformStyle.paddingMedium
         wrapMode: Text.WordWrap
     }
 
@@ -166,16 +166,16 @@ Page {
             width: 100
             height: 100
             anchors.top: parent.top
-            anchors.topMargin: platformStyle.paddingLarge
+            anchors.topMargin: customPlatformStyle.paddingLarge
             anchors.horizontalCenter: parent.horizontalCenter
         }
         Text {
             id: busyText
             text: "Writing..."
-            font.pixelSize: platformStyle.fontSizeLarge
-            color: platformStyle.colorNormalLight
+            font.pixelSize: customPlatformStyle.fontSizeLarge
+            color: customPlatformStyle.colorNormalLight
             anchors.top: busySpinner.bottom
-            anchors.topMargin: platformStyle.paddingMedium
+            anchors.topMargin: customPlatformStyle.paddingMedium
             anchors.horizontalCenter: parent.horizontalCenter
         }
     }
@@ -189,8 +189,8 @@ Page {
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.leftMargin: platformStyle.paddingLarge
-        anchors.rightMargin: platformStyle.paddingLarge
+        anchors.leftMargin: customPlatformStyle.paddingLarge
+        anchors.rightMargin: customPlatformStyle.paddingLarge
         visible: false
 
         Flickable {
@@ -205,7 +205,7 @@ Page {
             Column {
                 id: writeStatusGroup
                 width: parent.width
-                spacing: platformStyle.paddingSmall
+                spacing: customPlatformStyle.paddingSmall
 
                 PropertyAnimation {
                     id: writeStatusAnimation
@@ -220,9 +220,9 @@ Page {
                     id: writeStatusText
                     font.bold: true
                     horizontalAlignment: Text.AlignHCenter
-                    font.pixelSize: platformStyle.fontSizeLarge
-                    color: platformStyle.colorNormalLight
-                    height: platformStyle.fontSizeLarge + platformStyle.paddingLarge
+                    font.pixelSize: customPlatformStyle.fontSizeLarge
+                    color: customPlatformStyle.colorNormalLight
+                    height: customPlatformStyle.fontSizeLarge + customPlatformStyle.paddingLarge
                     verticalAlignment: Text.AlignBottom
                     width: parent.width
                     wrapMode: Text.WordWrap
@@ -230,8 +230,8 @@ Page {
                 Text {
                     id: writeStatusDetails
                     horizontalAlignment: Text.AlignHCenter
-                    font.pixelSize: platformStyle.fontSizeMedium
-                    color: platformStyle.colorNormalLight
+                    font.pixelSize: customPlatformStyle.fontSizeMedium
+                    color: customPlatformStyle.colorNormalLight
                     width: parent.width
                     wrapMode: Text.WordWrap
                 }

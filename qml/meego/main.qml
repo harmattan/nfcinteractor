@@ -112,11 +112,15 @@ PageStackWindow {
             if (writeTagPage.status === PageStatus.Active) {
                 // Active page is writing page - start busy animation
                 writeTagPage.startWriting();
+            } else if (nfcInfoPage.status === PageStatus.Active) {
+                nfcInfoPage.showHideBusy(true);
             }
         }
 
         onNfcStoppedTagInteraction: {
-            // TODO: start and stop busy animation in tag reading mode
+            // Hide the busy animation in any case - the user might have
+            // switched away from the page while tag reading was active.
+            nfcInfoPage.showHideBusy(false);
         }
 
         onNfcTagWritten: {

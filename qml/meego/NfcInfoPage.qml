@@ -110,6 +110,25 @@ Page {
         }
     }
 
+    // -------------------------------------------------------------------------
+    // Working indicator
+    function showHideBusy(showBusy) {
+        busySpinner.visible = showBusy;
+        busySpinner.running = showBusy;
+    }
+    BusyIndicator {
+        id: busySpinner
+        visible: false
+        running: false
+        platformStyle: BusyIndicatorStyle { size: "medium" }
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: customPlatformStyle.paddingMedium
+        anchors.right: parent.right
+        anchors.rightMargin: customPlatformStyle.paddingMedium
+    }
+
+    // -------------------------------------------------------------------------
+    // Toolbar
     tools: ToolBarLayout {
 //        ToolIcon {
 //            iconId: "toolbar-back";

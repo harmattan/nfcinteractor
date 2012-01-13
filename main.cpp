@@ -114,10 +114,9 @@ int main(int argc, char *argv[])
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.rootContext()->setContextProperty("platform", platformId);
 
-    qDebug() << "Setting context properties";
+    QDeclarativePropertyMap *platformStyle = new QDeclarativePropertyMap();
 #if defined(MEEGO_EDITION_HARMATTAN)
     qDebug() << "MeeGo UI platform style";
-    QDeclarativePropertyMap *platformStyle = new QDeclarativePropertyMap();
     platformStyle->insert("paddingSmall", QVariant(4));
     platformStyle->insert("paddingMedium", QVariant(8));
     platformStyle->insert("paddingLarge", QVariant(12));
@@ -125,8 +124,22 @@ int main(int argc, char *argv[])
     platformStyle->insert("fontSizeMedium", QVariant(22));
     platformStyle->insert("fontSizeLarge", QVariant(26));
     platformStyle->insert("colorNormalLight", QVariant(QColor(255, 255, 255)));
-    viewer.rootContext()->setContextProperty("customPlatformStyle", platformStyle);
+#else
+    // Symbian would have its own platformStyle, but to
+    // minimize the QML code differences, define it ourselves
+    // here.
+    // Unfortunately it's not possible to use the original
+    // "platformStyle" name only on MeeGo, because it's not possible
+    // to override the property called "platformStyle" of the Window.
+    platformStyle->insert("paddingSmall", QVariant(4));
+    platformStyle->insert("paddingMedium", QVariant(8));
+    platformStyle->insert("paddingLarge", QVariant(12));
+    platformStyle->insert("fontSizeSmall", QVariant(18));
+    platformStyle->insert("fontSizeMedium", QVariant(20));
+    platformStyle->insert("fontSizeLarge", QVariant(22));
+    platformStyle->insert("colorNormalLight", QVariant(QColor(255, 255, 255)));
 #endif
+    viewer.rootContext()->setContextProperty("customPlatformStyle", platformStyle);
 
     // Register the image provider class to QML
     TagImageCache *tagImageCache = new TagImageCache();

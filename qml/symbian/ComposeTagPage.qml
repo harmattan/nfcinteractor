@@ -31,11 +31,13 @@ Page {
     Text {
         id: messageHeader
         text: "Ndef Message"
+        font.bold: true
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        font.pixelSize: platformStyle.fontSizeLarge
-        color: platformStyle.colorNormalLight
+        height: customPlatformStyle.fontSizeLarge + customPlatformStyle.paddingSmall
+        font.pixelSize: customPlatformStyle.fontSizeLarge
+        color: customPlatformStyle.colorNormalLight
     }
 
     function updateHeader(ndefMessageSize) {
@@ -49,8 +51,8 @@ Page {
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         anchors {top: messageHeader.bottom; left: parent.left; right: parent.right; bottom: splitViewInput.top; }
-        font.pixelSize: platformStyle.fontSizeMedium
-        color: platformStyle.colorNormalLight
+        font.pixelSize: customPlatformStyle.fontSizeMedium
+        color: customPlatformStyle.colorNormalLight
         wrapMode: Text.WordWrap
     }
 
@@ -107,7 +109,6 @@ Page {
             model: ListModel { }
 
             onAccepted: doAddContentToRecord(recordIndex, messageType, addContentToRecordDialog.model.get(addContentToRecordDialog.selectedIndex).type)
-                //nfcInfo.recordModel.addContentToRecord(recordIndex, messageType, addContentToRecordDialog.model.get(addContentToRecordDialog.selectedIndex).type)
         }
     }
 

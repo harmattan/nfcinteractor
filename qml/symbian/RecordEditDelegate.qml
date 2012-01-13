@@ -46,7 +46,7 @@ Item {
     Button {
         id: removeRecordButton
         anchors.top: parent.top
-        anchors.topMargin: (recordContent == NfcTypes.RecordHeader) ? platformStyle.paddingSmall : 0
+        anchors.topMargin: (recordContent == NfcTypes.RecordHeader) ? customPlatformStyle.paddingSmall : 0
         anchors.right: parent.right
         iconSource: "delete.svg"
         onClicked: recordModel.removeRecord(index)
@@ -55,9 +55,9 @@ Item {
     Button {
         id: helpRecordButton
         anchors.top: parent.top
-        anchors.topMargin: (recordContent == NfcTypes.RecordHeader) ? platformStyle.paddingSmall : 0
+        anchors.topMargin: (recordContent == NfcTypes.RecordHeader) ? customPlatformStyle.paddingSmall : 0
         anchors.right: removeRecordButton.left
-        anchors.rightMargin: platformStyle.paddingSmall
+        anchors.rightMargin: customPlatformStyle.paddingSmall
         iconSource: "info.svg"
         onClicked: composeTagPage.showRecordHelp(index, title, messageType, recordContent)
         visible: (recordContent == NfcTypes.RecordHeader)
@@ -65,9 +65,9 @@ Item {
     Button {
         id: addInfoToRecordButton
         anchors.top: parent.top
-        anchors.topMargin: (recordContent == NfcTypes.RecordHeader) ? platformStyle.paddingSmall : 0
+        anchors.topMargin: (recordContent == NfcTypes.RecordHeader) ? customPlatformStyle.paddingSmall : 0
         anchors.right: helpRecordButton.left
-        anchors.rightMargin: platformStyle.paddingSmall
+        anchors.rightMargin: customPlatformStyle.paddingSmall
         iconSource: "add_large.svg"
         onClicked: composeTagPage.queryAddContentToRecord(index, messageType)
         visible: (recordContent == NfcTypes.RecordHeader && addVisible)
@@ -80,7 +80,7 @@ Item {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.topMargin: (recordContent == NfcTypes.RecordHeader) ? 11 : 7
-        font.pixelSize: platformStyle.fontSizeLarge
+        font.pixelSize: customPlatformStyle.fontSizeLarge
         color: (recordContent == NfcTypes.RecordHeader) ? "lightskyblue" : "aliceblue";
     }
 
@@ -131,7 +131,7 @@ Item {
     }
     Column {
         id: row
-        spacing: platformStyle.paddingSmall
+        spacing: customPlatformStyle.paddingSmall
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
