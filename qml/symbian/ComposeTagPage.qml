@@ -36,6 +36,7 @@ Page {
         anchors.right: parent.right
         anchors.top: parent.top
         height: customPlatformStyle.fontSizeLarge + customPlatformStyle.paddingSmall
+        font.family: customPlatformStyle.fontFamilyRegular;
         font.pixelSize: customPlatformStyle.fontSizeLarge
         color: customPlatformStyle.colorNormalLight
     }
@@ -51,6 +52,7 @@ Page {
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         anchors {top: messageHeader.bottom; left: parent.left; right: parent.right; bottom: splitViewInput.top; }
+        font.family: customPlatformStyle.fontFamilyRegular;
         font.pixelSize: customPlatformStyle.fontSizeMedium
         color: customPlatformStyle.colorNormalLight
         wrapMode: Text.WordWrap

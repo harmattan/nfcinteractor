@@ -114,30 +114,30 @@ int main(int argc, char *argv[])
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.rootContext()->setContextProperty("platform", platformId);
 
+    // Symbian has style constants defined in platformStyle, MeeGo has a
+    // different system.
+    // To minimize QML code differences between both versions, define
+    // a customPlatformStyle here, used by both versions.
+    // (Unfortunately it's not possible to use the original
+    // "platformStyle" on Symbian and set a "platformStyle" on MeeGo,
+    // because the Window already has platformStyle property, which
+    // would have preference over setting a context property from here)
     QDeclarativePropertyMap *platformStyle = new QDeclarativePropertyMap();
+    platformStyle->insert("paddingSmall", QVariant(4));
+    platformStyle->insert("paddingMedium", QVariant(8));
+    platformStyle->insert("paddingLarge", QVariant(12));
+    platformStyle->insert("fontSizeSmall", QVariant(18));
+    platformStyle->insert("colorNormalLight", QVariant(QColor(255, 255, 255)));
 #if defined(MEEGO_EDITION_HARMATTAN)
     qDebug() << "MeeGo UI platform style";
-    platformStyle->insert("paddingSmall", QVariant(4));
-    platformStyle->insert("paddingMedium", QVariant(8));
-    platformStyle->insert("paddingLarge", QVariant(12));
-    platformStyle->insert("fontSizeSmall", QVariant(18));
     platformStyle->insert("fontSizeMedium", QVariant(22));
     platformStyle->insert("fontSizeLarge", QVariant(26));
-    platformStyle->insert("colorNormalLight", QVariant(QColor(255, 255, 255)));
+    platformStyle->insert("fontFamilyRegular", QVariant(QString("Nokia Pure Text")));
 #else
-    // Symbian would have its own platformStyle, but to
-    // minimize the QML code differences, define it ourselves
-    // here.
-    // Unfortunately it's not possible to use the original
-    // "platformStyle" name only on MeeGo, because it's not possible
-    // to override the property called "platformStyle" of the Window.
-    platformStyle->insert("paddingSmall", QVariant(4));
-    platformStyle->insert("paddingMedium", QVariant(8));
-    platformStyle->insert("paddingLarge", QVariant(12));
-    platformStyle->insert("fontSizeSmall", QVariant(18));
+    qDebug() << "Symbian UI platform style";
     platformStyle->insert("fontSizeMedium", QVariant(20));
     platformStyle->insert("fontSizeLarge", QVariant(22));
-    platformStyle->insert("colorNormalLight", QVariant(QColor(255, 255, 255)));
+    platformStyle->insert("fontFamilyRegular", QVariant(QFont().defaultFamily()));
 #endif
     viewer.rootContext()->setContextProperty("customPlatformStyle", platformStyle);
 

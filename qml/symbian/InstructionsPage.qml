@@ -38,6 +38,7 @@ Page {
                     wrapMode: Text.WordWrap
                     //color: customPlatformStyle.colorNormalLight
                     color: "aliceblue";
+                    font.family: customPlatformStyle.fontFamilyRegular;
                     font.pixelSize: customPlatformStyle.fontSizeLarge
                 }
                 Image {
@@ -54,6 +55,7 @@ Page {
                     width: parent.width
                     wrapMode: Text.WordWrap
                     color: customPlatformStyle.colorNormalLight
+                    font.family: customPlatformStyle.fontFamilyRegular;
                     font.pixelSize: customPlatformStyle.fontSizeMedium
                 }
             }

@@ -99,6 +99,7 @@ Page {
                     id: infoTxt
                     text: infoMsg
                     color: textColor
+                    font.family: customPlatformStyle.fontFamilyRegular;
                     font.pixelSize: customPlatformStyle.fontSizeMedium // 18
                     wrapMode: Text.Wrap
                     anchors.left: infoImg.right
@@ -142,10 +143,6 @@ Page {
             }
         }
         ToolIcon {
-            //iconSource: "create_message.svg";
-            //iconId: "toolbar-edit"
-            //iconId: "toolbar-image-edit"
-            //iconId: "toolbar-new-message"
             iconId: "toolbar-new-email"
             onClicked: {
                 pageStack.push(composeTagPage)

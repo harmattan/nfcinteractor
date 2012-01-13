@@ -132,6 +132,7 @@ Page {
         id: writeInstructions
         text: "Please touch a tag to write the NDEF message"
         //horizontalAlignment: Text.AlignHCenter
+        font.family: customPlatformStyle.fontFamilyRegular;
         font.pixelSize: customPlatformStyle.fontSizeLarge
         color: customPlatformStyle.colorNormalLight
         anchors.top: parent.top
@@ -172,6 +173,7 @@ Page {
         Text {
             id: busyText
             text: "Writing..."
+            font.family: customPlatformStyle.fontFamilyRegular;
             font.pixelSize: customPlatformStyle.fontSizeLarge
             color: customPlatformStyle.colorNormalLight
             anchors.top: busySpinner.bottom
@@ -220,6 +222,7 @@ Page {
                     id: writeStatusText
                     font.bold: true
                     horizontalAlignment: Text.AlignHCenter
+                    font.family: customPlatformStyle.fontFamilyRegular;
                     font.pixelSize: customPlatformStyle.fontSizeLarge
                     color: customPlatformStyle.colorNormalLight
                     height: customPlatformStyle.fontSizeLarge + customPlatformStyle.paddingLarge
@@ -230,6 +233,7 @@ Page {
                 Text {
                     id: writeStatusDetails
                     horizontalAlignment: Text.AlignHCenter
+                    font.family: customPlatformStyle.fontFamilyRegular;
                     font.pixelSize: customPlatformStyle.fontSizeMedium
                     color: customPlatformStyle.colorNormalLight
                     width: parent.width

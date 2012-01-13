@@ -31,7 +31,7 @@ Item {
         id: separator
         width: parent.width; height: 1; color: "gray"
         anchors.top: parent.top
-        visible: (recordContent == NfcTypes.RecordHeader)
+        visible: (recordContent === NfcTypes.RecordHeader)
     }
     Rectangle {
         anchors.top:parent.top
@@ -41,7 +41,7 @@ Item {
         width: 2
         height: parent.height - 3
         color: "cornflowerblue"
-        visible: (recordContent != NfcTypes.RecordHeader)
+        visible: (recordContent !== NfcTypes.RecordHeader)
     }
     Button {
         id: removeRecordButton
@@ -55,33 +55,34 @@ Item {
     Button {
         id: helpRecordButton
         anchors.top: parent.top
-        anchors.topMargin: (recordContent == NfcTypes.RecordHeader) ? customPlatformStyle.paddingSmall : 0
+        anchors.topMargin: (recordContent === NfcTypes.RecordHeader) ? customPlatformStyle.paddingSmall : 0
         anchors.right: removeRecordButton.left
         anchors.rightMargin: customPlatformStyle.paddingSmall
         iconSource: "info.svg"
         onClicked: composeTagPage.showRecordHelp(index, title, messageType, recordContent)
-        visible: (recordContent == NfcTypes.RecordHeader)
+        visible: (recordContent === NfcTypes.RecordHeader)
     }
     Button {
         id: addInfoToRecordButton
         anchors.top: parent.top
-        anchors.topMargin: (recordContent == NfcTypes.RecordHeader) ? customPlatformStyle.paddingSmall : 0
+        anchors.topMargin: (recordContent === NfcTypes.RecordHeader) ? customPlatformStyle.paddingSmall : 0
         anchors.right: helpRecordButton.left
         anchors.rightMargin: customPlatformStyle.paddingSmall
         iconSource: "add_large.svg"
         onClicked: composeTagPage.queryAddContentToRecord(index, messageType)
-        visible: (recordContent == NfcTypes.RecordHeader && addVisible)
+        visible: (recordContent === NfcTypes.RecordHeader && addVisible)
     }
     Text {
         id: titleDescription
         text: title
-        anchors.leftMargin: (recordContent == NfcTypes.RecordHeader) ? 5 : 15
+        anchors.leftMargin: (recordContent === NfcTypes.RecordHeader) ? 5 : 15
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.topMargin: (recordContent == NfcTypes.RecordHeader) ? 11 : 7
+        anchors.topMargin: (recordContent === NfcTypes.RecordHeader) ? 11 : 7
+        font.family: customPlatformStyle.fontFamilyRegular;
         font.pixelSize: customPlatformStyle.fontSizeLarge
-        color: (recordContent == NfcTypes.RecordHeader) ? "lightskyblue" : "aliceblue";
+        color: (recordContent === NfcTypes.RecordHeader) ? "lightskyblue" : "aliceblue";
     }
 
     // --------------------------------------------------------------------------------
@@ -93,12 +94,12 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottomMargin: 7
-        text: (recordContent == NfcTypes.RecordHeader) ? "" : defaultText;
-        visible: (recordContent != NfcTypes.RecordHeader
-                  && recordContent != NfcTypes.RecordSpAction
-                  && recordContent != NfcTypes.RecordGeoType
-                  && recordContent != NfcTypes.RecordTypeNameFormat
-                  && recordContent != NfcTypes.RecordSocialNetworkType)
+        text: (recordContent === NfcTypes.RecordHeader) ? "" : defaultText;
+        visible: (recordContent !== NfcTypes.RecordHeader
+                  && recordContent !== NfcTypes.RecordSpAction
+                  && recordContent !== NfcTypes.RecordGeoType
+                  && recordContent !== NfcTypes.RecordTypeNameFormat
+                  && recordContent !== NfcTypes.RecordSocialNetworkType)
         onActiveFocusChanged: {
             // Note that this needs to be onActiveFocusChanged, not just onFocusChanged, which
             // wouldn't have the desired effect.
@@ -137,17 +138,17 @@ Item {
         anchors.right: parent.right
         anchors.bottomMargin: 7
         anchors.leftMargin: 15
-        visible: (recordContent == NfcTypes.RecordSpAction
-                  || recordContent == NfcTypes.RecordGeoType
-                  || recordContent == NfcTypes.RecordTypeNameFormat
-                  || recordContent == NfcTypes.RecordSocialNetworkType)
+        visible: (recordContent === NfcTypes.RecordSpAction
+                  || recordContent === NfcTypes.RecordGeoType
+                  || recordContent === NfcTypes.RecordTypeNameFormat
+                  || recordContent === NfcTypes.RecordSocialNetworkType)
         Repeater {
             model: selectOptions
             RadioButton {
                 id: button1
                 text: modelData
                 platformExclusiveGroup: selectGroup
-                checked: (index == selectedOption)
+                checked: (index === selectedOption)
             }
         }
     }
@@ -156,7 +157,7 @@ Item {
         // of the selected RadioButton, but not to get its index...
         // TODO: Report
         for (var i = 0; i < selectOptions.length; i++) {
-            if (selectOptions[i] == selectGroup.selectedValue) {
+            if (selectOptions[i] === selectGroup.selectedValue) {
                 return i;
             }
         }
@@ -169,10 +170,10 @@ Item {
         running: false
         repeat: false
         onTriggered: {
-            if (recordContent == NfcTypes.RecordSpAction
-                    || recordContent == NfcTypes.RecordGeoType
-                    || recordContent == NfcTypes.RecordTypeNameFormat
-                    || recordContent == NfcTypes.RecordSocialNetworkType) {
+            if (recordContent === NfcTypes.RecordSpAction
+                    || recordContent === NfcTypes.RecordGeoType
+                    || recordContent === NfcTypes.RecordTypeNameFormat
+                    || recordContent === NfcTypes.RecordSocialNetworkType) {
                 var selectedOptionIndex = getSelectedOptionIndex();
                 if (selectedOptionIndex > -1) {
                     //nfcInfo.recordModel.setDataValue(index, selectGroup.selectedValue, "selectedOption");

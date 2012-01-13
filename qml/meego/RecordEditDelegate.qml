@@ -32,7 +32,7 @@ Item {
         id: separator
         width: parent.width; height: 1; color: "gray"
         anchors.top: parent.top
-        visible: (recordContent == NfcTypes.RecordHeader)
+        visible: (recordContent === NfcTypes.RecordHeader)
     }
 
     Rectangle {
@@ -43,7 +43,7 @@ Item {
         width: 2
         height: parent.height - 3
         color: "cornflowerblue"
-        visible: (recordContent != NfcTypes.RecordHeader)
+        visible: (recordContent !== NfcTypes.RecordHeader)
     }
 
     // Buttons
@@ -91,8 +91,9 @@ Item {
         anchors.right: parent.right
         anchors.top: parent.top
         anchors.topMargin: 15
-        font.pixelSize: customPlatformStyle.fontSizeMedium
-        color: (recordContent == NfcTypes.RecordHeader) ? "lightskyblue" : "aliceblue";
+        font.family: customPlatformStyle.fontFamilyRegular;
+        font.pixelSize: customPlatformStyle.fontSizeLarge
+        color: (recordContent === NfcTypes.RecordHeader) ? "lightskyblue" : "aliceblue";
     }
 
     // --------------------------------------------------------------------------------
@@ -104,12 +105,12 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottomMargin: 7
-        text: (recordContent == NfcTypes.RecordHeader) ? "" : defaultText;
-        visible: (recordContent != NfcTypes.RecordHeader
-                  && recordContent != NfcTypes.RecordSpAction
-                  && recordContent != NfcTypes.RecordGeoType
-                  && recordContent != NfcTypes.RecordTypeNameFormat
-                  && recordContent != NfcTypes.RecordSocialNetworkType)
+        text: (recordContent === NfcTypes.RecordHeader) ? "" : defaultText;
+        visible: (recordContent !== NfcTypes.RecordHeader
+                  && recordContent !== NfcTypes.RecordSpAction
+                  && recordContent !== NfcTypes.RecordGeoType
+                  && recordContent !== NfcTypes.RecordTypeNameFormat
+                  && recordContent !== NfcTypes.RecordSocialNetworkType)
         onActiveFocusChanged: {
             // Note that this needs to be onActiveFocusChanged, not just onFocusChanged, which
             // wouldn't have the desired effect.
@@ -148,10 +149,10 @@ Item {
         anchors.right: parent.right
         anchors.bottomMargin: 7
         anchors.leftMargin: 15
-        visible: (recordContent == NfcTypes.RecordSpAction
-                  || recordContent == NfcTypes.RecordGeoType
-                  || recordContent == NfcTypes.RecordTypeNameFormat
-                  || recordContent == NfcTypes.RecordSocialNetworkType)
+        visible: (recordContent === NfcTypes.RecordSpAction
+                  || recordContent === NfcTypes.RecordGeoType
+                  || recordContent === NfcTypes.RecordTypeNameFormat
+                  || recordContent === NfcTypes.RecordSocialNetworkType)
         Repeater {
             model: selectOptions
             RadioButton {
@@ -159,7 +160,7 @@ Item {
                 text: modelData
                 // TODO: MeeGo
                 //platformExclusiveGroup: selectGroup
-                checked: (index == selectedOption)
+                checked: (index === selectedOption)
             }
         }
     }
@@ -168,7 +169,7 @@ Item {
         // of the selected RadioButton, but not to get its index...
         // TODO: Report
         for (var i = 0; i < selectOptions.length; i++) {
-            if (selectOptions[i] == selectGroup.selectedValue) {
+            if (selectOptions[i] === selectGroup.selectedValue) {
                 return i;
             }
         }
@@ -181,10 +182,10 @@ Item {
         running: false
         repeat: false
         onTriggered: {
-            if (recordContent == NfcTypes.RecordSpAction
-                    || recordContent == NfcTypes.RecordGeoType
-                    || recordContent == NfcTypes.RecordTypeNameFormat
-                    || recordContent == NfcTypes.RecordSocialNetworkType) {
+            if (recordContent === NfcTypes.RecordSpAction
+                    || recordContent === NfcTypes.RecordGeoType
+                    || recordContent === NfcTypes.RecordTypeNameFormat
+                    || recordContent === NfcTypes.RecordSocialNetworkType) {
                 var selectedOptionIndex = getSelectedOptionIndex();
                 if (selectedOptionIndex > -1) {
                     //nfcInfo.recordModel.setDataValue(index, selectGroup.selectedValue, "selectedOption");

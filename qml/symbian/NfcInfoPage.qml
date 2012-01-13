@@ -98,6 +98,7 @@ Page {
                     id: infoTxt
                     text: infoMsg
                     color: textColor
+                    font.family: customPlatformStyle.fontFamilyRegular;
                     font.pixelSize: customPlatformStyle.fontSizeMedium // 18
                     wrapMode: Text.Wrap
                     anchors.left: infoImg.right
