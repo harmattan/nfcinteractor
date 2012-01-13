@@ -54,7 +54,7 @@ void NearFieldTargetInfo::resetInfo()
     tagWriteAccessCC = NfcAccessUnknown;
     tagReadAccessLockBits = NfcAccessUnknown;
     tagWriteAccessLockBits = NfcAccessUnknown;
-    tagDynamicMemory = false;
+    tagMemoryType = NfcMemoryUnknown;
 }
 
 NearFieldTargetInfo::NfcTagAccessStatus NearFieldTargetInfo::combinedReadAccess() const

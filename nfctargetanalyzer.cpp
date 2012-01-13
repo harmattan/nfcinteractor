@@ -127,9 +127,9 @@ QString NfcTargetAnalyzer::analyzeType1Target(QNearFieldTagType1* target)
                 // != 0001b SHALL determine the dynamic memory map.
                 const quint8 tagStaticMemory = tagIdentification[0] & 0x0F;    // Least significant nibble
                 if (tagStaticMemory == 0x01) {
-                    m_tagInfo.tagDynamicMemory = false;
+                    m_tagInfo.tagMemoryType = NearFieldTargetInfo::NfcMemoryStatic;
                 } else {
-                    m_tagInfo.tagDynamicMemory = true;
+                    m_tagInfo.tagMemoryType = NearFieldTargetInfo::NfcMemoryDynamic;
                 }
                 // Byte 1: HR1 = xxh is undefined and SHALL be ignored.
             }
@@ -154,17 +154,30 @@ QString NfcTargetAnalyzer::analyzeType1Target(QNearFieldTagType1* target)
     // usually mean the actual writable & usable tag memory size.
     const int tagMemorySize = target->memorySize();
     if (tagMemorySize > 0) {
-        nfcInfo.append("Memory size: " + QString::number(tagMemorySize) + " bytes - ");
-    } else {
-        nfcInfo.append("Memory type: ");
+        nfcInfo.append("Memory size: " + QString::number(tagMemorySize) + " bytes");
     }
-    if (m_tagInfo.tagDynamicMemory) {
-        nfcInfo.append("Dynamic\n");
-    } else {
-        nfcInfo.append("Static\n");
+    if (m_tagInfo.tagMemoryType != NearFieldTargetInfo::NfcMemoryUnknown) {
+        if (tagMemorySize > 0) {
+            // Memory size is available - add type to the same line
+            nfcInfo.append(" - ");
+        } else {
+            // No memory size available - add caption
+            nfcInfo.append("Memory type: ");
+        }
+        if (m_tagInfo.tagMemoryType == NearFieldTargetInfo::NfcMemoryStatic) {
+            nfcInfo.append("Static");
+        } else if (m_tagInfo.tagMemoryType == NearFieldTargetInfo::NfcMemoryDynamic){
+            nfcInfo.append("Dynamic");
+        }
     }
+    if (!(tagMemorySize == 0 && m_tagInfo.tagMemoryType == NearFieldTargetInfo::NfcMemoryUnknown)) {
+        // If either the memory size or the memory type could be determined,
+        // add a new line.
+        nfcInfo.append("\n");
+    }
+
     m_tagInfo.tagMemorySize = tagMemorySize;
-    if (m_tagInfo.tagDynamicMemory == false) {
+    if (m_tagInfo.tagMemoryType == NearFieldTargetInfo::NfcMemoryStatic) {
         // Static memory:
         // The 12 blocks numbered as 1h to Ch contain 96 bytes
         // of general read/write memory.
@@ -178,7 +191,7 @@ QString NfcTargetAnalyzer::analyzeType1Target(QNearFieldTagType1* target)
     }
 
     // Lock status of static memory tag
-    if (!m_tagInfo.tagDynamicMemory) {
+    if (m_tagInfo.tagMemoryType == NearFieldTargetInfo::NfcMemoryStatic) {
         // Read bytes 0, 1 of block 0xE
         // All twelve of the memory blocks 1h to Ch are separately lockable.
         // When a block‘s lock-bit is set to a 1, that block becomes irreversibly frozen as read-only.
@@ -320,11 +333,14 @@ QString NfcTargetAnalyzer::analyzeType2Target(QNearFieldTagType2* target)
 
 
     // Static memory: 48 bytes (TYPE2_STATIC_MEMORY_SIZE)
-    m_tagInfo.tagDynamicMemory = (tagMemorySize > TYPE2_STATIC_MEMORY_SIZE);
-    if (m_tagInfo.tagDynamicMemory) {
-        nfcInfo.append("Dynamic\n");
-    } else {
-        nfcInfo.append("Static\n");
+    if (m_tagInfo.tagMemorySize > 0) {
+        if (m_tagInfo.tagMemorySize > TYPE2_STATIC_MEMORY_SIZE) {
+            m_tagInfo.tagMemoryType = NearFieldTargetInfo::NfcMemoryStatic;
+            nfcInfo.append("Static\n");
+        } else {
+            m_tagInfo.tagMemoryType = NearFieldTargetInfo::NfcMemoryDynamic;
+            nfcInfo.append("Dynamic\n");
+        }
     }
 
     // Read static lock bytes of the tag

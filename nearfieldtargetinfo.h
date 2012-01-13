@@ -51,6 +51,11 @@ public:
         NfcAccessAllowed,
         NfcAccessForbidden
     };
+    enum NfcTagMemoryType {
+        NfcMemoryUnknown,
+        NfcMemoryStatic,
+        NfcMemoryDynamic
+    };
 
     /*! Check if both the lock bits of the tag as well as the
       capability container (CC) indicate that the tag is readable. */
@@ -73,7 +78,7 @@ public:
     NfcTagAccessStatus tagWriteAccessCC;
     NfcTagAccessStatus tagReadAccessLockBits;
     NfcTagAccessStatus tagWriteAccessLockBits;
-    bool tagDynamicMemory;
+    NfcTagMemoryType tagMemoryType;
 };
 
 
