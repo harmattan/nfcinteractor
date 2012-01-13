@@ -46,6 +46,7 @@ Page {
                     anchors.horizontalCenter: parent.horizontalCenter
                     fillMode: Image.PreserveAspectFit
                     source: "icon.png"
+                    asynchronous: true
                 }
 
                 Text {

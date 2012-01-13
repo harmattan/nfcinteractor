@@ -90,7 +90,9 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.topMargin: 15
+        //anchors.topMargin: (recordContent === NfcTypes.RecordHeader) ? 15 : 12
+        height: 50
+        verticalAlignment: Text.AlignVCenter
         font.family: customPlatformStyle.fontFamilyRegular;
         font.pixelSize: customPlatformStyle.fontSizeLarge
         color: (recordContent === NfcTypes.RecordHeader) ? "lightskyblue" : "aliceblue";

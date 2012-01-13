@@ -35,7 +35,7 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        height: customPlatformStyle.fontSizeLarge + customPlatformStyle.paddingSmall
+        height: customPlatformStyle.fontSizeLarge + customPlatformStyle.paddingMedium
         font.family: customPlatformStyle.fontFamilyRegular;
         font.pixelSize: customPlatformStyle.fontSizeLarge
         color: customPlatformStyle.colorNormalLight

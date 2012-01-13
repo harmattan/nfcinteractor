@@ -144,9 +144,8 @@ PageStackWindow {
             composeTagPage.updateHeader(ndefMessageSize)
     }
 
-
+    // MeeGo: set black theme
     Component.onCompleted: {
-        console.log("Loaded")
         theme.inverted = true
     }
 

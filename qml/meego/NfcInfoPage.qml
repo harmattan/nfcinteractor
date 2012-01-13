@@ -69,12 +69,12 @@ Page {
         delegate: listDelegate
         // Automatically scroll down when a new element is added
         onCountChanged: {
-            positionViewAtIndex(count - 1, ListView.End)
-            // Qt Quick 1.1: positionViewAtEnd()
+            //positionViewAtIndex(count - 1, ListView.End)
+            positionViewAtEnd();
         }
         //anchors { top: writeNdefButton.bottom; left: parent.left; right: parent.right; bottom: parent.bottom }
         anchors.fill: parent
-        Component.onCompleted: positionViewAtIndex(0, ListView.Beginning)
+        Component.onCompleted: positionViewAtBeginning(); //positionViewAtIndex(0, ListView.Beginning)
     }
 
     // Delegate for showing an individual line of the model
@@ -82,17 +82,17 @@ Page {
         id: listDelegate
         Item {
             width: parent.width
-            //height: row.height + 10
             height: Math.max(infoImg.height, infoTxt.paintedHeight) + customPlatformStyle.paddingMedium
             Item {
                 id: row
-                //spacing: 5
                 width: parent.width
                 Image {
                     id: infoImg
                     source: image
                     fillMode: Image.PreserveAspectFit
                     anchors.left: parent.left
+                    anchors.top: parent.top
+                    anchors.topMargin: Math.ceil((customPlatformStyle.fontHeightMedium - infoImg.sourceSize.height) / 2)
                     asynchronous: true
                 }
                 Text {
@@ -100,7 +100,7 @@ Page {
                     text: infoMsg
                     color: textColor
                     font.family: customPlatformStyle.fontFamilyRegular;
-                    font.pixelSize: customPlatformStyle.fontSizeMedium // 18
+                    font.pixelSize: customPlatformStyle.fontSizeMedium
                     wrapMode: Text.Wrap
                     anchors.left: infoImg.right
                     anchors.leftMargin: customPlatformStyle.paddingMedium

@@ -50,7 +50,6 @@ Planned additional features for the final release:
 - Add store link to about view
 
 Known bugs (work-in-progress):
-- MeeGo: different font for selection items in tag compose view
 - MeeGo: 2x write confirmation callbacks, visible in raw view
 - MeeGo: skip attempts to read tag specific info to speed up reading & writing
 - MeeGo: finalize .deb packaging data

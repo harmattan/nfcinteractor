@@ -75,6 +75,16 @@ QObject* findQMLElement(QObject *rootElement, const QString &objectName)
     return NULL;
 }
 
+int getFontHeight(const QString& fontName, const int fontPixelSize) {
+    QFont *font = new QFont(fontName);
+    font->setPixelSize(fontPixelSize);
+    QFontMetrics *fm = new QFontMetrics(*font);
+    const int fontHeight = fm->height();
+    delete fm;
+    delete font;
+    return fontHeight;
+}
+
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
@@ -130,14 +140,16 @@ int main(int argc, char *argv[])
     platformStyle->insert("colorNormalLight", QVariant(QColor(255, 255, 255)));
 #if defined(MEEGO_EDITION_HARMATTAN)
     qDebug() << "MeeGo UI platform style";
-    platformStyle->insert("fontSizeMedium", QVariant(22));
-    platformStyle->insert("fontSizeLarge", QVariant(26));
     platformStyle->insert("fontFamilyRegular", QVariant(QString("Nokia Pure Text")));
+    platformStyle->insert("fontSizeMedium", QVariant(22));
+    platformStyle->insert("fontHeightMedium", QVariant(getFontHeight(QString("Nokia Pure Text"), 22)));
+    platformStyle->insert("fontSizeLarge", QVariant(26));
 #else
     qDebug() << "Symbian UI platform style";
-    platformStyle->insert("fontSizeMedium", QVariant(20));
-    platformStyle->insert("fontSizeLarge", QVariant(22));
     platformStyle->insert("fontFamilyRegular", QVariant(QFont().defaultFamily()));
+    platformStyle->insert("fontSizeMedium", QVariant(20));
+    platformStyle->insert("fontHeightMedium", QVariant(getFontHeight(QFont().defaultFamily(), 20)));
+    platformStyle->insert("fontSizeLarge", QVariant(22));
 #endif
     viewer.rootContext()->setContextProperty("customPlatformStyle", platformStyle);
 
