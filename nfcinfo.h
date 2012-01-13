@@ -109,6 +109,7 @@ class NfcInfo : public QObject
         NfcTargetAnalysis
     };
     enum ReportingLevel {
+        DebugReporting,
         FullReporting,
         OnlyImportantReporting
     };

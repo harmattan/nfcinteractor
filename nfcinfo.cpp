@@ -502,7 +502,8 @@ void NfcInfo::targetError(QNearFieldTarget::Error error, const QNearFieldTarget:
         emit nfcTagError(errorText);
         stoppedTagInteraction();
     } else {
-        if (m_reportingLevel == FullReporting) {
+        if (m_reportingLevel == FullReporting ||
+                error != QNearFieldTarget::InvalidParametersError) {
             emit nfcTagError(errorText);
         }
     }
@@ -560,25 +561,29 @@ void NfcInfo::requestCompleted(const QNearFieldTarget::RequestId &id)
     }
 
     // Request the response
-    if (m_cachedTarget)
-    {
-        QVariant response = m_cachedTarget->requestResponse(id);
-        if (response.isValid()) {
-            if (response.type() == QVariant::ByteArray) {
-                //emit nfcStatusUpdate("Response (" + QString(response.typeName()) + ")");
-                qDebug() << "Response (" << QString(response.typeName()) << ")";
-            } else {
-                //emit nfcStatusUpdate("Response (" + QString(response.typeName()) + "): " + response.toString());
-                qDebug() << "Response (" << QString(response.typeName()) << "): " << response.toString();
-            }
-            if (response.type() == QVariant::ByteArray) {
-                QByteArray p = response.toByteArray();
-                QString arrayContents = "";
-                for (int i = 0; i < p.size(); ++i) {
-                    arrayContents.append(QString("0x") + QString::number(p.at(i), 16) + " ");
+    if (m_reportingLevel == DebugReporting) {
+        // Print the response of the tag to the debug output
+        // in case debug reporting is active.
+        if (m_cachedTarget)
+        {
+            QVariant response = m_cachedTarget->requestResponse(id);
+            if (response.isValid()) {
+                if (response.type() == QVariant::ByteArray) {
+                    //emit nfcStatusUpdate("Response (" + QString(response.typeName()) + ")");
+                    qDebug() << "Response (" << QString(response.typeName()) << ")";
+                } else {
+                    //emit nfcStatusUpdate("Response (" + QString(response.typeName()) + "): " + response.toString());
+                    qDebug() << "Response (" << QString(response.typeName()) << "): " << response.toString();
                 }
-                //emit nfcStatusUpdate("Raw contents of payload:\n" + arrayContents + "\n");
-                qDebug() << "Raw contents of response:\n" << arrayContents;
+                if (response.type() == QVariant::ByteArray) {
+                    QByteArray p = response.toByteArray();
+                    QString arrayContents = "";
+                    for (int i = 0; i < p.size(); ++i) {
+                        arrayContents.append(QString("0x") + QString::number(p.at(i), 16) + " ");
+                    }
+                    //emit nfcStatusUpdate("Raw contents of payload:\n" + arrayContents + "\n");
+                    qDebug() << "Raw contents of response:\n" << arrayContents;
+                }
             }
         }
     }
