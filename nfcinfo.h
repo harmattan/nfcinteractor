@@ -126,6 +126,10 @@ signals:
     void nfcStatusError(const QString& nfcStatusErrorText);
     /*! Generic information about a new tag that was detected */
     void nfcInfoUpdate(const QString& nfcInfoText);
+    /*! Information when the app starts interacting with a tag. */
+    void nfcStartingTagInteraction();
+    /*! Finished interacting with the tag. */
+    void nfcStoppedTagInteraction();
     /*! Contents of the NDEF message found on the tag. */
     void nfcTagContents(const QString& nfcTagContents);
     /*! The tag contained an image. The parameter contains
@@ -168,6 +172,8 @@ private:
 
     QString convertTargetErrorToString(QNearFieldTarget::Error error);
 
+    void startedTagInteraction();
+    void stoppedTagInteraction();
 
 #ifdef Q_OS_SYMBIAN
 private slots:
@@ -191,6 +197,7 @@ private:
     /*! Set to true if the application requested to write an NDEF message
       to the tag on the next opportunity. */
     bool m_pendingWriteNdef;
+    bool m_nfcTagInteractionActive;
     /*! Current activity / status of the class, e.g., reading or analyzing
       a tag. The activity can consist of multiple individual requests. */
     NfcRequestStatus m_currentActivity;
@@ -203,7 +210,8 @@ private:
     QNdefMessage* m_cachedNdefMessage;
     int m_cachedNdefMessageSize;
     /*! Currently active request ID for tracking the requests
-      to the NFC interface. */
+      to the NFC interface. Only used for main read & write requests.
+      Finishing them will stop NFC interactivity. */
     QNearFieldTarget::RequestId m_cachedRequestId;
 
 //    enum NfcCachedRequestType {

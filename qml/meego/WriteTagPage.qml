@@ -12,6 +12,13 @@ Page {
                 pageStack.depth <= 1 ? Qt.quit() : pageStack.pop();
             }
         }
+//        ToolIcon {
+//            //iconSource: "toolbar-back";
+//            iconId: "toolbar-back"
+//            onClicked: {
+//                startWriting();
+//            }
+//        }
     }
 
     function resetPage() {
@@ -20,6 +27,16 @@ Page {
         writeStatusContainer.visible = false;
         writeStatusBg.visible = false;
         separator.visible = false;
+    }
+
+    function startWriting() {
+        writeStatusContainer.visible = false;
+        showHideBusy(true);
+    }
+
+    function showHideBusy(showBusy) {
+        busyContainer.visible = showBusy;
+        busySpinner.running = showBusy;
     }
 
     function startAnimation() {
@@ -31,6 +48,7 @@ Page {
     }
 
     function tagWritten() {
+        showHideBusy(false);
         writeStatusText.text = "Success";
         writeStatusText.color = "palegreen";
         writeStatusDetails.text = "Message written to the tag.\nTouch another tag to write again, or go back to the edit page.";
@@ -41,6 +59,7 @@ Page {
     }
 
     function tagWriteError(errorMsg) {
+        showHideBusy(false);
         writeStatusText.text = "Failed to write tag";
         writeStatusText.color = "lightcoral";
         writeStatusDetails.text = errorMsg;
@@ -133,6 +152,34 @@ Page {
         anchors.top: writeInstructionsImage.bottom
         visible: false
     }
+
+    // -------------------------------------------------------------------------
+    // Working indicator
+    Item {
+        id: busyContainer
+        anchors.top: separator.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        visible: false
+        BusyIndicator {
+            id: busySpinner
+            running: false
+            platformStyle: BusyIndicatorStyle { size: "large" }
+            anchors.top: parent.top
+            anchors.topMargin: customPlatformStyle.paddingLarge
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+        Text {
+            id: busyText
+            text: "Writing..."
+            font.pixelSize: customPlatformStyle.fontSizeLarge
+            color: customPlatformStyle.colorNormalLight
+            anchors.top: busySpinner.bottom
+            anchors.topMargin: customPlatformStyle.paddingMedium
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
+    }
+
     // -------------------------------------------------------------------------
     // Status
 

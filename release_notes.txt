@@ -46,6 +46,18 @@ Easily reusable code for developers including:
 
 Planned additional features for the final release:
 - Nokia Store link (specify content ID)
+  + Store link PHP script, with different content IDs for Symbian & MeeGo
+- Add store link to about view
+
+Known bugs (work-in-progress):
+- MeeGo: different font for selection items in tag compose view
+- MeeGo: 2x write confirmation callbacks, visible in raw view
+- MeeGo: tag writing takes long - show animated progress (also good for Symbian)
+- MeeGo: skip attempts to read tag specific info to speed up reading & writing
+- MeeGo: write failure issue: optimize linefeeds in message
+- MeeGo: finalize .deb packaging data
+- Different item contents for different message types (e.g., not "Nokia" for title in social network tag)
+- Also use customPlatformStyle for Symbian to reduce number of QML differences
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)

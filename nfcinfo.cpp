@@ -227,6 +227,7 @@ void NfcInfo::targetDetected(QNearFieldTarget *target)
     // (so that we can also write on tags that are empty as of now)
     m_cachedTarget = target;
 
+    startedTagInteraction();
     // Check if the target includes a NDEF message
     const bool targetHasNdefMessage = target->hasNdefMessage();
     if (targetHasNdefMessage)
@@ -269,6 +270,10 @@ void NfcInfo::targetDetected(QNearFieldTarget *target)
             // Write a cached NDEF message to the tag
             writeCachedNdefMessage();
         }
+    } else {
+        // No NDEF access - no further interaction
+        qDebug() << "No NDEF access to the target";
+        stoppedTagInteraction();
     }
 
 }
@@ -312,6 +317,7 @@ void NfcInfo::targetMessageDetected(const QNdefMessage &message, QNearFieldTarge
 void NfcInfo::ndefMessageRead(const QNdefMessage &message)
 {
     emit nfcTagContents(m_nfcNdefParser->parseNdefMessage(message));
+    stoppedTagInteraction();
 }
 
 /*!
@@ -394,7 +400,28 @@ bool NfcInfo::writeCachedNdefMessage()
             emit nfcStatusUpdate("Please touch a tag to write the message.");
         }
     }
+    if (!success) {
+        // Didn't start a request to write a message - finished interacting
+        // with the tag
+        stoppedTagInteraction();
+    }
     return success;
+}
+
+void NfcInfo::startedTagInteraction() {
+    if (!m_nfcTagInteractionActive) {
+        m_nfcTagInteractionActive = true;
+        emit nfcStartingTagInteraction();
+        qDebug() << "*** Starting tag interaction...";
+    }
+}
+
+void NfcInfo::stoppedTagInteraction() {
+    if (m_nfcTagInteractionActive) {
+        m_nfcTagInteractionActive = false;
+        emit nfcStoppedTagInteraction();
+        qDebug() << "*** Stopped tag interaction...";
+    }
 }
 
 /*!
@@ -405,6 +432,7 @@ void NfcInfo::targetLost(QNearFieldTarget *target)
 {
     m_cachedTarget = NULL;
     target->deleteLater();
+    stoppedTagInteraction();
     emit nfcStatusUpdate("Target lost");
 }
 
@@ -423,12 +451,12 @@ void NfcInfo::targetError(QNearFieldTarget::Error error, const QNearFieldTarget:
         if (!m_pendingWriteNdef) {
             m_currentActivity = NfcIdle;
         }
-        errorText.append("\nUnable to write message.");
+        errorText.append("\n\nUnable to write message.");
 
         if (m_nfcTargetAnalyzer->m_tagInfo.combinedWriteAccess() == NearFieldTargetInfo::NfcAccessForbidden) {
-            errorText.append("\n\nTag is write-protected.");
+            errorText.append("\nTag is write-protected.");
         } else if (m_nfcTargetAnalyzer->m_tagInfo.combinedWriteAccess() == NearFieldTargetInfo::NfcAccessUnknown) {
-            errorText.append("\n\nTag write access unknown.");
+            errorText.append("\nTag write access unknown.");
         }
         // Compare tag size to message size
         const int tagWritableSize = m_nfcTargetAnalyzer->m_tagInfo.tagWritableSize;
@@ -469,6 +497,10 @@ void NfcInfo::targetError(QNearFieldTarget::Error error, const QNearFieldTarget:
             }
         }
         emit nfcTagWriteError(errorText);
+        stoppedTagInteraction();
+    } if (id == m_cachedRequestId && m_cachedRequestType == NfcNdefReading) {
+        emit nfcTagError(errorText);
+        stoppedTagInteraction();
     } else {
         if (m_reportingLevel == FullReporting) {
             emit nfcTagError(errorText);
@@ -516,6 +548,7 @@ void NfcInfo::requestCompleted(const QNearFieldTarget::RequestId &id)
         }
         m_cachedRequestType = NfcIdle;
         emit nfcStatusUpdate(message);
+        stoppedTagInteraction();
     } else {
         message = "Request completed.";
     }
@@ -562,6 +595,7 @@ void NfcInfo::requestCompleted(const QNearFieldTarget::RequestId &id)
 void NfcInfo::ndefMessageWritten()
 {
     emit nfcTagWritten();
+    stoppedTagInteraction();
     qDebug() << "ndefMessageWritten";
 
     if (m_pendingWriteNdef) {

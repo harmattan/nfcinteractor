@@ -108,6 +108,17 @@ PageStackWindow {
         onNfcTagError:
             logMessage(nfcTagError, "coral", "nfcSymbolError.png");
 
+        onNfcStartingTagInteraction: {
+            if (writeTagPage.status === PageStatus.Active) {
+                // Active page is writing page - start busy animation
+                writeTagPage.startWriting();
+            }
+        }
+
+        onNfcStoppedTagInteraction: {
+            // TODO: start and stop busy animation in tag reading mode
+        }
+
         onNfcTagWritten: {
             logMessage("Message written to the tag.", "aliceblue", "nfcSymbolInfo.png");
             writeTagPage.tagWritten();

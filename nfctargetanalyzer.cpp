@@ -379,7 +379,7 @@ QString NfcTargetAnalyzer::analyzeType2Target(QNearFieldTagType2* target)
     // Byte 3 indicates the read and write access capability of the data area and CC area of the Type 2 Tag Platform
     id = target->readBlock(3);   // Check the NDEF magic number
     if (!target->waitForRequestCompleted(id)) {
-        qDebug() << "Error reading NDEF magic number of the NFC Forum Tag Type 1 target.";
+        qDebug() << "Error reading NDEF magic number of the NFC Forum Tag Type 2 target.";
     } else {
         QVariant response = target->requestResponse(id);
         if (response.isValid() && response.type() == QVariant::ByteArray) {
