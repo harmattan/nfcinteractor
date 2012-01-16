@@ -54,6 +54,7 @@ Known bugs (work-in-progress):
 - MeeGo: 2x write confirmation callbacks, visible in raw view
 - MeeGo: skip attempts to read tag specific info to speed up reading & writing
 - MeeGo: finalize .deb packaging data
+- MeeGo: Tag analysis always assumes tag is write protected
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)
