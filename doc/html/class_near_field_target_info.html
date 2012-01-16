@@ -95,6 +95,10 @@ Public Types</h2></td></tr>
 <b>NfcAccessAllowed</b>, 
 <b>NfcAccessForbidden</b>
  }</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>NfcTagMemoryType</b> { <b>NfcMemoryUnknown</b>, 
+<b>NfcMemoryStatic</b>, 
+<b>NfcMemoryDynamic</b>
+ }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa11ffd470469898763478e0ffd8b5df2"></a><!-- doxytag: member="NearFieldTargetInfo::resetInfo" ref="aa11ffd470469898763478e0ffd8b5df2" args="()" -->
@@ -119,8 +123,8 @@ NfcTagAccessStatus&#160;</td><td class="memItemRight" valign="bottom"><b>tagWrit
 NfcTagAccessStatus&#160;</td><td class="memItemRight" valign="bottom"><b>tagReadAccessLockBits</b></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abccfd5fba61b596f75c01759db47654f"></a><!-- doxytag: member="NearFieldTargetInfo::tagWriteAccessLockBits" ref="abccfd5fba61b596f75c01759db47654f" args="" -->
 NfcTagAccessStatus&#160;</td><td class="memItemRight" valign="bottom"><b>tagWriteAccessLockBits</b></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="adc94015491b94756774dcb3b0b1619a7"></a><!-- doxytag: member="NearFieldTargetInfo::tagDynamicMemory" ref="adc94015491b94756774dcb3b0b1619a7" args="" -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>tagDynamicMemory</b></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af00dd65f77dfe82cc3dc118107d65066"></a><!-- doxytag: member="NearFieldTargetInfo::tagMemoryType" ref="af00dd65f77dfe82cc3dc118107d65066" args="" -->
+NfcTagMemoryType&#160;</td><td class="memItemRight" valign="bottom"><b>tagMemoryType</b></td></tr>
 </table>
 <hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a068168d709b463a6ca35c2bb2d89a566"></a><!-- doxytag: member="NearFieldTargetInfo::combinedReadAccess" ref="a068168d709b463a6ca35c2bb2d89a566" args="() const " -->
@@ -179,7 +183,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>tagDynamicMemory</b><
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 13 2012 18:06:35 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 16 2012 18:08:07 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
-<title>Nfc Interactor: NdefNfcSmsRecord Class Reference</title>
+<title>Nfc Interactor: NdefNfcStoreLinkRecord Class Reference</title>
 
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link href="doxygen.css" rel="stylesheet" type="text/css" />
@@ -79,38 +79,51 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a>  </div>
   <div class="headertitle">
-<div class="title">NdefNfcSmsRecord Class Reference</div>  </div>
+<div class="title">NdefNfcStoreLinkRecord Class Reference</div>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="NdefNfcSmsRecord" --><!-- doxytag: inherits="NdefNfcSmartUriRecord" --><div class="dynheader">
-Inheritance diagram for NdefNfcSmsRecord:</div>
+<!-- doxytag: class="NdefNfcStoreLinkRecord" --><!-- doxytag: inherits="NdefNfcSmartUriRecord" --><div class="dynheader">
+Inheritance diagram for NdefNfcStoreLinkRecord:</div>
 <div class="dyncontent">
  <div class="center">
-  <img src="class_ndef_nfc_sms_record.png" usemap="#NdefNfcSmsRecord_map" alt=""/>
-  <map id="NdefNfcSmsRecord_map" name="NdefNfcSmsRecord_map">
-<area href="class_ndef_nfc_smart_uri_record.html" alt="NdefNfcSmartUriRecord" shape="rect" coords="0,56,148,80"/>
-<area href="class_ndef_nfc_sp_record.html" title="Handles the Smart Poster meta-record and is able to both parse and assemble a smart poster according ..." alt="NdefNfcSpRecord" shape="rect" coords="0,0,148,24"/>
+  <img src="class_ndef_nfc_store_link_record.png" usemap="#NdefNfcStoreLinkRecord_map" alt=""/>
+  <map id="NdefNfcStoreLinkRecord_map" name="NdefNfcStoreLinkRecord_map">
+<area href="class_ndef_nfc_smart_uri_record.html" alt="NdefNfcSmartUriRecord" shape="rect" coords="0,56,153,80"/>
+<area href="class_ndef_nfc_sp_record.html" title="Handles the Smart Poster meta-record and is able to both parse and assemble a smart poster according ..." alt="NdefNfcSpRecord" shape="rect" coords="0,0,153,24"/>
 </map>
  </div></div>
 
-<p><a href="class_ndef_nfc_sms_record-members.html">List of all members.</a></p>
+<p><a href="class_ndef_nfc_store_link_record-members.html">List of all members.</a></p>
 <table class="memberdecls">
+<tr><td colspan="2"><h2><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>AppStore</b> { <br/>
+&#160;&#160;<b>StoreNokia</b> =  0, 
+<b>StoreSymbian</b>, 
+<b>StoreMeeGoHarmattan</b>, 
+<b>StoreSeries40</b>, 
+<br/>
+&#160;&#160;<b>StoreWindowsPhone</b>, 
+<b>StoreAndroid</b>, 
+<b>StoreiOS</b>, 
+<b>StoreBlackberry</b>, 
+<br/>
+&#160;&#160;<b>StoreCustomName</b>
+<br/>
+ }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a88b22dc54f721a08067ab34c5587b9ad"></a><!-- doxytag: member="NdefNfcSmsRecord::smsBody" ref="a88b22dc54f721a08067ab34c5587b9ad" args="() const " -->
-QString&#160;</td><td class="memItemRight" valign="bottom"><b>smsBody</b> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af3a2a6b480a419a30fbfdec785aceadf"></a><!-- doxytag: member="NdefNfcSmsRecord::setSmsBody" ref="af3a2a6b480a419a30fbfdec785aceadf" args="(const QString &amp;smsBody)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setSmsBody</b> (const QString &amp;smsBody)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abc18a9bdbb98057aebf4d85fb7512aee"></a><!-- doxytag: member="NdefNfcSmsRecord::smsNumber" ref="abc18a9bdbb98057aebf4d85fb7512aee" args="() const " -->
-QString&#160;</td><td class="memItemRight" valign="bottom"><b>smsNumber</b> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1493fab7678eb061e276e483f82daf01"></a><!-- doxytag: member="NdefNfcSmsRecord::setSmsNumber" ref="a1493fab7678eb061e276e483f82daf01" args="(const QString &amp;smsNumber)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setSmsNumber</b> (const QString &amp;smsNumber)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6caa684ab9b06bf96e35b82d0325864f"></a><!-- doxytag: member="NdefNfcStoreLinkRecord::addAppId" ref="a6caa684ab9b06bf96e35b82d0325864f" args="(const AppStore appStore, const QString &amp;appId)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addAppId</b> (const AppStore appStore, const QString &amp;appId)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afcf1e422961b1bd38a59500fb2a78af4"></a><!-- doxytag: member="NdefNfcStoreLinkRecord::appId" ref="afcf1e422961b1bd38a59500fb2a78af4" args="(AppStore appStore) const " -->
+QString&#160;</td><td class="memItemRight" valign="bottom"><b>appId</b> (AppStore appStore) const </td></tr>
 </table>
 <hr/>The documentation for this class was generated from the following files:<ul>
-<li><a class="el" href="ndefnfcsmsrecord_8h_source.html">ndefnfcsmsrecord.h</a></li>
-<li>ndefnfcsmsrecord.cpp</li>
+<li><a class="el" href="ndefnfcstorelinkrecord_8h_source.html">ndefnfcstorelinkrecord.h</a></li>
+<li>ndefnfcstorelinkrecord.cpp</li>
 </ul>
 </div>
 <!-- window showing the filter options -->

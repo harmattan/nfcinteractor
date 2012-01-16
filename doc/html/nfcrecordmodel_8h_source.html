@@ -169,7 +169,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00089"></a>00089     <span class="keywordtype">void</span> insertRecordItem(<span class="keyword">const</span> <span class="keywordtype">int</span> row, <a class="code" href="class_nfc_record_item.html">NfcRecordItem</a> *newRecordItem);
 <a name="l00091"></a>00091     <span class="keywordtype">void</span> <a class="code" href="class_nfc_record_model.html#a1467040cf6c617bd5431a7495c6fbdb7">simpleInsertRecordItem</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> insertPosition, <span class="keyword">const</span> NfcTypes::MessageType messageType, <span class="keyword">const</span> NfcTypes::RecordContent contentType, <span class="keyword">const</span> <span class="keywordtype">bool</span> removeVisible, <span class="keyword">const</span> <span class="keywordtype">int</span> parentRecordId);
 <a name="l00092"></a>00092     <span class="keywordtype">void</span> simpleAppendRecordItem(<span class="keyword">const</span> NfcTypes::MessageType messageType, <span class="keyword">const</span> NfcTypes::RecordContent contentType, <span class="keyword">const</span> <span class="keywordtype">bool</span> removeVisible, <span class="keyword">const</span> <span class="keywordtype">int</span> parentRecordId);
-<a name="l00093"></a>00093     <span class="keywordtype">void</span> getDefaultsForRecordContent(<span class="keyword">const</span> NfcTypes::RecordContent contentType, QString &amp;defaultTitle, QString &amp;defaultContents);
+<a name="l00093"></a>00093     <span class="keywordtype">void</span> getDefaultsForRecordContent(<span class="keyword">const</span> NfcTypes::MessageType msgType, <span class="keyword">const</span> NfcTypes::RecordContent contentType, QString &amp;defaultTitle, QString &amp;defaultContents);
 <a name="l00094"></a>00094     QVariantList getSelectionItemsForRecordContent(<span class="keyword">const</span> NfcTypes::RecordContent contentType, <span class="keywordtype">int</span> &amp;defaultSelectedItem);
 <a name="l00095"></a>00095 
 <a name="l00096"></a>00096     <span class="keywordtype">void</span> addContentToRecord(<span class="keywordtype">int</span> recordIndex, <span class="keywordtype">int</span> messageTypeInt, <span class="keywordtype">int</span> newContentType);
@@ -224,7 +224,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 13 2012 18:06:35 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 16 2012 18:08:07 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

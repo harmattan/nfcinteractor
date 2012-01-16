@@ -134,50 +134,53 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00054"></a>00054 <span class="preprocessor">#include &quot;ndefnfcgeorecord.h&quot;</span>
 <a name="l00055"></a>00055 <span class="preprocessor">#include &quot;ndefnfcsmsrecord.h&quot;</span>
 <a name="l00056"></a>00056 <span class="preprocessor">#include &quot;ndefnfcsocialrecord.h&quot;</span>
-<a name="l00057"></a>00057 
-<a name="l00058"></a>00058 <span class="comment">// Contact handling</span>
-<a name="l00059"></a>00059 <span class="preprocessor">#include &quot;ndefnfcmimevcardrecord.h&quot;</span>
-<a name="l00060"></a>00060 <span class="preprocessor">#include &lt;QContact&gt;</span>
-<a name="l00061"></a>00061 <span class="preprocessor">#include &lt;QContactDetail&gt;</span>
-<a name="l00062"></a>00062 <span class="preprocessor">#include &lt;QContactName&gt;</span>
-<a name="l00063"></a>00063 <span class="preprocessor">#include &lt;QContactNickname&gt;</span>
-<a name="l00064"></a>00064 <span class="preprocessor">#include &lt;QContactPhoneNumber&gt;</span>
-<a name="l00065"></a>00065 <span class="preprocessor">#include &lt;QContactEmailAddress&gt;</span>
-<a name="l00066"></a>00066 <span class="preprocessor">#include &lt;QContactUrl&gt;</span>
-<a name="l00067"></a>00067 <span class="preprocessor">#include &lt;QContactOrganization&gt;</span>
-<a name="l00068"></a>00068 <span class="preprocessor">#include &lt;QContactAddress&gt;</span>
-<a name="l00069"></a>00069 <span class="preprocessor">#include &lt;QContactNote&gt;</span>
-<a name="l00070"></a>00070 <span class="preprocessor">#include &lt;QContactBirthday&gt;</span>
-<a name="l00071"></a>00071 
+<a name="l00057"></a>00057 <span class="preprocessor">#include &quot;ndefnfcstorelinkrecord.h&quot;</span>
+<a name="l00058"></a>00058 
+<a name="l00059"></a>00059 <span class="comment">// Contact handling</span>
+<a name="l00060"></a>00060 <span class="preprocessor">#include &quot;ndefnfcmimevcardrecord.h&quot;</span>
+<a name="l00061"></a>00061 <span class="preprocessor">#include &lt;QContact&gt;</span>
+<a name="l00062"></a>00062 <span class="preprocessor">#include &lt;QContactDetail&gt;</span>
+<a name="l00063"></a>00063 <span class="preprocessor">#include &lt;QContactName&gt;</span>
+<a name="l00064"></a>00064 <span class="preprocessor">#include &lt;QContactNickname&gt;</span>
+<a name="l00065"></a>00065 <span class="preprocessor">#include &lt;QContactPhoneNumber&gt;</span>
+<a name="l00066"></a>00066 <span class="preprocessor">#include &lt;QContactEmailAddress&gt;</span>
+<a name="l00067"></a>00067 <span class="preprocessor">#include &lt;QContactUrl&gt;</span>
+<a name="l00068"></a>00068 <span class="preprocessor">#include &lt;QContactOrganization&gt;</span>
+<a name="l00069"></a>00069 <span class="preprocessor">#include &lt;QContactAddress&gt;</span>
+<a name="l00070"></a>00070 <span class="preprocessor">#include &lt;QContactNote&gt;</span>
+<a name="l00071"></a>00071 <span class="preprocessor">#include &lt;QContactBirthday&gt;</span>
 <a name="l00072"></a>00072 
-<a name="l00073"></a><a class="code" href="class_nfc_model_to_ndef.html">00073</a> <span class="keyword">class </span><a class="code" href="class_nfc_model_to_ndef.html">NfcModelToNdef</a> : <span class="keyword">public</span> QObject
-<a name="l00074"></a>00074 {
-<a name="l00075"></a>00075     Q_OBJECT
-<a name="l00076"></a>00076 <span class="keyword">public</span>:
-<a name="l00077"></a>00077     <span class="keyword">explicit</span> <a class="code" href="class_nfc_model_to_ndef.html">NfcModelToNdef</a>(QList&lt;NfcRecordItem*&gt; &amp;nfcRecordItems, QObject *parent = 0);
-<a name="l00078"></a>00078 
-<a name="l00079"></a>00079     QNdefMessage * convertToNdefMessage();
-<a name="l00080"></a>00080 
-<a name="l00081"></a>00081 <span class="keyword">private</span>:
-<a name="l00082"></a>00082     <a class="code" href="class_ndef_nfc_sp_record.html" title="Handles the Smart Poster meta-record and is able to both parse and assemble a smart poster according ...">NdefNfcSpRecord</a> * convertSpFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span> &amp;endIndex);
-<a name="l00083"></a>00083     QNdefNfcUriRecord * convertUriFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span> &amp;endIndex, <span class="keywordtype">bool</span> expectHeader = <span class="keyword">true</span>);
-<a name="l00084"></a>00084     QNdefNfcTextRecord * convertTextFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span> &amp;endIndex, <span class="keywordtype">bool</span> expectHeader = <span class="keyword">true</span>);
-<a name="l00085"></a>00085     <a class="code" href="class_ndef_nfc_sms_record.html">NdefNfcSmsRecord</a> *convertSmsFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span>&amp; endIndex);
-<a name="l00086"></a>00086     <a class="code" href="class_ndef_nfc_mime_vcard_record.html" title="Handles the vCard record of the MIME record type.">NdefNfcMimeVcardRecord</a> *convertBusinessCardFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span> &amp;endIndex);
-<a name="l00087"></a>00087     <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt; <span class="keywordtype">bool</span> contactSetDetail(QContact &amp;contact, <span class="keyword">const</span> NfcTypes::RecordContent contentType, <span class="keyword">const</span> QString &amp;value);
-<a name="l00088"></a>00088     <a class="code" href="class_ndef_nfc_social_record.html">NdefNfcSocialRecord</a> *convertSocialNetworkFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span> &amp;endIndex);
-<a name="l00089"></a>00089     <a class="code" href="class_ndef_nfc_geo_record.html">NdefNfcGeoRecord</a> * convertGeoFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span>&amp; endIndex);
-<a name="l00090"></a>00090     QNdefRecord *convertCustomFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span> &amp;endIndex);
-<a name="l00091"></a>00091 
-<a name="l00092"></a>00092 signals:
-<a name="l00093"></a>00093 
-<a name="l00094"></a>00094 <span class="keyword">public</span> slots:
-<a name="l00095"></a>00095 <span class="keyword">private</span>:
-<a name="l00096"></a>00096     QList&lt;NfcRecordItem*&gt; &amp;recordItems;    <span class="comment">// Not owned by this class</span>
-<a name="l00097"></a>00097 
-<a name="l00098"></a>00098 };
-<a name="l00099"></a>00099 
-<a name="l00100"></a>00100 <span class="preprocessor">#endif // NFCMODELTONDEF_H</span>
+<a name="l00073"></a>00073 
+<a name="l00074"></a><a class="code" href="class_nfc_model_to_ndef.html">00074</a> <span class="keyword">class </span><a class="code" href="class_nfc_model_to_ndef.html">NfcModelToNdef</a> : <span class="keyword">public</span> QObject
+<a name="l00075"></a>00075 {
+<a name="l00076"></a>00076     Q_OBJECT
+<a name="l00077"></a>00077 <span class="keyword">public</span>:
+<a name="l00078"></a>00078     <span class="keyword">explicit</span> <a class="code" href="class_nfc_model_to_ndef.html">NfcModelToNdef</a>(QList&lt;NfcRecordItem*&gt; &amp;nfcRecordItems, QObject *parent = 0);
+<a name="l00079"></a>00079 
+<a name="l00080"></a>00080     QNdefMessage * convertToNdefMessage();
+<a name="l00081"></a>00081 
+<a name="l00082"></a>00082 <span class="keyword">private</span>:
+<a name="l00083"></a>00083     <a class="code" href="class_ndef_nfc_sp_record.html" title="Handles the Smart Poster meta-record and is able to both parse and assemble a smart poster according ...">NdefNfcSpRecord</a> *convertSpFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span> &amp;endIndex);
+<a name="l00084"></a>00084     QNdefNfcUriRecord *convertUriFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span> &amp;endIndex, <span class="keywordtype">bool</span> expectHeader = <span class="keyword">true</span>);
+<a name="l00085"></a>00085     QNdefNfcTextRecord *convertTextFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span> &amp;endIndex, <span class="keywordtype">bool</span> expectHeader = <span class="keyword">true</span>);
+<a name="l00086"></a>00086     <a class="code" href="class_ndef_nfc_sms_record.html">NdefNfcSmsRecord</a> *convertSmsFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span>&amp; endIndex);
+<a name="l00087"></a>00087     <a class="code" href="class_ndef_nfc_mime_vcard_record.html" title="Handles the vCard record of the MIME record type.">NdefNfcMimeVcardRecord</a> *convertBusinessCardFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span> &amp;endIndex);
+<a name="l00088"></a>00088     <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt; <span class="keywordtype">bool</span> contactSetDetail(QContact &amp;contact, <span class="keyword">const</span> NfcTypes::RecordContent contentType, <span class="keyword">const</span> QString &amp;value);
+<a name="l00089"></a>00089     <a class="code" href="class_ndef_nfc_social_record.html">NdefNfcSocialRecord</a> *convertSocialNetworkFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span> &amp;endIndex);
+<a name="l00090"></a>00090     <a class="code" href="class_ndef_nfc_geo_record.html">NdefNfcGeoRecord</a> *convertGeoFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span>&amp; endIndex);
+<a name="l00091"></a>00091     <a class="code" href="class_ndef_nfc_store_link_record.html">NdefNfcStoreLinkRecord</a> *convertStoreFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span> &amp;endIndex);
+<a name="l00092"></a>00092     NdefNfcStoreLinkRecord::AppStore appStoreFromRecordContentType(<span class="keyword">const</span> NfcTypes::RecordContent contentType);
+<a name="l00093"></a>00093     QNdefRecord *convertCustomFromModel(<span class="keyword">const</span> <span class="keywordtype">int</span> startIndex, <span class="keywordtype">int</span> &amp;endIndex);
+<a name="l00094"></a>00094 
+<a name="l00095"></a>00095 signals:
+<a name="l00096"></a>00096 
+<a name="l00097"></a>00097 <span class="keyword">public</span> slots:
+<a name="l00098"></a>00098 <span class="keyword">private</span>:
+<a name="l00099"></a>00099     QList&lt;NfcRecordItem*&gt; &amp;recordItems;    <span class="comment">// Not owned by this class</span>
+<a name="l00100"></a>00100 
+<a name="l00101"></a>00101 };
+<a name="l00102"></a>00102 
+<a name="l00103"></a>00103 <span class="preprocessor">#endif // NFCMODELTONDEF_H</span>
 </pre></div></div>
 </div>
 <!-- window showing the filter options -->
@@ -197,7 +200,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Jan 13 2012 18:06:35 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Jan 16 2012 18:08:07 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>
