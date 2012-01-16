@@ -108,7 +108,7 @@ symbian {
     # CONFIG += qtquickcomponents
 	
     # Autostart
-    ndefhandler.sources = ndefhandler_NfcInteractor.xml
+    ndefhandler.sources = ndefhandler_nfcinteractor.xml
     ndefhandler.path = c:/private/2002AC7F/import/
     DEPLOYMENT += ndefhandler
 
@@ -169,6 +169,9 @@ contains(MEEGO_EDITION,harmattan) {
     # Temp
     DEFINES += MEEGO_EDITION_HARMATTAN
 
+    # Speed up launching on MeeGo/Harmattan when using applauncherd daemon
+    CONFIG += qdeclarative-boostable
+
     OTHER_FILES += qtc_packaging/debian_harmattan/*
 
     OTHER_FILES += \
@@ -178,15 +181,15 @@ contains(MEEGO_EDITION,harmattan) {
     qmlFolder.target = qml
     QML_IMPORT_PATH = qml/meego
 
-    # TODO: Don't use nfcinfo_harmattan.desktop. Otherwise,
+    # Don't use nfcinfo_harmattan.desktop. Otherwise,
     # the NDEF Autostart handler won't find the desktop file and
     # will not be able to auto-launch this app on tag-touch.
     # See: https://bugreports.qt.nokia.com/browse/QTMOBILITY-1848
-    desktopfile.files = nfcinteractor_harmattan.desktop
-    desktopfile.path = /usr/share/applications
-    INSTALLS += desktopfile
-
-    launchericon.files = nfcinteractor80.png
+    harmattandesktopfile.files = nfcinteractor.desktop
+    harmattandesktopfile.path = /usr/share/applications
+    INSTALLS += harmattandesktopfile
+	
+    launchericon.files = nfcinteractor80.png splash-nfcinteractor-l.png splash-nfcinteractor-p.png
     launchericon.path = /opt/nfcinteractor/
     INSTALLS += launchericon
 }
