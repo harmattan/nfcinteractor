@@ -55,6 +55,7 @@ public:
         MsgBusinessCard,
         MsgSocialNetwork,
         MsgGeo,
+        MsgStore,
         MsgImage,
         MsgAnnotatedUrl,
         MsgCustom,
@@ -105,7 +106,17 @@ public:
 
         RecordGeoType,
         RecordGeoLatitude,
-        RecordGeoLongitude
+        RecordGeoLongitude,
+
+        RecordStoreNokia,
+        RecordStoreSymbian,
+        RecordStoreMeeGoHarmattan,
+        RecordStoreSeries40,
+        RecordStoreWindowsPhone,
+        RecordStoreAndroid,
+        RecordStoreiOS,
+        RecordStoreBlackberry,
+        RecordStoreCustomName
     };
 
     enum NfcModes {

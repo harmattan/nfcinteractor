@@ -201,6 +201,14 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
         simpleAppendRecordItem(NfcTypes::MsgGeo, NfcTypes::RecordGeoLatitude, false, recordId);
         simpleAppendRecordItem(NfcTypes::MsgGeo, NfcTypes::RecordGeoLongitude, false, recordId);
         break; }
+    case NfcTypes::MsgStore: {
+        addRecord("Store Record", NfcTypes::MsgStore, NfcTypes::RecordHeader, "", true, true, recordId);
+#ifdef MEEGO_EDITION_HARMATTAN
+        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordStoreMeeGoHarmattan, true, recordId);
+#else
+        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordStoreSymbian, true, recordId);
+#endif
+        break; }
     case NfcTypes::MsgImage:
         // TODO: not supported yet
         break;
@@ -273,6 +281,8 @@ void NfcRecordModel::addContentToRecord(int recordIndex, int messageTypeInt, int
     switch (contentType) {
     case NfcTypes::RecordText:
     {
+        // Add two items for the text record, therefore handle it here
+        // and not in the generic simpleInsertRecordItem() method.
         insertRecordItem(insertPosition, new NfcRecordItem("Language", messageType, NfcTypes::RecordTextLanguage, "en", false, false, parentRecordId, this));
         insertRecordItem(insertPosition, new NfcRecordItem("Title text", messageType, NfcTypes::RecordText, "Nokia", true, false, parentRecordId, this));
         break;
@@ -446,7 +456,7 @@ void NfcRecordModel::removeRecord(const int removeRecordIndex) {
             }
         }
     }
-    // TODO: Remove record if all its content is empty (?)
+    // Note: Don't remove record if all its content is empty
 
 }
 
@@ -473,8 +483,6 @@ QList<QObject*> NfcRecordModel::possibleContentForRecord(int recordIndex)
             m_recordItems[recordIndex]->recordContent() != NfcTypes::RecordHeader)
         return possibleContent;
 
-    // int curIndex = recordIndex;
-    // int recordId = m_recordItems[recordIndex]->recordId();
     const NfcTypes::MessageType messageType = m_recordItems[recordIndex]->messageType();
     switch (messageType) {
     case NfcTypes::MsgUri:
@@ -529,6 +537,30 @@ QList<QObject*> NfcRecordModel::possibleContentForRecord(int recordIndex)
     {
         // Smart URI types - can convert to a Smart Poster record, by default URI record.
         checkPossibleContentForRecord(possibleContent, false, recordIndex, messageType, NfcTypes::RecordText);
+        break;
+    }
+    case NfcTypes::MsgStore:
+    {
+        // Smart URI types - can convert to a Smart Poster record, by default URI record.
+        checkPossibleContentForRecord(possibleContent, false, recordIndex, messageType, NfcTypes::RecordText);
+        if (!isContentInRecord(recordIndex, NfcTypes::RecordStoreSymbian) &&
+                !isContentInRecord(recordIndex, NfcTypes::RecordStoreMeeGoHarmattan) &&
+                !isContentInRecord(recordIndex, NfcTypes::RecordStoreSeries40)) {
+            // Generic Nokia Store link only available when no Symbian, MeeGo Harmattan or Series 40 specific ID is here
+            checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordStoreNokia);
+        }
+        if (!isContentInRecord(recordIndex, NfcTypes::RecordStoreNokia)) {
+            // Symbian, MeeGo Harmattan and Series 40 links only possible if no generic
+            // Nokia app id is present
+            checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordStoreSymbian);
+            checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordStoreMeeGoHarmattan);
+            checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordStoreSeries40);
+        }
+        checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordStoreWindowsPhone);
+        checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordStoreAndroid);
+        checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordStoreiOS);
+        checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordStoreBlackberry);
+        checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordStoreCustomName);
         break;
     }
     case NfcTypes::MsgCustom:
@@ -706,6 +738,38 @@ void NfcRecordModel::getDefaultsForRecordContent(const NfcTypes::RecordContent c
     case NfcTypes::RecordGeoLongitude:
         defaultTitle = "Longitude (dec deg., WGS-84)";
         defaultContents = "24.829";
+        break;
+        // ----------------------------------------------------------------
+        // Store
+    case NfcTypes::RecordStoreNokia:
+        defaultTitle = "Nokia Store generic ID";
+        // TODO: add id of Nfc Interactor by default, once known
+        break;
+    case NfcTypes::RecordStoreSymbian:
+        defaultTitle = "Symbian ID in Nokia Store";
+        defaultContents = "184295";
+        break;
+    case NfcTypes::RecordStoreMeeGoHarmattan:
+        defaultTitle = "MeeGo ID in Nokia Store";
+        break;
+    case NfcTypes::RecordStoreSeries40:
+        defaultTitle = "Series 40 ID in Nokia Store";
+        break;
+    case NfcTypes::RecordStoreWindowsPhone:
+        defaultTitle = "Windows Phone Marketplace ID";
+        break;
+    case NfcTypes::RecordStoreAndroid:
+        defaultTitle = "Android Marketplace ID";
+        break;
+    case NfcTypes::RecordStoreiOS:
+        defaultTitle = "iOS App Store ID";
+        break;
+    case NfcTypes::RecordStoreBlackberry:
+        defaultTitle = "BlackBerry App World ID";
+        break;
+    case NfcTypes::RecordStoreCustomName:
+        defaultTitle = "nfcinteractor.com app name";
+        defaultContents = "nfcinteractor";
         break;
     default:
         qDebug() << "Warning: don't have defaults for requested content type in NfcRecordModel::getDefaultsForRecordContent().";

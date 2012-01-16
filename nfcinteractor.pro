@@ -46,7 +46,8 @@ SOURCES += main.cpp \
     ndefnfcsmarturirecord.cpp \
     ndefnfcsmsrecord.cpp \
     nearfieldtargetinfo.cpp \
-    ndefnfcsocialrecord.cpp
+    ndefnfcsocialrecord.cpp \
+    ndefnfcstorelinkrecord.cpp
 
 HEADERS += \
     nfcinfo.h \
@@ -64,7 +65,8 @@ HEADERS += \
     ndefnfcsmarturirecord.h \
     ndefnfcsmsrecord.h \
     nearfieldtargetinfo.h \
-    ndefnfcsocialrecord.h
+    ndefnfcsocialrecord.h \
+    ndefnfcstorelinkrecord.h
 
 simulator {
     OTHER_FILES += \

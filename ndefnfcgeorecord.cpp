@@ -44,6 +44,7 @@ NdefNfcGeoRecord::NdefNfcGeoRecord()
     : NdefNfcSmartUriRecord(),
       m_geoType(GeoUri)
 {
+    updatePayload();
 }
 
 NdefNfcGeoRecord::NdefNfcGeoRecord(const QGeoCoordinate &geoCoordinate)

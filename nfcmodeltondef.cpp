@@ -89,6 +89,9 @@ QNdefMessage* NfcModelToNdef::convertToNdefMessage()
             case NfcTypes::MsgGeo:
                 ndefMessage->append(*convertGeoFromModel(curRecordIndex, parseEndIndex));
                 break;
+            case NfcTypes::MsgStore:
+                ndefMessage->append(*convertStoreFromModel(curRecordIndex, parseEndIndex));
+                break;
             case NfcTypes::MsgImage:
                 // TODO: not supported yet
 //                ndefMessage->append(*convertImageFromModel(curRecordIndex, parseEndIndex));
@@ -576,6 +579,91 @@ NdefNfcGeoRecord *NfcModelToNdef::convertGeoFromModel(const int startIndex, int 
 }
 
 
+NdefNfcStoreLinkRecord *NfcModelToNdef::convertStoreFromModel(const int startIndex, int &endIndex)
+{
+    NdefNfcStoreLinkRecord* newRecord = new NdefNfcStoreLinkRecord();
+    if (recordItems[startIndex]->messageType() != NfcTypes::MsgStore ||
+            recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
+        return newRecord;
+    }
+    // Start at the next item after the header
+    int curIndex = startIndex + 1;
+    bool reachedRecordEnd = false;
+
+    while (curIndex < recordItems.size()) {
+        NfcRecordItem* curItem = recordItems[curIndex];
+        switch (curItem->recordContent()) {
+
+        case NfcTypes::RecordHeader:
+            // Next record starts - quit!
+            reachedRecordEnd = true;
+            break;
+        case NfcTypes::RecordStoreNokia:
+        case NfcTypes::RecordStoreSymbian:
+        case NfcTypes::RecordStoreMeeGoHarmattan:
+        case NfcTypes::RecordStoreSeries40:
+        case NfcTypes::RecordStoreWindowsPhone:
+        case NfcTypes::RecordStoreAndroid:
+        case NfcTypes::RecordStoreiOS:
+        case NfcTypes::RecordStoreBlackberry:
+        case NfcTypes::RecordStoreCustomName:
+            newRecord->addAppId(appStoreFromRecordContentType(curItem->recordContent()), curItem->defaultText());
+            curIndex ++;
+            break;
+        case NfcTypes::RecordText:
+        case NfcTypes::RecordTextLanguage:
+            newRecord->addTitle(*convertTextFromModel(curIndex, curIndex, false));
+            break;
+        default:
+            // Unknown record content that doesn't belong to this record
+            reachedRecordEnd = true;
+            break;
+        }
+        if (reachedRecordEnd)
+            break;
+        //curIndex ++;  // Already incremented by convert...() methods.
+    }
+    endIndex = curIndex;
+    qDebug() << "Store payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
+    qDebug() << "Is Store == Sp: " << newRecord->isSp();
+    return newRecord;
+}
+
+NdefNfcStoreLinkRecord::AppStore NfcModelToNdef::appStoreFromRecordContentType(const NfcTypes::RecordContent contentType)
+{
+    switch (contentType) {
+    case NfcTypes::RecordStoreNokia:
+        return NdefNfcStoreLinkRecord::StoreNokia;
+        break;
+    case NfcTypes::RecordStoreSymbian:
+        return NdefNfcStoreLinkRecord::StoreSymbian;
+        break;
+    case NfcTypes::RecordStoreMeeGoHarmattan:
+        return NdefNfcStoreLinkRecord::StoreMeeGoHarmattan;
+        break;
+    case NfcTypes::RecordStoreSeries40:
+        return NdefNfcStoreLinkRecord::StoreSeries40;
+        break;
+    case NfcTypes::RecordStoreWindowsPhone:
+        return NdefNfcStoreLinkRecord::StoreWindowsPhone;
+        break;
+    case NfcTypes::RecordStoreAndroid:
+        return NdefNfcStoreLinkRecord::StoreAndroid;
+        break;
+    case NfcTypes::RecordStoreiOS:
+        return NdefNfcStoreLinkRecord::StoreiOS;
+        break;
+    case NfcTypes::RecordStoreBlackberry:
+        return NdefNfcStoreLinkRecord::StoreBlackberry;
+        break;
+    case NfcTypes::RecordStoreCustomName:
+        return NdefNfcStoreLinkRecord::StoreCustomName;
+        break;
+    }
+}
+
+
+
 QNdefRecord *NfcModelToNdef::convertCustomFromModel(const int startIndex, int &endIndex)
 {
     QNdefRecord* newRecord = new NdefNfcGeoRecord();
@@ -630,36 +718,3 @@ QNdefRecord *NfcModelToNdef::convertCustomFromModel(const int startIndex, int &e
     qDebug() << "Custom payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
     return newRecord;
 }
-
-// Code for parsing without distributed methods
-//        switch (curRecordContent) {
-//        case RecordTypes::RecordHeader:
-//            {
-//            switch (curMessageType) {
-//            case RecordTypes::MsgSmartPoster:
-//                curNdefRecord = new NdefNfcSpRecord();
-//                break;
-//            case RecordTypes::MsgUri:
-//                curNdefRecord = new QNdefNfcUriRecord();
-//                break;
-//            case RecordTypes::MsgText:
-//                curNdefRecord = new QNdefNfcTextRecord();
-//                break;
-//            }
-//            curNdefRecordType = curMessageType;
-//            break;
-//            }
-//        case RecordTypes::RecordUri:
-//            {
-//            switch (curNdefRecordType) {
-//            case RecordTypes::MsgSmartPoster:
-//                static_cast<NdefNfcSpRecord*>(curNdefRecord)->setUri(curItem->defaultText());
-//                break;
-//            case RecordTypes::MsgUri:
-//                static_cast<QNdefNfcUriRecord*>(curNdefRecord)->setUri(curItem->defaultText());
-//                break;
-//            }
-//            break;
-//            }
-//        case RecordTypes::RecordText:
-//        }

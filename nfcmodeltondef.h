@@ -54,6 +54,7 @@
 #include "ndefnfcgeorecord.h"
 #include "ndefnfcsmsrecord.h"
 #include "ndefnfcsocialrecord.h"
+#include "ndefnfcstorelinkrecord.h"
 
 // Contact handling
 #include "ndefnfcmimevcardrecord.h"
@@ -79,14 +80,16 @@ public:
     QNdefMessage * convertToNdefMessage();
 
 private:
-    NdefNfcSpRecord * convertSpFromModel(const int startIndex, int &endIndex);
-    QNdefNfcUriRecord * convertUriFromModel(const int startIndex, int &endIndex, bool expectHeader = true);
-    QNdefNfcTextRecord * convertTextFromModel(const int startIndex, int &endIndex, bool expectHeader = true);
+    NdefNfcSpRecord *convertSpFromModel(const int startIndex, int &endIndex);
+    QNdefNfcUriRecord *convertUriFromModel(const int startIndex, int &endIndex, bool expectHeader = true);
+    QNdefNfcTextRecord *convertTextFromModel(const int startIndex, int &endIndex, bool expectHeader = true);
     NdefNfcSmsRecord *convertSmsFromModel(const int startIndex, int& endIndex);
     NdefNfcMimeVcardRecord *convertBusinessCardFromModel(const int startIndex, int &endIndex);
     template<class T> bool contactSetDetail(QContact &contact, const NfcTypes::RecordContent contentType, const QString &value);
     NdefNfcSocialRecord *convertSocialNetworkFromModel(const int startIndex, int &endIndex);
-    NdefNfcGeoRecord * convertGeoFromModel(const int startIndex, int& endIndex);
+    NdefNfcGeoRecord *convertGeoFromModel(const int startIndex, int& endIndex);
+    NdefNfcStoreLinkRecord *convertStoreFromModel(const int startIndex, int &endIndex);
+    NdefNfcStoreLinkRecord::AppStore appStoreFromRecordContentType(const NfcTypes::RecordContent contentType);
     QNdefRecord *convertCustomFromModel(const int startIndex, int &endIndex);
 
 signals:

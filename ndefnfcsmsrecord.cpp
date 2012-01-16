@@ -42,6 +42,7 @@
 NdefNfcSmsRecord::NdefNfcSmsRecord()
     : NdefNfcSmartUriRecord()
 {
+    updatePayload();
 }
 
 QString NdefNfcSmsRecord::smsBody() const

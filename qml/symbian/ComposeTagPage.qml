@@ -175,6 +175,7 @@ Page {
             ListElement { name: "Business Card" }
             ListElement { name: "Social Network" }
             ListElement { name: "Geo" }
+            ListElement { name: "App Store" }
             //ListElement { name: "Image" }
             ListElement { name: "Annotated URL" }
             ListElement { name: "Custom" }
@@ -205,6 +206,9 @@ Page {
             break;
         case "Geo":
             newRecordType = NfcTypes.MsgGeo;
+            break;
+        case "App Store":
+            newRecordType = NfcTypes.MsgStore;
             break;
         case "Image":
             newRecordType = NfcTypes.MsgImage;
@@ -246,6 +250,8 @@ Page {
             return qsTr("Choose the social network you want to link to and enter your social network username to create a link to follow you. Record written as a URI record or Smart Poster (if additional information like the title is provided)");
         case NfcTypes.MsgGeo:
             return qsTr("Enter latitude and longitude specified in decimal degrees according to WSG 84. The URI is encoded either using the Geo URI standard (supported by MeeGo Harmattan), a link to Nokia Maps (supported by Symbian) or a generic redirection script hosted on NfcInteractor.com that works for all Nokia phones. Record written as a URI record or Smart Poster (if additional information like the title is provided)");
+        case NfcTypes.MsgStore:
+            return qsTr("Generate a download link to an app store. Creates a direct store link if one ID is specified, or a generic link using a platform detection script at nfcinteractor.com if more app ids are specified. For Nokia, either specify a generic Nokia Store ID if it's the same for all platforms, or instead specify an own ID for Symbian, MeeGo Harmattan and if needed Series 40. Record written as a URI record or Smart Poster (if additional information like the title is provided)");
         case NfcTypes.MsgImage:
             return qsTr("Store an image on a tag in any format. Note the images are usually very large and require a tag with enough writable space.");
         case NfcTypes.MsgCustom:
