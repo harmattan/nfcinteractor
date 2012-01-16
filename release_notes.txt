@@ -25,35 +25,35 @@ Tag reading:
 - NDEF message size
 - List of all individual NDEF records
 - Parses Smart Poster, URI, text, image and business card (vCard) records
+- App is automatically launched for custom record with external RTD: "nokia.com:nfcinteractor"
 
 Tag writing:
 - Dynamic UI to create a message consisting of multiple NDEF records, and to add information to each record
 - Help for all supported message types
 - NDEF message size calculation
 - Specialized editors for each message type:
-  - Social Network record: enter the username and choose the network to create a link to follow you. Creates a URI or Smart Poster, depending on if you add an optional title
-  - Business card record: select the data to include from a wealth of available fields, and create your own business card based on the universal vCard standard. Integrates with the Qt Mobility Contacts APIs. Note: usually large tag size requirements
-  - Geo record: enter coordinates and select the Geo Tag type. Supports Geo URI (RFC 5870), Nokia Maps links and a generic redirection script that enables Geo tags on Symbian and MeeGo, hosted at nfcinteractor.com*. Integrates with the Qt Mobility Location APIs for the coordinates. Creates a URI or Smart Poster, depending on if you add an optional title
-  - SMS record: enter number and body to create a working SMS link, useful for example to request information services or for payment via SMS. Creates a URI or Smart Poster, depending on if you add an optional title
-  - Smart Posters: has to contain at least a URI, optionally an unlimited amount of titles in different languages, a recommended action and information about the linked content (size and MIME type)
-  - URI records: automatically shortens URIs according to the specification to save tag space (e.g., won't save "http://www.", but encode that in a single byte)
-  - Text records: set text and language
+  - Social Network record: enter the username and choose the network to create a link to follow you. Creates a URI or Smart Poster, depending on if you add an optional title.
+  - Business card record: select the data to include from a wealth of available fields, and create your own business card based on the universal vCard standard. Integrates with the Qt Mobility Contacts APIs. Note: usually large tag size requirements.
+  - Geo record: enter coordinates and select the Geo Tag type. Supports Geo URI (RFC 5870), Nokia Maps links and a generic redirection script that enables Geo tags on Symbian and MeeGo, hosted at nfcinteractor.com*. Integrates with the Qt Mobility Location APIs for the coordinates. Creates a URI or Smart Poster, depending on if you add an optional title.
+  - App Store record: generate a download link to an app store. Creates a direct store link if one ID is specified, or a generic link using a platform detection script at nfcinteractor.com* if more app ids are specified. For Nokia, either specify a generic Nokia Store ID if it's the same for all platforms, or instead specify an own ID for Symbian, MeeGo Harmattan and if needed Series 40. Creates a URI or Smart Poster, depending on if you add an optional title.
+  - SMS record: enter number and body to create a working SMS link, useful for example to request information services or for payment via SMS. Creates a URI or Smart Poster, depending on if you add an optional title.
+  - Smart Posters: has to contain at least a URI, optionally an unlimited amount of titles in different languages, a recommended action and information about the linked content (size and MIME type).
+  - URI records: automatically shortens URIs according to the specification to save tag space (e.g., won't save "http://www.", but encode that in a single byte).
+  - Text records: set text and language.
   - Custom records: Choose the type name format and optionally add a type name and payload. Also useful for application autostart tags.
 
 Easily reusable code for developers including:
-- NDEF record classes for: Smart Poster, Mime/vCard (Business Cards), Mime/Image, Geo, Social Networks (Twitter, LinkedIn, Facebook, Xing, vKontakte), SMS, Smart URI (depending on content requirements uses Smart Poster or URI to create the smallest possible message)
+- NDEF record classes for: Smart Poster, Mime/vCard (Business Cards), Mime/Image, Geo coordinates, App Store links, Social Networks (Twitter, LinkedIn, Facebook, Xing, vKontakte), SMS, Smart URI (depending on content requirements uses Smart Poster or URI to create the smallest possible message)
 - Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2, Symbian only)
 
 Planned additional features for the final release:
-- Nokia Store link (specify content ID)
-  + Store link PHP script, with different content IDs for Symbian & MeeGo
 - Add store link to about view
 
 Known bugs (work-in-progress):
+- Changing from landscape mode to portrait while VKB is open on Symbian leaves too little space for the listview. Plus, list doesn't scroll down in landscape mode to make item visible if going to be obscured by the VKB.
 - MeeGo: 2x write confirmation callbacks, visible in raw view
 - MeeGo: skip attempts to read tag specific info to speed up reading & writing
 - MeeGo: finalize .deb packaging data
-- Different item contents for different message types (e.g., not "Nokia" for title in social network tag)
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)
@@ -62,9 +62,10 @@ Ideas for future updates:
 - Write vCalendar records
 - Bluetooth pairing records
 - Lock tags
+- Use current location for geo tags
+- Geocoding (enter address, write coordinates to the tag)
 - Check composed record contents for errors according to specifications
 - Faster startup-time by loading application screens on demand
-- App autostart on tag touch of nokia.com:nfcinteractor tags (external RTD)
 
 * Disclaimer: The services hosted on nfcinteractor.com (e.g., the generic geo-tag redirection script) have no service or uptime guarantee. They are intended for testing purposes only and could be removed at any point. You should host the required server-side scripts on your own webserver for real-world deployment.
 

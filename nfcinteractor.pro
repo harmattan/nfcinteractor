@@ -190,6 +190,13 @@ contains(MEEGO_EDITION,harmattan) {
     harmattandesktopfile.files = nfcinteractor.desktop
     harmattandesktopfile.path = /usr/share/applications
     INSTALLS += harmattandesktopfile
+
+    # To avoid conflicts, recommended to name this file according to the
+    # full service name instead of just the app name.
+    # See: https://bugreports.qt.nokia.com/browse/QTMOBILITY-1848
+    ndefhandler_service.files = com.nokia.qtmobility.nfc.nfcinteractor.service
+    ndefhandler_service.path = /usr/share/dbus-1/services/
+    INSTALLS += ndefhandler_service
 	
     launchericon.files = nfcinteractor80.png splash-nfcinteractor-l.png splash-nfcinteractor-p.png
     launchericon.path = /opt/nfcinteractor/

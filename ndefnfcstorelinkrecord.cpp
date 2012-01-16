@@ -121,4 +121,5 @@ QString NdefNfcStoreLinkRecord::getWebCharForAppStore(const NdefNfcStoreLinkReco
         return "n";
         break;
     }
+    return QString();
 }
