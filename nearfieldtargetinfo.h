@@ -40,6 +40,8 @@
 #ifndef NEARFIELDTARGETINFO_H
 #define NEARFIELDTARGETINFO_H
 
+#include <QDebug>
+
 class NearFieldTargetInfo
 {
 public:

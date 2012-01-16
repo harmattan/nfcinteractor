@@ -152,10 +152,18 @@ QString NfcTargetAnalyzer::analyzeType1Target(QNearFieldTagType1* target)
     // Therefore, only works when the tag is NDEF-formatted.
     // Also, the returned value can be the total tag size, and doesn't
     // usually mean the actual writable & usable tag memory size.
-    const int tagMemorySize = target->memorySize();
+    int tagMemorySize = target->memorySize();
     if (tagMemorySize > 0) {
         nfcInfo.append("Memory size: " + QString::number(tagMemorySize) + " bytes");
     }
+#ifdef MEEGO_EDITION_HARMATTAN
+    if (tagMemorySize == 0) {
+        // MeeGo returns 0 for the tag size because it can't determine it,
+        // not because that's the real tag size.
+        // -> set it to unknown
+        tagMemorySize = -1;
+    }
+#endif
     if (m_tagInfo.tagMemoryType != NearFieldTargetInfo::NfcMemoryUnknown) {
         if (tagMemorySize > 0) {
             // Memory size is available - add type to the same line
@@ -170,7 +178,7 @@ QString NfcTargetAnalyzer::analyzeType1Target(QNearFieldTagType1* target)
             nfcInfo.append("Dynamic");
         }
     }
-    if (!(tagMemorySize == 0 && m_tagInfo.tagMemoryType == NearFieldTargetInfo::NfcMemoryUnknown)) {
+    if (!(tagMemorySize == -1 && m_tagInfo.tagMemoryType == NearFieldTargetInfo::NfcMemoryUnknown)) {
         // If either the memory size or the memory type could be determined,
         // add a new line.
         nfcInfo.append("\n");
@@ -186,7 +194,7 @@ QString NfcTargetAnalyzer::analyzeType1Target(QNearFieldTagType1* target)
         // (for NDEF, reserved memory, termination, dynamic lock, etc.)
         m_tagInfo.tagWritableSize = TYPE1_STATIC_WRITABLE_SIZE;
     }
-    if (m_tagInfo.tagWritableSize == 0) {
+    if (m_tagInfo.tagWritableSize == -1) {
         m_tagInfo.tagWritableSize = m_tagInfo.tagMemorySize;
     }
 
@@ -240,7 +248,7 @@ QString NfcTargetAnalyzer::analyzeType1Target(QNearFieldTagType1* target)
     }
     if (m_tagInfo.tagWritableSize == 0) {
         m_tagInfo.tagWriteAccessLockBits = NearFieldTargetInfo::NfcAccessForbidden;
-    } else {
+    } else if (m_tagInfo.tagWritableSize > 0) {
         m_tagInfo.tagWriteAccessLockBits = NearFieldTargetInfo::NfcAccessAllowed;
     }
 
@@ -326,6 +334,14 @@ QString NfcTargetAnalyzer::analyzeType2Target(QNearFieldTagType2* target)
     if (tagMemorySize > 0) {
         nfcInfo.append("Memory size: " + QString::number(tagMemorySize) + " bytes - ");
     }
+#ifdef MEEGO_EDITION_HARMATTAN
+    if (tagMemorySize == 0) {
+        // MeeGo returns 0 for the tag size because it can't determine it,
+        // not because that's the real tag size.
+        // -> set it to unknown
+        tagMemorySize = -1;
+    }
+#endif
 
     m_tagInfo.tagMemorySize = tagMemorySize;
     // TODO: search for TLV areas in dynamic memory tags

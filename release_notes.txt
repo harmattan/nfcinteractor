@@ -1,5 +1,7 @@
 Nfc Interactor Professional
-===========================
+http://www.nfcinteractor.com
+-------------------------------------------------------------------------------
+
 View low level information about NFC tags and their contents, and write your own tags with a dynamic NDEF message editor UI.
 
 Touch an NFC tag to analyze its format and its contents. Nfc Interactor parses and shows many different NDEF messages and extends the offering of Qt through reusable convenience classes for handling additional record types: Smart Poster, Mime/Image, vCard, SMS, Social Networks, Geo-Tags, Smart URI and custom records.
@@ -8,8 +10,6 @@ Compose your own NDEF messages by combining one or more NDEF records using the d
 
 Nfc Interactor is written in Qt and works on Symbian Anna / Belle as well as on MeeGo Harmattan. As an open source example project, it also showcases the use of Qt Quick Components, as well as the integration of C++ with QML.
 
-More information:
-https://projects.developer.nokia.com/nfcinteractor
 
 Note: this version of Nfc Interactor replaces the previous Java ME-based NFCinteractor. The new Qt-version is more powerful and introduces a wealth of new features, plus improved reading support. The Java ME-based project is still useful as a code example and has therefore been renamed to Nfc Creator and is available here: https://projects.developer.nokia.com/nfccreator . This Qt-based Nfc Interactor also succeeds the "Nfc Info" project, which was only capable of reading tags.
 
@@ -55,6 +55,7 @@ Known bugs (work-in-progress):
 - MeeGo: skip attempts to read tag specific info to speed up reading & writing
 - MeeGo: finalize .deb packaging data
 - MeeGo: Tag analysis always assumes tag is write protected
+- MeeGo: remove tag during writing -> ui might not recognize the issue, even though there is the *** Stopped tag interaction... 
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)
