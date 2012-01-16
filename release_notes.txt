@@ -52,9 +52,9 @@ Planned additional features for the final release:
 Known bugs (work-in-progress):
 - Symbian: Changing from landscape mode to portrait while VKB is open on Symbian leaves too little space for the listview. Plus, list doesn't scroll down in landscape mode to make item visible if going to be obscured by the VKB.
 - MeeGo: 2x write confirmation callbacks, visible in raw view
-- MeeGo: skip attempts to read tag specific info to speed up reading & writing
 - MeeGo: finalize .deb packaging data
 - Symbian: Writing... busy animation is on top of previous write status when writing another tag -> write status doesn't get invisible as it should (and does on MeeGo)
+- Check tag UID reading
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)
@@ -81,7 +81,7 @@ Harmattan: No special aegis manifest is required.
 KNOWN ISSUES
 -------------------------------------------------------------------------------
 
-The Tag Image Cache stores all images in memory. Images found in tags
+General: the Tag Image Cache stores all images in memory. Images found in tags
 are usually very small, making this no issue at all. For special usage 
 scenarios, this class might have to be extended to cache the images
 on the disc instead.
@@ -91,7 +91,13 @@ simultaneous tag read & write access. This has been fixed in PR 1.1,
 which is the firmware version required by this example.
 For PR 1.0, the example would need to switch between those two modes.
 See the earlier versions of Nfc Info or Nfc Corkboards for example code
-if needed.
+if needed. This example has not been tested on PR 1.0.
+
+Harmattan: if removing the tag while the app is interacting with it (reading
+or writing), the Qt Mobility APIs might not emit the 'target lost' signal
+on PR 1.1. This causes the app to keep the "writing..." animation active,
+requiring the user to touch the tag again up to 2x. This behavior has
+been fixed in PR 1.2.
 
 
 BUILD & INSTALLATION INSTRUCTIONS

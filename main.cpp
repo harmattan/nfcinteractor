@@ -157,13 +157,7 @@ int main(int argc, char *argv[])
     TagImageCache *tagImageCache = new TagImageCache();
     viewer.engine()->addImageProvider(QLatin1String("nfcimageprovider"), tagImageCache);
 
-#if defined(Q_OS_SYMBIAN)
     viewer.setMainQmlFile(QLatin1String("qml/main.qml"));
-#elif defined(QT_SIMULATOR)
-    viewer.setMainQmlFile(QLatin1String("qml/main.qml"));
-#else
-    viewer.setMainQmlFile(QLatin1String("qml/main.qml"));
-#endif
 
     // Inform the NfcInfo class about the image cache
     // The NfcInfo has been instantiated through QML, so retrieve its instance
