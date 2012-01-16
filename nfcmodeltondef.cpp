@@ -469,7 +469,7 @@ template<class T> bool NfcModelToNdef::contactSetDetail(QContact& contact, const
         contactField = QContactAddress::FieldStreet.latin1();
         break;
     default:
-        qDebug() << "Unknown contact detail in NfcModelToNdef::contactSetDetail()";
+        qDebug() << "Warning: Unknown contact detail in NfcModelToNdef::contactSetDetail()";
         contactField = "Unknown";
         break;
     }
@@ -658,6 +658,9 @@ NdefNfcStoreLinkRecord::AppStore NfcModelToNdef::appStoreFromRecordContentType(c
         break;
     case NfcTypes::RecordStoreCustomName:
         return NdefNfcStoreLinkRecord::StoreCustomName;
+        break;
+    default:
+        qDebug() << "Warning: Unknown record content type passed to NfcModelToNdef::appStoreFromRecordContentType.";
         break;
     }
 }

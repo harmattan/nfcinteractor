@@ -90,7 +90,7 @@ public slots:
     /** Creates and inserts a new record item, using defaults for some of the most common info (remove is visible, add is invisible). */
     void simpleInsertRecordItem(const int insertPosition, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const bool removeVisible, const int parentRecordId);
     void simpleAppendRecordItem(const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const bool removeVisible, const int parentRecordId);
-    void getDefaultsForRecordContent(const NfcTypes::RecordContent contentType, QString &defaultTitle, QString &defaultContents);
+    void getDefaultsForRecordContent(const NfcTypes::MessageType msgType, const NfcTypes::RecordContent contentType, QString &defaultTitle, QString &defaultContents);
     QVariantList getSelectionItemsForRecordContent(const NfcTypes::RecordContent contentType, int &defaultSelectedItem);
 
     void addContentToRecord(int recordIndex, int messageTypeInt, int newContentType);

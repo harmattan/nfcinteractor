@@ -283,8 +283,10 @@ void NfcRecordModel::addContentToRecord(int recordIndex, int messageTypeInt, int
     {
         // Add two items for the text record, therefore handle it here
         // and not in the generic simpleInsertRecordItem() method.
-        insertRecordItem(insertPosition, new NfcRecordItem("Language", messageType, NfcTypes::RecordTextLanguage, "en", false, false, parentRecordId, this));
-        insertRecordItem(insertPosition, new NfcRecordItem("Title text", messageType, NfcTypes::RecordText, "Nokia", true, false, parentRecordId, this));
+        simpleInsertRecordItem(insertPosition, messageType, NfcTypes::RecordTextLanguage, false, parentRecordId);
+        simpleInsertRecordItem(insertPosition, messageType, NfcTypes::RecordText, true, parentRecordId);
+        //insertRecordItem(insertPosition, new NfcRecordItem("Language", messageType, NfcTypes::RecordTextLanguage, "en", false, false, parentRecordId, this));
+        //insertRecordItem(insertPosition, new NfcRecordItem("Title text", messageType, NfcTypes::RecordText, "Nokia", true, false, parentRecordId, this));
         break;
     }
     case NfcTypes::RecordHeader:
@@ -313,7 +315,7 @@ void NfcRecordModel::simpleInsertRecordItem(const int insertPosition, const NfcT
 {
     QString defaultTitle;
     QString defaultContents;
-    getDefaultsForRecordContent(contentType, defaultTitle, defaultContents);
+    getDefaultsForRecordContent(messageType, contentType, defaultTitle, defaultContents);
     NfcRecordItem* newRecordItem = new NfcRecordItem(defaultTitle, messageType, contentType, defaultContents, removeVisible, false, parentRecordId, this);
     if (contentType == NfcTypes::RecordSpAction ||
             contentType == NfcTypes::RecordGeoType ||
@@ -588,14 +590,14 @@ void NfcRecordModel::checkPossibleContentForRecord(QList<QObject*> &contentList,
         if (description.isEmpty()) {
             // No description provided - use the defaulf for this record content type
             QString defaultContents;
-            getDefaultsForRecordContent(searchForRecordContent, description, defaultContents);
+            getDefaultsForRecordContent(searchForMsgType, searchForRecordContent, description, defaultContents);
         }
         contentList.append(new NfcRecordItem(description, searchForMsgType, searchForRecordContent, QString(), false, false, -1, this));
     }
 
 }
 
-void NfcRecordModel::getDefaultsForRecordContent(const NfcTypes::RecordContent contentType, QString& defaultTitle, QString& defaultContents)
+void NfcRecordModel::getDefaultsForRecordContent(const NfcTypes::MessageType msgType, const NfcTypes::RecordContent contentType, QString& defaultTitle, QString& defaultContents)
 {
     defaultTitle = "";
     defaultContents = "";
@@ -604,10 +606,29 @@ void NfcRecordModel::getDefaultsForRecordContent(const NfcTypes::RecordContent c
         defaultTitle = "URI";
         defaultContents = "http://nokia.com";
         break;
-    case NfcTypes::RecordText:
-        defaultTitle = "Title text";
-        defaultContents = "Nokia";
-        break;
+    case NfcTypes::RecordText: {
+        if (msgType == NfcTypes::MsgText) {
+            defaultTitle = "Text";
+        } else {
+            defaultTitle = "Title text";
+        }
+        switch (msgType) {
+        case NfcTypes::MsgSms:
+            defaultContents = "Send SMS";
+            break;
+        case NfcTypes::MsgSocialNetwork:
+            defaultContents = "Follow me";
+            break;
+        case NfcTypes::MsgGeo:
+            defaultContents = "View location";
+            break;
+        case NfcTypes::MsgStore:
+            defaultContents = "Download app";
+            break;
+        default:
+            defaultContents = "Nokia";
+        }
+        break; }
     case NfcTypes::RecordTextLanguage:
         defaultTitle = "Language";
         defaultContents = "en";
@@ -751,6 +772,7 @@ void NfcRecordModel::getDefaultsForRecordContent(const NfcTypes::RecordContent c
         break;
     case NfcTypes::RecordStoreMeeGoHarmattan:
         defaultTitle = "MeeGo ID in Nokia Store";
+        defaultContents = "214283";
         break;
     case NfcTypes::RecordStoreSeries40:
         defaultTitle = "Series 40 ID in Nokia Store";
