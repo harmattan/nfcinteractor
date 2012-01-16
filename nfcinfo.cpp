@@ -446,7 +446,6 @@ void NfcInfo::targetError(QNearFieldTarget::Error error, const QNearFieldTarget:
     QString errorText("Error: " + convertTargetErrorToString(error));
     qDebug() << errorText;
     if (id == m_cachedRequestId && m_cachedRequestType == NfcNdefWriting) {
-        //qDebug() << "Error was from cached write request.";
         m_cachedRequestType = NfcIdle;
         if (!m_pendingWriteNdef) {
             m_currentActivity = NfcIdle;

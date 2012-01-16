@@ -12,7 +12,6 @@ Page {
             }
         }
 //        ToolButton {
-//            //iconSource: "toolbar-back";
 //            iconSource: "end.svg"
 //            onClicked: {
 //                startWriting();

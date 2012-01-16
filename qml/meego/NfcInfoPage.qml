@@ -39,8 +39,6 @@
 ****************************************************************************/
 
 import QtQuick 1.1
-//import com.nokia.symbian 1.1 // Symbian Qt Quick components
-//import Qt.labs.components.native 1.0
 import com.nokia.meego 1.0
 
 import Nfc 1.0
@@ -136,7 +134,6 @@ Page {
 //            onClicked: pageStack.depth <= 1 ? Qt.quit() : pageStack.pop()
 //        }
         ToolIcon {
-            //iconSource: "info.svg";
             iconId: "toolbar-tools"
             onClicked: {
                 pageStack.push(instructionsPage)

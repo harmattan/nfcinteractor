@@ -39,7 +39,6 @@
 ****************************************************************************/
 
 import QtQuick 1.1
-//import com.nokia.symbian 1.1 // Symbian Qt Quick components
 import com.nokia.meego 1.0
 
 import Nfc 1.0

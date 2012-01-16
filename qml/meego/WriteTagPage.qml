@@ -1,11 +1,9 @@
 import QtQuick 1.1
-//import com.nokia.symbian 1.1 // Symbian Qt Quick components
 import com.nokia.meego 1.0
 
 Page {
     tools: ToolBarLayout {
         ToolIcon {
-            //iconSource: "toolbar-back";
             iconId: "toolbar-back"
             onClicked: {
                 nfcInfo.nfcStopWritingTags();
@@ -13,7 +11,6 @@ Page {
             }
         }
 //        ToolIcon {
-//            //iconSource: "toolbar-back";
 //            iconId: "toolbar-back"
 //            onClicked: {
 //                startWriting();

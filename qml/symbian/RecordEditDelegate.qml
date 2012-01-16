@@ -1,6 +1,5 @@
 import QtQuick 1.1
 import com.nokia.symbian 1.1 // Symbian Qt Quick components
-//import Qt.labs.components.native 1.0
 import Qt.labs.components 1.1   // Needed for CheckableGroup on Symbian
 import com.nfcinfo.types 1.0
 
