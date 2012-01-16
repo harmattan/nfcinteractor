@@ -88,12 +88,32 @@ QString NfcTargetAnalyzer::analyzeTarget(QNearFieldTarget* target)
     {
         // NFC Forum Tag Type 1
         QNearFieldTagType1* targetSpecific = qobject_cast<QNearFieldTagType1 *>(target);
+#ifdef Q_OS_SYMBIAN
+        // On Symbian, the tag type specific access flag is never set,
+        // so analyze the target in any case.
+        // (doesn't work with QtM 1.2.1 on Symbian Anna, but works
+        // with Symbian Belle).
         nfcInfo.append(analyzeType1Target(targetSpecific));
+#else
+        // MeeGo doesn't support tag type specific access as of now (PR 1.2),
+        // so don't even attempt to do it, as it will only make tag detection
+        // slower.
+        if (accessMethods.testFlag(QNearFieldTarget::TagTypeSpecificAccess)) {
+            nfcInfo.append(analyzeType1Target(targetSpecific));
+        }
+#endif
     } else if (target->type() == QNearFieldTarget::NfcTagType2)
     {
         // NFC Forum Tag Type 2
         QNearFieldTagType2* targetSpecific = qobject_cast<QNearFieldTagType2 *>(target);
+        // See above for explanations for the ifdef
+#ifdef Q_OS_SYMBIAN
         nfcInfo.append(analyzeType2Target(targetSpecific));
+#else
+        if (accessMethods.testFlag(QNearFieldTarget::TagTypeSpecificAccess)) {
+            nfcInfo.append(analyzeType2Target(targetSpecific));
+        }
+#endif
     }
 
     return nfcInfo.trimmed();

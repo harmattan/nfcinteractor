@@ -500,7 +500,8 @@ void NfcInfo::targetError(QNearFieldTarget::Error error, const QNearFieldTarget:
         stoppedTagInteraction();
     } else {
         if (m_reportingLevel == FullReporting ||
-                error != QNearFieldTarget::InvalidParametersError) {
+                (error != QNearFieldTarget::InvalidParametersError &&
+                 error != QNearFieldTarget::UnsupportedError)) {
             emit nfcTagError(errorText);
         }
     }
@@ -544,13 +545,16 @@ void NfcInfo::requestCompleted(const QNearFieldTarget::RequestId &id)
             message = "Request completed.";
             break;
         }
+        qDebug() << message;
         m_cachedRequestType = NfcIdle;
         emit nfcStatusUpdate(message);
         stoppedTagInteraction();
     } else {
         message = "Request completed.";
+        if (m_reportingLevel == DebugReporting) {
+            qDebug() << message;
+        }
     }
-    qDebug() << message;
     if (showAnotherTagWriteMsg) {
         // Emit the message that the user can write another tag.
         // (after we emitted the message that the previous write request completed).
