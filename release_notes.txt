@@ -50,12 +50,11 @@ Planned additional features for the final release:
 - Add store link to about view
 
 Known bugs (work-in-progress):
-- Changing from landscape mode to portrait while VKB is open on Symbian leaves too little space for the listview. Plus, list doesn't scroll down in landscape mode to make item visible if going to be obscured by the VKB.
+- Symbian: Changing from landscape mode to portrait while VKB is open on Symbian leaves too little space for the listview. Plus, list doesn't scroll down in landscape mode to make item visible if going to be obscured by the VKB.
 - MeeGo: 2x write confirmation callbacks, visible in raw view
 - MeeGo: skip attempts to read tag specific info to speed up reading & writing
 - MeeGo: finalize .deb packaging data
-- MeeGo: Tag analysis always assumes tag is write protected
-- MeeGo: remove tag during writing -> ui might not recognize the issue, even though there is the *** Stopped tag interaction... 
+- Symbian: Writing... busy animation is on top of previous write status when writing another tag -> write status doesn't get invisible as it should (and does on MeeGo)
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)
@@ -112,17 +111,17 @@ C7-00/Oro/Astound and 801T with Symbian Anna/Belle,
 Nokia 603, 700 and 701 with Belle
 (plus all upcoming NFC capable phones)
 
-Device Preparation:
-C7-00/801T with Symbian Anna: additionally install Qt 4.7.4, Qt Mobility 1.2 
-and Qt Quick Components 1.1 from the Qt SDK:
+Device Preparation
+C7-00 with Symbian Anna: install using the Smart Installer.
+For manual device preparation, additionally install Qt 4.7.4, Qt Mobility 1.2 and Qt Quick Components from the Qt SDK:
 C:\QtSDK\Symbian\sis\Symbian_Anna\Qt\4.7.4\Qt-4.7.403-for-Anna.sis
 C:\QtSDK\Symbian\sis\Symbian_Anna\Qt\4.7.4\QtWebKit-4.8.1-for-Anna.sis
 C:\QtSDK\Symbian\sis\Symbian_Anna\QtMobility\1.2.1\QtMobility-1.2.1-for-Anna.sis
 C:\QtSDK\Symbian\sis\Symbian_Anna\QtQuickComponents\1.1\QtQuickComponents-1.1-for-Anna-Belle.sis
 
-Symbian Belle: already includes Qt 4.7.4 and QtM 1.2 - you don't
-need to install these. Only Qt Quick Components is required:
-C:\QtSDK\Symbian\sis\Symbian_Anna\QtQuickComponents\1.1\QtQuickComponents-1.1-for-Anna-Belle.sis
+Symbian Belle: install using the Smart Installer.
+For manual device preparation, you only need to install Qt Quick Components, as Belle already includes Qt 4.7.4 and Qt Mobility 1.2:
+C:\QtSDK\Symbian\sis\Symbian_Belle\QtQuickComponents\1.1\QtQuickComponents-1.1-for-Anna-Belle.sis 
 
 
 
@@ -152,9 +151,9 @@ COMPATIBILITY
 - Qt Quick Components 1.1
 
 Tested on: 
-- Nokia C7-00 with Symbian Anna Firmware and QtM 1.2
-- Nokia C7-00 and 701 with Symbian Belle Firmware (already includes QtM 1.2)
-- Nokia N9 PR 1.1
+- Nokia C7-00 with Symbian Anna Firmware and Qt 4.7.4 / QtM 1.2
+- Nokia C7-00 and 701 with Symbian Belle Firmware
+- Nokia N9 PR 1.1 / PR 1.2
 
 
 CHANGE HISTORY
@@ -172,6 +171,7 @@ RELATED DOCUMENTATION
 -------------------------------------------------------------------------------
 
 Project page
+http://www.nfcinteractor.com
 https://projects.developer.nokia.com/nfcinteractor
 
 Related example projects

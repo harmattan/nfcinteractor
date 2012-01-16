@@ -120,6 +120,7 @@ PageStackWindow {
             // Hide the busy animation in any case - the user might have
             // switched away from the page while tag reading was active.
             nfcInfoPage.showHideBusy(false);
+            writeTagPage.cancelWriting();
         }
 
         onNfcTagWritten: {

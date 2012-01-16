@@ -32,6 +32,13 @@ Page {
         showHideBusy(true);
     }
 
+    function cancelWriting() {
+        if (busyContainer.visible) {
+            writeStatusContainer.visible = false;
+            showHideBusy(false);
+        }
+    }
+
     function showHideBusy(showBusy) {
         busyContainer.visible = showBusy;
         busySpinner.running = showBusy;

@@ -69,7 +69,6 @@ NearFieldTargetInfo::NfcTagAccessStatus NearFieldTargetInfo::combinedWriteAccess
 
 NearFieldTargetInfo::NfcTagAccessStatus NearFieldTargetInfo::combineAccess(const NfcTagAccessStatus accessCC, const NfcTagAccessStatus accessLockBits) const
 {
-    qDebug() << "Combined access query: cc " << accessCC << ", bits " << accessLockBits << ", writable " << tagWritableSize << ", size " << tagMemorySize;
     if (accessCC == NfcAccessAllowed &&
         accessLockBits == NfcAccessAllowed) {
         // Both CC and lock bits indicate that the access is allowed
