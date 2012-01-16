@@ -45,6 +45,7 @@
 #include <QByteArray>
 #include <QVariant>
 #include <QUrl>
+#include <QDeclarativeView>
 
 #include <QNearFieldManager>
 #include <QNdefFilter>
@@ -119,6 +120,7 @@ public:
     ~NfcInfo();
 
     void setImageCache(TagImageCache* tagImageCache);
+    void setDeclarativeView(QDeclarativeView& view);
 
 signals:
     /*! Update on the NFC status (starting target detection, etc.) */
@@ -226,6 +228,7 @@ private:
       analysis phase can include multiple individual requests. */
     NfcRequestStatus m_cachedRequestType;
 
+    QDeclarativeView* m_declarativeView;
 };
 
 #endif // NFCINFO_H

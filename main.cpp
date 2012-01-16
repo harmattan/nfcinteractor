@@ -172,22 +172,21 @@ int main(int argc, char *argv[])
     if (nfcInfoObj) {
         nfcInfoObj->setImageCache(tagImageCache);
         // Pass the record model back to the QML
-        // TODO: would most likely be easier to just make the model a property!
+        // TODO: would most likely be easier to just make the model a property?
         viewer.rootContext()->setContextProperty("recordModel", nfcInfoObj->recordModel());
+        // Give the ndef manager a pointer to our declarative view,
+        // so that it can raise the app to the foreground when an
+        // autostart tag is touched and the app is already running.
+        nfcInfoObj->setDeclarativeView(viewer);
     }
-
-    /*QObject *recordModel = viewer.rootObject()->findChild<QObject*>("recordModelObj");
-    if (recordModel) {
-        qDebug() << recordModel->metaObject()->className();
-    }*/
 
     viewer.showExpanded();
 
-#ifdef Q_OS_SYMBIAN
-    // Prevent screensaver from kicking in on Symbian
-    QSystemScreenSaver *screensaver = new QSystemScreenSaver ( &viewer );
-    screensaver->setScreenSaverInhibit();
-#endif
+//#ifdef Q_OS_SYMBIAN
+//    // Prevent screensaver from kicking in on Symbian
+//    QSystemScreenSaver *screensaver = new QSystemScreenSaver ( &viewer );
+//    screensaver->setScreenSaverInhibit();
+//#endif
 
     return app.exec();
 }

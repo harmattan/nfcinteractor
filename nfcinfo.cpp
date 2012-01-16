@@ -293,15 +293,13 @@ void NfcInfo::targetMessageDetected(const QNdefMessage &message, QNearFieldTarge
     // Go through all records in the message
     ndefMessageRead(message);
 #ifdef MEEGO_EDITION_HARMATTAN
-    // MeeGo: raise the app to the foreground in case it was autostarted by touching the tag
-    // AND it was already running in the background.
-    // If we wouldn't do it, the app would receive the tag, but remain in the background.
-
-    // TODO: pass declarative view to this class, like in nfc corkboard app.
-
-    //if (declarativeView) {
-    //    declarativeView->raise();
-    //}
+    // MeeGo: raise the app to the foreground in case it was autostarted
+    // by touching the tag AND it was already running in the background.
+    // If we wouldn't do it, the app would receive the tag, but remain
+    // in the background.
+    if (m_declarativeView) {
+        m_declarativeView->raise();
+    }
 #endif
 }
 
@@ -650,6 +648,11 @@ QString NfcInfo::convertTargetErrorToString(QNearFieldTarget::Error error)
 //#endif
     }
     return errorString;
+}
+
+void NfcInfo::setDeclarativeView(QDeclarativeView& view)
+{
+    m_declarativeView = &view;
 }
 
 #ifdef Q_OS_SYMBIAN
