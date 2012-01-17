@@ -125,6 +125,8 @@ public:
 signals:
     /*! Update on the NFC status (starting target detection, etc.) */
     void nfcStatusUpdate(const QString& nfcStatusText);
+    /*! An important operation finished successfully (reading or writing tags) */
+    void nfcStatusSuccess(const QString& nfcStatusSuccessText);
     /*! Error with NFC. */
     void nfcStatusError(const QString& nfcStatusErrorText);
     /*! Generic information about a new tag that was detected */

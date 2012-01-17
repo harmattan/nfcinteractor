@@ -546,8 +546,14 @@ void NfcInfo::requestCompleted(const QNearFieldTarget::RequestId &id)
             break;
         }
         qDebug() << message;
+        if (!(m_cachedRequestType == NfcNdefWriting && m_reportingLevel == OnlyImportantReporting)) {
+            // Writing success will already be reported by the nfcTagWritten method
+            // (this method is called as well on MeeGo, resulting in 2x status updates).
+            // Therefore, for writing, do not print this status mesesage if
+            // reporting is set to only important.
+            emit nfcStatusSuccess(message);
+        }
         m_cachedRequestType = NfcIdle;
-        emit nfcStatusUpdate(message);
         stoppedTagInteraction();
     } else {
         message = "Request completed.";
@@ -555,11 +561,12 @@ void NfcInfo::requestCompleted(const QNearFieldTarget::RequestId &id)
             qDebug() << message;
         }
     }
-    if (showAnotherTagWriteMsg) {
-        // Emit the message that the user can write another tag.
-        // (after we emitted the message that the previous write request completed).
-        emit nfcStatusUpdate("Touch another tag to write again.");
-    }
+    // This is already done by the nfcTagWritten() method.
+//    if (showAnotherTagWriteMsg) {
+//        // Emit the message that the user can write another tag.
+//        // (after we emitted the message that the previous write request completed).
+//        emit nfcStatusUpdate("Touch another tag to write again.");
+//    }
 
     // Request the response
     if (m_reportingLevel == DebugReporting) {
@@ -602,7 +609,6 @@ void NfcInfo::ndefMessageWritten()
 {
     emit nfcTagWritten();
     stoppedTagInteraction();
-    qDebug() << "ndefMessageWritten";
 
     if (m_pendingWriteNdef) {
         // Writing tags is still pending - means the user can write another

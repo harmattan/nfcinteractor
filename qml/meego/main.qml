@@ -96,6 +96,8 @@ PageStackWindow {
 
         onNfcStatusUpdate:
             logMessage(nfcStatusText, "aliceblue", "nfcSymbolInfo.png");
+        onNfcStatusSuccess:
+            logMessage(nfcStatusSuccessText, "aliceblue", "nfcSymbolSuccess.png");
         onNfcStatusError:
             logMessage(nfcStatusErrorText, "coral", "nfcSymbolError.png");
         onNfcInfoUpdate:
@@ -124,7 +126,7 @@ PageStackWindow {
         }
 
         onNfcTagWritten: {
-            logMessage("Message written to the tag.", "aliceblue", "nfcSymbolInfo.png");
+            logMessage("Message written to the tag.", "aliceblue", "nfcSymbolSuccess.png");
             writeTagPage.tagWritten();
         }
         onNfcTagWriteError: {
