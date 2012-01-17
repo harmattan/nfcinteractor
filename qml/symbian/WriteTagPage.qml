@@ -20,21 +20,21 @@ Page {
     }
 
     function resetPage() {
-        writeStatusAnimation.stop()
-        writeStatusBgFlash.stop()
+        writeStatusAnimation.complete();
+        writeStatusBgFlash.complete();
         writeStatusContainer.visible = false;
+        writeStatusGroup.visible = false;
         writeStatusBg.visible = false;
         separator.visible = false;
     }
 
     function startWriting() {
-        writeStatusContainer.visible = false;
+        resetPage();
         showHideBusy(true);
     }
 
     function cancelWriting() {
         if (busyContainer.visible) {
-            writeStatusContainer.visible = false;
             showHideBusy(false);
         }
     }
@@ -46,6 +46,7 @@ Page {
 
     function startAnimation() {
         writeStatusContainer.visible = true;
+        writeStatusGroup.visible = true;
         writeStatusAnimation.restart();
         writeStatusBg.visible = true;
         writeStatusBgFlash.restart();
@@ -100,22 +101,22 @@ Page {
     Rectangle {
         id: writeStatusBg
         anchors.fill: parent
-        opacity: 0
+        opacity: 0.0
         SequentialAnimation {
             id: writeStatusBgFlash
             PropertyAnimation {
                 target: writeStatusBg
                 property: "opacity"
-                from: 0
-                to: 100
-                duration: 500
+                from: 0.0
+                to: 1.0
+                duration: 10
                 easing.type: Easing.InQuad
             }
             PropertyAnimation {
                 target: writeStatusBg
                 property: "opacity"
-                from: 100
-                to: 0
+                from: 1.0
+                to: 0.0
                 duration: 1000
                 easing.type: Easing.OutQuad
             }
@@ -178,7 +179,7 @@ Page {
         }
         Text {
             id: busyText
-            text: "Writing..."
+            text: "Writing...\n         "
             font.family: customPlatformStyle.fontFamilyRegular;
             font.pixelSize: customPlatformStyle.fontSizeLarge
             color: customPlatformStyle.colorNormalLight
@@ -219,9 +220,9 @@ Page {
                     id: writeStatusAnimation
                     target: writeStatusGroup
                     property: "opacity"
-                    from: 0
-                    to: 100
-                    duration: 2000
+                    from: 0.0
+                    to: 1.0
+                    duration: 500
                     easing.type: Easing.InOutQuad
                 }
                 Text {
