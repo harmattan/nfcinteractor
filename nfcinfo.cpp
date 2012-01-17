@@ -464,7 +464,7 @@ void NfcInfo::targetError(QNearFieldTarget::Error error, const QNearFieldTarget:
                 // Message was too large for the target.
                 errorText.append("\n\nMessage (" + QString::number(m_cachedNdefMessageSize) + " bytes) and control data were probably too large for the available tag size (" + QString::number(tagWritableSize) + " bytes).");
             }
-        } else if (tagWritableSize == 0 && m_cachedNdefMessageSize > 0 && m_cachedTarget) {
+        } else if (tagWritableSize <= 0 && m_cachedNdefMessageSize > 0 && m_cachedTarget) {
             // Don't know the tag size - print a warning for typical tag sizes
             // that we have have to guess
             // This happens if the tag has issues, if Qt Mobility APIs
