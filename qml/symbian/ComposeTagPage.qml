@@ -48,7 +48,7 @@ Page {
     Text {
         id: composeInstructions
         visible: recordView.count === 0
-        text: "Empty message.\nUse the add ('plus') button in the toolbar to add one or more NDEF records."
+        text: qsTr("Empty message.\nUse the add ('plus') button in the toolbar to add one or more NDEF records.")
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
         anchors {top: messageHeader.bottom; left: parent.left; right: parent.right; bottom: splitViewInput.top; }
@@ -68,6 +68,11 @@ Page {
         focus: true
         visible: count > 0
     }
+
+    // --------------------------------------------------------------------------------
+    // Virtual Keyboard handling (VKB)
+    // Resizes the Listview to avoid overlapping the edited item with the VKB.
+    // Only needed on Symbian, MeeGo does that by itself.
     Item {
         // This element has the same size as the virtual keyboard and is used to
         // reduce the size of the recordView whenever the VKB becomes visible.
@@ -78,11 +83,16 @@ Page {
     }
     Connections {
         target: inputContext;
-        onVisibleChanged:  {
-            if (platform !== 2) {
-                // Only do this when not working with the Simulator, which doesn't draw the
-                // VKB but still reserves the size for it.
-                splitViewInput.height = (inputContext.visible) ? inputContext.height - tools.height : 0;
+        onVisibleChanged: adjustVkbHeight();
+        onHeightChanged: adjustVkbHeight();
+    }
+    function adjustVkbHeight() {
+        if (platform !== 2) {
+            var prevSplitViewInputHeight = splitViewInput.height;
+            // Only do this when not working with the Simulator, which doesn't draw the
+            // VKB but still reserves the size for it.
+            splitViewInput.height = (inputContext.visible) ? inputContext.height - tools.height : 0;
+            if (prevSplitViewInputHeight !== splitViewInput.height) {
                 // Note that the recordView.currentIndex requires the item to set itself
                 // as the current index when the user starts editing an item.
                 // (in onActiveFocusChanged in the TextField element of the delegate)
@@ -91,6 +101,8 @@ Page {
         }
     }
 
+
+    // --------------------------------------------------------------------------------
     // Create a selection dialog with a title and list elements to choose from.
     Loader {
         // Need to dynamically load the dialog, as otherwise Symbian Components

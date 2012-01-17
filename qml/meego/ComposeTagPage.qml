@@ -57,7 +57,7 @@ Page {
 
     ListView {
         id: recordView
-        anchors {top: messageHeader.bottom; left: parent.left; right: parent.right; bottom: splitViewInput.top; }
+        anchors {top: messageHeader.bottom; left: parent.left; right: parent.right; bottom: parent.bottom; }
         model: nfcInfo.recordModel
         cacheBuffer: 200
         clip: true
@@ -65,28 +65,8 @@ Page {
         focus: true
         visible: count > 0
     }
-    Item {
-        // This element has the same size as the virtual keyboard and is used to
-        // reduce the size of the recordView whenever the VKB becomes visible.
-        // This is needed to ensure the edited item is visible and not hidden
-        // by the VKB (through overlap).
-        id: splitViewInput
-        anchors { bottom: parent.bottom; left: parent.left; right: parent.right }
-    }
-//    Connections {
-//        target: inputContext;
-//        onVisibleChanged:  {
-//            if (platform !== 2) {
-//                // Only do this when not working with the Simulator, which doesn't draw the
-//                // VKB but still reserves the size for it.
-//                splitViewInput.height = (inputContext.visible) ? inputContext.height - tools.height : 0;
-//                // Note that the recordView.currentIndex requires the item to set itself
-//                // as the current index when the user starts editing an item.
-//                // (in onActiveFocusChanged in the TextField element of the delegate)
-//                recordView.positionViewAtIndex(recordView.currentIndex, ListView.Visible);
-//            }
-//        }
-//    }
+
+    // Note: VKB-Tricks with inputContext not needed on MeeGo
 
     // Create a selection dialog with a title and list elements to choose from.
     Loader {
