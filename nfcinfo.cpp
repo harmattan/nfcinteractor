@@ -329,7 +329,6 @@ void NfcInfo::ndefMessageRead(const QNdefMessage &message)
   */
 bool NfcInfo::nfcWriteTag(const bool writeOneTagOnly)
 {
-    qDebug() << "Write tag ... ";
     emit nfcModeChanged(NfcTypes::nfcWriting);
 
     // Convert the model into a NDEF message

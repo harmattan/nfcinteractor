@@ -92,8 +92,14 @@ symbian {
 
     qmlFolder.source = qml/symbian/*
     qmlFolder.target = qml
-
     QML_IMPORT_PATH = qml/symbian
+
+    # Symbian specific images
+    OTHER_FILES += \
+        qml/images-symbian/*.qml
+    imagesFolderSymbian.source = qml/images-symbian/*
+    imagesFolderSymbian.target = qml
+    DEPLOYMENTFOLDERS += imagesFolderSymbian
 
     #qmlImages.sources = qml/images/*
     #qmlImages.path = .

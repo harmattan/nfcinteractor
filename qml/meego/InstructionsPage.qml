@@ -59,18 +59,10 @@ Page {
                     font.pixelSize: customPlatformStyle.fontSizeMedium
                 }
             }
-
         }
 
-        // TODO: MeeGo
-//        ScrollBar {
-//            id: scrollBar
-//            height: parent.height
-//            anchors { top: instructionsFlickable.top; right: instructionsFlickable.right }
-//            flickableItem: instructionsFlickable
-//            interactive: false
-//            orientation: Qt.Vertical
-//        }
-
+        ScrollDecorator {
+            flickableItem: instructionsFlickable
+        }
     }
 }

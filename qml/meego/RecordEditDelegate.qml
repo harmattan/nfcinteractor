@@ -59,21 +59,18 @@ Item {
         width: calculateButtonRowWidth()
         Button {
             id: addInfoToRecordButton
-            //iconSource: "add_large.svg"
             iconSource: "image://theme/icon-s-common-add-inverse"
             onClicked: composeTagPage.queryAddContentToRecord(index, messageType)
             visible: (recordContent === NfcTypes.RecordHeader && addVisible)
         }
         Button {
             id: helpRecordButton
-            //iconSource: "info.svg"
             iconSource: "image://theme/icon-s-description-inverse"
             onClicked: composeTagPage.showRecordHelp(index, title, messageType, recordContent)
             visible: (recordContent === NfcTypes.RecordHeader)
         }
         Button {
             id: removeRecordButton
-            //iconSource: "delete.svg"
             iconSource: "image://theme/icon-m-toolbar-delete-selected"
             onClicked: recordModel.removeRecord(index)
             visible: removeVisible

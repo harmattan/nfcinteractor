@@ -134,7 +134,7 @@ Page {
 //            onClicked: pageStack.depth <= 1 ? Qt.quit() : pageStack.pop()
 //        }
         ToolIcon {
-            iconId: "toolbar-tools"
+            iconSource: "image://theme/icon-s-description-inverse"
             onClicked: {
                 pageStack.push(instructionsPage)
             }
