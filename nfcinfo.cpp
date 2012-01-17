@@ -230,8 +230,7 @@ void NfcInfo::targetDetected(QNearFieldTarget *target)
     startedTagInteraction();
     // Check if the target includes a NDEF message
     const bool targetHasNdefMessage = target->hasNdefMessage();
-    if (targetHasNdefMessage)
-    {
+    if (targetHasNdefMessage) {
         emit nfcStatusUpdate("NDEF target detected");
     } else {
         emit nfcStatusUpdate("Target detected");
@@ -244,8 +243,7 @@ void NfcInfo::targetDetected(QNearFieldTarget *target)
     // Check if we have NDEF access and can read or write to the tag
     QNearFieldTarget::AccessMethods accessMethods = target->accessMethods();
 
-    if (accessMethods.testFlag(QNearFieldTarget::NdefAccess))
-    {
+    if (accessMethods.testFlag(QNearFieldTarget::NdefAccess)) {
         // Is a write operation pending?
         if (!m_pendingWriteNdef)
         {
@@ -260,9 +258,7 @@ void NfcInfo::targetDetected(QNearFieldTarget *target)
                         this, SLOT(ndefMessageRead(QNdefMessage)));
                 m_cachedRequestId = target->readNdefMessages();
             }
-        }
-        else
-        {
+        } else {
             // Write operation is pending, so attempt writing the message.
             //#ifdef MEEGO_EDITION_HARMATTAN
             //            nfcManager->setTargetAccessModes(QNearFieldManager::NdefWriteTargetAccess);
