@@ -20,8 +20,8 @@ Tag reading:
 - Tag type (NFC Forum Tag Type 1, 2, 3, 4 and Mifare)
 - Tag UID
 - Tag version
-- Tag memory size, static vs. dynamic memory (for Tag Types 1 + 2, Symbian only)
-- Lock bits and Capability Container access level (for Tag Types 1 + 2, Symbian only)
+- Tag memory size, static vs. dynamic memory (for tag types 1 + 2**)
+- Lock bits and Capability Container access level (for static memory tag types 1 + 2**)
 - NDEF message size
 - List of all individual NDEF records
 - Parses Smart Poster, URI, text, image and business card (vCard) records
@@ -53,8 +53,7 @@ Known bugs (work-in-progress):
 - Symbian: Changing from landscape mode to portrait while VKB is open on Symbian leaves too little space for the listview. Plus, list doesn't scroll down in landscape mode to make item visible if going to be obscured by the VKB.
 - MeeGo: 2x write confirmation callbacks, visible in raw view
 - MeeGo: finalize .deb packaging data
-- Symbian: Writing... busy animation is on top of previous write status when writing another tag -> write status doesn't get invisible as it should (and does on MeeGo)
-- Check tag UID reading
+- Check tag UID reading - type 1 UID possibly from back to front?
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)
@@ -62,13 +61,17 @@ Ideas for future updates:
 - Write a contact from the address book
 - Write vCalendar records
 - Bluetooth pairing records
-- Lock tags
-- Use current location for geo tags
-- Geocoding (enter address, write coordinates to the tag)
+- Lock tags (type 1, 2**)
 - Check composed record contents for errors according to specifications
+- Use current location for geo tags (asynchronously updated UI)
+- Birthday support for contacts (date picker UI)
+- Image writing support (file selection UI)
+- Geocoding (enter address, write coordinates to the tag - interactive UI)
+- SNEP sending and receiving (through LLCP)
 - Faster startup-time by loading application screens on demand
 
 * Disclaimer: The services hosted on nfcinteractor.com (e.g., the generic geo-tag redirection script) have no service or uptime guarantee. They are intended for testing purposes only and could be removed at any point. You should host the required server-side scripts on your own webserver for real-world deployment.
+** MeeGo Harmattan currently does not allow tag type specific access through Qt APIs; therefore, it's not possible to access functionality not offered by Qt classes, such as getting tag specific information or locking tags.
 
 SECURITY
 --------------------------------------------------------------------------------
