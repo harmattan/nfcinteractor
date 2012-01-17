@@ -92,10 +92,13 @@ QTM_USE_NAMESPACE
   record, the image of a Mime record or the QContact coming from the versit
   document stored on a mime / text-vCard record.
 
-  More comprehensive support for writing tags will be added in a later release.
-  The focus of this version is on reading and parsing tags - even though
-  all classes already work in both directions and it's mostly the UI that is
-  missing.
+  Furthermore, the class can also write NDEF messages to tags. The contents
+  are edited by the user through the UI and stored in the model called
+  NfcRecordModel. When writing, the model is converted to an actual NDEF message
+  and written to the next available tag.
+
+  The class will also handles errors that can occur and sends them out as
+  signals for the UI to handle.
   */
 class NfcInfo : public QObject
 {
@@ -168,11 +171,9 @@ private slots:
     void ndefMessageWritten();
     void requestCompleted(const QNearFieldTarget::RequestId & id);
     void targetError(QNearFieldTarget::Error error, const QNearFieldTarget::RequestId &id);
-
     void targetLost(QNearFieldTarget *target);
 
 private:
-
     bool writeCachedNdefMessage();
 
     QString convertTargetErrorToString(QNearFieldTarget::Error error);
@@ -190,18 +191,27 @@ private:
 #endif
 
 private:
+    /*! Responsible for finding tags and interacting with them. */
     QNearFieldManager *m_nfcManager;
+    /*! Stores the editable records of the compose tag view. */
     NfcRecordModel* m_nfcRecordModel;
+    /*! Current NFC target in proximity. */
     QNearFieldTarget *m_cachedTarget;
 
+    /*! Analyze the tag type platform targets, getting low level information about
+      the tags themselves. */
     NfcTargetAnalyzer *m_nfcTargetAnalyzer;
+    /*! Analyze the NDEF contents and return the record contents in text format. */
     NfcNdefParser *m_nfcNdefParser;
 
+    /*! Configures mainly how many messages are shown on the screen in the
+      Nfc Info view. Also partly affects output to qDebug(). */
     ReportingLevel m_reportingLevel;
 
     /*! Set to true if the application requested to write an NDEF message
       to the tag on the next opportunity. */
     bool m_pendingWriteNdef;
+    /*! Set to true if the app is currently interacting with a tag. */
     bool m_nfcTagInteractionActive;
     /*! Current activity / status of the class, e.g., reading or analyzing
       a tag. The activity can consist of multiple individual requests. */
@@ -213,23 +223,22 @@ private:
     bool m_writeOneTagOnly;
     /*! The cached NDEF message that is to be written to the tag. */
     QNdefMessage* m_cachedNdefMessage;
+    /*! Save the size of the message that is queued to write, to make
+      it easier to compare it to the tag size if writing fails. */
     int m_cachedNdefMessageSize;
     /*! Currently active request ID for tracking the requests
       to the NFC interface. Only used for main read & write requests.
       Finishing them will stop NFC interactivity. */
     QNearFieldTarget::RequestId m_cachedRequestId;
 
-//    enum NfcCachedRequestType {
-//        nfcIdle,
-//        nfcReadRequest,
-//        nfcWriteRequest
-//    };
     /*! Status of the concrete currently active request.
       In contrast to the m_currentActivity, this is related to only
       one request and not the whole class status, where for example the
       analysis phase can include multiple individual requests. */
     NfcRequestStatus m_cachedRequestType;
 
+    /*! Needed on MeeGo Harmattan to raise the app to the foreground when
+      it's autostarted. */
     QDeclarativeView* m_declarativeView;
 };
 

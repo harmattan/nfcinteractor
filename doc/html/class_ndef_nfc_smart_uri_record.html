@@ -85,6 +85,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="contents">
 <!-- doxytag: class="NdefNfcSmartUriRecord" --><!-- doxytag: inherits="NdefNfcSpRecord" -->
+<p>Smart class that uses the smallest possible NDEF record type for storing the requested information - either a simple URI record, or a Smart Poster record.  
+ <a href="class_ndef_nfc_smart_uri_record.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="ndefnfcsmarturirecord_8h_source.html">ndefnfcsmarturirecord.h</a>&gt;</code></p>
 <div class="dynheader">
 Inheritance diagram for NdefNfcSmartUriRecord:</div>
@@ -93,9 +96,9 @@ Inheritance diagram for NdefNfcSmartUriRecord:</div>
   <img src="class_ndef_nfc_smart_uri_record.png" usemap="#NdefNfcSmartUriRecord_map" alt=""/>
   <map id="NdefNfcSmartUriRecord_map" name="NdefNfcSmartUriRecord_map">
 <area href="class_ndef_nfc_sp_record.html" title="Handles the Smart Poster meta-record and is able to both parse and assemble a smart poster according ..." alt="NdefNfcSpRecord" shape="rect" coords="244,0,397,24"/>
-<area href="class_ndef_nfc_geo_record.html" alt="NdefNfcGeoRecord" shape="rect" coords="0,112,153,136"/>
-<area href="class_ndef_nfc_sms_record.html" alt="NdefNfcSmsRecord" shape="rect" coords="163,112,316,136"/>
-<area href="class_ndef_nfc_social_record.html" alt="NdefNfcSocialRecord" shape="rect" coords="326,112,479,136"/>
+<area href="class_ndef_nfc_geo_record.html" title="Store longitude and latitude on a tag, to allow the user to view a map when touching the tag..." alt="NdefNfcGeoRecord" shape="rect" coords="0,112,153,136"/>
+<area href="class_ndef_nfc_sms_record.html" title="Convenience class for formatting SMS information into an NDEF record, depending on added info either ..." alt="NdefNfcSmsRecord" shape="rect" coords="163,112,316,136"/>
+<area href="class_ndef_nfc_social_record.html" title="Link to one of the supported social networks by simply selecting the network and specifying the usern..." alt="NdefNfcSocialRecord" shape="rect" coords="326,112,479,136"/>
 <area href="class_ndef_nfc_store_link_record.html" alt="NdefNfcStoreLinkRecord" shape="rect" coords="489,112,642,136"/>
 </map>
  </div></div>
@@ -131,9 +134,11 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an image to the Smart Poster.  <a href="#a1026e55340dffc94be5b5dcf8f2b4391"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
-<div class="textblock"><p>At construction and when only setting the URI, this class will stay a URI record. As soon as you set a Smart Poster feature, the payload and type will transform into a Smart Poster. This transformation will not be reversed if you remove Smart Poster information again.</p>
+<div class="textblock"><p>Smart class that uses the smallest possible NDEF record type for storing the requested information - either a simple URI record, or a Smart Poster record. </p>
+<p>At construction and when only setting the URI, this class will stay a URI record. As soon as you set a Smart Poster feature, the payload and type will transform into a Smart Poster. This transformation will not be reversed if you remove Smart Poster information again.</p>
 <p>If you use the type() and payload() methods provided by this class, it will look like a URI record again. However, as the methods of the base class are not virtual, accessing the payload() through a variable of type QNdefRecord would return a Smart Poster payload after such information has been added.</p>
-<p>Note: the QNdefRecord base class doesn't define its methods as virtual. Therefore, make sure you only modify the data in this class if your object is of the correct <a class="el" href="class_ndef_nfc_smart_uri_record.html">NdefNfcSmartUriRecord</a> type. </p>
+<p>Note: the QNdefRecord base class doesn't define its methods as virtual. Therefore, make sure you only modify the data in this class if your object is of the correct <a class="el" href="class_ndef_nfc_smart_uri_record.html" title="Smart class that uses the smallest possible NDEF record type for storing the requested information - ...">NdefNfcSmartUriRecord</a> type.</p>
+<dl class="version"><dt><b>Version:</b></dt><dd>1.0.0 </dd></dl>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a354051e0c994f2bf34f62f0c19b5fde1"></a><!-- doxytag: member="NdefNfcSmartUriRecord::addTitle" ref="a354051e0c994f2bf34f62f0c19b5fde1" args="(const QNdefNfcTextRecord &amp;newTitle)" -->
 <div class="memitem">
@@ -356,7 +361,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 16 2012 18:08:07 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 17 2012 18:57:33 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

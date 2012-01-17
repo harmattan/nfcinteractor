@@ -85,13 +85,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">NdefNfcGeoRecord Class Reference</div>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="NdefNfcGeoRecord" --><!-- doxytag: inherits="NdefNfcSmartUriRecord" --><div class="dynheader">
+<!-- doxytag: class="NdefNfcGeoRecord" --><!-- doxytag: inherits="NdefNfcSmartUriRecord" -->
+<p>Store longitude and latitude on a tag, to allow the user to view a map when touching the tag.  
+ <a href="class_ndef_nfc_geo_record.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="ndefnfcgeorecord_8h_source.html">ndefnfcgeorecord.h</a>&gt;</code></p>
+<div class="dynheader">
 Inheritance diagram for NdefNfcGeoRecord:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="class_ndef_nfc_geo_record.png" usemap="#NdefNfcGeoRecord_map" alt=""/>
   <map id="NdefNfcGeoRecord_map" name="NdefNfcGeoRecord_map">
-<area href="class_ndef_nfc_smart_uri_record.html" alt="NdefNfcSmartUriRecord" shape="rect" coords="0,56,148,80"/>
+<area href="class_ndef_nfc_smart_uri_record.html" title="Smart class that uses the smallest possible NDEF record type for storing the requested information - ..." alt="NdefNfcSmartUriRecord" shape="rect" coords="0,56,148,80"/>
 <area href="class_ndef_nfc_sp_record.html" title="Handles the Smart Poster meta-record and is able to both parse and assemble a smart poster according ..." alt="NdefNfcSpRecord" shape="rect" coords="0,0,148,24"/>
 </map>
  </div></div>
@@ -121,7 +126,15 @@ NfcGeoType&#160;</td><td class="memItemRight" valign="bottom"><b>geoType</b> () 
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3a8000b77eba36ccda9dd6ae4aed8b65"></a><!-- doxytag: member="NdefNfcGeoRecord::setGeoType" ref="a3a8000b77eba36ccda9dd6ae4aed8b65" args="(const NfcGeoType geoType)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setGeoType</b> (const NfcGeoType geoType)</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>Store longitude and latitude on a tag, to allow the user to view a map when touching the tag. </p>
+<p>Geo tags are not standardized by the NFC forum, therefore, this class supports three different types of writing the location to a tag.</p>
+<p>1. GeoUri: write URI based on the "geo:" URI scheme, as specified by RFC5870, available at: <a href="http://geouri.org/">http://geouri.org/</a> Currently supported by MeeGo Harmattan and Android, not recognized by Symbian at the moment.</p>
+<p>2. NokiaMaps: write URI based on a Nokia Maps link, following the "http://m.ovi.me/?c=..." scheme of the Nokia/Ovi Maps Rendering API. Depending on the target device, the phone / web service should then redirect to the best maps representation. On Symbian, the phone will launch the Nokia Maps client. On a desktop computer, the full Nokia Maps web experience will open. On other phones, the HTML 5 client may be available. On MeeGo Harmattan, currently only a static Maps image is shown, making this alternative not suitable for the Nokia N9.</p>
+<p>3. WebRedirect: uses the web service at NfcInteractor.com to check the OS of the phone, and then redirect to the best way of showing maps to the user. On MeeGo Harmattan, this would be the GeoUri (1) scheme; on Symbian, the NokiaMaps-link (2). Essentially, this allows opening the Maps client on all currently available NFC capable Nokia phones. Note the limitations and terms of use of the web service. For real world deployment, outside of development and testing, it's recommended to host the script on your own web server. Find more information at nfcinteractor.com.</p>
+<p>As this class is based on the Smart URI base class, the payload is formatted as a URI record initially. When first adding Smart Poster information (like a title), the payload instantly transforms into a Smart Poster.</p>
+<dl class="version"><dt><b>Version:</b></dt><dd>1.0.0 </dd></dl>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="ndefnfcgeorecord_8h_source.html">ndefnfcgeorecord.h</a></li>
 <li>ndefnfcgeorecord.cpp</li>
 </ul>
@@ -143,7 +156,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setGeoType</b> (const
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 16 2012 18:08:07 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 17 2012 18:57:33 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

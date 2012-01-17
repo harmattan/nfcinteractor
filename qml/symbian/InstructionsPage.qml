@@ -32,7 +32,7 @@ Page {
 
                 Text {
                     id: instructionsText1
-                    text: qsTr("<strong>Nfc Interactor Professional</strong>")
+                    text: qsTr("<strong>Nfc Interactor</strong>")
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     wrapMode: Text.WordWrap

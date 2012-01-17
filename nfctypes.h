@@ -59,7 +59,8 @@ public:
         MsgImage,
         MsgAnnotatedUrl,
         MsgCustom,
-        MsgCombination
+        MsgCombination,
+        MsgNfcAutostart
     };
     enum RecordContent {
         RecordHeader,

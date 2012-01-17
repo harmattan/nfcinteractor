@@ -11,6 +11,21 @@
 
 QTM_USE_NAMESPACE
 
+/*!
+  \brief Link to one of the supported social networks by
+  simply selecting the network and specifying the username.
+
+  Touching a tag written with this record type will take
+  the user to the social network web site, where he can then
+  for example start following you on Twitter.
+
+  As this class is based on the Smart URI base class, the
+  payload is formatted as a URI record initially. When first
+  adding Smart Poster information (like a title), the payload
+  instantly transforms into a Smart Poster.
+
+  \version 1.0.0
+  */
 class NdefNfcSocialRecord : public NdefNfcSmartUriRecord
 {
 public:

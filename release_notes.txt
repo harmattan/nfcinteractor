@@ -47,8 +47,6 @@ Easily reusable code for developers including:
 - Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2, Symbian only)
 
 Known bugs (work-in-progress):
-- Add store link to about view
-- Check which svg images are still in use and remove the others (especially for MeeGo, which doesn't use any)
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)

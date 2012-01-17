@@ -231,6 +231,27 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
         addRecord("URI Record", NfcTypes::MsgUri, NfcTypes::RecordHeader, "", true, false, recordId);
         simpleAppendRecordItem(NfcTypes::MsgUri, NfcTypes::RecordUri, false,  recordId);
         break;
+    case NfcTypes::MsgNfcAutostart:
+        addRecord("Custom Record", NfcTypes::MsgCustom, NfcTypes::RecordHeader, "", true, true, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeNameFormat, false,  recordId);
+        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeName, true,  recordId);
+        m_recordItems.last()->setDefaultText("nokia.com:nfcinteractor");
+        addRecord("Smart Poster Record", NfcTypes::MsgSmartPoster, NfcTypes::RecordHeader, "", true, true, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordUri, false,  recordId);
+        m_recordItems.last()->setDefaultText("http://nfcinteractor.com");
+        simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordText, true,  recordId);
+        m_recordItems.last()->setDefaultText("Download Nfc Interactor");
+        simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordTextLanguage, false,  recordId);
+        // TODO: when app is in the store, change to store record
+//        addRecord("Store Record", NfcTypes::MsgStore, NfcTypes::RecordHeader, "", true, true, recordId);
+//        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordStoreMeeGoHarmattan, true, recordId);
+//        m_recordItems[m_recordItems.count()]->setDefaultText("");
+//        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordStoreSymbian, true, recordId);
+//        m_recordItems[m_recordItems.count()]->setDefaultText("");
+//        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordText, true,  recordId);
+//        m_recordItems.last()->setDefaultText("Download Nfc Interactor");
+//        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordTextLanguage, false,  recordId);
+        break;
     }
 }
 
@@ -285,8 +306,6 @@ void NfcRecordModel::addContentToRecord(int recordIndex, int messageTypeInt, int
         // and not in the generic simpleInsertRecordItem() method.
         simpleInsertRecordItem(insertPosition, messageType, NfcTypes::RecordTextLanguage, false, parentRecordId);
         simpleInsertRecordItem(insertPosition, messageType, NfcTypes::RecordText, true, parentRecordId);
-        //insertRecordItem(insertPosition, new NfcRecordItem("Language", messageType, NfcTypes::RecordTextLanguage, "en", false, false, parentRecordId, this));
-        //insertRecordItem(insertPosition, new NfcRecordItem("Title text", messageType, NfcTypes::RecordText, "Nokia", true, false, parentRecordId, this));
         break;
     }
     case NfcTypes::RecordHeader:
@@ -492,6 +511,7 @@ QList<QObject*> NfcRecordModel::possibleContentForRecord(int recordIndex)
     case NfcTypes::MsgImage:
     case NfcTypes::MsgAnnotatedUrl:
     case NfcTypes::MsgCombination:
+    case NfcTypes::MsgNfcAutostart:
         // No content can be added/removed to these records
         break;
     case NfcTypes::MsgSmartPoster:
@@ -681,14 +701,14 @@ void NfcRecordModel::getDefaultsForRecordContent(const NfcTypes::MessageType msg
         break;
     case NfcTypes::RecordFirstName:
         defaultTitle = "First name";
-        defaultContents = "Max";
+        defaultContents = "Joe";
         break;
     case NfcTypes::RecordMiddleName:
         defaultTitle = "Middle name";
         break;
     case NfcTypes::RecordLastName:
         defaultTitle = "Last name";
-        defaultContents = "Mustermann";
+        defaultContents = "Bloggs";
         break;
     case NfcTypes::RecordNameSuffix:
         defaultTitle = "Name suffix";
@@ -699,7 +719,7 @@ void NfcRecordModel::getDefaultsForRecordContent(const NfcTypes::MessageType msg
         break;
     case NfcTypes::RecordEmailAddress:
         defaultTitle = "Email address";
-        defaultContents = "max.mustermann@nokia.com";
+        defaultContents = "joe.bloggs@nokia.com";
         break;
     case NfcTypes::RecordPhoneNumber:
         defaultTitle = "Phone number";

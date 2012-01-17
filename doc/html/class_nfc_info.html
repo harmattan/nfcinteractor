@@ -126,6 +126,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>nfcStopWritingTags</b
 <tr><td colspan="2"><h2><a name="signals"></a>
 Signals</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_info.html#ab8520100ca496a52fe0a87b1b8aacd2e">nfcStatusUpdate</a> (const QString &amp;nfcStatusText)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_info.html#a00601a1b616ea584e148bc939771d625">nfcStatusSuccess</a> (const QString &amp;nfcStatusSuccessText)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_info.html#a942b9307fe06ebc8bb49a2a7df5e4f98">nfcStatusError</a> (const QString &amp;nfcStatusErrorText)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_info.html#a4606bb617667c34b9c26b2789a73e53a">nfcInfoUpdate</a> (const QString &amp;nfcInfoText)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_info.html#a2d352978fc851f81588aadc588b67f4b">nfcStartingTagInteraction</a> ()</td></tr>
@@ -156,7 +157,8 @@ Properties</h2></td></tr>
 <div class="textblock"><p>The <a class="el" href="class_nfc_info.html" title="The NfcInfo class manages the interaction with the Nfc hardware, parses the tags and emits informatio...">NfcInfo</a> class manages the interaction with the Nfc hardware, parses the tags and emits information signals for the UI. </p>
 <p>Following the use case of this application, the emitted signals contain mostly textual descriptions of the events or the information. Therefore, it is a good example to understand how the APIs are working and what kind of information you can get through the Qt Mobility APIs.</p>
 <p>Additionally, this class demonstrates how to parse tags and how to extract the relevant information - e.g., the parameters of a Smart Poster record, the image of a Mime record or the QContact coming from the versit document stored on a mime / text-vCard record.</p>
-<p>More comprehensive support for writing tags will be added in a later release. The focus of this version is on reading and parsing tags - even though all classes already work in both directions and it's mostly the UI that is missing. </p>
+<p>Furthermore, the class can also write NDEF messages to tags. The contents are edited by the user through the UI and stored in the model called <a class="el" href="class_nfc_record_model.html">NfcRecordModel</a>. When writing, the model is converted to an actual NDEF message and written to the next available tag.</p>
+<p>The class will also handles errors that can occur and sends them out as signals for the UI to handle. </p>
 </div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a20c5d7955339faa2cbc0a8f7a0f42f11"></a><!-- doxytag: member="NfcInfo::checkNfcStatus" ref="a20c5d7955339faa2cbc0a8f7a0f42f11" args="()" -->
 <div class="memitem">
@@ -266,6 +268,24 @@ Properties</h2></td></tr>
 </div>
 <div class="memdoc">
 <p>Error with NFC. </p>
+
+</div>
+</div>
+<a class="anchor" id="a00601a1b616ea584e148bc939771d625"></a><!-- doxytag: member="NfcInfo::nfcStatusSuccess" ref="a00601a1b616ea584e148bc939771d625" args="(const QString &amp;nfcStatusSuccessText)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void NfcInfo::nfcStatusSuccess </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>nfcStatusSuccessText</em></td><td>)</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>An important operation finished successfully (reading or writing tags) </p>
 
 </div>
 </div>
@@ -454,7 +474,7 @@ Properties</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 16 2012 18:08:07 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 17 2012 18:57:34 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

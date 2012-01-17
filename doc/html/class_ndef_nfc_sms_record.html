@@ -84,13 +84,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">NdefNfcSmsRecord Class Reference</div>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="NdefNfcSmsRecord" --><!-- doxytag: inherits="NdefNfcSmartUriRecord" --><div class="dynheader">
+<!-- doxytag: class="NdefNfcSmsRecord" --><!-- doxytag: inherits="NdefNfcSmartUriRecord" -->
+<p>Convenience class for formatting SMS information into an NDEF record, depending on added info either URI or Smart Poster.  
+ <a href="class_ndef_nfc_sms_record.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="ndefnfcsmsrecord_8h_source.html">ndefnfcsmsrecord.h</a>&gt;</code></p>
+<div class="dynheader">
 Inheritance diagram for NdefNfcSmsRecord:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="class_ndef_nfc_sms_record.png" usemap="#NdefNfcSmsRecord_map" alt=""/>
   <map id="NdefNfcSmsRecord_map" name="NdefNfcSmsRecord_map">
-<area href="class_ndef_nfc_smart_uri_record.html" alt="NdefNfcSmartUriRecord" shape="rect" coords="0,56,148,80"/>
+<area href="class_ndef_nfc_smart_uri_record.html" title="Smart class that uses the smallest possible NDEF record type for storing the requested information - ..." alt="NdefNfcSmartUriRecord" shape="rect" coords="0,56,148,80"/>
 <area href="class_ndef_nfc_sp_record.html" title="Handles the Smart Poster meta-record and is able to both parse and assemble a smart poster according ..." alt="NdefNfcSpRecord" shape="rect" coords="0,0,148,24"/>
 </map>
  </div></div>
@@ -108,7 +113,13 @@ QString&#160;</td><td class="memItemRight" valign="bottom"><b>smsNumber</b> () c
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1493fab7678eb061e276e483f82daf01"></a><!-- doxytag: member="NdefNfcSmsRecord::setSmsNumber" ref="a1493fab7678eb061e276e483f82daf01" args="(const QString &amp;smsNumber)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setSmsNumber</b> (const QString &amp;smsNumber)</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>Convenience class for formatting SMS information into an NDEF record, depending on added info either URI or Smart Poster. </p>
+<p>Touching a tag with SMS information stored on it should trigger a dialog in the phone to send the proposed SMS. This can for example be used to interact with information services that then reply by sending more info per SMS, or for payment services that send a premium SMS to purchase items or content.</p>
+<p>Add the recipient number and the SMS message body to the class, which takes care of properly encoding the information into the correct URI.</p>
+<p>As this class is based on the Smart URI base class, the payload is formatted as a URI record initially. When first adding Smart Poster information (like a title), the payload instantly transforms into a Smart Poster.</p>
+<dl class="version"><dt><b>Version:</b></dt><dd>1.0.0 </dd></dl>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="ndefnfcsmsrecord_8h_source.html">ndefnfcsmsrecord.h</a></li>
 <li>ndefnfcsmsrecord.cpp</li>
 </ul>
@@ -130,7 +141,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setSmsNumber</b> (con
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 16 2012 18:08:07 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 17 2012 18:57:33 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

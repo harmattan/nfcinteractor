@@ -47,7 +47,11 @@
 
 QTM_USE_NAMESPACE
 
-/**
+/*!
+  \brief Smart class that uses the smallest possible NDEF record type
+  for storing the requested information - either a simple URI record,
+  or a Smart Poster record.
+
   At construction and when only setting the URI, this class will stay a
   URI record. As soon as you set a Smart Poster feature, the payload and
   type will transform into a Smart Poster. This transformation will not
@@ -62,6 +66,8 @@ QTM_USE_NAMESPACE
   Note: the QNdefRecord base class doesn't define its methods as virtual.
   Therefore, make sure you only modify the data in this class if your
   object is of the correct NdefNfcSmartUriRecord type.
+
+  \version 1.0.0
   */
 class NdefNfcSmartUriRecord : public NdefNfcSpRecord
 {
@@ -80,7 +86,6 @@ public:
       will return a URI record instead of a Smart Poster.
       */
     bool isSp() const;
-
 
     void setUri(const QUrl &uri);
     void setUri(const QNdefNfcUriRecord& newUri);

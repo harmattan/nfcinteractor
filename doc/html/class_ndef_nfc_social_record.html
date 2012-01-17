@@ -85,13 +85,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">NdefNfcSocialRecord Class Reference</div>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="NdefNfcSocialRecord" --><!-- doxytag: inherits="NdefNfcSmartUriRecord" --><div class="dynheader">
+<!-- doxytag: class="NdefNfcSocialRecord" --><!-- doxytag: inherits="NdefNfcSmartUriRecord" -->
+<p>Link to one of the supported social networks by simply selecting the network and specifying the username.  
+ <a href="class_ndef_nfc_social_record.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="ndefnfcsocialrecord_8h_source.html">ndefnfcsocialrecord.h</a>&gt;</code></p>
+<div class="dynheader">
 Inheritance diagram for NdefNfcSocialRecord:</div>
 <div class="dyncontent">
  <div class="center">
   <img src="class_ndef_nfc_social_record.png" usemap="#NdefNfcSocialRecord_map" alt=""/>
   <map id="NdefNfcSocialRecord_map" name="NdefNfcSocialRecord_map">
-<area href="class_ndef_nfc_smart_uri_record.html" alt="NdefNfcSmartUriRecord" shape="rect" coords="0,56,148,80"/>
+<area href="class_ndef_nfc_smart_uri_record.html" title="Smart class that uses the smallest possible NDEF record type for storing the requested information - ..." alt="NdefNfcSmartUriRecord" shape="rect" coords="0,56,148,80"/>
 <area href="class_ndef_nfc_sp_record.html" title="Handles the Smart Poster meta-record and is able to both parse and assemble a smart poster according ..." alt="NdefNfcSpRecord" shape="rect" coords="0,0,148,24"/>
 </map>
  </div></div>
@@ -120,7 +125,12 @@ NfcSocialType&#160;</td><td class="memItemRight" valign="bottom"><b>socialType</
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc890497bc5392621cc58e70b496a093"></a><!-- doxytag: member="NdefNfcSocialRecord::setSocialType" ref="afc890497bc5392621cc58e70b496a093" args="(const NfcSocialType socialType)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setSocialType</b> (const NfcSocialType socialType)</td></tr>
 </table>
-<hr/>The documentation for this class was generated from the following files:<ul>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>Link to one of the supported social networks by simply selecting the network and specifying the username. </p>
+<p>Touching a tag written with this record type will take the user to the social network web site, where he can then for example start following you on Twitter.</p>
+<p>As this class is based on the Smart URI base class, the payload is formatted as a URI record initially. When first adding Smart Poster information (like a title), the payload instantly transforms into a Smart Poster.</p>
+<dl class="version"><dt><b>Version:</b></dt><dd>1.0.0 </dd></dl>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="ndefnfcsocialrecord_8h_source.html">ndefnfcsocialrecord.h</a></li>
 <li>ndefnfcsocialrecord.cpp</li>
 </ul>
@@ -142,7 +152,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setSocialType</b> (co
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Jan 16 2012 18:08:07 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Tue Jan 17 2012 18:57:34 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

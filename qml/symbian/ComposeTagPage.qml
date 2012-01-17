@@ -192,6 +192,7 @@ Page {
             ListElement { name: "Annotated URL" }
             ListElement { name: "Custom" }
             ListElement { name: "Combination" }
+            ListElement { name: "Nfc Interactor Autostart" }
         }
     }
 
@@ -233,6 +234,9 @@ Page {
             break;
         case "Combination":
             newRecordType = NfcTypes.MsgCombination;
+            break;
+        case "Nfc Interactor Autostart":
+            newRecordType = NfcTypes.MsgNfcAutostart;
             break;
         }
 
