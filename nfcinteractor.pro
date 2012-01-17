@@ -78,7 +78,7 @@ simulator {
 }
 
 symbian {
-    DEPLOYMENT.display_name = "Nfc Interactor"
+    DEPLOYMENT.display_name = "NfcInteractor"
     TARGET.UID3 = 0xE0D154A1
 
     # Allow network access on Symbian
