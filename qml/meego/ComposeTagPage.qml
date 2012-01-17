@@ -48,7 +48,7 @@ Page {
         text: qsTr("Empty message.\nUse the add ('plus') button in the toolbar to add one or more NDEF records.")
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
-        anchors {top: messageHeader.bottom; left: parent.left; right: parent.right; bottom: splitViewInput.top; }
+        anchors {top: messageHeader.bottom; left: parent.left; right: parent.right; bottom: parent.bottom; }
         font.family: customPlatformStyle.fontFamilyRegular;
         font.pixelSize: customPlatformStyle.fontSizeMedium
         color: customPlatformStyle.colorNormalLight
