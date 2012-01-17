@@ -51,7 +51,6 @@ Planned additional features for the final release:
 
 Known bugs (work-in-progress):
 - MeeGo: finalize .deb packaging data
-- Check tag UID reading - type 1 UID possibly from back to front?
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)

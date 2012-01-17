@@ -1,16 +1,6 @@
 Nfc Interactor
-Powerful tool to read and write NFC tags.
-When touching an NFC tag, the application shows general information
-about the tag and parses the contents of contained NDEF messages.
-Go to the write mode to compose your own tag contents, which can
-consist of multiple NDEF records. Various templates help to format
-the contents.
-The app supports the following content: Smart Poster, URI, Text,
-Geo, SMS, social networks, MIME/vCard (business cards), MIME/image
-(reading only) and custom records.
-This tool is made for enthusiasts and developers.
-
-It was downloaded from https://projects.developer.nokia.com/nfcinteractor
+http://www.nfcinteractor.com/
+Powerful tool for reading and writing NFC tags.
 
 Upstream Author(s):
 
