@@ -134,7 +134,7 @@ QString NfcNdefParser::parseNdefMessage(const QNdefMessage &message)
         {
             // ------------------------------------------------
             // Record type not handled by this application
-            tagContents.append("[Unknown record: " + record.type() + "]\n");
+            tagContents.append("[Not parsed]\n");
         }
         numRecord++;
     }
