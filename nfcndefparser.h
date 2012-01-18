@@ -72,6 +72,9 @@ QTM_USE_NAMESPACE
   The output contains information about all the records contained
   in the message. More details are reported for records of type:
   Uri, Text, Smart Poster, Image and Mime/vCard.
+
+  The NfcTargetAnalyzer has a similar task, but returns the general
+  tag information in textual form.
   */
 class NfcNdefParser : public QObject
 {

@@ -52,29 +52,17 @@
 #include "nfcrecorditem.h"
 
 /*!
-  \brief Search the children of the specified QML \a rootElement for
-  an instance of the element with the specified \a objectName" property.
+  \brief Get the height of a font, including its line spacing.
 
-  \return if the element is found, an instance of the object.
+  This is required to vertically center the symbol to the text line
+  in the Nfc Info view. The text can have a height of multiple lines,
+  nevertheless, the icon needs to be centered to the first line and
+  not the multiline text.
+
+  Specially important to adapt to the font height changes between
+  MeeGo Harmattan PR 1.1 and PR 1.2 (line spacing increased in PR 1.2,
+  to increase text legibility).
   */
-QObject* findQMLElement(QObject *rootElement, const QString &objectName)
-{
-    if(rootElement->objectName() == objectName) {
-        return rootElement;
-    }
-
-    const QObjectList list = rootElement->children();
-    for(QObjectList::const_iterator it=list.begin(); it!=list.end(); it++)
-    {
-        QObject *object = findQMLElement((*it), objectName);
-        if(object != NULL) {
-            return object;
-        }
-    }
-
-    return NULL;
-}
-
 int getFontHeight(const QString& fontName, const int fontPixelSize) {
     QFont *font = new QFont(fontName);
     font->setPixelSize(fontPixelSize);
@@ -112,7 +100,7 @@ int main(int argc, char *argv[])
     int platformId = 3;
 #endif
 
-    // Register the NfcInfo class to the QML environment
+    // Register the Nfc interaction classes to the QML environment
     qmlRegisterType<NfcInfo>("Nfc", 1, 0, "NfcInfo");
     qmlRegisterType<NfcRecordModel>("Nfc", 1, 0, "NfcRecordModel");
     qmlRegisterType<NfcRecordItem>("Nfc", 1, 0, "NfcRecordItem");
@@ -157,6 +145,7 @@ int main(int argc, char *argv[])
     TagImageCache *tagImageCache = new TagImageCache();
     viewer.engine()->addImageProvider(QLatin1String("nfcimageprovider"), tagImageCache);
 
+    // Finally, load the main QML file to the viewer.
     viewer.setMainQmlFile(QLatin1String("qml/main.qml"));
 
     // Inform the NfcInfo class about the image cache
@@ -166,7 +155,7 @@ int main(int argc, char *argv[])
     if (nfcInfoObj) {
         nfcInfoObj->setImageCache(tagImageCache);
         // Pass the record model back to the QML
-        // TODO: would most likely be easier to just make the model a property?
+        // Could be easier to just make the model a property?
         viewer.rootContext()->setContextProperty("recordModel", nfcInfoObj->recordModel());
         // Give the ndef manager a pointer to our declarative view,
         // so that it can raise the app to the foreground when an

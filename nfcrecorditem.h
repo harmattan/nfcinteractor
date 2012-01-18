@@ -48,12 +48,39 @@
 #include "nfctypes.h"
 #include <QDebug>
 
+/*!
+  \brief Individual record item contained in the NfcRecordModel.
+
+  The item stores all the data needed to properly draw it on the UI
+  using a delegate, as well as to convert it to a piece of information
+  in an NDEF record.
+
+  Note that an individual NfcRecordItem doesn't represent a whole
+  NDEF record, just one piece of information in it (like the text language
+  in a title record in a Smart Poster, or the longitude in a Geo record).
+
+  A valid construct that can be converted to an NDEF record needs to be
+  made of at least a single NfcRecordItem of the header record content type,
+  with the message type defining the NDEF record it's representing, so that
+  the NfcModelToNdef class can properly convert it.
+
+  Typically, at least one other NfcRecordItems follow successively after the
+  header, containing the data to be stored in the record (e.g., longitude,
+  latitude, title, title language, etc.). All of those NfcRecordItems that
+  belong together have to be stored right after each other in the model,
+  all with the same message type.
+
+  A header content type is only allowed at the beginning of a record
+  definition, afterwards only data NfcRecordItems can follow; another
+  header would mean the beginning of another record definition.
+  */
 class NfcRecordItem : public QObject
 {
     Q_OBJECT
 
     //Q_PROPERTY(QString currentText READ currentText WRITE setCurrentText NOTIFY dataChanged)
 public:
+    /*! Roles according to data stored in a Qt model, which can then be requested from this class. */
     enum RecordRoles {
         TitleRole = Qt::UserRole + 1,
         MessageTypeRole,

@@ -144,20 +144,22 @@ Signals</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a581832833fde8cf0fb717f9ea0530f4e"></a><!-- doxytag: member="NfcInfo::NfcInfo" ref="a581832833fde8cf0fb717f9ea0530f4e" args="(QObject *parent=0)" -->
 &#160;</td><td class="memItemRight" valign="bottom"><b>NfcInfo</b> (QObject *parent=0)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_info.html#a7ca1253d5b232e51f13648ffb26ae311">setImageCache</a> (<a class="el" href="class_tag_image_cache.html">TagImageCache</a> *tagImageCache)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7ca1253d5b232e51f13648ffb26ae311"></a><!-- doxytag: member="NfcInfo::setImageCache" ref="a7ca1253d5b232e51f13648ffb26ae311" args="(TagImageCache *tagImageCache)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_info.html#a7ca1253d5b232e51f13648ffb26ae311">setImageCache</a> (<a class="el" href="class_tag_image_cache.html">TagImageCache</a> *tagImageCache)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the image cache to use for storing images retrieved from tags. <em>tagImageCache</em> instance of the image cache. This class will not take ownership of the instance! <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_info.html#a58ec7f5db4468b6913f838fff76ed4ed">setDeclarativeView</a> (QDeclarativeView &amp;view)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Store a pointer to the declarative view.  <a href="#a58ec7f5db4468b6913f838fff76ed4ed"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="properties"></a>
 Properties</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4ab4518158d5def9eb6a3912ef0db1d9"></a><!-- doxytag: member="NfcInfo::recordModel" ref="a4ab4518158d5def9eb6a3912ef0db1d9" args="" -->
 <a class="el" href="class_nfc_record_model.html">NfcRecordModel</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_info.html#a4ab4518158d5def9eb6a3912ef0db1d9">recordModel</a></td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a pointer to the <a class="el" href="class_nfc_record_model.html">NfcRecordModel</a> instance used by this class. <br/></td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a pointer to the <a class="el" href="class_nfc_record_model.html" title="Stores and manages the editable data, which can be transformed to an NDEF message.">NfcRecordModel</a> instance used by this class. <br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="class_nfc_info.html" title="The NfcInfo class manages the interaction with the Nfc hardware, parses the tags and emits informatio...">NfcInfo</a> class manages the interaction with the Nfc hardware, parses the tags and emits information signals for the UI. </p>
 <p>Following the use case of this application, the emitted signals contain mostly textual descriptions of the events or the information. Therefore, it is a good example to understand how the APIs are working and what kind of information you can get through the Qt Mobility APIs.</p>
 <p>Additionally, this class demonstrates how to parse tags and how to extract the relevant information - e.g., the parameters of a Smart Poster record, the image of a Mime record or the QContact coming from the versit document stored on a mime / text-vCard record.</p>
-<p>Furthermore, the class can also write NDEF messages to tags. The contents are edited by the user through the UI and stored in the model called <a class="el" href="class_nfc_record_model.html">NfcRecordModel</a>. When writing, the model is converted to an actual NDEF message and written to the next available tag.</p>
+<p>Furthermore, the class can also write NDEF messages to tags. The contents are edited by the user through the UI and stored in the model called <a class="el" href="class_nfc_record_model.html" title="Stores and manages the editable data, which can be transformed to an NDEF message.">NfcRecordModel</a>. When writing, the model is converted to an actual NDEF message and written to the next available tag.</p>
 <p>The class will also handles errors that can occur and sends them out as signals for the UI to handle. </p>
 </div><hr/><h2>Member Enumeration Documentation</h2>
 <a class="anchor" id="a1da62b67fa1657df548c9d618e1d98ae"></a><!-- doxytag: member="NfcInfo::NfcRequestStatus" ref="a1da62b67fa1657df548c9d618e1d98ae" args="" -->
@@ -496,26 +498,7 @@ Properties</h2></td></tr>
 <div class="memdoc">
 
 <p>Store a pointer to the declarative view. </p>
-<p>Store a pointer to the declarative view. Needed for raising the app to the foreground on MeeGo in the autostart scenario when the app is already active in the background.</p>
 <p>Needed for raising the app to the foreground on MeeGo in the autostart scenario when the app is already active in the background. </p>
-
-</div>
-</div>
-<a class="anchor" id="a7ca1253d5b232e51f13648ffb26ae311"></a><!-- doxytag: member="NfcInfo::setImageCache" ref="a7ca1253d5b232e51f13648ffb26ae311" args="(TagImageCache *tagImageCache)" -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void NfcInfo::setImageCache </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="class_tag_image_cache.html">TagImageCache</a> *&#160;</td>
-          <td class="paramname"><em>tagImageCache</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Set the image cache to use for storing images retrieved from tags. <em>tagImageCache</em> instance of the image cache. This class will not take ownership of the instance! </p>
 
 </div>
 </div>
@@ -533,7 +516,7 @@ Properties</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
-<p>The byte-size of the NDEF message resulting from the current <a class="el" href="class_nfc_record_model.html">NfcRecordModel</a> changed. </p>
+<p>The byte-size of the NDEF message resulting from the current <a class="el" href="class_nfc_record_model.html" title="Stores and manages the editable data, which can be transformed to an NDEF message.">NfcRecordModel</a> changed. </p>
 
 </div>
 </div>
@@ -559,7 +542,7 @@ Properties</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 18 2012 11:51:59 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 18 2012 15:12:11 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

@@ -86,6 +86,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="contents">
 <!-- doxytag: class="NfcTargetAnalyzer" -->
+<p>Analyze the NFC target and return the gathered information in human-readable textual form.  
+ <a href="class_nfc_target_analyzer.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="nfctargetanalyzer_8h_source.html">nfctargetanalyzer.h</a>&gt;</code></p>
+
 <p><a href="class_nfc_target_analyzer-members.html">List of all members.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
@@ -108,7 +113,13 @@ Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aceb2a6b245f448db6108b63f65348425"></a><!-- doxytag: member="NfcTargetAnalyzer::m_tagInfo" ref="aceb2a6b245f448db6108b63f65348425" args="" -->
 <a class="el" href="class_near_field_target_info.html">NearFieldTargetInfo</a>&#160;</td><td class="memItemRight" valign="bottom"><b>m_tagInfo</b></td></tr>
 </table>
-<hr/><h2>Member Function Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>Analyze the NFC target and return the gathered information in human-readable textual form. </p>
+<p>The output contains in all cases information about the tag type, UID and access methods.</p>
+<p>If the underlying Qt Mobility implementation allows tag-type specific access, it will further analyze the memory size and several other parts of the tag.</p>
+<p>For Type 1 &amp; 2 targets, deeper analysis is performed using low-level commands. Note that tag-type specific access is currently only implemented for Symbian, and does not work on the N9.</p>
+<p>The <a class="el" href="class_nfc_ndef_parser.html" title="Parse the contents of an NDEF message and return the contents of known records in human-readable text...">NfcNdefParser</a> has a similar task, but returns the tag contents in textual form. </p>
+</div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a772c7157f2d38801a61d19b73eb619da"></a><!-- doxytag: member="NfcTargetAnalyzer::analyzeTarget" ref="a772c7157f2d38801a61d19b73eb619da" args="(QNearFieldTarget *target)" -->
 <div class="memitem">
 <div class="memproto">
@@ -156,7 +167,7 @@ Public Attributes</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 18 2012 11:51:59 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 18 2012 15:12:12 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

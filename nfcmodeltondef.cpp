@@ -661,6 +661,7 @@ NdefNfcStoreLinkRecord::AppStore NfcModelToNdef::appStoreFromRecordContentType(c
         break;
     default:
         qDebug() << "Warning: Unknown record content type passed to NfcModelToNdef::appStoreFromRecordContentType.";
+        return NdefNfcStoreLinkRecord::StoreNokia;
         break;
     }
 }

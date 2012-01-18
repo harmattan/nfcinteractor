@@ -73,6 +73,24 @@
 
 QTM_USE_NAMESPACE
 
+/*!
+  \brief Analyze the NFC target and return the gathered information
+  in human-readable textual form.
+
+  The output contains in all cases information about the tag type,
+  UID and access methods.
+
+  If the underlying Qt Mobility implementation allows tag-type specific
+  access, it will further analyze the memory size and several other
+  parts of the tag.
+
+  For Type 1 & 2 targets, deeper analysis is performed using low-level
+  commands. Note that tag-type specific access is currently only
+  implemented for Symbian, and does not work on the N9.
+
+  The NfcNdefParser has a similar task, but returns the tag contents
+  in textual form.
+  */
 class NfcTargetAnalyzer : public QObject
 {
     Q_OBJECT

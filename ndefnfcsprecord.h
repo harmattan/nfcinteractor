@@ -240,12 +240,12 @@ public:
     bool hasSpData() const;
 
 private:
-    QNdefNfcUriRecord *recordUri;
-    QList<QNdefNfcTextRecord> recordTitleList;
-    NdefNfcActRecord* recordAction;
-    NdefNfcSizeRecord* recordSize;
-    NdefNfcTypeRecord* recordMimeType;
-    NdefNfcMimeImageRecord* recordImage;
+    QNdefNfcUriRecord *m_recordUri;
+    QList<QNdefNfcTextRecord> m_recordTitleList;
+    NdefNfcActRecord* m_recordAction;
+    NdefNfcSizeRecord* m_recordSize;
+    NdefNfcTypeRecord* m_recordMimeType;
+    NdefNfcMimeImageRecord* m_recordImage;
 };
 
 Q_DECLARE_ISRECORDTYPE_FOR_NDEF_RECORD(NdefNfcSpRecord, QNdefRecord::NfcRtd, "Sp")

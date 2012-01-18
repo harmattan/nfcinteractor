@@ -56,12 +56,28 @@
 // Forward declarations
 class NfcModelToNdef;
 
+/*!
+  \brief Stores and manages the editable data, which can be transformed
+  to an NDEF message.
+
+  The record model manages a list of NfcRecordItem instances, which
+  define the various details that are combined to create a single
+  NDEF message. The model can also contain data that will end up in
+  several different NDEF records, which are all put together into
+  one NDEF message in the end.
+
+  Interaction with the data directly is encapsulated in the NfcRecordItem,
+  but this class provides logic to add, remove and query items from the
+  model, as well as tasks that go beyond the responsibilities of a single
+  item - for example, finding which other record items can be added to a
+  record present in the model (e.g., does the Smart Poster already have
+  the optional Action item, or can it still be added?).
+  */
 class NfcRecordModel : public QAbstractListModel
 {
     Q_OBJECT
+
 public:
-
-
     explicit NfcRecordModel(QObject *parent = 0);
     ~NfcRecordModel();
 
@@ -121,12 +137,14 @@ private:
     void checkPossibleContentForRecord(QList<QObject*> &contentList, const bool onlyIfNotYetPresent, const int recordIndex, const NfcTypes::MessageType searchForMsgType, const NfcTypes::RecordContent searchForRecordContent, QString description = "");
 
 signals:
+    /*! Emitted whenever the model contents have been modified, e.g., by adding, removing or changing a record item. */
     void recordItemsModified();
 
 private:
+    /*! List of record items, which can be parsed to create an NDEF message. */
     QList<NfcRecordItem*> m_recordItems;
+    /*! Converter to parse the record items and create an NDEF message. */
     NfcModelToNdef* m_nfcModelToNdef;
-    int m_updatedModelIndex;
 
 };
 

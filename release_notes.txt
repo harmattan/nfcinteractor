@@ -47,6 +47,7 @@ Easily reusable code for developers including:
 - Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2, Symbian only)
 
 Known bugs / issues (work-in-progress):
+- Selecting different Sp action on MeeGo doesn't get propagated to the model.
 - Complete source code comments
 
 Ideas for future updates:

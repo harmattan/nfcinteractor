@@ -527,7 +527,7 @@ void NfcInfo::targetError(QNearFieldTarget::Error error, const QNearFieldTarget:
         }
         emit nfcTagWriteError(errorText);
         stoppedTagInteraction();
-    } if (id == m_cachedRequestId && m_cachedRequestType == NfcNdefReading) {
+    } else if (id == m_cachedRequestId && m_cachedRequestType == NfcNdefReading) {
         emit nfcTagError(errorText);
         stoppedTagInteraction();
     } else {

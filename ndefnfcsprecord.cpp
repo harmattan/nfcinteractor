@@ -49,11 +49,11 @@
   */
 NdefNfcSpRecord::NdefNfcSpRecord()
     : QNdefRecord(QNdefRecord::NfcRtd, "Sp"),
-      recordUri(NULL),
-      recordAction(NULL),
-      recordSize(NULL),
-      recordMimeType(NULL),
-      recordImage(NULL)
+      m_recordUri(NULL),
+      m_recordAction(NULL),
+      m_recordSize(NULL),
+      m_recordMimeType(NULL),
+      m_recordImage(NULL)
 {
     setPayload(QByteArray(0, char(0)));
 }
@@ -66,23 +66,23 @@ NdefNfcSpRecord::NdefNfcSpRecord()
   */
 NdefNfcSpRecord::NdefNfcSpRecord(const QNdefRecord &other)
     : QNdefRecord(QNdefRecord::NfcRtd, "Sp"),
-      recordUri(NULL),
-      recordAction(NULL),
-      recordSize(NULL),
-      recordMimeType(NULL),
-      recordImage(NULL)
+      m_recordUri(NULL),
+      m_recordAction(NULL),
+      m_recordSize(NULL),
+      m_recordMimeType(NULL),
+      m_recordImage(NULL)
 {
     setPayload(other.payload());
 }
 
 NdefNfcSpRecord::~NdefNfcSpRecord()
 {
-    delete recordUri;
-    recordTitleList.clear();
-    delete recordAction;
-    delete recordSize;
-    delete recordMimeType;
-    delete recordImage;
+    delete m_recordUri;
+    m_recordTitleList.clear();
+    delete m_recordAction;
+    delete m_recordSize;
+    delete m_recordMimeType;
+    delete m_recordImage;
 }
 
 /*!
@@ -90,17 +90,17 @@ NdefNfcSpRecord::~NdefNfcSpRecord()
   */
 void NdefNfcSpRecord::initializeData()
 {
-    delete recordUri;
-    recordUri = NULL;
-    recordTitleList.clear();
-    delete recordAction;
-    recordAction = NULL;
-    delete recordSize;
-    recordSize = NULL;
-    delete recordMimeType;
-    recordMimeType = NULL;
-    delete recordImage;
-    recordImage = NULL;
+    delete m_recordUri;
+    m_recordUri = NULL;
+    m_recordTitleList.clear();
+    delete m_recordAction;
+    m_recordAction = NULL;
+    delete m_recordSize;
+    m_recordSize = NULL;
+    delete m_recordMimeType;
+    m_recordMimeType = NULL;
+    delete m_recordImage;
+    m_recordImage = NULL;
 }
 
 /*!
@@ -153,8 +153,8 @@ void NdefNfcSpRecord::parseRecords()
 
         // URI
         if (record.isRecordType<QNdefNfcUriRecord>()) {
-            if (recordUri) { delete recordUri; recordUri = NULL; }
-            recordUri = new QNdefNfcUriRecord(record);
+            if (m_recordUri) { delete m_recordUri; m_recordUri = NULL; }
+            m_recordUri = new QNdefNfcUriRecord(record);
             //qDebug() << "Sp URI: " << recordUri->uri().toString();
         }
         // Title
@@ -168,29 +168,29 @@ void NdefNfcSpRecord::parseRecords()
         // Image
         else if (record.typeNameFormat() == QNdefRecord::Mime &&
                    record.type().startsWith("image/")) {
-            if (recordImage) { delete recordImage; recordImage = NULL; }
-            recordImage = new NdefNfcMimeImageRecord(record);
+            if (m_recordImage) { delete m_recordImage; m_recordImage = NULL; }
+            m_recordImage = new NdefNfcMimeImageRecord(record);
             //qDebug() << "Sp Image: " << recordImage->format();
         }
         // Action
         else if (record.typeNameFormat() == QNdefRecord::NfcRtd &&
                  QString(record.type()) == "act") {
-            if (recordAction) { delete recordAction; recordAction = NULL; }
-            recordAction = new NdefNfcActRecord(record);
+            if (m_recordAction) { delete m_recordAction; m_recordAction = NULL; }
+            m_recordAction = new NdefNfcActRecord(record);
             //qDebug() << "Sp Action: " << action();
         }
         // Size
         else if (record.typeNameFormat() == QNdefRecord::NfcRtd &&
                  QString(record.type()) == "s") {
-            if (recordSize) { delete recordSize; recordSize = NULL; }
-            recordSize = new NdefNfcSizeRecord(record);
+            if (m_recordSize) { delete m_recordSize; m_recordSize = NULL; }
+            m_recordSize = new NdefNfcSizeRecord(record);
             //qDebug() << "Sp Size: " << size();
         }
         // Type
         else if (record.typeNameFormat() == QNdefRecord::NfcRtd &&
                  QString(record.type()) == "t") {
-            if (recordMimeType) { delete recordMimeType; recordMimeType = NULL; }
-            recordMimeType = new NdefNfcTypeRecord(record);
+            if (m_recordMimeType) { delete m_recordMimeType; m_recordMimeType = NULL; }
+            m_recordMimeType = new NdefNfcTypeRecord(record);
             //qDebug() << "Sp Type: " << type();
         }
         else
@@ -214,40 +214,40 @@ void NdefNfcSpRecord::parseRecords()
 bool NdefNfcSpRecord::assemblePayload()
 {
     // Uri is mandatory - don't assemble the payload if it's not set
-    if (!recordUri) {
+    if (!m_recordUri) {
         return false;
     }
 
     QNdefMessage message;
 
     // URI (mandatory)
-    message.append(*recordUri);
+    message.append(*m_recordUri);
 
     // Title(s) (optional)
     if (titleCount() > 0) {
-        foreach (QNdefNfcTextRecord curTitle, recordTitleList) {
+        foreach (QNdefNfcTextRecord curTitle, m_recordTitleList) {
             message.append(curTitle);
         }
     }
 
     // Action (optional)
-    if (recordAction) {
-        message.append(*recordAction);
+    if (m_recordAction) {
+        message.append(*m_recordAction);
     }
 
     // Size (optional)
-    if (recordSize) {
-        message.append(*recordSize);
+    if (m_recordSize) {
+        message.append(*m_recordSize);
     }
 
     // Type (optional)
-    if (recordMimeType) {
-        message.append(*recordMimeType);
+    if (m_recordMimeType) {
+        message.append(*m_recordMimeType);
     }
 
     // Image (optional)
-    if (recordImage) {
-        message.append(*recordImage);
+    if (m_recordImage) {
+        message.append(*m_recordImage);
     }
 
     setPayloadAndParse(message.toByteArray(), false);
@@ -291,10 +291,10 @@ QString NdefNfcSpRecord::rawContents() const
   */
 void NdefNfcSpRecord::setUri(const QUrl& newUri)
 {
-    if (!recordUri) {
-        recordUri = new QNdefNfcUriRecord();
+    if (!m_recordUri) {
+        m_recordUri = new QNdefNfcUriRecord();
     }
-    recordUri->setUri(newUri);
+    m_recordUri->setUri(newUri);
     assemblePayload();
 }
 
@@ -305,10 +305,10 @@ void NdefNfcSpRecord::setUri(const QUrl& newUri)
   */
 void NdefNfcSpRecord::setUri(const QNdefNfcUriRecord& newUri)
 {
-    if (recordUri) {
-        delete recordUri;
+    if (m_recordUri) {
+        delete m_recordUri;
     }
-    recordUri = new QNdefNfcUriRecord(newUri);
+    m_recordUri = new QNdefNfcUriRecord(newUri);
     assemblePayload();
 }
 
@@ -321,8 +321,8 @@ void NdefNfcSpRecord::setUri(const QNdefNfcUriRecord& newUri)
   */
 QUrl NdefNfcSpRecord::uri() const
 {
-    if (recordUri) {
-        return recordUri->uri();
+    if (m_recordUri) {
+        return m_recordUri->uri();
     } else {
         return QUrl();
     }
@@ -336,8 +336,8 @@ QUrl NdefNfcSpRecord::uri() const
   */
 QNdefNfcUriRecord NdefNfcSpRecord::uriRecord() const
 {
-    if (recordUri) {
-        return *recordUri;
+    if (m_recordUri) {
+        return *m_recordUri;
     } else {
         return QNdefNfcUriRecord();
     }
@@ -358,7 +358,7 @@ QNdefNfcUriRecord NdefNfcSpRecord::uriRecord() const
   */
 void NdefNfcSpRecord::addTitle(const QNdefNfcTextRecord &newTitle)
 {
-    recordTitleList.append(newTitle);
+    m_recordTitleList.append(newTitle);
     assemblePayload();
 }
 
@@ -377,8 +377,8 @@ void NdefNfcSpRecord::addTitle(const QNdefNfcTextRecord &newTitle)
   */
 void NdefNfcSpRecord::setTitleList(QList<QNdefNfcTextRecord> newTitleList)
 {
-    recordTitleList.clear();
-    recordTitleList.append(newTitleList);
+    m_recordTitleList.clear();
+    m_recordTitleList.append(newTitleList);
     assemblePayload();
 }
 
@@ -387,7 +387,7 @@ void NdefNfcSpRecord::setTitleList(QList<QNdefNfcTextRecord> newTitleList)
   */
 int NdefNfcSpRecord::titleCount() const
 {
-    return recordTitleList.count();
+    return m_recordTitleList.count();
 }
 
 /*!
@@ -396,7 +396,7 @@ int NdefNfcSpRecord::titleCount() const
   */
 QList<QNdefNfcTextRecord> NdefNfcSpRecord::titles() const
 {
-    return recordTitleList;
+    return m_recordTitleList;
 }
 
 /*!
@@ -408,7 +408,7 @@ QList<QNdefNfcTextRecord> NdefNfcSpRecord::titles() const
 QNdefNfcTextRecord NdefNfcSpRecord::title(const int index) const
 {
     if (index >= 0 && index < titleCount()) {
-        return recordTitleList[index];
+        return m_recordTitleList[index];
     } else {
         return QNdefNfcTextRecord();
     }
@@ -422,7 +422,7 @@ QNdefNfcTextRecord NdefNfcSpRecord::title(const int index) const
   */
 bool NdefNfcSpRecord::actionInUse() const
 {
-    return (recordAction);
+    return (m_recordAction);
 }
 
 /*!
@@ -434,8 +434,8 @@ bool NdefNfcSpRecord::actionInUse() const
   */
 NdefNfcSpRecord::NfcAction NdefNfcSpRecord::action() const
 {
-    if (recordAction) {
-        return recordAction->action();
+    if (m_recordAction) {
+        return m_recordAction->action();
     }
     return NdefNfcSpRecord::DoAction; // Default
 }
@@ -449,10 +449,10 @@ NdefNfcSpRecord::NfcAction NdefNfcSpRecord::action() const
   */
 void NdefNfcSpRecord::setAction(const NdefNfcSpRecord::NfcAction &action)
 {
-    if (!recordAction) {
-        recordAction = new NdefNfcActRecord();
+    if (!m_recordAction) {
+        m_recordAction = new NdefNfcActRecord();
     }
-    recordAction->setAction(action);
+    m_recordAction->setAction(action);
     assemblePayload();
 }
 
@@ -463,7 +463,7 @@ void NdefNfcSpRecord::setAction(const NdefNfcSpRecord::NfcAction &action)
   */
 bool NdefNfcSpRecord::sizeInUse() const
 {
-    return (recordSize);
+    return (m_recordSize);
 }
 
 /*!
@@ -475,8 +475,8 @@ bool NdefNfcSpRecord::sizeInUse() const
   */
 quint32 NdefNfcSpRecord::size() const
 {
-    if (recordSize) {
-        return recordSize->size();
+    if (m_recordSize) {
+        return m_recordSize->size();
     }
     return 0; // Default
 }
@@ -490,10 +490,10 @@ quint32 NdefNfcSpRecord::size() const
   */
 void NdefNfcSpRecord::setSize(const quint32 size)
 {
-    if (!recordSize) {
-        recordSize = new NdefNfcSizeRecord();
+    if (!m_recordSize) {
+        m_recordSize = new NdefNfcSizeRecord();
     }
-    recordSize->setSize(size);
+    m_recordSize->setSize(size);
     assemblePayload();
 }
 
@@ -504,7 +504,7 @@ void NdefNfcSpRecord::setSize(const quint32 size)
   */
 bool NdefNfcSpRecord::mimeTypeInUse() const
 {
-    return (recordMimeType);
+    return (m_recordMimeType);
 }
 
 /*!
@@ -516,8 +516,8 @@ bool NdefNfcSpRecord::mimeTypeInUse() const
   */
 QString NdefNfcSpRecord::mimeType() const
 {
-    if (recordMimeType) {
-        return recordMimeType->mimeType();
+    if (m_recordMimeType) {
+        return m_recordMimeType->mimeType();
     }
     return QString(); // Default
 }
@@ -531,10 +531,10 @@ QString NdefNfcSpRecord::mimeType() const
   */
 void NdefNfcSpRecord::setMimeType(const QString &type)
 {
-    if (!recordMimeType) {
-        recordMimeType = new NdefNfcTypeRecord();
+    if (!m_recordMimeType) {
+        m_recordMimeType = new NdefNfcTypeRecord();
     }
-    recordMimeType->setMimeType(type);
+    m_recordMimeType->setMimeType(type);
     assemblePayload();
 }
 
@@ -545,7 +545,7 @@ void NdefNfcSpRecord::setMimeType(const QString &type)
   */
 bool NdefNfcSpRecord::imageInUse() const
 {
-    return (recordImage);
+    return (m_recordImage);
 }
 
 /*!
@@ -557,8 +557,8 @@ bool NdefNfcSpRecord::imageInUse() const
   */
 NdefNfcMimeImageRecord NdefNfcSpRecord::image() const
 {
-    if (recordImage) {
-        return *recordImage;
+    if (m_recordImage) {
+        return *m_recordImage;
     }
     return NdefNfcMimeImageRecord(); // Default
 }
@@ -572,8 +572,8 @@ NdefNfcMimeImageRecord NdefNfcSpRecord::image() const
   */
 void NdefNfcSpRecord::setImage(const NdefNfcMimeImageRecord& imageRecord)
 {
-    if (recordImage) { delete recordImage; recordImage = NULL; }
-    recordImage = new NdefNfcMimeImageRecord(imageRecord);
+    if (m_recordImage) { delete m_recordImage; m_recordImage = NULL; }
+    m_recordImage = new NdefNfcMimeImageRecord(imageRecord);
     assemblePayload();
 }
 

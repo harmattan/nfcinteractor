@@ -122,91 +122,92 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00042"></a>00042 <span class="preprocessor"></span>
 <a name="l00043"></a>00043 <span class="preprocessor">#include &lt;QObject&gt;</span>
 <a name="l00044"></a>00044 
-<a name="l00045"></a><a class="code" href="class_nfc_types.html">00045</a> <span class="keyword">class </span><a class="code" href="class_nfc_types.html">NfcTypes</a> : <span class="keyword">public</span> QObject
-<a name="l00046"></a>00046 {
-<a name="l00047"></a>00047     Q_OBJECT
-<a name="l00048"></a>00048     Q_ENUMS(MessageType RecordContent NfcModes)
-<a name="l00049"></a>00049 <span class="keyword">public</span>:
-<a name="l00050"></a>00050     <span class="keyword">enum</span> MessageType {
-<a name="l00051"></a>00051         MsgSmartPoster,
-<a name="l00052"></a>00052         MsgUri,
-<a name="l00053"></a>00053         MsgText,
-<a name="l00054"></a>00054         MsgSms,
-<a name="l00055"></a>00055         MsgBusinessCard,
-<a name="l00056"></a>00056         MsgSocialNetwork,
-<a name="l00057"></a>00057         MsgGeo,
-<a name="l00058"></a>00058         MsgStore,
-<a name="l00059"></a>00059         MsgImage,
-<a name="l00060"></a>00060         MsgAnnotatedUrl,
-<a name="l00061"></a>00061         MsgCustom,
-<a name="l00062"></a>00062         MsgCombination,
-<a name="l00063"></a>00063         MsgNfcAutostart
-<a name="l00064"></a>00064     };
-<a name="l00065"></a>00065     <span class="keyword">enum</span> RecordContent {
-<a name="l00066"></a>00066         RecordHeader,
-<a name="l00067"></a>00067         RecordUri,
-<a name="l00068"></a>00068         RecordText,
-<a name="l00069"></a>00069         RecordTextLanguage,
-<a name="l00070"></a>00070         RecordSmsBody,
-<a name="l00071"></a>00071         RecordSpAction,
-<a name="l00072"></a>00072         RecordSpType,
-<a name="l00073"></a>00073         RecordSpSize,
-<a name="l00074"></a>00074         RecordImageFilename,
-<a name="l00075"></a>00075         RecordTypeName,
-<a name="l00076"></a>00076         RecordTypeNameFormat,
-<a name="l00077"></a>00077         RecordId,
-<a name="l00078"></a>00078         RecordRawPayload,
-<a name="l00079"></a>00079         RecordSocialNetworkType,
-<a name="l00080"></a>00080         RecordSocialNetworkName,
-<a name="l00081"></a>00081 
-<a name="l00082"></a>00082         RecordNamePrefix,
-<a name="l00083"></a>00083         RecordFirstName,
-<a name="l00084"></a>00084         RecordMiddleName,
-<a name="l00085"></a>00085         RecordLastName,
-<a name="l00086"></a>00086         RecordNameSuffix,
-<a name="l00087"></a>00087         RecordNickname,
-<a name="l00088"></a>00088 
-<a name="l00089"></a>00089         RecordEmailAddress,
-<a name="l00090"></a>00090         RecordPhoneNumber,
-<a name="l00091"></a>00091         RecordContactUrl,
-<a name="l00092"></a>00092 
-<a name="l00093"></a>00093         RecordOrganizationName,
-<a name="l00094"></a>00094         RecordOrganizationDepartment,
-<a name="l00095"></a>00095         RecordOrganizationRole,
-<a name="l00096"></a>00096         RecordOrganizationTitle,
-<a name="l00097"></a>00097 
-<a name="l00098"></a>00098         RecordBirthday, <span class="comment">// not implemented yet, would require a date editor field</span>
-<a name="l00099"></a>00099         RecordNote,
-<a name="l00100"></a>00100 
-<a name="l00101"></a>00101         RecordCountry,
-<a name="l00102"></a>00102         RecordLocality,
-<a name="l00103"></a>00103         RecordPostOfficeBox,
-<a name="l00104"></a>00104         RecordPostcode,
-<a name="l00105"></a>00105         RecordRegion,
-<a name="l00106"></a>00106         RecordStreet,
-<a name="l00107"></a>00107 
-<a name="l00108"></a>00108         RecordGeoType,
-<a name="l00109"></a>00109         RecordGeoLatitude,
-<a name="l00110"></a>00110         RecordGeoLongitude,
-<a name="l00111"></a>00111 
-<a name="l00112"></a>00112         RecordStoreNokia,
-<a name="l00113"></a>00113         RecordStoreSymbian,
-<a name="l00114"></a>00114         RecordStoreMeeGoHarmattan,
-<a name="l00115"></a>00115         RecordStoreSeries40,
-<a name="l00116"></a>00116         RecordStoreWindowsPhone,
-<a name="l00117"></a>00117         RecordStoreAndroid,
-<a name="l00118"></a>00118         RecordStoreiOS,
-<a name="l00119"></a>00119         RecordStoreBlackberry,
-<a name="l00120"></a>00120         RecordStoreCustomName
-<a name="l00121"></a>00121     };
-<a name="l00122"></a>00122 
-<a name="l00123"></a>00123     <span class="keyword">enum</span> NfcModes {
-<a name="l00124"></a>00124         nfcReading = 0,
-<a name="l00125"></a>00125         nfcWriting
-<a name="l00126"></a>00126     };
-<a name="l00127"></a>00127 };
-<a name="l00128"></a>00128 
-<a name="l00129"></a>00129 <span class="preprocessor">#endif // RECORDTYPES_H</span>
+<a name="l00056"></a><a class="code" href="class_nfc_types.html">00056</a> <span class="keyword">class </span><a class="code" href="class_nfc_types.html" title="Important enums that are shared between QML and C++.">NfcTypes</a> : <span class="keyword">public</span> QObject
+<a name="l00057"></a>00057 {
+<a name="l00058"></a>00058     Q_OBJECT
+<a name="l00059"></a>00059     Q_ENUMS(<a class="code" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f" title="The message type of record items stored in the model.">MessageType</a> <a class="code" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691" title="Type of the content of an individual item in the model.">RecordContent</a> <a class="code" href="class_nfc_types.html#a7df7f57eb1e968cb5f93e2ac364efd10" title="Status information whether the NfcInfo class is currently in reading or writing mode.">NfcModes</a>)
+<a name="l00060"></a>00060 <span class="keyword">public</span>:
+<a name="l00075"></a><a class="code" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f">00075</a>     <span class="keyword">enum</span> <a class="code" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f" title="The message type of record items stored in the model.">MessageType</a> {
+<a name="l00076"></a>00076         MsgSmartPoster,
+<a name="l00077"></a>00077         MsgUri,
+<a name="l00078"></a>00078         MsgText,
+<a name="l00079"></a>00079         MsgSms,
+<a name="l00080"></a>00080         MsgBusinessCard,
+<a name="l00081"></a>00081         MsgSocialNetwork,
+<a name="l00082"></a>00082         MsgGeo,
+<a name="l00083"></a>00083         MsgStore,
+<a name="l00084"></a>00084         MsgImage,
+<a name="l00085"></a>00085         MsgAnnotatedUrl,
+<a name="l00086"></a>00086         MsgCustom,
+<a name="l00087"></a>00087         MsgCombination,
+<a name="l00088"></a>00088         MsgNfcAutostart
+<a name="l00089"></a>00089     };
+<a name="l00090"></a>00090 
+<a name="l00113"></a><a class="code" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691">00113</a>     <span class="keyword">enum</span> <a class="code" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691" title="Type of the content of an individual item in the model.">RecordContent</a> {
+<a name="l00114"></a>00114         RecordHeader,
+<a name="l00115"></a>00115         RecordUri,
+<a name="l00116"></a>00116         RecordText,
+<a name="l00117"></a>00117         RecordTextLanguage,
+<a name="l00118"></a>00118         RecordSmsBody,
+<a name="l00119"></a>00119         RecordSpAction,
+<a name="l00120"></a>00120         RecordSpType,
+<a name="l00121"></a>00121         RecordSpSize,
+<a name="l00122"></a>00122         RecordImageFilename,
+<a name="l00123"></a>00123         RecordTypeName,
+<a name="l00124"></a>00124         RecordTypeNameFormat,
+<a name="l00125"></a>00125         RecordId,
+<a name="l00126"></a>00126         RecordRawPayload,
+<a name="l00127"></a>00127         RecordSocialNetworkType,
+<a name="l00128"></a>00128         RecordSocialNetworkName,
+<a name="l00129"></a>00129 
+<a name="l00130"></a>00130         RecordNamePrefix,
+<a name="l00131"></a>00131         RecordFirstName,
+<a name="l00132"></a>00132         RecordMiddleName,
+<a name="l00133"></a>00133         RecordLastName,
+<a name="l00134"></a>00134         RecordNameSuffix,
+<a name="l00135"></a>00135         RecordNickname,
+<a name="l00136"></a>00136 
+<a name="l00137"></a>00137         RecordEmailAddress,
+<a name="l00138"></a>00138         RecordPhoneNumber,
+<a name="l00139"></a>00139         RecordContactUrl,
+<a name="l00140"></a>00140 
+<a name="l00141"></a>00141         RecordOrganizationName,
+<a name="l00142"></a>00142         RecordOrganizationDepartment,
+<a name="l00143"></a>00143         RecordOrganizationRole,
+<a name="l00144"></a>00144         RecordOrganizationTitle,
+<a name="l00145"></a>00145 
+<a name="l00146"></a>00146         RecordBirthday, <span class="comment">// not implemented yet, would require a date editor field</span>
+<a name="l00147"></a>00147         RecordNote,
+<a name="l00148"></a>00148 
+<a name="l00149"></a>00149         RecordCountry,
+<a name="l00150"></a>00150         RecordLocality,
+<a name="l00151"></a>00151         RecordPostOfficeBox,
+<a name="l00152"></a>00152         RecordPostcode,
+<a name="l00153"></a>00153         RecordRegion,
+<a name="l00154"></a>00154         RecordStreet,
+<a name="l00155"></a>00155 
+<a name="l00156"></a>00156         RecordGeoType,
+<a name="l00157"></a>00157         RecordGeoLatitude,
+<a name="l00158"></a>00158         RecordGeoLongitude,
+<a name="l00159"></a>00159 
+<a name="l00160"></a>00160         RecordStoreNokia,
+<a name="l00161"></a>00161         RecordStoreSymbian,
+<a name="l00162"></a>00162         RecordStoreMeeGoHarmattan,
+<a name="l00163"></a>00163         RecordStoreSeries40,
+<a name="l00164"></a>00164         RecordStoreWindowsPhone,
+<a name="l00165"></a>00165         RecordStoreAndroid,
+<a name="l00166"></a>00166         RecordStoreiOS,
+<a name="l00167"></a>00167         RecordStoreBlackberry,
+<a name="l00168"></a>00168         RecordStoreCustomName
+<a name="l00169"></a>00169     };
+<a name="l00170"></a>00170 
+<a name="l00177"></a><a class="code" href="class_nfc_types.html#a7df7f57eb1e968cb5f93e2ac364efd10">00177</a>     <span class="keyword">enum</span> NfcModes {
+<a name="l00178"></a>00178         nfcReading = 0,
+<a name="l00179"></a>00179         nfcWriting
+<a name="l00180"></a>00180     };
+<a name="l00181"></a>00181 };
+<a name="l00182"></a>00182 
+<a name="l00183"></a>00183 <span class="preprocessor">#endif // RECORDTYPES_H</span>
 </pre></div></div>
 </div>
 <!-- window showing the filter options -->
@@ -226,7 +227,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 18 2012 11:51:58 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 18 2012 15:12:11 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

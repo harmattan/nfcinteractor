@@ -153,24 +153,24 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00073"></a>00073 <span class="preprocessor"></span>
 <a name="l00074"></a>00074 QTM_USE_NAMESPACE
 <a name="l00075"></a>00075 
-<a name="l00076"></a><a class="code" href="class_nfc_target_analyzer.html">00076</a> <span class="keyword">class </span><a class="code" href="class_nfc_target_analyzer.html">NfcTargetAnalyzer</a> : <span class="keyword">public</span> QObject
-<a name="l00077"></a>00077 {
-<a name="l00078"></a>00078     Q_OBJECT
-<a name="l00079"></a>00079 <span class="keyword">public</span>:
-<a name="l00080"></a>00080     <span class="keyword">explicit</span> <a class="code" href="class_nfc_target_analyzer.html">NfcTargetAnalyzer</a>(QObject *parent = 0);
-<a name="l00081"></a>00081     QString <a class="code" href="class_nfc_target_analyzer.html#a772c7157f2d38801a61d19b73eb619da" title="Create a string containing a textual description of the generic tag properties.">analyzeTarget</a>(QNearFieldTarget *target);
-<a name="l00082"></a>00082     QString <a class="code" href="class_nfc_target_analyzer.html#a7c88108af8d02dfd5d75b9231e6bb0da" title="Show more detailed information if the target is based on the NFC Forum Type 1 platform (such as the I...">analyzeType1Target</a>(QNearFieldTagType1 *target);
-<a name="l00083"></a>00083     QString <a class="code" href="class_nfc_target_analyzer.html#a63cd32d24cad0ea7b981c213872ff998" title="Show more detailed information if the target is based on the NFC Forum Type 2 platform.">analyzeType2Target</a>(QNearFieldTagType2 *target);
-<a name="l00084"></a>00084 
-<a name="l00085"></a>00085     QString <a class="code" href="class_nfc_target_analyzer.html#a11bfe253a458a48ec2d8f0597e8b33a8" title="Return a textual description of the NFC target type.">convertTagTypeToString</a>(<span class="keyword">const</span> QNearFieldTarget::Type type);
-<a name="l00086"></a>00086     
-<a name="l00087"></a>00087 <span class="keyword">private</span>:
-<a name="l00088"></a>00088     
-<a name="l00089"></a>00089 <span class="keyword">public</span>:
-<a name="l00090"></a>00090     <a class="code" href="class_near_field_target_info.html" title="Stores additional information about a QNearFieldTarget.">NearFieldTargetInfo</a> m_tagInfo;
-<a name="l00091"></a>00091 };
-<a name="l00092"></a>00092 
-<a name="l00093"></a>00093 <span class="preprocessor">#endif // NFCTARGETANALYZER_H</span>
+<a name="l00094"></a><a class="code" href="class_nfc_target_analyzer.html">00094</a> <span class="keyword">class </span><a class="code" href="class_nfc_target_analyzer.html" title="Analyze the NFC target and return the gathered information in human-readable textual form...">NfcTargetAnalyzer</a> : <span class="keyword">public</span> QObject
+<a name="l00095"></a>00095 {
+<a name="l00096"></a>00096     Q_OBJECT
+<a name="l00097"></a>00097 <span class="keyword">public</span>:
+<a name="l00098"></a>00098     <span class="keyword">explicit</span> <a class="code" href="class_nfc_target_analyzer.html" title="Analyze the NFC target and return the gathered information in human-readable textual form...">NfcTargetAnalyzer</a>(QObject *parent = 0);
+<a name="l00099"></a>00099     QString <a class="code" href="class_nfc_target_analyzer.html#a772c7157f2d38801a61d19b73eb619da" title="Create a string containing a textual description of the generic tag properties.">analyzeTarget</a>(QNearFieldTarget *target);
+<a name="l00100"></a>00100     QString <a class="code" href="class_nfc_target_analyzer.html#a7c88108af8d02dfd5d75b9231e6bb0da" title="Show more detailed information if the target is based on the NFC Forum Type 1 platform (such as the I...">analyzeType1Target</a>(QNearFieldTagType1 *target);
+<a name="l00101"></a>00101     QString <a class="code" href="class_nfc_target_analyzer.html#a63cd32d24cad0ea7b981c213872ff998" title="Show more detailed information if the target is based on the NFC Forum Type 2 platform.">analyzeType2Target</a>(QNearFieldTagType2 *target);
+<a name="l00102"></a>00102 
+<a name="l00103"></a>00103     QString <a class="code" href="class_nfc_target_analyzer.html#a11bfe253a458a48ec2d8f0597e8b33a8" title="Return a textual description of the NFC target type.">convertTagTypeToString</a>(<span class="keyword">const</span> QNearFieldTarget::Type type);
+<a name="l00104"></a>00104     
+<a name="l00105"></a>00105 <span class="keyword">private</span>:
+<a name="l00106"></a>00106     
+<a name="l00107"></a>00107 <span class="keyword">public</span>:
+<a name="l00108"></a>00108     <a class="code" href="class_near_field_target_info.html" title="Stores additional information about a QNearFieldTarget.">NearFieldTargetInfo</a> m_tagInfo;
+<a name="l00109"></a>00109 };
+<a name="l00110"></a>00110 
+<a name="l00111"></a>00111 <span class="preprocessor">#endif // NFCTARGETANALYZER_H</span>
 </pre></div></div>
 </div>
 <!-- window showing the filter options -->
@@ -190,7 +190,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 18 2012 11:51:58 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 18 2012 15:12:11 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

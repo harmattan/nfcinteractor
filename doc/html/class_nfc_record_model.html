@@ -87,30 +87,35 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="contents">
 <!-- doxytag: class="NfcRecordModel" -->
+<p>Stores and manages the editable data, which can be transformed to an NDEF message.  
+ <a href="class_nfc_record_model.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="nfcrecordmodel_8h_source.html">nfcrecordmodel.h</a>&gt;</code></p>
+
 <p><a href="class_nfc_record_model-members.html">List of all members.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-slots"></a>
 Public Slots</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8a3d19869138110bfbaca719745ba321"></a><!-- doxytag: member="NfcRecordModel::addCompleteRecordWithDefault" ref="a8a3d19869138110bfbaca719745ba321" args="(const int messageTypeInt)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addCompleteRecordWithDefault</b> (const int messageTypeInt)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5f300f982fd28b0ad1fd5f503f33788"></a><!-- doxytag: member="NfcRecordModel::addRecord" ref="ac5f300f982fd28b0ad1fd5f503f33788" args="(const QString &amp;title, const int messageType, const int recordContent, const QString &amp;defaultText, const bool removeVisible, const bool addVisible, const int recordId)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addRecord</b> (const QString &amp;title, const int messageType, const int recordContent, const QString &amp;defaultText, const bool removeVisible, const bool addVisible, const int recordId)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1ecd4b2abb1eb5ae1bcd6b69948517ad"></a><!-- doxytag: member="NfcRecordModel::addRecord" ref="a1ecd4b2abb1eb5ae1bcd6b69948517ad" args="(const QString &amp;title, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent recordContent, const QString &amp;defaultText, const bool removeVisible, const bool addVisible, const int recordId)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addRecord</b> (const QString &amp;title, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent recordContent, const QString &amp;defaultText, const bool removeVisible, const bool addVisible, const int recordId)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b2511ef6081b874013b2f3a8da8a56f"></a><!-- doxytag: member="NfcRecordModel::addRecord" ref="a3b2511ef6081b874013b2f3a8da8a56f" args="(const QString &amp;title, const int messageType, const int recordContent, const QString &amp;currentText, const bool removeVisible, const bool addVisible, const int recordId)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addRecord</b> (const QString &amp;title, const int messageType, const int recordContent, const QString &amp;currentText, const bool removeVisible, const bool addVisible, const int recordId)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a40aacc282579d101d778ba5749cecdbd"></a><!-- doxytag: member="NfcRecordModel::addRecord" ref="a40aacc282579d101d778ba5749cecdbd" args="(const QString &amp;title, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent recordContent, const QString &amp;currentText, const bool removeVisible, const bool addVisible, const int recordId)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>addRecord</b> (const QString &amp;title, const <a class="el" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f">NfcTypes::MessageType</a> messageType, const <a class="el" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691">NfcTypes::RecordContent</a> recordContent, const QString &amp;currentText, const bool removeVisible, const bool addVisible, const int recordId)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9cb38de9ed4d45d6b68c25a117ef17b2"></a><!-- doxytag: member="NfcRecordModel::addRecordItem" ref="a9cb38de9ed4d45d6b68c25a117ef17b2" args="(NfcRecordItem *newRecordItem)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addRecordItem</b> (<a class="el" href="class_nfc_record_item.html">NfcRecordItem</a> *newRecordItem)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a08890d188a01073cb52553243a6a2f70"></a><!-- doxytag: member="NfcRecordModel::insertRecordItem" ref="a08890d188a01073cb52553243a6a2f70" args="(const int row, NfcRecordItem *newRecordItem)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>insertRecordItem</b> (const int row, <a class="el" href="class_nfc_record_item.html">NfcRecordItem</a> *newRecordItem)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_model.html#a1467040cf6c617bd5431a7495c6fbdb7">simpleInsertRecordItem</a> (const int insertPosition, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const bool removeVisible, const int parentRecordId)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_model.html#a1467040cf6c617bd5431a7495c6fbdb7">simpleInsertRecordItem</a> (const int insertPosition, const <a class="el" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f">NfcTypes::MessageType</a> messageType, const <a class="el" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691">NfcTypes::RecordContent</a> contentType, const bool removeVisible, const int parentRecordId)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a28c345a87023c984234ad1d6f1661ab2"></a><!-- doxytag: member="NfcRecordModel::simpleAppendRecordItem" ref="a28c345a87023c984234ad1d6f1661ab2" args="(const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const bool removeVisible, const int parentRecordId)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>simpleAppendRecordItem</b> (const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const bool removeVisible, const int parentRecordId)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>simpleAppendRecordItem</b> (const <a class="el" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f">NfcTypes::MessageType</a> messageType, const <a class="el" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691">NfcTypes::RecordContent</a> contentType, const bool removeVisible, const int parentRecordId)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6ec573dda826ee98180df65fe132d847"></a><!-- doxytag: member="NfcRecordModel::getDefaultsForRecordContent" ref="a6ec573dda826ee98180df65fe132d847" args="(const NfcTypes::MessageType msgType, const NfcTypes::RecordContent contentType, QString &amp;defaultTitle, QString &amp;defaultContents)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>getDefaultsForRecordContent</b> (const NfcTypes::MessageType msgType, const NfcTypes::RecordContent contentType, QString &amp;defaultTitle, QString &amp;defaultContents)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>getDefaultsForRecordContent</b> (const <a class="el" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f">NfcTypes::MessageType</a> msgType, const <a class="el" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691">NfcTypes::RecordContent</a> contentType, QString &amp;defaultTitle, QString &amp;defaultContents)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a168d6359e59b8b23eec830dd11718bc3"></a><!-- doxytag: member="NfcRecordModel::getSelectionItemsForRecordContent" ref="a168d6359e59b8b23eec830dd11718bc3" args="(const NfcTypes::RecordContent contentType, int &amp;defaultSelectedItem)" -->
-QVariantList&#160;</td><td class="memItemRight" valign="bottom"><b>getSelectionItemsForRecordContent</b> (const NfcTypes::RecordContent contentType, int &amp;defaultSelectedItem)</td></tr>
+QVariantList&#160;</td><td class="memItemRight" valign="bottom"><b>getSelectionItemsForRecordContent</b> (const <a class="el" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691">NfcTypes::RecordContent</a> contentType, int &amp;defaultSelectedItem)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a360f92331b34efa5b4031eedce11a151"></a><!-- doxytag: member="NfcRecordModel::addContentToRecord" ref="a360f92331b34efa5b4031eedce11a151" args="(int recordIndex, int messageTypeInt, int newContentType)" -->
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addContentToRecord</b> (int recordIndex, int messageTypeInt, int newContentType)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_model.html#a9ae26a84a75e4a5ef8097463072795ae">isContentInRecord</a> (const int recordIndex, const NfcTypes::RecordContent searchForRecordContent)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_model.html#a9ae26a84a75e4a5ef8097463072795ae">isContentInRecord</a> (const int recordIndex, const <a class="el" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691">NfcTypes::RecordContent</a> searchForRecordContent)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the record UI already contains the specified content item. <em>recordIndex</em> index of the parent record, whose children should be searched <em>searchForRecordContent</em> record content type to check if available in the parent record.  <a href="#a9ae26a84a75e4a5ef8097463072795ae"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3a4c7c93570254cc791f111eabccdef4"></a><!-- doxytag: member="NfcRecordModel::isContentInRecord" ref="a3a4c7c93570254cc791f111eabccdef4" args="(const int recordIndex, const int searchForRecordContent)" -->
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isContentInRecord</b> (const int recordIndex, const int searchForRecordContent)</td></tr>
@@ -127,8 +132,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a list of content items that can potentially be added to a record.  <a href="#a0ae72ff7f61f02010e854a05f6142d34"></a><br/></td></tr>
 <tr><td colspan="2"><h2><a name="signals"></a>
 Signals</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a21008add9a7311fd6e92d43c914c0786"></a><!-- doxytag: member="NfcRecordModel::recordItemsModified" ref="a21008add9a7311fd6e92d43c914c0786" args="()" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>recordItemsModified</b> ()</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_model.html#a21008add9a7311fd6e92d43c914c0786">recordItemsModified</a> ()</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab9c45360986047a9806d6b53675f8779"></a><!-- doxytag: member="NfcRecordModel::NfcRecordModel" ref="ab9c45360986047a9806d6b53675f8779" args="(QObject *parent=0)" -->
@@ -150,7 +154,11 @@ QModelIndex&#160;</td><td class="memItemRight" valign="bottom"><b>indexFromItem<
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abf3347ebfdeb7312d8e921cbdf33a9e7"></a><!-- doxytag: member="NfcRecordModel::size" ref="abf3347ebfdeb7312d8e921cbdf33a9e7" args="() const " -->
 int&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td></tr>
 </table>
-<hr/><h2>Member Function Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>Stores and manages the editable data, which can be transformed to an NDEF message. </p>
+<p>The record model manages a list of <a class="el" href="class_nfc_record_item.html" title="Individual record item contained in the NfcRecordModel.">NfcRecordItem</a> instances, which define the various details that are combined to create a single NDEF message. The model can also contain data that will end up in several different NDEF records, which are all put together into one NDEF message in the end.</p>
+<p>Interaction with the data directly is encapsulated in the <a class="el" href="class_nfc_record_item.html" title="Individual record item contained in the NfcRecordModel.">NfcRecordItem</a>, but this class provides logic to add, remove and query items from the model, as well as tasks that go beyond the responsibilities of a single item - for example, finding which other record items can be added to a record present in the model (e.g., does the Smart Poster already have the optional Action item, or can it still be added?). </p>
+</div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a9ae26a84a75e4a5ef8097463072795ae"></a><!-- doxytag: member="NfcRecordModel::isContentInRecord" ref="a9ae26a84a75e4a5ef8097463072795ae" args="(const int recordIndex, const NfcTypes::RecordContent searchForRecordContent)" -->
 <div class="memitem">
 <div class="memproto">
@@ -164,7 +172,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const NfcTypes::RecordContent&#160;</td>
+          <td class="paramtype">const <a class="el" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691">NfcTypes::RecordContent</a>&#160;</td>
           <td class="paramname"><em>searchForRecordContent</em>&#160;</td>
         </tr>
         <tr>
@@ -206,6 +214,23 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td
 
 </div>
 </div>
+<a class="anchor" id="a21008add9a7311fd6e92d43c914c0786"></a><!-- doxytag: member="NfcRecordModel::recordItemsModified" ref="a21008add9a7311fd6e92d43c914c0786" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void NfcRecordModel::recordItemsModified </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td><code> [signal]</code></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Emitted whenever the model contents have been modified, e.g., by adding, removing or changing a record item. </p>
+
+</div>
+</div>
 <a class="anchor" id="a1467040cf6c617bd5431a7495c6fbdb7"></a><!-- doxytag: member="NfcRecordModel::simpleInsertRecordItem" ref="a1467040cf6c617bd5431a7495c6fbdb7" args="(const int insertPosition, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const bool removeVisible, const int parentRecordId)" -->
 <div class="memitem">
 <div class="memproto">
@@ -219,13 +244,13 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const NfcTypes::MessageType&#160;</td>
+          <td class="paramtype">const <a class="el" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f">NfcTypes::MessageType</a>&#160;</td>
           <td class="paramname"><em>messageType</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const NfcTypes::RecordContent&#160;</td>
+          <td class="paramtype">const <a class="el" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691">NfcTypes::RecordContent</a>&#160;</td>
           <td class="paramname"><em>contentType</em>, </td>
         </tr>
         <tr>
@@ -274,7 +299,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>size</b> () const </td
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 18 2012 11:51:59 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 18 2012 15:12:12 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

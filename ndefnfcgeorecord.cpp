@@ -95,7 +95,8 @@ void NdefNfcGeoRecord::setGeoType(const NdefNfcGeoRecord::NfcGeoType geoType)
 void NdefNfcGeoRecord::updatePayload()
 {
     QUrl uri;
-    // TODO: check if double -> string conversion needs to be locale-aware to get right comma
+    // The double -> string conversion used here is not locale-aware, so
+    // should always get the right comma.
     const QString latString = QString::number(m_geoCoordinate.latitude());
     const QString longString = QString::number(m_geoCoordinate.longitude());
     switch(m_geoType) {
