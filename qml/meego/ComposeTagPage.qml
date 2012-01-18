@@ -72,6 +72,11 @@ Page {
     // --------------------------------------------------------------------------------
     // Create a selection dialog with a title and list elements to choose from.
     Loader {
+        // TODO: bug report - if setting loader to fill its parent, the first element
+        // of the selection dialog will be invisible.
+        // If centering the loader on the parent or not setting a size at all,
+        // it works, but results in multiple binding loops reported in the debug output.
+        //anchors.fill: parent
         // Need to dynamically load the dialog, as otherwise Symbian Components
         // would only check the size upon creation of the element and not update it
         // when we add components dynamically later on.
@@ -86,7 +91,8 @@ Page {
             property int recordIndex
             property int messageType
             titleText: "Add to the record ..."
-            selectedIndex: 1
+            selectedIndex: -1
+            z: 1
             model: ListModel { }
 
             onAccepted: doAddContentToRecord(recordIndex, messageType, addContentToRecordDialog.model.get(addContentToRecordDialog.selectedIndex).type)
@@ -95,7 +101,7 @@ Page {
 
     function doAddContentToRecord(recordIndex, messageType, newRecordContent) {
         nfcInfo.recordModel.addContentToRecord(recordIndex, messageType, newRecordContent)
-        addContentDialogLoader.sourceComponent = null
+        addContentDialogLoader.sourceComponent = undefined
     }
 
 
@@ -111,7 +117,7 @@ Page {
             // "No further records can be added to this message"
             // Shouldn't get here, as the add button should be removed from
             // the record header when the last possible content item has been added.
-            addContentDialogLoader.sourceComponent = null
+            addContentDialogLoader.sourceComponent = undefined
         } else {
             // Show selection dialog - if accepted, it will call addInfoToRecord() to
             // actually add the content to the record.
