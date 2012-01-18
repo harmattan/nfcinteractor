@@ -94,20 +94,27 @@ PageStackWindow {
             //nfcInfoPage.messageModel.append( {"infoMsg": "", "textColor": "white", "image": ("image://nfcimageprovider/"+imgId)} )
         }
 
-        onNfcStatusUpdate:
+        onNfcStatusUpdate: {
             logMessage(nfcStatusText, "aliceblue", "nfcSymbolInfo.png");
-        onNfcStatusSuccess:
+        }
+        onNfcStatusSuccess: {
             logMessage(nfcStatusSuccessText, "aliceblue", "nfcSymbolSuccess.png");
-        onNfcStatusError:
+        }
+        onNfcStatusError: {
             logMessage(nfcStatusErrorText, "coral", "nfcSymbolError.png");
-        onNfcInfoUpdate:
+        }
+        onNfcInfoUpdate: {
             logMessage(nfcInfoText, "aquamarine", "nfcSymbolTag.png");
-        onNfcTagContents:
+        }
+        onNfcTagContents: {
             logMessage(nfcTagContents, "lightskyblue", "nfcSymbolTag.png");
-        onNfcTagImage:
+        }
+        onNfcTagImage: {
             logImage(nfcImgId);
-        onNfcTagError:
+        }
+        onNfcTagError: {
             logMessage(nfcTagError, "coral", "nfcSymbolError.png");
+        }
 
         onNfcStartingTagInteraction: {
             if (writeTagPage.status === PageStatus.Active) {
@@ -142,8 +149,9 @@ PageStackWindow {
             }
         }
 
-        onStoredMessageSizeChanged:
+        onStoredMessageSizeChanged: {
             composeTagPage.updateHeader(ndefMessageSize)
+        }
     }
 
     // MeeGo: set black theme
@@ -151,12 +159,4 @@ PageStackWindow {
         theme.inverted = true
     }
 
-//    Component.onCompleted: {
-////        if (platform !== 0) {
-////            // Only show the toolbar with the back/quit button on Symbian
-////            toolBar.visible = false;
-////        }
-//        //pageStack.push(Qt.resolvedUrl("NfcInfoPage.qml"))
-//        pageStack.push(nfcInfoPage)
-//    }
 }
