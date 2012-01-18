@@ -51,6 +51,9 @@
 
 QTM_USE_NAMESPACE
 
+#define DEFAULT_GEOTAG_NOKIAMAPS_URL "http://m.ovi.me/?c="
+#define DEFAULT_GEOTAG_WEBSERVICE_URL "http://NfcInteractor.com/m.php?c="
+
 /*!
   \brief Store longitude and latitude on a tag, to allow the user
   to view a map when touching the tag.
@@ -84,6 +87,8 @@ QTM_USE_NAMESPACE
   real world deployment, outside of development and testing, it's
   recommended to host the script on your own web server.
   Find more information at nfcinteractor.com.
+  If you host the web service on your own URI, you can change the
+  location using setWebServiceUrl().
 
   As this class is based on the Smart URI base class, the
   payload is formatted as a URI record initially. When first
@@ -111,6 +116,8 @@ public:
         WebRedirect
     };
 public:
+    QUrl webServiceUrl() const;
+    void setWebServiceUrl(const QUrl& webServiceUrl);
     QGeoCoordinate location() const;
     void setLocation(const QGeoCoordinate& geoCoordinate);
     void setLatitude(const double latitude);
@@ -125,6 +132,7 @@ private:
 private:
     QGeoCoordinate m_geoCoordinate;
     NfcGeoType m_geoType;
+    QUrl m_webServiceUrl;
 };
 
 #endif // NDEFNFCGEORECORD_H

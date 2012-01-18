@@ -45,7 +45,8 @@
   */
 NdefNfcGeoRecord::NdefNfcGeoRecord()
     : NdefNfcSmartUriRecord(),
-      m_geoType(GeoUri)
+      m_geoType(GeoUri),
+      m_webServiceUrl(DEFAULT_GEOTAG_WEBSERVICE_URL)
 {
     updatePayload();
 }
@@ -56,9 +57,34 @@ NdefNfcGeoRecord::NdefNfcGeoRecord()
   */
 NdefNfcGeoRecord::NdefNfcGeoRecord(const QGeoCoordinate &geoCoordinate)
     : NdefNfcSmartUriRecord(),
-      m_geoType(GeoUri)
+      m_geoType(GeoUri),
+      m_webServiceUrl(DEFAULT_GEOTAG_WEBSERVICE_URL)
 {
     setLocation(geoCoordinate);
+}
+
+/*!
+  \brief Get the current web service URL.
+
+  By default, the web service hosted at nfcinteractor.com is used.
+  See terms and conditions at nfcinteractor.com
+  */
+QUrl NdefNfcGeoRecord::webServiceUrl() const
+{
+    return m_webServiceUrl;
+}
+
+/*!
+  \brief Set the web service URL.
+
+  The parameter should contain the complete URL, including the
+  "?c=" part. The script will then add longitude and latitude,
+  separated by a comma.
+  */
+void NdefNfcGeoRecord::setWebServiceUrl(const QUrl &webServiceUrl)
+{
+    m_webServiceUrl = webServiceUrl;
+    updatePayload();
 }
 
 /*!
@@ -137,10 +163,10 @@ void NdefNfcGeoRecord::updatePayload()
     const QString longString = QString::number(m_geoCoordinate.longitude());
     switch(m_geoType) {
     case NokiaMaps:
-        uri = "http://m.ovi.me/?c=" + latString + "," + longString;
+        uri = DEFAULT_GEOTAG_NOKIAMAPS_URL + latString + "," + longString;
         break;
     case WebRedirect:
-        uri = "http://NfcInteractor.com/m.php?c=" + latString + "," + longString;
+        uri = DEFAULT_GEOTAG_WEBSERVICE_URL + latString + "," + longString;
         break;
     case GeoUri:
     default:
