@@ -101,7 +101,7 @@ Item {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottomMargin: 7
-        text: (recordContent === NfcTypes.RecordHeader) ? "" : defaultText;
+        text: (recordContent === NfcTypes.RecordHeader) ? "" : currentText;
         visible: (recordContent !== NfcTypes.RecordHeader
                   && recordContent !== NfcTypes.RecordSpAction
                   && recordContent !== NfcTypes.RecordGeoType
@@ -125,9 +125,9 @@ Item {
             // Solution: Don't update the model right away, but delay it using a timer, so
             // that the update happens outside of the onTextChanged. This seems to do the job.
             delayModelChangeTimer.start();
-            //            nfcInfo.recordModel.setDataValue(index, editText.text, "defaultText")
+            //            nfcInfo.recordModel.setDataValue(index, editText.text, "currentText")
             //            console.log("QML: editText.text = " + editText.text)
-            //            console.log("QML: defaultText = " + defaultText)
+            //            console.log("QML: currentText = " + currentText)
         }
     }
 
@@ -191,9 +191,9 @@ Item {
                 // cursor position here, and restore it after the model has been changed.
                 var cachedCursorPosition = editText.cursorPosition;
     //            console.log("QML Delayed timer Caching cursor pos: " + cachedCursorPosition);
-    //            console.log("QML Delayed timer - setting value to model. New: " + editText.text + ", defaultText: "+ defaultText);
-                nfcInfo.recordModel.setDataValue(index, editText.text, "defaultText");
-    //            console.log("QML Delayed timer end. New: " + editText.text + ", defaultText: "+ defaultText);
+    //            console.log("QML Delayed timer - setting value to model. New: " + editText.text + ", currentText: "+ currentText);
+                nfcInfo.recordModel.setDataValue(index, editText.text, "currentText");
+    //            console.log("QML Delayed timer end. New: " + editText.text + ", currentText: "+ currentText);
     //            console.log("QML Delayed timer Restoring cursor pos: " + cachedCursorPosition + "(currently set to: " + editText.cursorPosition + ")");
                 editText.cursorPosition = cachedCursorPosition;
             }

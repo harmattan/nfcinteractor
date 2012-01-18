@@ -52,13 +52,13 @@ class NfcRecordItem : public QObject
 {
     Q_OBJECT
 
-    //Q_PROPERTY(QString defaultText READ defaultText WRITE setDefaultText NOTIFY dataChanged)
+    //Q_PROPERTY(QString currentText READ currentText WRITE setCurrentText NOTIFY dataChanged)
 public:
     enum RecordRoles {
         TitleRole = Qt::UserRole + 1,
         MessageTypeRole,
         RecordContentRole,
-        DefaultTextRole,
+        CurrentTextRole,
         SelectOptionsRole,
         SelectedOptionRole,
         RemoveVisibleRole,
@@ -68,8 +68,7 @@ public:
 
 public:
     NfcRecordItem(QObject* parent = 0) : QObject(parent) {}
-    //NfcRecordItem(const NfcRecordItem& other);
-    NfcRecordItem(const QString &title, NfcTypes::MessageType messageType, NfcTypes::RecordContent recordContent, const QString &defaultText, bool removeVisible, bool addVisible, int recordId, QObject* parent = 0);
+    NfcRecordItem(const QString &title, NfcTypes::MessageType messageType, NfcTypes::RecordContent recordContent, const QString &currentText, bool removeVisible, bool addVisible, int recordId, QObject* parent = 0);
 
 public:
     //QString id() const = 0;
@@ -89,8 +88,8 @@ public:
     Q_INVOKABLE int recordContentInt() const;
     void setRecordContent(const NfcTypes::RecordContent recordContent);
 
-    QString defaultText() const;
-    Q_INVOKABLE void setDefaultText(const QString& defaultText);
+    QString currentText() const;
+    Q_INVOKABLE void setCurrentText(const QString& currentText);
 
     QVariantList selectOptions() const;
     void setSelectOptions(const QVariantList selectOptions);
@@ -115,7 +114,7 @@ private:
     QString m_title;
     NfcTypes::MessageType m_messageType;
     NfcTypes::RecordContent m_recordContent;
-    QString m_defaultText;
+    QString m_currentText;
     QVariantList m_selectOptions;
     int m_selectedOption;
     bool m_removeVisible;

@@ -126,9 +126,6 @@ public:
     ~NfcInfo();
 
     void setImageCache(TagImageCache* tagImageCache);
-    /*! Store a pointer to the declarative view. Needed for raising the app to
-      the foreground on MeeGo in the autostart scenario when the app is already
-      active in the background. */
     void setDeclarativeView(QDeclarativeView& view);
 
 signals:

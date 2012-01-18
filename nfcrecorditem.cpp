@@ -41,13 +41,13 @@
 #include "nfcrecorditem.h"
 
 NfcRecordItem::NfcRecordItem(const QString& title, NfcTypes::MessageType messageType,
-                             NfcTypes::RecordContent recordContent, const QString& defaultText,
+                             NfcTypes::RecordContent recordContent, const QString& currentText,
                              bool removeVisible, bool addVisible, int recordId, QObject* parent) :
     QObject(parent),
     m_title(title),
     m_messageType(messageType),
     m_recordContent(recordContent),
-    m_defaultText(defaultText),
+    m_currentText(currentText),
     m_removeVisible(removeVisible),
     m_addVisible(addVisible),
     m_recordId(recordId)
@@ -59,7 +59,7 @@ NfcRecordItem::NfcRecordItem(const QString& title, NfcTypes::MessageType message
 //    m_title(other.title()),
 //    m_messageType(other.messageType()),
 //    m_recordContent(other.recordContent()),
-//    m_defaultText(other.defaultText()),
+//    m_currentText(other.currentText()),
 //    m_removeVisible(other.removeVisible()),
 //    m_addVisible(other.addVisible()),
 //    m_recordId(other.recordId())
@@ -74,7 +74,7 @@ QHash<int, QByteArray> NfcRecordItem::roleNames() const
     roles[TitleRole] = "title";
     roles[MessageTypeRole] = "messageType";
     roles[RecordContentRole] = "recordContent";
-    roles[DefaultTextRole] = "defaultText";
+    roles[CurrentTextRole] = "currentText";
     roles[SelectOptionsRole] = "selectOptions";
     roles[SelectedOptionRole] = "selectedOption";
     roles[RemoveVisibleRole] = "removeVisible";
@@ -95,8 +95,8 @@ QVariant NfcRecordItem::data(int role) const
     case RecordContentRole:
         return recordContent();
         break;
-    case DefaultTextRole:
-        return defaultText();
+    case CurrentTextRole:
+        return currentText();
         break;
     case SelectOptionsRole:
         return selectOptions();
@@ -141,8 +141,8 @@ void NfcRecordItem::setData(const QVariant& value, const int role)
     case RecordContentRole:
         setRecordContent((NfcTypes::RecordContent)value.toInt());
         break;
-    case DefaultTextRole:
-        setDefaultText(value.toString());
+    case CurrentTextRole:
+        setCurrentText(value.toString());
         break;
     case SelectOptionsRole:
         // Should work, but not tested
@@ -185,9 +185,9 @@ int NfcRecordItem::recordContentInt() const
     return (int)m_recordContent;
 }
 
-QString NfcRecordItem::defaultText() const
+QString NfcRecordItem::currentText() const
 {
-    return m_defaultText;
+    return m_currentText;
 }
 
 bool NfcRecordItem::removeVisible() const
@@ -231,11 +231,11 @@ void NfcRecordItem::setRecordContent(const NfcTypes::RecordContent recordContent
     }
 }
 
-void NfcRecordItem::setDefaultText(const QString &defaultText)
+void NfcRecordItem::setCurrentText(const QString &currentText)
 {
-    if (m_defaultText != defaultText) {
-        m_defaultText = defaultText;
-        qDebug() << "NfcRecordItem::setDefaultText: changed to: " << m_defaultText;
+    if (m_currentText != currentText) {
+        m_currentText = currentText;
+        //qDebug() << "NfcRecordItem::setCurrentText: changed to: " << m_currentText;
         emit dataChanged();
     }
 }

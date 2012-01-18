@@ -169,11 +169,11 @@ NdefNfcSpRecord* NfcModelToNdef::convertSpFromModel(const int startIndex, int& e
             curIndex ++;
             break; }
         case NfcTypes::RecordSpSize:
-            newRecord->setSize(curItem->defaultText().toUInt());
+            newRecord->setSize(curItem->currentText().toUInt());
             curIndex ++;
             break;
         case NfcTypes::RecordSpType:
-            newRecord->setMimeType(curItem->defaultText());
+            newRecord->setMimeType(curItem->currentText());
             curIndex ++;
             break;
         case NfcTypes::RecordImageFilename:
@@ -209,7 +209,7 @@ QNdefNfcUriRecord* NfcModelToNdef::convertUriFromModel(const int startIndex, int
     if (curIndex >= m_recordItems.size())
         return newRecord;
     NfcRecordItem* curItem = m_recordItems[curIndex];
-    newRecord->setUri(QUrl(curItem->defaultText()));
+    newRecord->setUri(QUrl(curItem->currentText()));
     endIndex = curIndex + 1;
     return newRecord;
 }
@@ -239,7 +239,7 @@ QNdefNfcTextRecord* NfcModelToNdef::convertTextFromModel(const int startIndex, i
             if (foundText) {
                 reachedRecordEnd = true;
             } else {
-                newRecord->setText(curItem->defaultText());
+                newRecord->setText(curItem->currentText());
                 foundText = true;
             }
             break;
@@ -247,7 +247,7 @@ QNdefNfcTextRecord* NfcModelToNdef::convertTextFromModel(const int startIndex, i
             if (foundLocale) {
                 reachedRecordEnd = true;
             } else {
-                newRecord->setLocale(curItem->defaultText());
+                newRecord->setLocale(curItem->currentText());
                 foundLocale = true;
             }
             break;
@@ -287,11 +287,11 @@ NdefNfcSmsRecord* NfcModelToNdef::convertSmsFromModel(const int startIndex, int&
             reachedRecordEnd = true;
             break;
         case NfcTypes::RecordPhoneNumber:
-            newRecord->setSmsNumber(curItem->defaultText());
+            newRecord->setSmsNumber(curItem->currentText());
             curIndex ++;
             break;
         case NfcTypes::RecordSmsBody:
-            newRecord->setSmsBody(curItem->defaultText());
+            newRecord->setSmsBody(curItem->currentText());
             curIndex ++;
             break;
         case NfcTypes::RecordText:
@@ -330,7 +330,7 @@ NdefNfcMimeVcardRecord* NfcModelToNdef::convertBusinessCardFromModel(const int s
 
     while (curIndex < m_recordItems.size()) {
         NfcRecordItem* curItem = m_recordItems[curIndex];
-        QString value = curItem->defaultText();
+        QString value = curItem->currentText();
         const NfcTypes::RecordContent contentType = curItem->recordContent();
         switch (contentType) {
 
@@ -502,7 +502,7 @@ NdefNfcSocialRecord *NfcModelToNdef::convertSocialNetworkFromModel(const int sta
             curIndex ++;
             break; }
         case NfcTypes::RecordSocialNetworkName:
-            newRecord->setSocialUserName(curItem->defaultText());
+            newRecord->setSocialUserName(curItem->currentText());
             curIndex ++;
             break;
         case NfcTypes::RecordText:
@@ -545,11 +545,11 @@ NdefNfcGeoRecord *NfcModelToNdef::convertGeoFromModel(const int startIndex, int 
             reachedRecordEnd = true;
             break;
         case NfcTypes::RecordGeoLatitude:
-            newRecord->setLatitude(curItem->defaultText().toDouble());
+            newRecord->setLatitude(curItem->currentText().toDouble());
             curIndex ++;
             break;
         case NfcTypes::RecordGeoLongitude:
-            newRecord->setLongitude(curItem->defaultText().toDouble());
+            newRecord->setLongitude(curItem->currentText().toDouble());
             curIndex ++;
             break;
         case NfcTypes::RecordText:
@@ -607,7 +607,7 @@ NdefNfcStoreLinkRecord *NfcModelToNdef::convertStoreFromModel(const int startInd
         case NfcTypes::RecordStoreiOS:
         case NfcTypes::RecordStoreBlackberry:
         case NfcTypes::RecordStoreCustomName:
-            newRecord->addAppId(appStoreFromRecordContentType(curItem->recordContent()), curItem->defaultText());
+            newRecord->addAppId(appStoreFromRecordContentType(curItem->recordContent()), curItem->currentText());
             curIndex ++;
             break;
         case NfcTypes::RecordText:
@@ -694,16 +694,16 @@ QNdefRecord *NfcModelToNdef::convertCustomFromModel(const int startIndex, int &e
             curIndex ++;
             break; }
         case NfcTypes::RecordTypeName: {
-            newRecord->setType(curItem->defaultText().toLatin1());
+            newRecord->setType(curItem->currentText().toLatin1());
             curIndex ++;
             break; }
         case NfcTypes::RecordRawPayload:
-            newRecord->setPayload(curItem->defaultText().toLatin1());
+            newRecord->setPayload(curItem->currentText().toLatin1());
             curIndex ++;
             isEmptyRecord = false;
             break;
         case NfcTypes::RecordId:
-            newRecord->setId(curItem->defaultText().toLatin1());
+            newRecord->setId(curItem->currentText().toLatin1());
             curIndex ++;
             isEmptyRecord = false;
             break;

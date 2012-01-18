@@ -203,7 +203,7 @@ bool NfcInfo::checkNfcStatus()
 }
 
 /*!
-  Set the image cache to use for storing images retrieved
+  \brief Set the image cache to use for storing images retrieved
   from tags.
   \a tagImageCache instance of the image cache. This
   class will not take ownership of the instance!
@@ -692,7 +692,8 @@ QString NfcInfo::convertTargetErrorToString(QNearFieldTarget::Error error)
     return errorString;
 }
 
-/*! \brief Store a pointer to the declarative view.
+/*!
+  \brief Store a pointer to the declarative view.
 
   Needed for raising the app to the foreground on MeeGo in the
   autostart scenario when the app is already active in the background.

@@ -82,8 +82,8 @@ public:
 
 public slots:
     void addCompleteRecordWithDefault(const int messageTypeInt);
-    void addRecord(const QString &title, const int messageType, const int recordContent, const QString &defaultText, const bool removeVisible, const bool addVisible, const int recordId);
-    void addRecord(const QString &title, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent recordContent, const QString &defaultText, const bool removeVisible, const bool addVisible, const int recordId);
+    void addRecord(const QString &title, const int messageType, const int recordContent, const QString &currentText, const bool removeVisible, const bool addVisible, const int recordId);
+    void addRecord(const QString &title, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent recordContent, const QString &currentText, const bool removeVisible, const bool addVisible, const int recordId);
     void addRecordItem(NfcRecordItem *newRecordItem);
 
     void insertRecordItem(const int row, NfcRecordItem *newRecordItem);

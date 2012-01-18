@@ -52,7 +52,7 @@ NfcRecordModel::NfcRecordModel(QObject *parent) :
 //    roles[TitleRole] = "title";
 //    roles[MessageTypeRole] = "messageType";
 //    roles[RecordContentRole] = "recordContent";
-//    roles[DefaultTextRole] = "defaultText";
+//    roles[CurrentTextRole] = "currentText";
 //    roles[RemoveVisibleRole] = "removeVisible";
 //    roles[AddVisibleRole] = "addVisible";
     NfcRecordItem* prototype = new NfcRecordItem(this);
@@ -93,8 +93,8 @@ QVariant NfcRecordModel::data(const QModelIndex &index, int role) const
 //        return recordItem.messageType();
 //    case RecordContentRole:
 //        return recordItem.recordContent();
-//    case DefaultTextRole:
-//        return recordItem.defaultText();
+//    case CurrentTextRole:
+//        return recordItem.currentText();
 //    case RemoveVisibleRole:
 //        return recordItem.removeVisible();
 //    case AddVisibleRole:
@@ -117,7 +117,7 @@ void NfcRecordModel::handleItemChange()
 {
     NfcRecordItem* item = static_cast<NfcRecordItem*>(sender());
     QModelIndex index = indexFromItem(item);
-    qDebug() << "NfcRecordModel::handleItemChange(): " << m_recordItems.at(index.row())->defaultText();
+    qDebug() << "NfcRecordModel::handleItemChange(): " << m_recordItems.at(index.row())->currentText();
     if(index.isValid()) {
         qDebug() << "NfcRecordModel::handleItemChange: emitting dataChanged signal";
         emit dataChanged(index, index);
@@ -125,14 +125,14 @@ void NfcRecordModel::handleItemChange()
     }
 }
 
-void NfcRecordModel::addRecord(const QString &title, const int messageType, const int recordContent, const QString &defaultText, const bool removeVisible, const bool addVisible, const int recordId)
+void NfcRecordModel::addRecord(const QString &title, const int messageType, const int recordContent, const QString &currentText, const bool removeVisible, const bool addVisible, const int recordId)
 {
-    addRecord(title, (NfcTypes::MessageType)messageType, (NfcTypes::RecordContent)recordContent, defaultText, removeVisible, addVisible, recordId);
+    addRecord(title, (NfcTypes::MessageType)messageType, (NfcTypes::RecordContent)recordContent, currentText, removeVisible, addVisible, recordId);
 }
 
-void NfcRecordModel::addRecord(const QString &title, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent recordContent, const QString &defaultText, const bool removeVisible, const bool addVisible, const int recordId)
+void NfcRecordModel::addRecord(const QString &title, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent recordContent, const QString &currentText, const bool removeVisible, const bool addVisible, const int recordId)
 {
-    NfcRecordItem* newRecordItem = new NfcRecordItem(title, messageType, recordContent, defaultText, removeVisible, addVisible, recordId, this);
+    NfcRecordItem* newRecordItem = new NfcRecordItem(title, messageType, recordContent, currentText, removeVisible, addVisible, recordId, this);
     addRecordItem(newRecordItem);
 }
 
@@ -235,21 +235,21 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
         addRecord("Custom Record", NfcTypes::MsgCustom, NfcTypes::RecordHeader, "", true, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeNameFormat, false,  recordId);
         simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeName, true,  recordId);
-        m_recordItems.last()->setDefaultText("nokia.com:nfcinteractor");
+        m_recordItems.last()->setCurrentText("nokia.com:nfcinteractor");
         addRecord("Smart Poster Record", NfcTypes::MsgSmartPoster, NfcTypes::RecordHeader, "", true, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordUri, false,  recordId);
-        m_recordItems.last()->setDefaultText("http://nfcinteractor.com");
+        m_recordItems.last()->setCurrentText("http://nfcinteractor.com");
         simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordText, true,  recordId);
-        m_recordItems.last()->setDefaultText("Download Nfc Interactor");
+        m_recordItems.last()->setCurrentText("Download Nfc Interactor");
         simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordTextLanguage, false,  recordId);
         // TODO: when app is in the store, change to store record
 //        addRecord("Store Record", NfcTypes::MsgStore, NfcTypes::RecordHeader, "", true, true, recordId);
 //        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordStoreMeeGoHarmattan, true, recordId);
-//        m_recordItems[m_recordItems.count()]->setDefaultText("");
+//        m_recordItems[m_recordItems.count()]->setCurrentText("");
 //        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordStoreSymbian, true, recordId);
-//        m_recordItems[m_recordItems.count()]->setDefaultText("");
+//        m_recordItems[m_recordItems.count()]->setCurrentText("");
 //        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordText, true,  recordId);
-//        m_recordItems.last()->setDefaultText("Download Nfc Interactor");
+//        m_recordItems.last()->setCurrentText("Download Nfc Interactor");
 //        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordTextLanguage, false,  recordId);
         break;
     }
@@ -258,7 +258,7 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
 
 bool NfcRecordModel::setData ( const QModelIndex & index, const QVariant & value, int role )
 {
-    qDebug() << "NfcRecordModel::setData()";
+    //qDebug() << "NfcRecordModel::setData()";
     if (index.isValid() && role == Qt::EditRole) {
         m_recordItems.at(index.row())->setData(value, role);
         //emit dataChanged(index, index);  //  Not needed, emitted by the item
@@ -270,13 +270,12 @@ bool NfcRecordModel::setData ( const QModelIndex & index, const QVariant & value
 void NfcRecordModel::setDataValue(int index, const QVariant &value, const QString &role)
 {
     //qDebug() << "NfcRecordModel::setDataValue (before): index = " << index << ", value = " << value << ", role = " << role;
-    //qDebug() << "Current text: " << m_recordItems.at(index)->defaultText();
+    //qDebug() << "Current text: " << m_recordItems.at(index)->currentText();
     if (index < 0 || index >= m_recordItems.size())
         return;
 
     m_recordItems.at(index)->setData(value, role);
-
-    //qDebug() << "NfcRecordModel::setDataValue (after): " << m_recordItems.at(index)->defaultText();
+    //qDebug() << "NfcRecordModel::setDataValue (after): " << m_recordItems.at(index)->currentText();
 }
 
 Qt::ItemFlags NfcRecordModel::flags ( const QModelIndex & index ) const
@@ -292,10 +291,10 @@ void NfcRecordModel::addContentToRecord(int recordIndex, int messageTypeInt, int
     if (recordIndex < 0 || recordIndex > m_recordItems.count())
         return;
 
-    qDebug() << "Add content to record";
+    //qDebug() << "Add content to record";
     // Search the end of the record, so that we can add the new info at the end
     const int parentRecordId = m_recordItems[recordIndex]->recordId();
-    qDebug() << "Parent record index: " << recordIndex << ", id: " << parentRecordId;
+    //qDebug() << "Parent record index: " << recordIndex << ", id: " << parentRecordId;
     const int insertPosition = lastRecordContentIndex(recordIndex);
     const NfcTypes::MessageType messageType = (NfcTypes::MessageType) messageTypeInt;
     const NfcTypes::RecordContent contentType = (NfcTypes::RecordContent) contentTypeInt;
