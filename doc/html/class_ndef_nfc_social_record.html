@@ -105,7 +105,7 @@ Inheritance diagram for NdefNfcSocialRecord:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>NfcSocialType</b> { <br/>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ndef_nfc_social_record.html#a677a99bcb017c2f0a942f0158fd039f3">NfcSocialType</a> { <br/>
 &#160;&#160;<b>Twitter</b> =  0, 
 <b>LinkedIn</b>, 
 <b>Facebook</b>, 
@@ -116,21 +116,62 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ndef_nfc_social_record.html#a12e43563ffc8985f6f6dcbf08c5aa84f">NdefNfcSocialRecord</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Create an empty Social record.  <a href="#a12e43563ffc8985f6f6dcbf08c5aa84f"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae16b8a601c079852aba2d5b1210d6d2a"></a><!-- doxytag: member="NdefNfcSocialRecord::socialUserName" ref="ae16b8a601c079852aba2d5b1210d6d2a" args="() const " -->
-QString&#160;</td><td class="memItemRight" valign="bottom"><b>socialUserName</b> () const </td></tr>
+QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ndef_nfc_social_record.html#ae16b8a601c079852aba2d5b1210d6d2a">socialUserName</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the user name / id of the social network. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afba6f65354510c374a7d9c0b61e62d67"></a><!-- doxytag: member="NdefNfcSocialRecord::setSocialUserName" ref="afba6f65354510c374a7d9c0b61e62d67" args="(const QString &amp;socialUserName)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setSocialUserName</b> (const QString &amp;socialUserName)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ndef_nfc_social_record.html#afba6f65354510c374a7d9c0b61e62d67">setSocialUserName</a> (const QString &amp;socialUserName)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the user name / id for the social network. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9d36a49271b05eb4ab5d354409ef6974"></a><!-- doxytag: member="NdefNfcSocialRecord::socialType" ref="a9d36a49271b05eb4ab5d354409ef6974" args="() const " -->
-NfcSocialType&#160;</td><td class="memItemRight" valign="bottom"><b>socialType</b> () const </td></tr>
+<a class="el" href="class_ndef_nfc_social_record.html#a677a99bcb017c2f0a942f0158fd039f3">NfcSocialType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ndef_nfc_social_record.html#a9d36a49271b05eb4ab5d354409ef6974">socialType</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the social network this class will create a link to. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afc890497bc5392621cc58e70b496a093"></a><!-- doxytag: member="NdefNfcSocialRecord::setSocialType" ref="afc890497bc5392621cc58e70b496a093" args="(const NfcSocialType socialType)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setSocialType</b> (const NfcSocialType socialType)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ndef_nfc_social_record.html#afc890497bc5392621cc58e70b496a093">setSocialType</a> (const <a class="el" href="class_ndef_nfc_social_record.html#a677a99bcb017c2f0a942f0158fd039f3">NfcSocialType</a> socialType)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the social network this class will create a link to. <br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Link to one of the supported social networks by simply selecting the network and specifying the username. </p>
 <p>Touching a tag written with this record type will take the user to the social network web site, where he can then for example start following you on Twitter.</p>
 <p>As this class is based on the Smart URI base class, the payload is formatted as a URI record initially. When first adding Smart Poster information (like a title), the payload instantly transforms into a Smart Poster.</p>
 <dl class="version"><dt><b>Version:</b></dt><dd>1.0.0 </dd></dl>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+</div><hr/><h2>Member Enumeration Documentation</h2>
+<a class="anchor" id="a677a99bcb017c2f0a942f0158fd039f3"></a><!-- doxytag: member="NdefNfcSocialRecord::NfcSocialType" ref="a677a99bcb017c2f0a942f0158fd039f3" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_ndef_nfc_social_record.html#a677a99bcb017c2f0a942f0158fd039f3">NdefNfcSocialRecord::NfcSocialType</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Social network this class will create a link to. </p>
+
+</div>
+</div>
+<hr/><h2>Constructor &amp; Destructor Documentation</h2>
+<a class="anchor" id="a12e43563ffc8985f6f6dcbf08c5aa84f"></a><!-- doxytag: member="NdefNfcSocialRecord::NdefNfcSocialRecord" ref="a12e43563ffc8985f6f6dcbf08c5aa84f" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">NdefNfcSocialRecord::NdefNfcSocialRecord </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Create an empty Social record. </p>
+<p>Default social network is Twitter. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="ndefnfcsocialrecord_8h_source.html">ndefnfcsocialrecord.h</a></li>
 <li>ndefnfcsocialrecord.cpp</li>
 </ul>
@@ -152,7 +193,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setSocialType</b> (co
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 18 2012 15:12:11 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 18 2012 16:01:21 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

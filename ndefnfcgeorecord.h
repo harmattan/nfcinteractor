@@ -100,6 +100,11 @@ public:
     NdefNfcGeoRecord(const QGeoCoordinate& geoCoordinate);
 
 public:
+    /*!
+      \brief The type of link to generate for the specified coordinates.
+
+      For more details on the different types, see the general class documentation.
+      */
     enum NfcGeoType {
         GeoUri = 0,
         NokiaMaps,

@@ -32,6 +32,7 @@ public:
     NdefNfcSocialRecord();
 
 public:
+    /*! Social network this class will create a link to. */
     enum NfcSocialType {
         Twitter = 0,
         LinkedIn,

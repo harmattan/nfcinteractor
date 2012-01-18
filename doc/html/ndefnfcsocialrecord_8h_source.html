@@ -94,33 +94,33 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00029"></a><a class="code" href="class_ndef_nfc_social_record.html">00029</a> <span class="keyword">class </span><a class="code" href="class_ndef_nfc_social_record.html" title="Link to one of the supported social networks by simply selecting the network and specifying the usern...">NdefNfcSocialRecord</a> : <span class="keyword">public</span> <a class="code" href="class_ndef_nfc_smart_uri_record.html" title="Smart class that uses the smallest possible NDEF record type for storing the requested information - ...">NdefNfcSmartUriRecord</a>
 <a name="l00030"></a>00030 {
 <a name="l00031"></a>00031 <span class="keyword">public</span>:
-<a name="l00032"></a>00032     <a class="code" href="class_ndef_nfc_social_record.html" title="Link to one of the supported social networks by simply selecting the network and specifying the usern...">NdefNfcSocialRecord</a>();
+<a name="l00032"></a>00032     <a class="code" href="class_ndef_nfc_social_record.html#a12e43563ffc8985f6f6dcbf08c5aa84f" title="Create an empty Social record.">NdefNfcSocialRecord</a>();
 <a name="l00033"></a>00033 
 <a name="l00034"></a>00034 <span class="keyword">public</span>:
-<a name="l00035"></a>00035     <span class="keyword">enum</span> NfcSocialType {
-<a name="l00036"></a>00036         Twitter = 0,
-<a name="l00037"></a>00037         LinkedIn,
-<a name="l00038"></a>00038         Facebook,
-<a name="l00039"></a>00039         Xing,
-<a name="l00040"></a>00040         VKontakte
-<a name="l00041"></a>00041     };
-<a name="l00042"></a>00042 
-<a name="l00043"></a>00043 <span class="keyword">public</span>:
-<a name="l00044"></a>00044     QString socialUserName() <span class="keyword">const</span>;
-<a name="l00045"></a>00045     <span class="keywordtype">void</span> setSocialUserName(<span class="keyword">const</span> QString&amp; socialUserName);
-<a name="l00046"></a>00046 
-<a name="l00047"></a>00047     NfcSocialType socialType() <span class="keyword">const</span>;
-<a name="l00048"></a>00048     <span class="keywordtype">void</span> setSocialType(<span class="keyword">const</span> NfcSocialType socialType);
-<a name="l00049"></a>00049 
-<a name="l00050"></a>00050 <span class="keyword">private</span>:
-<a name="l00051"></a>00051     <span class="keywordtype">void</span> updatePayload();
-<a name="l00052"></a>00052 
-<a name="l00053"></a>00053 <span class="keyword">private</span>:
-<a name="l00054"></a>00054     QString m_socialUserName;
-<a name="l00055"></a>00055     NfcSocialType m_socialType;
-<a name="l00056"></a>00056 };
-<a name="l00057"></a>00057 
-<a name="l00058"></a>00058 <span class="preprocessor">#endif // NDEFNFCSOCIALRECORD_H</span>
+<a name="l00036"></a><a class="code" href="class_ndef_nfc_social_record.html#a677a99bcb017c2f0a942f0158fd039f3">00036</a>     <span class="keyword">enum</span> <a class="code" href="class_ndef_nfc_social_record.html#a677a99bcb017c2f0a942f0158fd039f3">NfcSocialType</a> {
+<a name="l00037"></a>00037         Twitter = 0,
+<a name="l00038"></a>00038         LinkedIn,
+<a name="l00039"></a>00039         Facebook,
+<a name="l00040"></a>00040         Xing,
+<a name="l00041"></a>00041         VKontakte
+<a name="l00042"></a>00042     };
+<a name="l00043"></a>00043 
+<a name="l00044"></a>00044 <span class="keyword">public</span>:
+<a name="l00045"></a>00045     QString <a class="code" href="class_ndef_nfc_social_record.html#ae16b8a601c079852aba2d5b1210d6d2a" title="Get the user name / id of the social network.">socialUserName</a>() <span class="keyword">const</span>;
+<a name="l00046"></a>00046     <span class="keywordtype">void</span> <a class="code" href="class_ndef_nfc_social_record.html#afba6f65354510c374a7d9c0b61e62d67" title="Set the user name / id for the social network.">setSocialUserName</a>(<span class="keyword">const</span> QString&amp; <a class="code" href="class_ndef_nfc_social_record.html#ae16b8a601c079852aba2d5b1210d6d2a" title="Get the user name / id of the social network.">socialUserName</a>);
+<a name="l00047"></a>00047 
+<a name="l00048"></a>00048     <a class="code" href="class_ndef_nfc_social_record.html#a677a99bcb017c2f0a942f0158fd039f3">NfcSocialType</a> <a class="code" href="class_ndef_nfc_social_record.html#a9d36a49271b05eb4ab5d354409ef6974" title="Get the social network this class will create a link to.">socialType</a>() <span class="keyword">const</span>;
+<a name="l00049"></a>00049     <span class="keywordtype">void</span> <a class="code" href="class_ndef_nfc_social_record.html#afc890497bc5392621cc58e70b496a093" title="Set the social network this class will create a link to.">setSocialType</a>(<span class="keyword">const</span> <a class="code" href="class_ndef_nfc_social_record.html#a677a99bcb017c2f0a942f0158fd039f3">NfcSocialType</a> <a class="code" href="class_ndef_nfc_social_record.html#a9d36a49271b05eb4ab5d354409ef6974" title="Get the social network this class will create a link to.">socialType</a>);
+<a name="l00050"></a>00050 
+<a name="l00051"></a>00051 <span class="keyword">private</span>:
+<a name="l00052"></a>00052     <span class="keywordtype">void</span> updatePayload();
+<a name="l00053"></a>00053 
+<a name="l00054"></a>00054 <span class="keyword">private</span>:
+<a name="l00055"></a>00055     QString m_socialUserName;
+<a name="l00056"></a>00056     <a class="code" href="class_ndef_nfc_social_record.html#a677a99bcb017c2f0a942f0158fd039f3">NfcSocialType</a> m_socialType;
+<a name="l00057"></a>00057 };
+<a name="l00058"></a>00058 
+<a name="l00059"></a>00059 <span class="preprocessor">#endif // NDEFNFCSOCIALRECORD_H</span>
 </pre></div></div>
 </div>
 <!-- window showing the filter options -->
@@ -140,7 +140,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 18 2012 15:12:11 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 18 2012 16:01:20 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

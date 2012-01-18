@@ -40,6 +40,9 @@
 
 #include "ndefnfcgeorecord.h"
 
+/*!
+  \brief Create an empty Geo record.
+  */
 NdefNfcGeoRecord::NdefNfcGeoRecord()
     : NdefNfcSmartUriRecord(),
       m_geoType(GeoUri)
@@ -47,6 +50,10 @@ NdefNfcGeoRecord::NdefNfcGeoRecord()
     updatePayload();
 }
 
+/*!
+  \brief Create a Geo record based on the record passed
+  through the argument.
+  */
 NdefNfcGeoRecord::NdefNfcGeoRecord(const QGeoCoordinate &geoCoordinate)
     : NdefNfcSmartUriRecord(),
       m_geoType(GeoUri)
@@ -54,34 +61,60 @@ NdefNfcGeoRecord::NdefNfcGeoRecord(const QGeoCoordinate &geoCoordinate)
     setLocation(geoCoordinate);
 }
 
+/*!
+  \brief Get the current location / geo coordinate.
+  */
 QGeoCoordinate NdefNfcGeoRecord::location() const
 {
     return m_geoCoordinate;
 }
 
+/*!
+  \brief Set the location to the specified geo coordinate.
+  */
 void NdefNfcGeoRecord::setLocation(const QGeoCoordinate &geoCoordinate)
 {
     m_geoCoordinate = geoCoordinate;
     updatePayload();
 }
 
+/*!
+  \brief Set the latitude in decimal degrees; the value should be
+  in the WSG84 datum.
+
+  To be valid, the latitude must be between -90 to 90 inclusive.
+  (\see QGeoCoordinate::setLatitude())
+  */
 void NdefNfcGeoRecord::setLatitude(const double latitude)
 {
     m_geoCoordinate.setLatitude(latitude);
     updatePayload();
 }
 
+/*!
+  \brief Set the longitude in decimal degrees; the value should be
+  in the WSG84 datum.
+
+  To be valid, the longitude must be between -180 to 180 inclusive.
+  (\see QGeoCoordinate::setLongitude())
+  */
 void NdefNfcGeoRecord::setLongitude(const double longitude)
 {
     m_geoCoordinate.setLongitude(longitude);
     updatePayload();
 }
 
+/*!
+  \brief Get the current geo type.
+  */
 NdefNfcGeoRecord::NfcGeoType NdefNfcGeoRecord::geoType() const
 {
     return m_geoType;
 }
 
+/*!
+  \brief Change the geo type, updating the payload to the new type.
+  */
 void NdefNfcGeoRecord::setGeoType(const NdefNfcGeoRecord::NfcGeoType geoType)
 {
     if (m_geoType != geoType) {
@@ -92,6 +125,9 @@ void NdefNfcGeoRecord::setGeoType(const NdefNfcGeoRecord::NfcGeoType geoType)
     }
 }
 
+/*!
+  \brief Format the payload and set it through the Smart URI base class.
+  */
 void NdefNfcGeoRecord::updatePayload()
 {
     QUrl uri;

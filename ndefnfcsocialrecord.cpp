@@ -1,27 +1,44 @@
 #include "ndefnfcsocialrecord.h"
 
+/*!
+  \brief Create an empty Social record.
+
+  Default social network is Twitter.
+  */
 NdefNfcSocialRecord::NdefNfcSocialRecord()
     : NdefNfcSmartUriRecord(),
     m_socialType(Twitter)
 {
 }
 
+/*!
+  \brief Get the user name / id of the social network.
+  */
 QString NdefNfcSocialRecord::socialUserName() const
 {
     return m_socialUserName;
 }
 
+/*!
+  \brief Set the user name / id for the social network.
+  */
 void NdefNfcSocialRecord::setSocialUserName(const QString &socialUserName)
 {
     m_socialUserName = socialUserName;
     updatePayload();
 }
 
+/*!
+  \brief Get the social network this class will create a link to.
+  */
 NdefNfcSocialRecord::NfcSocialType NdefNfcSocialRecord::socialType() const
 {
     return m_socialType;
 }
 
+/*!
+  \brief Set the social network this class will create a link to.
+  */
 void NdefNfcSocialRecord::setSocialType(const NdefNfcSocialRecord::NfcSocialType socialType)
 {
     if (m_socialType != socialType) {
@@ -30,6 +47,9 @@ void NdefNfcSocialRecord::setSocialType(const NdefNfcSocialRecord::NfcSocialType
     }
 }
 
+/*!
+  \brief Format the payload and set it through the Smart URI base class.
+  */
 void NdefNfcSocialRecord::updatePayload()
 {
     QUrl uri;

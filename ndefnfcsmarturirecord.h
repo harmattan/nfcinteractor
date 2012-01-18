@@ -47,6 +47,9 @@
 
 QTM_USE_NAMESPACE
 
+#define SMARTURI_URI_RECORD_TYPE "U"
+#define SMARTURI_SP_RECORD_TYPE "Sp"
+
 /*!
   \brief Smart class that uses the smallest possible NDEF record type
   for storing the requested information - either a simple URI record,
