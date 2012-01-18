@@ -43,28 +43,23 @@
 NfcRecordModel::NfcRecordModel(QObject *parent) :
     QAbstractListModel(parent)
 {
-    // TODO: don't discard default role names (?)
-//    QHash roles = roleNames();
-//    roles.insert(FirstNameRole, QByteArray("firstName"));
-//    roles.insert(LastNameRole, QByteArray("lastName"));
-//    setRoleNames(roles);
-//    QHash<int, QByteArray> roles;
-//    roles[TitleRole] = "title";
-//    roles[MessageTypeRole] = "messageType";
-//    roles[RecordContentRole] = "recordContent";
-//    roles[CurrentTextRole] = "currentText";
-//    roles[RemoveVisibleRole] = "removeVisible";
-//    roles[AddVisibleRole] = "addVisible";
+    // Merge default role names (if existing) with own role names
     NfcRecordItem* prototype = new NfcRecordItem(this);
-    setRoleNames(prototype->roleNames());
+    QHash<int, QByteArray> ownRoleNames = prototype->roleNames();
+    QHash<int, QByteArray> defaultRoleNames = roleNames();
+
+    setRoleNames(defaultRoleNames.unite(ownRoleNames));
     delete prototype;
 
+    // Pass the list of record items to the Model->Ndef converter,
+    // however, the ownership of the items will still stay with
+    // the model of course.
     m_nfcModelToNdef = new NfcModelToNdef(m_recordItems, this);
 }
 
 NfcRecordModel::~NfcRecordModel()
 {
-    qDeleteAll(m_recordItems);  // Only required if we store pointers
+    qDeleteAll(m_recordItems);  // Required as we store pointers
     m_recordItems.clear();
 }
 

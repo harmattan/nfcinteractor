@@ -105,6 +105,7 @@ public:
     QHash<int, QByteArray> roleNames() const;
 
 public:
+    // Probably the Q_INVOKABLE isn't actually required anymore.
     Q_INVOKABLE QString title() const;
     void setTitle(const QString& title);
 
@@ -149,7 +150,7 @@ private:
     int m_recordId;
 };
 
-// TODO
+// ?
 //Q_DECLARE_METATYPE(NfcRecordItem)
 
 #endif // NFCRECORDITEM_H

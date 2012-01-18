@@ -58,29 +58,37 @@ void NfcNdefParser::setImageCache(TagImageCache *tagImageCache)
     m_imgCache = tagImageCache;
 }
 
+/*!
+  \brief Parse the NDEF \a message and return its contents in human-readable
+  textual format.
+  */
 QString NfcNdefParser::parseNdefMessage(const QNdefMessage &message)
 {
     if (message.isEmpty()) {
-        return "No records in the Ndef message";
+        return QString("No records in the Ndef message");
     }
 
+    // Total string that will contain the parsed contents.
     QString tagContents;
 
+    // Message size
     QByteArray rawMessage = message.toByteArray();
     const int msgSize = rawMessage.size();
     if (msgSize > 0) {
         tagContents.append("Message size: " + QString::number(msgSize) + " bytes\n");
     }
 
+    // Go through all records in the message
     const int recordCount = message.size();
     int numRecord = 1;
-    // Go through all records in the message
     foreach (const QNdefRecord &record, message)
     {
-        if (recordCount > 1)
-        {
+        if (recordCount > 1) {
+            // More than one record in the message?
+            // -> show which one we're parsing now.
             tagContents.append("Record " + QString::number(numRecord) + "/" + QString::number(recordCount) + "\n");
         }
+
         // Print generic information about the record
         tagContents.append("Type name: " + convertRecordTypeNameToString(record.typeNameFormat()) + "\n");
         tagContents.append("Record type: " + QString(record.type()) + " ");
@@ -133,7 +141,7 @@ QString NfcNdefParser::parseNdefMessage(const QNdefMessage &message)
         else
         {
             // ------------------------------------------------
-            // Record type not handled by this application
+            // Record type not parsed by this class
             tagContents.append("[Not parsed]\n");
         }
         numRecord++;
@@ -282,14 +290,17 @@ QString NfcNdefParser::parseSpRecord(const NdefNfcSpRecord& record)
 QString NfcNdefParser::parseImageRecord(const NdefNfcMimeImageRecord& record)
 {
     QString tagContents("[Image]\n");
+
     // Read image format (png, gif, jpg, etc.)
     QByteArray imgFormat = record.format();
     if (!imgFormat.isEmpty()) {
         tagContents.append("Format: " + imgFormat + "\n");
     }
+
     // Retrieve the image
     QImage img = record.image();
     if (!img.isNull()) {
+
         // Image size
         const QSize imgSize = img.size();
         tagContents.append("Width: " + QString::number(imgSize.width()) + ", height: " + QString::number(imgSize.height()));
@@ -351,10 +362,10 @@ QString NfcNdefParser::parseVcardRecord(NdefNfcMimeVcardRecord& record)
                     // Any other detail except the image:
                     // add the detail name and its contents to the description.
                     tagContents.append(detailName + ": ");
+
                     // We just add all values related to the detail converted to a string.
                     QVariantMap valueMap = curDetail.variantValues();
                     foreach (QVariant curValue, valueMap) {
-
                         tagContents.append(curValue.toString() + " ");
                     }
                     tagContents.append("\n");

@@ -62,12 +62,8 @@ public:
         NfcMemoryDynamic
     };
 
-    /*! Check if both the lock bits of the tag as well as the
-      capability container (CC) indicate that the tag is readable. */
     NearFieldTargetInfo::NfcTagAccessStatus combinedReadAccess() const;
 
-    /*! Check if both the lock bits of the tag as well as the
-      capability container (CC) indicate that the tag is writable. */
     NearFieldTargetInfo::NfcTagAccessStatus combinedWriteAccess() const;
 
 private:

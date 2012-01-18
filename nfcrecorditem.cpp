@@ -288,6 +288,6 @@ void NfcRecordItem::setSelectedOption(const int selectedOption)
         m_selectedOption = selectedOption;
         emit dataChanged();
     }
-    qDebug() << "Nfc Record Item - New selected option: " << m_selectedOption;
+    //qDebug() << "Nfc Record Item - New selected option: " << m_selectedOption;
 }
 

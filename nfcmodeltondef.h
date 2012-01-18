@@ -76,11 +76,9 @@
 class NfcModelToNdef : public QObject
 {
     Q_OBJECT
+
 public:
-    /*! Construct a new converter, based on the list of NfcRecordItems, as managed
-      by the NfcRecordModel. */
     explicit NfcModelToNdef(QList<NfcRecordItem*> &nfcRecordItems, QObject *parent = 0);
-    /*! Convert the current data in the record model to an NDEF message. */
     QNdefMessage * convertToNdefMessage();
 
 private:
@@ -96,9 +94,6 @@ private:
     NdefNfcStoreLinkRecord::AppStore appStoreFromRecordContentType(const NfcTypes::RecordContent contentType);
     QNdefRecord *convertCustomFromModel(const int startIndex, int &endIndex);
 
-signals:
-
-public slots:
 private:
     QList<NfcRecordItem*> &m_recordItems;    // Not owned by this class
 

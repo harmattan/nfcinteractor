@@ -40,6 +40,10 @@
 
 #include "nfcmodeltondef.h"
 
+/*!
+  \brief Construct a new converter, based on the list of NfcRecordItems, as managed
+  by the NfcRecordModel.
+  */
 NfcModelToNdef::NfcModelToNdef(QList<NfcRecordItem*> &nfcRecordItems, QObject *parent) :
     QObject(parent),
     m_recordItems(nfcRecordItems)
@@ -47,6 +51,9 @@ NfcModelToNdef::NfcModelToNdef(QList<NfcRecordItem*> &nfcRecordItems, QObject *p
 }
 
 
+/*!
+  \brief Convert the current data in the record model to an NDEF message.
+  */
 QNdefMessage* NfcModelToNdef::convertToNdefMessage()
 {
     QNdefMessage* ndefMessage = new QNdefMessage();
@@ -62,7 +69,9 @@ QNdefMessage* NfcModelToNdef::convertToNdefMessage()
         curRecordContent = curItem->recordContent();
         curMessageType = curItem->messageType();
 
-
+        // If we find a new record header, check the message type
+        // and convert this to a QNdefRecord, which is appended to the
+        // ndefMessage.
         if (curRecordContent == NfcTypes::RecordHeader) {
             // Starting a new Ndef Record
             int parseEndIndex = -1;
@@ -100,11 +109,13 @@ QNdefMessage* NfcModelToNdef::convertToNdefMessage()
                 ndefMessage->append(*convertCustomFromModel(curRecordIndex, parseEndIndex));
                 break;
             default:
-                // MsgAnnotatedUrl and MsgCombination are just templates to add multiple records
+                // MsgAnnotatedUrl, MsgCombination and a few others
+                // are just templates to add multiple records
                 // at once and don't exist as a type in the final model.
                 qDebug() << "Warning: don't know how to handle this message type in NfcModelToNdef::convertToNdefMessage().";
                 break;
             }
+
             if (parseEndIndex == curRecordIndex || parseEndIndex == -1) {
                 // Record wasn't parsed
                 // Skip it
@@ -557,8 +568,6 @@ NdefNfcGeoRecord *NfcModelToNdef::convertGeoFromModel(const int startIndex, int 
             newRecord->addTitle(*convertTextFromModel(curIndex, curIndex, false));
             break;
         case NfcTypes::RecordGeoType: {
-            //bool useGeoUri = (curItem->selectedOption() == 0);
-            //newRecord->setUseGeoUri(useGeoUri);
             NdefNfcGeoRecord::NfcGeoType geoType = (NdefNfcGeoRecord::NfcGeoType)curItem->selectedOption();
             newRecord->setGeoType(geoType);
             curIndex ++;

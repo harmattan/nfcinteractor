@@ -47,8 +47,9 @@ Easily reusable code for developers including:
 - Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2, Symbian only)
 
 Known bugs / issues (work-in-progress):
-- Selecting different Sp action on MeeGo doesn't get propagated to the model.
 - Complete source code comments
+- Toolbar in Simulator doesn't work (most likely images not found)
+- Change from Beta to Release Candidate
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)
