@@ -133,10 +133,6 @@ Item {
 
     // --------------------------------------------------------------------------------
     // Checkable options group
-//    CheckableGroup {
-//        id: selectGroup
-//        onSelectedValueChanged: delayModelChangeTimer.start();
-//    }
     ButtonColumn {
         id: row
         spacing: customPlatformStyle.paddingSmall
@@ -149,21 +145,19 @@ Item {
                   || recordContent === NfcTypes.RecordGeoType
                   || recordContent === NfcTypes.RecordTypeNameFormat
                   || recordContent === NfcTypes.RecordSocialNetworkType)
+        onCheckedButtonChanged: delayModelChangeTimer.start();
         Repeater {
             model: selectOptions
             RadioButton {
-                id: button1
+                //id: button1
                 text: modelData
                 checked: (index === selectedOption)
             }
         }
     }
     function getSelectedOptionIndex() {
-        // QML CheckableGroup unfortunately only has a function to get the value
-        // of the selected RadioButton, but not to get its index...
-        // TODO: Report
         for (var i = 0; i < selectOptions.length; i++) {
-            if (selectOptions[i] === selectGroup.selectedValue) {
+            if (selectOptions[i] === row.checkedButton.text) {
                 return i;
             }
         }
