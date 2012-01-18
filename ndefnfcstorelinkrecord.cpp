@@ -1,21 +1,76 @@
 #include "ndefnfcstorelinkrecord.h"
 
-NdefNfcStoreLinkRecord::NdefNfcStoreLinkRecord()
+/*!
+  \brief Create an empty App Store Link record.
+
+  Uses the web service hosted at nfcinteractor.com by default
+  for multi-store links. See terms and conditions at
+  nfcinteractor.com
+  */
+NdefNfcStoreLinkRecord::NdefNfcStoreLinkRecord() :
+    m_webServiceUrl(DEFAULT_STORELINK_WEBSERVICE_URL)
 {
     updatePayload();
 }
 
+/*!
+  \brief Create an empty App Store Link record, using the specified
+  web service for multi-store links.
+  */
+NdefNfcStoreLinkRecord::NdefNfcStoreLinkRecord(const QUrl &webServiceUrl) :
+    m_webServiceUrl(webServiceUrl)
+{
+    updatePayload();
+}
+
+/*!
+  \brief Get the current web service URL.
+
+  By default, the web service hosted at nfcinteractor.com is used.
+  See terms and conditions at nfcinteractor.com
+  */
+QUrl NdefNfcStoreLinkRecord::webServiceUrl() const
+{
+    return m_webServiceUrl;
+}
+
+/*!
+  \brief Set the web service URL.
+
+  The parameter should contain the complete URL. The script will then
+  add the corresponding parameters to the URL.
+  */
+void NdefNfcStoreLinkRecord::setWebServiceUrl(const QUrl &webServiceUrl)
+{
+    m_webServiceUrl = webServiceUrl;
+    updatePayload();
+}
+
+/*!
+  \brief Add an app id for a specified app store.
+
+  If you only add a single app id, the class will generate
+  a direct store link. If you add more than one app store,
+  it will by default use the nfcinteractor.com web service.
+  */
 void NdefNfcStoreLinkRecord::addAppId(const NdefNfcStoreLinkRecord::AppStore appStore, const QString &appId)
 {
     m_appIds.insert(appStore, appId);
     updatePayload();
 }
 
+/*!
+  \brief Retrieve the app id for the specified app store, if it has
+  already been set.
+  */
 QString NdefNfcStoreLinkRecord::appId(NdefNfcStoreLinkRecord::AppStore appStore) const
 {
     return m_appIds.value(appStore);
 }
 
+/*!
+  \brief Format the payload and set it through the Smart URI base class.
+  */
 void NdefNfcStoreLinkRecord::updatePayload()
 {
     QUrl tagStoreUri;
@@ -50,6 +105,9 @@ void NdefNfcStoreLinkRecord::updatePayload()
     NdefNfcSmartUriRecord::setUri(tagStoreUri);
 }
 
+/*!
+  \brief Generate a direct link to the specified app store, using the specified UID.
+  */
 QUrl NdefNfcStoreLinkRecord::generateStoreLink(const NdefNfcStoreLinkRecord::AppStore appStore, const QString& appId)
 {
     QUrl link;
@@ -79,6 +137,10 @@ QUrl NdefNfcStoreLinkRecord::generateStoreLink(const NdefNfcStoreLinkRecord::App
     return link;
 }
 
+/*!
+  \brief Create a multi-store link for all defined app stores, using the
+  web service.
+  */
 QUrl NdefNfcStoreLinkRecord::generateMultiStoreLink()
 {
     QUrl link("http://nfcinteractor.com/dl.php");
@@ -91,6 +153,13 @@ QUrl NdefNfcStoreLinkRecord::generateMultiStoreLink()
     return link;
 }
 
+/*!
+  \brief Get the character used to abbreviate the app store for the web service.
+
+  The web service adds the content IDs for the different platforms as GET parameters
+  to the URL. The character used for the parameters can be retrieved using this method
+  for the specified app store.
+  */
 QString NdefNfcStoreLinkRecord::getWebCharForAppStore(const NdefNfcStoreLinkRecord::AppStore appStore) {
     switch (appStore) {
     case StoreNokia:

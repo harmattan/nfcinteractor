@@ -11,6 +11,8 @@
 
 QTM_USE_NAMESPACE
 
+#define DEFAULT_STORELINK_WEBSERVICE_URL "http://nfcinteractor.com/dl.php"
+
 /*!
   \brief Create an app store link to download the app, either direct
   or for multiple stores using the nfcinteractor.com web service.
@@ -36,7 +38,9 @@ QTM_USE_NAMESPACE
   The web service also supports specifying a name instead of passing
   different IDs, to make further maintenance easier (StoreCustomName).
   See the instructions at nfcinteractor.com how to host the service, in
-  order to add your own names to the script.
+  order to add your own names to the script. You can change the URL
+  of the webservice using setWebServiceUrl() or during construction
+  of the class.
 
   As this class is based on the Smart URI base class, the
   payload is formatted as a URI record initially. When first
@@ -49,6 +53,7 @@ class NdefNfcStoreLinkRecord : public NdefNfcSmartUriRecord
 {
 public:
     NdefNfcStoreLinkRecord();
+    NdefNfcStoreLinkRecord(const QUrl& webServiceUrl);
 
 public:
     /*! Which app store to link to. */
@@ -65,13 +70,9 @@ public:
     };
 
 public:
-    /*! Add an app id for a specified app store. If you only add
-      a single app id, the class will generate a direct store link.
-      If you add more than one app store, it will by default use
-      the nfcinteractor.com web service. */
+    QUrl webServiceUrl() const;
+    void setWebServiceUrl(const QUrl& webServiceUrl);
     void addAppId(const AppStore appStore, const QString& appId);
-    /*! Retrieve the app id for the specified app store, if it has
-      already been set. */
     QString appId(AppStore appStore) const;
 
 private:
@@ -81,6 +82,7 @@ private:
     QString getWebCharForAppStore(const NdefNfcStoreLinkRecord::AppStore appStore);
 
 private:
+    QUrl m_webServiceUrl;
     QHash<AppStore,QString> m_appIds;
 };
 
