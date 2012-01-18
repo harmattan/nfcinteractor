@@ -42,6 +42,9 @@
 
 #include <QDebug>
 
+/*!
+  \brief Stores additional information about a QNearFieldTarget.
+  */
 class NearFieldTargetInfo
 {
 public:

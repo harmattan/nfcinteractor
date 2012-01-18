@@ -70,13 +70,17 @@
 #include <QContactNote>
 #include <QContactBirthday>
 
-
+/*!
+  \brief Builds an NDEF message based on the data stored in the NfcRecordModel.
+  */
 class NfcModelToNdef : public QObject
 {
     Q_OBJECT
 public:
+    /*! Construct a new converter, based on the list of NfcRecordItems, as managed
+      by the NfcRecordModel. */
     explicit NfcModelToNdef(QList<NfcRecordItem*> &nfcRecordItems, QObject *parent = 0);
-
+    /*! Convert the current data in the record model to an NDEF message. */
     QNdefMessage * convertToNdefMessage();
 
 private:
@@ -96,7 +100,7 @@ signals:
 
 public slots:
 private:
-    QList<NfcRecordItem*> &recordItems;    // Not owned by this class
+    QList<NfcRecordItem*> &m_recordItems;    // Not owned by this class
 
 };
 

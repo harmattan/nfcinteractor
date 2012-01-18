@@ -86,6 +86,11 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div>
 <div class="contents">
 <!-- doxytag: class="NfcNdefParser" -->
+<p>Parse the contents of an NDEF message and return the contents of known records in human-readable textual form.  
+ <a href="class_nfc_ndef_parser.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="nfcndefparser_8h_source.html">nfcndefparser.h</a>&gt;</code></p>
+
 <p><a href="class_nfc_ndef_parser-members.html">List of all members.</a></p>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="signals"></a>
@@ -99,7 +104,10 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9baa416b8e93dabcc40cb638d6eedf76"></a><!-- doxytag: member="NfcNdefParser::parseNdefMessage" ref="a9baa416b8e93dabcc40cb638d6eedf76" args="(const QNdefMessage &amp;message)" -->
 QString&#160;</td><td class="memItemRight" valign="bottom"><b>parseNdefMessage</b> (const QNdefMessage &amp;message)</td></tr>
 </table>
-<hr/><h2>Member Function Documentation</h2>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>Parse the contents of an NDEF message and return the contents of known records in human-readable textual form. </p>
+<p>The output contains information about all the records contained in the message. More details are reported for records of type: Uri, Text, Smart Poster, Image and Mime/vCard. </p>
+</div><hr/><h2>Member Function Documentation</h2>
 <a class="anchor" id="a921e03d815898443d25805db363f2943"></a><!-- doxytag: member="NfcNdefParser::nfcTagImage" ref="a921e03d815898443d25805db363f2943" args="(const int nfcImgId)" -->
 <div class="memitem">
 <div class="memproto">
@@ -146,7 +154,7 @@ QString&#160;</td><td class="memItemRight" valign="bottom"><b>parseNdefMessage</
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Properties</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -158,7 +166,7 @@ QString&#160;</td><td class="memItemRight" valign="bottom"><b>parseNdefMessage</
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 17 2012 18:57:34 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 18 2012 11:51:59 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

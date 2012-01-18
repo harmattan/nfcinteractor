@@ -77,7 +77,7 @@ bool NfcInfo::initAndStartNfc()
 {
     if (m_nfcRecordModel->size() == 0) {
         nfcRecordModelChanged();
-        // Populate write view with items (for development, TODO: comment out for release)
+        // Populate write view with items (for development time only, comment out for release)
 //        nfcRecordModel->addRecordItem(new NfcRecordItem("Smart Poster", NfcTypes::MsgSmartPoster, NfcTypes::RecordHeader, "", true, true, 1));
 //        nfcRecordModel->addRecordItem(new NfcRecordItem("URI", NfcTypes::MsgSmartPoster, NfcTypes::RecordUri, "http://www.nokia.com/", false, false, 1));
     }
@@ -123,13 +123,23 @@ bool NfcInfo::initAndStartNfc()
     m_currentActivity = NfcIdle;
 }
 
-
+/*!
+  \brief Get a pointer to the NfcRecordModel instance used by this class.
+*/
 NfcRecordModel * NfcInfo::recordModel() const
 {
     return m_nfcRecordModel;
 }
 
+/*!
+  \brief Slot to be called whenever the contents of the record model changed,
+  so that the contents can be converted to an NDEF message to see if the
+  resulting size changed.
 
+  If the NDEF message size does change, the method will emit the
+  storedMessageSizeChanged signal, passing the byte-size of the message as
+  parameter.
+  */
 void NfcInfo::nfcRecordModelChanged()
 {
     // Calculate new message size
@@ -274,7 +284,15 @@ void NfcInfo::targetDetected(QNearFieldTarget *target)
 
 }
 
+/*!
+  \brief Slot needed for the registerNdefMessageHandler() method.
 
+  This isn't used by the app directly, as it reads NDEF messages through the
+  two-step process of first detecting targets, and then reading the messages.
+  However, for registering an app for autostart on nfc tag touch, Qt Mobility
+  requires to also use the registerNdefMessageHandler() handler, as this
+  slot will get called when the app has been autostarted through a tag.
+  */
 void NfcInfo::targetMessageDetected(const QNdefMessage &message, QNearFieldTarget* target)
 {
     // TODO: When this method is called through autostart, it seems to crash the app
@@ -346,6 +364,9 @@ bool NfcInfo::nfcWriteTag(const bool writeOneTagOnly)
     return writeCachedNdefMessage();
 }
 
+/*!
+  \brief Stop waiting to write a tag, and switch back to reading mode.
+  */
 void NfcInfo::nfcStopWritingTags()
 {
     m_pendingWriteNdef = false;
@@ -401,6 +422,14 @@ bool NfcInfo::writeCachedNdefMessage()
     return success;
 }
 
+/*!
+  \brief This method should be called by the code of this class whenever the
+  app is starting interaction with a tag.
+
+  This also emits the nfcStartingTagInteraction() signal, so that the UI
+  can for example show a busy animation, informing the user that he should
+  keep the phone close to the tag until tag interaction is finished.
+  */
 void NfcInfo::startedTagInteraction() {
     if (!m_nfcTagInteractionActive) {
         m_nfcTagInteractionActive = true;
@@ -409,6 +438,14 @@ void NfcInfo::startedTagInteraction() {
     }
 }
 
+/*!
+  \brief This method should be called by the code of this class whenever the
+  app is stopping interaction with a tag.
+
+  This also emits the nfcStoppedTagInteraction() signal, so that the UI
+  can for example stop the busy animation, informing the user that it's now
+  safe to remove the phone from the tag again.
+  */
 void NfcInfo::stoppedTagInteraction() {
     if (m_nfcTagInteractionActive) {
         m_nfcTagInteractionActive = false;
@@ -655,6 +692,11 @@ QString NfcInfo::convertTargetErrorToString(QNearFieldTarget::Error error)
     return errorString;
 }
 
+/*! \brief Store a pointer to the declarative view.
+
+  Needed for raising the app to the foreground on MeeGo in the
+  autostart scenario when the app is already active in the background.
+  */
 void NfcInfo::setDeclarativeView(QDeclarativeView& view)
 {
     m_declarativeView = &view;

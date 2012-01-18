@@ -122,45 +122,45 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00042"></a>00042 <span class="preprocessor"></span>
 <a name="l00043"></a>00043 <span class="preprocessor">#include &lt;QDebug&gt;</span>
 <a name="l00044"></a>00044 
-<a name="l00045"></a><a class="code" href="class_near_field_target_info.html">00045</a> <span class="keyword">class </span><a class="code" href="class_near_field_target_info.html">NearFieldTargetInfo</a>
-<a name="l00046"></a>00046 {
-<a name="l00047"></a>00047 <span class="keyword">public</span>:
-<a name="l00048"></a>00048     <a class="code" href="class_near_field_target_info.html">NearFieldTargetInfo</a>();
-<a name="l00049"></a>00049     <span class="keywordtype">void</span> resetInfo();
-<a name="l00050"></a>00050 
-<a name="l00051"></a>00051     <span class="keyword">enum</span> NfcTagAccessStatus {
-<a name="l00052"></a>00052         NfcAccessUnknown,
-<a name="l00053"></a>00053         NfcAccessAllowed,
-<a name="l00054"></a>00054         NfcAccessForbidden
-<a name="l00055"></a>00055     };
-<a name="l00056"></a>00056     <span class="keyword">enum</span> NfcTagMemoryType {
-<a name="l00057"></a>00057         NfcMemoryUnknown,
-<a name="l00058"></a>00058         NfcMemoryStatic,
-<a name="l00059"></a>00059         NfcMemoryDynamic
-<a name="l00060"></a>00060     };
-<a name="l00061"></a>00061 
-<a name="l00064"></a>00064     NearFieldTargetInfo::NfcTagAccessStatus <a class="code" href="class_near_field_target_info.html#a068168d709b463a6ca35c2bb2d89a566">combinedReadAccess</a>() <span class="keyword">const</span>;
-<a name="l00065"></a>00065 
-<a name="l00068"></a>00068     NearFieldTargetInfo::NfcTagAccessStatus <a class="code" href="class_near_field_target_info.html#a5e4a5aac162f16c858bbafc44d9a849e">combinedWriteAccess</a>() <span class="keyword">const</span>;
-<a name="l00069"></a>00069 
-<a name="l00070"></a>00070 <span class="keyword">private</span>:
-<a name="l00071"></a>00071     NearFieldTargetInfo::NfcTagAccessStatus combineAccess(<span class="keyword">const</span> NfcTagAccessStatus accessCC, <span class="keyword">const</span> NfcTagAccessStatus accessLockBits) <span class="keyword">const</span>;
+<a name="l00048"></a><a class="code" href="class_near_field_target_info.html">00048</a> <span class="keyword">class </span><a class="code" href="class_near_field_target_info.html" title="Stores additional information about a QNearFieldTarget.">NearFieldTargetInfo</a>
+<a name="l00049"></a>00049 {
+<a name="l00050"></a>00050 <span class="keyword">public</span>:
+<a name="l00051"></a>00051     <a class="code" href="class_near_field_target_info.html" title="Stores additional information about a QNearFieldTarget.">NearFieldTargetInfo</a>();
+<a name="l00052"></a>00052     <span class="keywordtype">void</span> resetInfo();
+<a name="l00053"></a>00053 
+<a name="l00054"></a>00054     <span class="keyword">enum</span> NfcTagAccessStatus {
+<a name="l00055"></a>00055         NfcAccessUnknown,
+<a name="l00056"></a>00056         NfcAccessAllowed,
+<a name="l00057"></a>00057         NfcAccessForbidden
+<a name="l00058"></a>00058     };
+<a name="l00059"></a>00059     <span class="keyword">enum</span> NfcTagMemoryType {
+<a name="l00060"></a>00060         NfcMemoryUnknown,
+<a name="l00061"></a>00061         NfcMemoryStatic,
+<a name="l00062"></a>00062         NfcMemoryDynamic
+<a name="l00063"></a>00063     };
+<a name="l00064"></a>00064 
+<a name="l00067"></a>00067     NearFieldTargetInfo::NfcTagAccessStatus <a class="code" href="class_near_field_target_info.html#a068168d709b463a6ca35c2bb2d89a566">combinedReadAccess</a>() <span class="keyword">const</span>;
+<a name="l00068"></a>00068 
+<a name="l00071"></a>00071     NearFieldTargetInfo::NfcTagAccessStatus <a class="code" href="class_near_field_target_info.html#a5e4a5aac162f16c858bbafc44d9a849e">combinedWriteAccess</a>() <span class="keyword">const</span>;
 <a name="l00072"></a>00072 
-<a name="l00073"></a>00073 <span class="keyword">public</span>:
-<a name="l00074"></a>00074 
-<a name="l00075"></a>00075     <span class="keywordtype">int</span> tagMajorVersion;
-<a name="l00076"></a>00076     <span class="keywordtype">int</span> tagMinorVersion;
-<a name="l00077"></a>00077     <span class="keywordtype">int</span> tagMemorySize;
-<a name="l00078"></a>00078     <span class="keywordtype">int</span> tagWritableSize;
-<a name="l00079"></a>00079     NfcTagAccessStatus tagReadAccessCC;
-<a name="l00080"></a>00080     NfcTagAccessStatus tagWriteAccessCC;
-<a name="l00081"></a>00081     NfcTagAccessStatus tagReadAccessLockBits;
-<a name="l00082"></a>00082     NfcTagAccessStatus tagWriteAccessLockBits;
-<a name="l00083"></a>00083     NfcTagMemoryType tagMemoryType;
-<a name="l00084"></a>00084 };
-<a name="l00085"></a>00085 
-<a name="l00086"></a>00086 
-<a name="l00087"></a>00087 <span class="preprocessor">#endif // NEARFIELDTARGETINFO_H</span>
+<a name="l00073"></a>00073 <span class="keyword">private</span>:
+<a name="l00074"></a>00074     NearFieldTargetInfo::NfcTagAccessStatus combineAccess(<span class="keyword">const</span> NfcTagAccessStatus accessCC, <span class="keyword">const</span> NfcTagAccessStatus accessLockBits) <span class="keyword">const</span>;
+<a name="l00075"></a>00075 
+<a name="l00076"></a>00076 <span class="keyword">public</span>:
+<a name="l00077"></a>00077 
+<a name="l00078"></a>00078     <span class="keywordtype">int</span> tagMajorVersion;
+<a name="l00079"></a>00079     <span class="keywordtype">int</span> tagMinorVersion;
+<a name="l00080"></a>00080     <span class="keywordtype">int</span> tagMemorySize;
+<a name="l00081"></a>00081     <span class="keywordtype">int</span> tagWritableSize;
+<a name="l00082"></a>00082     NfcTagAccessStatus tagReadAccessCC;
+<a name="l00083"></a>00083     NfcTagAccessStatus tagWriteAccessCC;
+<a name="l00084"></a>00084     NfcTagAccessStatus tagReadAccessLockBits;
+<a name="l00085"></a>00085     NfcTagAccessStatus tagWriteAccessLockBits;
+<a name="l00086"></a>00086     NfcTagMemoryType tagMemoryType;
+<a name="l00087"></a>00087 };
+<a name="l00088"></a>00088 
+<a name="l00089"></a>00089 
+<a name="l00090"></a>00090 <span class="preprocessor">#endif // NEARFIELDTARGETINFO_H</span>
 </pre></div></div>
 </div>
 <!-- window showing the filter options -->
@@ -168,7 +168,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Properties</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -180,7 +180,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 17 2012 18:57:33 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 18 2012 11:51:58 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

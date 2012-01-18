@@ -105,6 +105,7 @@ class NfcInfo : public QObject
     Q_OBJECT
     Q_PROPERTY(NfcRecordModel* recordModel READ recordModel NOTIFY recordModelChanged)
 
+    /*! Current request type / status of the Nfc Interface. */
     enum NfcRequestStatus {
         NfcUninitialized,
         NfcIdle,
@@ -112,6 +113,8 @@ class NfcInfo : public QObject
         NfcNdefWriting,
         NfcTargetAnalysis
     };
+    /*! Reporting level, affects mainly the amount of status updates sent as signals,
+      as well some debug output on the console. */
     enum ReportingLevel {
         DebugReporting,
         FullReporting,
@@ -123,6 +126,9 @@ public:
     ~NfcInfo();
 
     void setImageCache(TagImageCache* tagImageCache);
+    /*! Store a pointer to the declarative view. Needed for raising the app to
+      the foreground on MeeGo in the autostart scenario when the app is already
+      active in the background. */
     void setDeclarativeView(QDeclarativeView& view);
 
 signals:
@@ -152,9 +158,10 @@ signals:
     void nfcTagWriteError(const QString& nfcTagError);
     /*! Switched to a different operation mode. Using int for better compatibility to QML. */
     void nfcModeChanged(const int nfcNewMode);
-
+    /*! The byte-size of the NDEF message resulting from the current NfcRecordModel changed. */
     void storedMessageSizeChanged(const int ndefMessageSize);
-
+    /*! Signal when the record model has changed,
+      needed for the NOTIFY part of the property of this class. */
     void recordModelChanged();
 public slots:
     bool checkNfcStatus();

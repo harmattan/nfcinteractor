@@ -65,6 +65,14 @@
 
 QTM_USE_NAMESPACE
 
+/*!
+  \brief Parse the contents of an NDEF message and return the contents
+  of known records in human-readable textual form.
+
+  The output contains information about all the records contained
+  in the message. More details are reported for records of type:
+  Uri, Text, Smart Poster, Image and Mime/vCard.
+  */
 class NfcNdefParser : public QObject
 {
     Q_OBJECT

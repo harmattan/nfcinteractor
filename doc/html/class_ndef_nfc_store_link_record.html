@@ -85,7 +85,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">NdefNfcStoreLinkRecord Class Reference</div>  </div>
 </div>
 <div class="contents">
-<!-- doxytag: class="NdefNfcStoreLinkRecord" --><!-- doxytag: inherits="NdefNfcSmartUriRecord" --><div class="dynheader">
+<!-- doxytag: class="NdefNfcStoreLinkRecord" --><!-- doxytag: inherits="NdefNfcSmartUriRecord" -->
+<p>Create an app store link to download the app, either direct or for multiple stores using the nfcinteractor.com web service.  
+ <a href="class_ndef_nfc_store_link_record.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="ndefnfcstorelinkrecord_8h_source.html">ndefnfcstorelinkrecord.h</a>&gt;</code></p>
+<div class="dynheader">
 Inheritance diagram for NdefNfcStoreLinkRecord:</div>
 <div class="dyncontent">
  <div class="center">
@@ -100,7 +105,7 @@ Inheritance diagram for NdefNfcStoreLinkRecord:</div>
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><b>AppStore</b> { <br/>
+<tr><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ndef_nfc_store_link_record.html#a860405a03d4ce60fd624c7b0a87f509e">AppStore</a> { <br/>
 &#160;&#160;<b>StoreNokia</b> =  0, 
 <b>StoreSymbian</b>, 
 <b>StoreMeeGoHarmattan</b>, 
@@ -116,11 +121,79 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6caa684ab9b06bf96e35b82d0325864f"></a><!-- doxytag: member="NdefNfcStoreLinkRecord::addAppId" ref="a6caa684ab9b06bf96e35b82d0325864f" args="(const AppStore appStore, const QString &amp;appId)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>addAppId</b> (const AppStore appStore, const QString &amp;appId)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="afcf1e422961b1bd38a59500fb2a78af4"></a><!-- doxytag: member="NdefNfcStoreLinkRecord::appId" ref="afcf1e422961b1bd38a59500fb2a78af4" args="(AppStore appStore) const " -->
-QString&#160;</td><td class="memItemRight" valign="bottom"><b>appId</b> (AppStore appStore) const </td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ndef_nfc_store_link_record.html#a6caa684ab9b06bf96e35b82d0325864f">addAppId</a> (const <a class="el" href="class_ndef_nfc_store_link_record.html#a860405a03d4ce60fd624c7b0a87f509e">AppStore</a> appStore, const QString &amp;appId)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ndef_nfc_store_link_record.html#afcf1e422961b1bd38a59500fb2a78af4">appId</a> (<a class="el" href="class_ndef_nfc_store_link_record.html#a860405a03d4ce60fd624c7b0a87f509e">AppStore</a> appStore) const </td></tr>
 </table>
+<hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
+<div class="textblock"><p>Create an app store link to download the app, either direct or for multiple stores using the nfcinteractor.com web service. </p>
+<p>Tags to download an app are useful in many cases, either as the sole record on a tag, or in combination with a custom record in a single NDEF message. This would then allow your app to auto-start when already installed on the phone (through the custom record your app is registered for), or if the app isn't installed, the phone will ignore the record and instead parse this store record and send the user to download the app.</p>
+<p>IF you only add the app ID for a single app store, the class will write the direct store link to the tag. This causes some phones to directly open the store (e.g., on the Nokia N9).</p>
+<p>If you want your tag to work for multiple platforms, you can use the web service at nfcinteractor.com to pass multiple ids for different platforms. The web service will then detect the operating system of the phone, and redirect it to the correct app store link.</p>
+<p>The web service also supports specifying a name instead of passing different IDs, to make further maintenance easier (StoreCustomName). See the instructions at nfcinteractor.com how to host the service, in order to add your own names to the script.</p>
+<p>As this class is based on the Smart URI base class, the payload is formatted as a URI record initially. When first adding Smart Poster information (like a title), the payload instantly transforms into a Smart Poster.</p>
+<dl class="version"><dt><b>Version:</b></dt><dd>1.0.0 </dd></dl>
+</div><hr/><h2>Member Enumeration Documentation</h2>
+<a class="anchor" id="a860405a03d4ce60fd624c7b0a87f509e"></a><!-- doxytag: member="NdefNfcStoreLinkRecord::AppStore" ref="a860405a03d4ce60fd624c7b0a87f509e" args="" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="class_ndef_nfc_store_link_record.html#a860405a03d4ce60fd624c7b0a87f509e">NdefNfcStoreLinkRecord::AppStore</a></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Which app store to link to. </p>
+
+</div>
+</div>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="a6caa684ab9b06bf96e35b82d0325864f"></a><!-- doxytag: member="NdefNfcStoreLinkRecord::addAppId" ref="a6caa684ab9b06bf96e35b82d0325864f" args="(const AppStore appStore, const QString &amp;appId)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void NdefNfcStoreLinkRecord::addAppId </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="class_ndef_nfc_store_link_record.html#a860405a03d4ce60fd624c7b0a87f509e">AppStore</a>&#160;</td>
+          <td class="paramname"><em>appStore</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>appId</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Add an app id for a specified app store. If you only add a single app id, the class will generate a direct store link. If you add more than one app store, it will by default use the nfcinteractor.com web service. </p>
+
+</div>
+</div>
+<a class="anchor" id="afcf1e422961b1bd38a59500fb2a78af4"></a><!-- doxytag: member="NdefNfcStoreLinkRecord::appId" ref="afcf1e422961b1bd38a59500fb2a78af4" args="(AppStore appStore) const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString NdefNfcStoreLinkRecord::appId </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_ndef_nfc_store_link_record.html#a860405a03d4ce60fd624c7b0a87f509e">NdefNfcStoreLinkRecord::AppStore</a>&#160;</td>
+          <td class="paramname"><em>appStore</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Retrieve the app id for the specified app store, if it has already been set. </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="ndefnfcstorelinkrecord_8h_source.html">ndefnfcstorelinkrecord.h</a></li>
 <li>ndefnfcstorelinkrecord.cpp</li>
@@ -131,7 +204,7 @@ QString&#160;</td><td class="memItemRight" valign="bottom"><b>appId</b> (AppStor
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Classes</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Properties</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -143,7 +216,7 @@ QString&#160;</td><td class="memItemRight" valign="bottom"><b>appId</b> (AppStor
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Tue Jan 17 2012 18:57:34 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Wed Jan 18 2012 11:51:59 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

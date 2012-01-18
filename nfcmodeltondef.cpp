@@ -42,7 +42,7 @@
 
 NfcModelToNdef::NfcModelToNdef(QList<NfcRecordItem*> &nfcRecordItems, QObject *parent) :
     QObject(parent),
-    recordItems(nfcRecordItems)
+    m_recordItems(nfcRecordItems)
 {
 }
 
@@ -56,9 +56,9 @@ QNdefMessage* NfcModelToNdef::convertToNdefMessage()
     int curRecordIndex = 0;
     //qDebug() << "NfcModelToNdef::convertToNdefMessage() Record item array size: " << recordItems.size();
     // Go through array and convert the data to Ndef Records
-    while(curRecordIndex < recordItems.size())
+    while(curRecordIndex < m_recordItems.size())
     {
-        NfcRecordItem* curItem = recordItems[curRecordIndex];
+        NfcRecordItem* curItem = m_recordItems[curRecordIndex];
         curRecordContent = curItem->recordContent();
         curMessageType = curItem->messageType();
 
@@ -129,16 +129,16 @@ QNdefMessage* NfcModelToNdef::convertToNdefMessage()
 NdefNfcSpRecord* NfcModelToNdef::convertSpFromModel(const int startIndex, int& endIndex)
 {
     NdefNfcSpRecord* newRecord = new NdefNfcSpRecord();
-    if (recordItems[startIndex]->messageType() != NfcTypes::MsgSmartPoster ||
-            recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
+    if (m_recordItems[startIndex]->messageType() != NfcTypes::MsgSmartPoster ||
+            m_recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
         return newRecord;
     }
     // Start at the next item after the header
     int curIndex = startIndex + 1;
     bool reachedRecordEnd = false;
 
-    while (curIndex < recordItems.size()) {
-        NfcRecordItem* curItem = recordItems[curIndex];
+    while (curIndex < m_recordItems.size()) {
+        NfcRecordItem* curItem = m_recordItems[curIndex];
         switch (curItem->recordContent()) {
 
         case NfcTypes::RecordHeader:
@@ -199,16 +199,16 @@ QNdefNfcUriRecord* NfcModelToNdef::convertUriFromModel(const int startIndex, int
     QNdefNfcUriRecord* newRecord = new QNdefNfcUriRecord();
     int curIndex = startIndex;
     if (expectHeader) {
-        if (recordItems[startIndex]->messageType() != NfcTypes::MsgUri ||
-                recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
+        if (m_recordItems[startIndex]->messageType() != NfcTypes::MsgUri ||
+                m_recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
             return newRecord;
         }
         // Start at the next item after the header
         curIndex = startIndex + 1;
     }
-    if (curIndex >= recordItems.size())
+    if (curIndex >= m_recordItems.size())
         return newRecord;
-    NfcRecordItem* curItem = recordItems[curIndex];
+    NfcRecordItem* curItem = m_recordItems[curIndex];
     newRecord->setUri(QUrl(curItem->defaultText()));
     endIndex = curIndex + 1;
     return newRecord;
@@ -220,8 +220,8 @@ QNdefNfcTextRecord* NfcModelToNdef::convertTextFromModel(const int startIndex, i
     QNdefNfcTextRecord* newRecord = new QNdefNfcTextRecord();
     int curIndex = startIndex;
     if (expectHeader) {
-        if (recordItems[startIndex]->messageType() != NfcTypes::MsgText ||
-                recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
+        if (m_recordItems[startIndex]->messageType() != NfcTypes::MsgText ||
+                m_recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
             return newRecord;
         }
         // Start at the next item after the header
@@ -231,8 +231,8 @@ QNdefNfcTextRecord* NfcModelToNdef::convertTextFromModel(const int startIndex, i
     bool reachedRecordEnd = false;
     bool foundText = false;
     bool foundLocale = false;
-    while (curIndex < recordItems.size()) {
-        NfcRecordItem* curItem = recordItems[curIndex];
+    while (curIndex < m_recordItems.size()) {
+        NfcRecordItem* curItem = m_recordItems[curIndex];
         switch (curItem->recordContent()) {
 
         case NfcTypes::RecordText:
@@ -268,8 +268,8 @@ QNdefNfcTextRecord* NfcModelToNdef::convertTextFromModel(const int startIndex, i
 NdefNfcSmsRecord* NfcModelToNdef::convertSmsFromModel(const int startIndex, int& endIndex)
 {
     NdefNfcSmsRecord* newRecord = new NdefNfcSmsRecord();
-    if (recordItems[startIndex]->messageType() != NfcTypes::MsgSms ||
-            recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
+    if (m_recordItems[startIndex]->messageType() != NfcTypes::MsgSms ||
+            m_recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
         return newRecord;
     }
     // Start at the next item after the header
@@ -278,8 +278,8 @@ NdefNfcSmsRecord* NfcModelToNdef::convertSmsFromModel(const int startIndex, int&
 
     // Need to find out all the info beforehand, in order to decide on
     // whether to write an URI record or a Smart Poster
-    while (curIndex < recordItems.size()) {
-        NfcRecordItem* curItem = recordItems[curIndex];
+    while (curIndex < m_recordItems.size()) {
+        NfcRecordItem* curItem = m_recordItems[curIndex];
         switch (curItem->recordContent()) {
 
         case NfcTypes::RecordHeader:
@@ -318,8 +318,8 @@ NdefNfcSmsRecord* NfcModelToNdef::convertSmsFromModel(const int startIndex, int&
 NdefNfcMimeVcardRecord* NfcModelToNdef::convertBusinessCardFromModel(const int startIndex, int& endIndex)
 {
     NdefNfcMimeVcardRecord* newRecord = new NdefNfcMimeVcardRecord();
-    if (recordItems[startIndex]->messageType() != NfcTypes::MsgBusinessCard ||
-            recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
+    if (m_recordItems[startIndex]->messageType() != NfcTypes::MsgBusinessCard ||
+            m_recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
         return newRecord;
     }
     // Start at the next item after the header
@@ -328,8 +328,8 @@ NdefNfcMimeVcardRecord* NfcModelToNdef::convertBusinessCardFromModel(const int s
 
     QContact contact;
 
-    while (curIndex < recordItems.size()) {
-        NfcRecordItem* curItem = recordItems[curIndex];
+    while (curIndex < m_recordItems.size()) {
+        NfcRecordItem* curItem = m_recordItems[curIndex];
         QString value = curItem->defaultText();
         const NfcTypes::RecordContent contentType = curItem->recordContent();
         switch (contentType) {
@@ -480,16 +480,16 @@ template<class T> bool NfcModelToNdef::contactSetDetail(QContact& contact, const
 NdefNfcSocialRecord *NfcModelToNdef::convertSocialNetworkFromModel(const int startIndex, int &endIndex)
 {
     NdefNfcSocialRecord* newRecord = new NdefNfcSocialRecord();
-    if (recordItems[startIndex]->messageType() != NfcTypes::MsgSocialNetwork ||
-            recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
+    if (m_recordItems[startIndex]->messageType() != NfcTypes::MsgSocialNetwork ||
+            m_recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
         return newRecord;
     }
     // Start at the next item after the header
     int curIndex = startIndex + 1;
     bool reachedRecordEnd = false;
 
-    while (curIndex < recordItems.size()) {
-        NfcRecordItem* curItem = recordItems[curIndex];
+    while (curIndex < m_recordItems.size()) {
+        NfcRecordItem* curItem = m_recordItems[curIndex];
         switch (curItem->recordContent()) {
 
         case NfcTypes::RecordHeader:
@@ -528,16 +528,16 @@ NdefNfcSocialRecord *NfcModelToNdef::convertSocialNetworkFromModel(const int sta
 NdefNfcGeoRecord *NfcModelToNdef::convertGeoFromModel(const int startIndex, int &endIndex)
 {
     NdefNfcGeoRecord* newRecord = new NdefNfcGeoRecord();
-    if (recordItems[startIndex]->messageType() != NfcTypes::MsgGeo ||
-            recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
+    if (m_recordItems[startIndex]->messageType() != NfcTypes::MsgGeo ||
+            m_recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
         return newRecord;
     }
     // Start at the next item after the header
     int curIndex = startIndex + 1;
     bool reachedRecordEnd = false;
 
-    while (curIndex < recordItems.size()) {
-        NfcRecordItem* curItem = recordItems[curIndex];
+    while (curIndex < m_recordItems.size()) {
+        NfcRecordItem* curItem = m_recordItems[curIndex];
         switch (curItem->recordContent()) {
 
         case NfcTypes::RecordHeader:
@@ -582,16 +582,16 @@ NdefNfcGeoRecord *NfcModelToNdef::convertGeoFromModel(const int startIndex, int 
 NdefNfcStoreLinkRecord *NfcModelToNdef::convertStoreFromModel(const int startIndex, int &endIndex)
 {
     NdefNfcStoreLinkRecord* newRecord = new NdefNfcStoreLinkRecord();
-    if (recordItems[startIndex]->messageType() != NfcTypes::MsgStore ||
-            recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
+    if (m_recordItems[startIndex]->messageType() != NfcTypes::MsgStore ||
+            m_recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
         return newRecord;
     }
     // Start at the next item after the header
     int curIndex = startIndex + 1;
     bool reachedRecordEnd = false;
 
-    while (curIndex < recordItems.size()) {
-        NfcRecordItem* curItem = recordItems[curIndex];
+    while (curIndex < m_recordItems.size()) {
+        NfcRecordItem* curItem = m_recordItems[curIndex];
         switch (curItem->recordContent()) {
 
         case NfcTypes::RecordHeader:
@@ -671,8 +671,8 @@ QNdefRecord *NfcModelToNdef::convertCustomFromModel(const int startIndex, int &e
 {
     QNdefRecord* newRecord = new NdefNfcGeoRecord();
     newRecord->setTypeNameFormat(QNdefRecord::ExternalRtd);
-    if (recordItems[startIndex]->messageType() != NfcTypes::MsgCustom ||
-            recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
+    if (m_recordItems[startIndex]->messageType() != NfcTypes::MsgCustom ||
+            m_recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
         return newRecord;
     }
     // Start at the next item after the header
@@ -680,8 +680,8 @@ QNdefRecord *NfcModelToNdef::convertCustomFromModel(const int startIndex, int &e
     bool reachedRecordEnd = false;
     bool isEmptyRecord = true;
 
-    while (curIndex < recordItems.size()) {
-        NfcRecordItem* curItem = recordItems[curIndex];
+    while (curIndex < m_recordItems.size()) {
+        NfcRecordItem* curItem = m_recordItems[curIndex];
         switch (curItem->recordContent()) {
 
         case NfcTypes::RecordHeader:
