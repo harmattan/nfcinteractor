@@ -148,64 +148,65 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <a name="l00095"></a>00095 
 <a name="l00096"></a>00096 <span class="keyword">public</span>:
 <a name="l00097"></a>00097     <a class="code" href="class_nfc_record_item.html" title="Individual record item contained in the NfcRecordModel.">NfcRecordItem</a>(QObject* parent = 0) : QObject(parent) {}
-<a name="l00098"></a>00098     <a class="code" href="class_nfc_record_item.html" title="Individual record item contained in the NfcRecordModel.">NfcRecordItem</a>(<span class="keyword">const</span> QString &amp;title, <a class="code" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f" title="The message type of record items stored in the model.">NfcTypes::MessageType</a> messageType, <a class="code" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691" title="Type of the content of an individual item in the model.">NfcTypes::RecordContent</a> recordContent, <span class="keyword">const</span> QString &amp;currentText, <span class="keywordtype">bool</span> removeVisible, <span class="keywordtype">bool</span> addVisible, <span class="keywordtype">int</span> recordId, QObject* parent = 0);
+<a name="l00098"></a>00098     <a class="code" href="class_nfc_record_item.html" title="Individual record item contained in the NfcRecordModel.">NfcRecordItem</a>(<span class="keyword">const</span> QString &amp;<a class="code" href="class_nfc_record_item.html#a3c06dffe3784b607998835bc6df79a6d" title="Get the title text / header of the record item.">title</a>, <a class="code" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f" title="The message type of record items stored in the model.">NfcTypes::MessageType</a> <a class="code" href="class_nfc_record_item.html#a4d92d401ae4cae96898a4e317c66030e" title="Get the message type this item adds info to.">messageType</a>, <a class="code" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691" title="Type of the content of an individual item in the model.">NfcTypes::RecordContent</a> <a class="code" href="class_nfc_record_item.html#a1d199f2b3af825191131e06c5dc6c042" title="Get the record content - the detail of the NDEF record that is stored by this specific instance...">recordContent</a>, <span class="keyword">const</span> QString &amp;<a class="code" href="class_nfc_record_item.html#ac5c9c51b22217986fd1db45f2c613c3e" title="The current text of the record item.">currentText</a>, <span class="keywordtype">bool</span> <a class="code" href="class_nfc_record_item.html#a618d736a09bd92f75bcd663f2c7ad8bd" title="Whether this record item can be removed again from the message.">removeVisible</a>, <span class="keywordtype">bool</span> <a class="code" href="class_nfc_record_item.html#ad38d6168008e264150f60314aa8895b4" title="Whether a sub-item can be added after this record item to the same message type, providing more detai...">addVisible</a>, <span class="keywordtype">int</span> <a class="code" href="class_nfc_record_item.html#a4c178302d84d67c2be9fdf1a4877674c" title="Get the record id this record item belongs to.">recordId</a>, QObject* parent = 0);
 <a name="l00099"></a>00099 
 <a name="l00100"></a>00100 <span class="keyword">public</span>:
 <a name="l00101"></a>00101     <span class="comment">//QString id() const = 0;</span>
-<a name="l00102"></a>00102     QVariant data(<span class="keywordtype">int</span> role) <span class="keyword">const</span>;
-<a name="l00103"></a>00103     <span class="keywordtype">void</span> setData(<span class="keyword">const</span> QVariant&amp; value, <span class="keyword">const</span> QString&amp; role);
-<a name="l00104"></a>00104     <span class="keywordtype">void</span> setData(<span class="keyword">const</span> QVariant&amp; value, <span class="keyword">const</span> <span class="keywordtype">int</span> role);
-<a name="l00105"></a>00105     QHash&lt;int, QByteArray&gt; roleNames() <span class="keyword">const</span>;
+<a name="l00102"></a>00102     QVariant <a class="code" href="class_nfc_record_item.html#a153abc99ecccf35a1b094d5e5c2f3e4c" title="Get the current data of the instance, based on the role.">data</a>(<span class="keywordtype">int</span> role) <span class="keyword">const</span>;
+<a name="l00103"></a>00103     <span class="keywordtype">void</span> <a class="code" href="class_nfc_record_item.html#ad3dce406ae2db40736c7e8e1cf35ccd4" title="Set data of the item using the role name as a string.">setData</a>(<span class="keyword">const</span> QVariant&amp; value, <span class="keyword">const</span> QString&amp; role);
+<a name="l00104"></a>00104     <span class="keywordtype">void</span> <a class="code" href="class_nfc_record_item.html#ad3dce406ae2db40736c7e8e1cf35ccd4" title="Set data of the item using the role name as a string.">setData</a>(<span class="keyword">const</span> QVariant&amp; value, <span class="keyword">const</span> <span class="keywordtype">int</span> role);
+<a name="l00105"></a>00105     QHash&lt;int, QByteArray&gt; <a class="code" href="class_nfc_record_item.html#af4a7f0e7422892612e27a101e2c2d277" title="Get all role names supported for this item, to be used by the model for generic setting and retrievin...">roleNames</a>() <span class="keyword">const</span>;
 <a name="l00106"></a>00106 
 <a name="l00107"></a>00107 <span class="keyword">public</span>:
-<a name="l00108"></a>00108     Q_INVOKABLE QString title() <span class="keyword">const</span>;
-<a name="l00109"></a>00109     <span class="keywordtype">void</span> setTitle(<span class="keyword">const</span> QString&amp; title);
-<a name="l00110"></a>00110 
-<a name="l00111"></a>00111     Q_INVOKABLE <a class="code" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f" title="The message type of record items stored in the model.">NfcTypes::MessageType</a> messageType() <span class="keyword">const</span>;
-<a name="l00112"></a>00112     <span class="keywordtype">void</span> setMessageType(<span class="keyword">const</span> <a class="code" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f" title="The message type of record items stored in the model.">NfcTypes::MessageType</a> messageType);
-<a name="l00113"></a>00113 
-<a name="l00114"></a>00114     Q_INVOKABLE <a class="code" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691" title="Type of the content of an individual item in the model.">NfcTypes::RecordContent</a> recordContent() <span class="keyword">const</span>;
-<a name="l00115"></a>00115     Q_INVOKABLE <span class="keywordtype">int</span> recordContentInt() <span class="keyword">const</span>;
-<a name="l00116"></a>00116     <span class="keywordtype">void</span> setRecordContent(<span class="keyword">const</span> <a class="code" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691" title="Type of the content of an individual item in the model.">NfcTypes::RecordContent</a> recordContent);
-<a name="l00117"></a>00117 
-<a name="l00118"></a>00118     QString currentText() <span class="keyword">const</span>;
-<a name="l00119"></a>00119     Q_INVOKABLE <span class="keywordtype">void</span> setCurrentText(<span class="keyword">const</span> QString&amp; currentText);
-<a name="l00120"></a>00120 
-<a name="l00121"></a>00121     QVariantList selectOptions() <span class="keyword">const</span>;
-<a name="l00122"></a>00122     <span class="keywordtype">void</span> setSelectOptions(<span class="keyword">const</span> QVariantList selectOptions);
-<a name="l00123"></a>00123 
-<a name="l00124"></a>00124     <span class="keywordtype">int</span> selectedOption() <span class="keyword">const</span>;
-<a name="l00125"></a>00125     <span class="keywordtype">void</span> setSelectedOption(<span class="keyword">const</span> <span class="keywordtype">int</span> selectedOption);
-<a name="l00126"></a>00126 
-<a name="l00127"></a>00127     <span class="keywordtype">bool</span> removeVisible() <span class="keyword">const</span>;
-<a name="l00128"></a>00128     <span class="keywordtype">void</span> setRemoveVisible(<span class="keyword">const</span> <span class="keywordtype">bool</span> removeVisible);
-<a name="l00129"></a>00129 
-<a name="l00130"></a>00130     <span class="keywordtype">bool</span> addVisible() <span class="keyword">const</span>;
-<a name="l00131"></a>00131     <span class="keywordtype">void</span> setAddVisible(<span class="keyword">const</span> <span class="keywordtype">bool</span> addVisible);
-<a name="l00132"></a>00132 
-<a name="l00133"></a>00133     <span class="keywordtype">int</span> recordId() <span class="keyword">const</span>;
-<a name="l00134"></a>00134     <span class="keywordtype">void</span> setRecordId(<span class="keyword">const</span> <span class="keywordtype">int</span> recordId);
-<a name="l00135"></a>00135 
-<a name="l00136"></a>00136     <span class="comment">//int getIntForRoleString(const QString &amp;role);</span>
-<a name="l00137"></a>00137 signals:
-<a name="l00138"></a>00138     <span class="keywordtype">void</span> dataChanged();
-<a name="l00139"></a>00139 
-<a name="l00140"></a>00140 <span class="keyword">private</span>:
-<a name="l00141"></a>00141     QString m_title;
-<a name="l00142"></a>00142     <a class="code" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f" title="The message type of record items stored in the model.">NfcTypes::MessageType</a> m_messageType;
-<a name="l00143"></a>00143     <a class="code" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691" title="Type of the content of an individual item in the model.">NfcTypes::RecordContent</a> m_recordContent;
-<a name="l00144"></a>00144     QString m_currentText;
-<a name="l00145"></a>00145     QVariantList m_selectOptions;
-<a name="l00146"></a>00146     <span class="keywordtype">int</span> m_selectedOption;
-<a name="l00147"></a>00147     <span class="keywordtype">bool</span> m_removeVisible;
-<a name="l00148"></a>00148     <span class="keywordtype">bool</span> m_addVisible;
-<a name="l00149"></a>00149     <span class="keywordtype">int</span> m_recordId;
-<a name="l00150"></a>00150 };
-<a name="l00151"></a>00151 
-<a name="l00152"></a>00152 <span class="comment">// TODO</span>
-<a name="l00153"></a>00153 <span class="comment">//Q_DECLARE_METATYPE(NfcRecordItem)</span>
-<a name="l00154"></a>00154 
-<a name="l00155"></a>00155 <span class="preprocessor">#endif // NFCRECORDITEM_H</span>
+<a name="l00108"></a>00108     <span class="comment">// Probably the Q_INVOKABLE isn&#39;t actually required anymore.</span>
+<a name="l00109"></a>00109     Q_INVOKABLE QString <a class="code" href="class_nfc_record_item.html#a3c06dffe3784b607998835bc6df79a6d" title="Get the title text / header of the record item.">title</a>() <span class="keyword">const</span>;
+<a name="l00110"></a>00110     <span class="keywordtype">void</span> <a class="code" href="class_nfc_record_item.html#ae18f03ef8b5feadfa2b7dd29fb152dee" title="Set the title text / header of the record item.">setTitle</a>(<span class="keyword">const</span> QString&amp; <a class="code" href="class_nfc_record_item.html#a3c06dffe3784b607998835bc6df79a6d" title="Get the title text / header of the record item.">title</a>);
+<a name="l00111"></a>00111 
+<a name="l00112"></a>00112     Q_INVOKABLE <a class="code" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f" title="The message type of record items stored in the model.">NfcTypes::MessageType</a> <a class="code" href="class_nfc_record_item.html#a4d92d401ae4cae96898a4e317c66030e" title="Get the message type this item adds info to.">messageType</a>() <span class="keyword">const</span>;
+<a name="l00113"></a>00113     <span class="keywordtype">void</span> <a class="code" href="class_nfc_record_item.html#a87845bde127bd7ca871d8170d78fb846" title="Set the message type this item adds info to.">setMessageType</a>(<span class="keyword">const</span> <a class="code" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f" title="The message type of record items stored in the model.">NfcTypes::MessageType</a> <a class="code" href="class_nfc_record_item.html#a4d92d401ae4cae96898a4e317c66030e" title="Get the message type this item adds info to.">messageType</a>);
+<a name="l00114"></a>00114 
+<a name="l00115"></a>00115     Q_INVOKABLE <a class="code" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691" title="Type of the content of an individual item in the model.">NfcTypes::RecordContent</a> <a class="code" href="class_nfc_record_item.html#a1d199f2b3af825191131e06c5dc6c042" title="Get the record content - the detail of the NDEF record that is stored by this specific instance...">recordContent</a>() <span class="keyword">const</span>;
+<a name="l00116"></a>00116     Q_INVOKABLE <span class="keywordtype">int</span> <a class="code" href="class_nfc_record_item.html#a23ee50fa06359524bf792f21aa17e940" title="Get the record content - the detail of the NDEF record that is stored by this specific instance...">recordContentInt</a>() <span class="keyword">const</span>;
+<a name="l00117"></a>00117     <span class="keywordtype">void</span> <a class="code" href="class_nfc_record_item.html#a476f0648dd9495a3244bd9f9295658a0" title="Set the record content - the detail of the NDEF record that is stored by this specific instance...">setRecordContent</a>(<span class="keyword">const</span> <a class="code" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691" title="Type of the content of an individual item in the model.">NfcTypes::RecordContent</a> <a class="code" href="class_nfc_record_item.html#a1d199f2b3af825191131e06c5dc6c042" title="Get the record content - the detail of the NDEF record that is stored by this specific instance...">recordContent</a>);
+<a name="l00118"></a>00118 
+<a name="l00119"></a>00119     QString <a class="code" href="class_nfc_record_item.html#ac5c9c51b22217986fd1db45f2c613c3e" title="The current text of the record item.">currentText</a>() <span class="keyword">const</span>;
+<a name="l00120"></a>00120     Q_INVOKABLE <span class="keywordtype">void</span> <a class="code" href="class_nfc_record_item.html#a3b0780d833ac21b95b35bf67ed07eb75" title="Set the current text of the record item.">setCurrentText</a>(<span class="keyword">const</span> QString&amp; <a class="code" href="class_nfc_record_item.html#ac5c9c51b22217986fd1db45f2c613c3e" title="The current text of the record item.">currentText</a>);
+<a name="l00121"></a>00121 
+<a name="l00122"></a>00122     QVariantList <a class="code" href="class_nfc_record_item.html#a78ee4066d905c7dff0784c5e58f3618d" title="Get the list of option items / radio buttons for this record item, in case it is of a type that uses ...">selectOptions</a>() <span class="keyword">const</span>;
+<a name="l00123"></a>00123     <span class="keywordtype">void</span> <a class="code" href="class_nfc_record_item.html#aaad619a7b1b89c64d64eb18c2cace6a6" title="Set the list of option items / radio buttons for this record item, in case it is of a type that uses ...">setSelectOptions</a>(<span class="keyword">const</span> QVariantList <a class="code" href="class_nfc_record_item.html#a78ee4066d905c7dff0784c5e58f3618d" title="Get the list of option items / radio buttons for this record item, in case it is of a type that uses ...">selectOptions</a>);
+<a name="l00124"></a>00124 
+<a name="l00125"></a>00125     <span class="keywordtype">int</span> <a class="code" href="class_nfc_record_item.html#a265edde61756915e6482e124dd69552f" title="Get the currently selected option / radio button for this record item, in case it is of a type that u...">selectedOption</a>() <span class="keyword">const</span>;
+<a name="l00126"></a>00126     <span class="keywordtype">void</span> <a class="code" href="class_nfc_record_item.html#a1417d058227ccfd36f427d5a793dca08" title="Set the currently selected option / radio button for this record item, in case it is of a type that u...">setSelectedOption</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="class_nfc_record_item.html#a265edde61756915e6482e124dd69552f" title="Get the currently selected option / radio button for this record item, in case it is of a type that u...">selectedOption</a>);
+<a name="l00127"></a>00127 
+<a name="l00128"></a>00128     <span class="keywordtype">bool</span> <a class="code" href="class_nfc_record_item.html#a618d736a09bd92f75bcd663f2c7ad8bd" title="Whether this record item can be removed again from the message.">removeVisible</a>() <span class="keyword">const</span>;
+<a name="l00129"></a>00129     <span class="keywordtype">void</span> <a class="code" href="class_nfc_record_item.html#ab79de4af0c8ec60e11979f619a20085e" title="Whether this record item can be removed again from the message.">setRemoveVisible</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> <a class="code" href="class_nfc_record_item.html#a618d736a09bd92f75bcd663f2c7ad8bd" title="Whether this record item can be removed again from the message.">removeVisible</a>);
+<a name="l00130"></a>00130 
+<a name="l00131"></a>00131     <span class="keywordtype">bool</span> <a class="code" href="class_nfc_record_item.html#ad38d6168008e264150f60314aa8895b4" title="Whether a sub-item can be added after this record item to the same message type, providing more detai...">addVisible</a>() <span class="keyword">const</span>;
+<a name="l00132"></a>00132     <span class="keywordtype">void</span> <a class="code" href="class_nfc_record_item.html#ad2481ede899f1c5025ab4abcb959d529" title="Whether a sub-item can be added after this record item to the same message type, providing more detai...">setAddVisible</a>(<span class="keyword">const</span> <span class="keywordtype">bool</span> <a class="code" href="class_nfc_record_item.html#ad38d6168008e264150f60314aa8895b4" title="Whether a sub-item can be added after this record item to the same message type, providing more detai...">addVisible</a>);
+<a name="l00133"></a>00133 
+<a name="l00134"></a>00134     <span class="keywordtype">int</span> <a class="code" href="class_nfc_record_item.html#a4c178302d84d67c2be9fdf1a4877674c" title="Get the record id this record item belongs to.">recordId</a>() <span class="keyword">const</span>;
+<a name="l00135"></a>00135     <span class="keywordtype">void</span> <a class="code" href="class_nfc_record_item.html#a41d1b0364f93d6a5ec2abb9fd95b5c55" title="Set the record id this record item belongs to.">setRecordId</a>(<span class="keyword">const</span> <span class="keywordtype">int</span> <a class="code" href="class_nfc_record_item.html#a4c178302d84d67c2be9fdf1a4877674c" title="Get the record id this record item belongs to.">recordId</a>);
+<a name="l00136"></a>00136 
+<a name="l00137"></a>00137     <span class="comment">//int getIntForRoleString(const QString &amp;role);</span>
+<a name="l00138"></a>00138 signals:
+<a name="l00139"></a>00139     <span class="keywordtype">void</span> dataChanged();
+<a name="l00140"></a>00140 
+<a name="l00141"></a>00141 <span class="keyword">private</span>:
+<a name="l00142"></a>00142     QString m_title;
+<a name="l00143"></a>00143     <a class="code" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f" title="The message type of record items stored in the model.">NfcTypes::MessageType</a> m_messageType;
+<a name="l00144"></a>00144     <a class="code" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691" title="Type of the content of an individual item in the model.">NfcTypes::RecordContent</a> m_recordContent;
+<a name="l00145"></a>00145     QString m_currentText;
+<a name="l00146"></a>00146     QVariantList m_selectOptions;
+<a name="l00147"></a>00147     <span class="keywordtype">int</span> m_selectedOption;
+<a name="l00148"></a>00148     <span class="keywordtype">bool</span> m_removeVisible;
+<a name="l00149"></a>00149     <span class="keywordtype">bool</span> m_addVisible;
+<a name="l00150"></a>00150     <span class="keywordtype">int</span> m_recordId;
+<a name="l00151"></a>00151 };
+<a name="l00152"></a>00152 
+<a name="l00153"></a>00153 <span class="comment">// ?</span>
+<a name="l00154"></a>00154 <span class="comment">//Q_DECLARE_METATYPE(NfcRecordItem)</span>
+<a name="l00155"></a>00155 
+<a name="l00156"></a>00156 <span class="preprocessor">#endif // NFCRECORDITEM_H</span>
 </pre></div></div>
 </div>
 <!-- window showing the filter options -->
@@ -225,7 +226,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 18 2012 16:01:20 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 19 2012 16:04:47 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

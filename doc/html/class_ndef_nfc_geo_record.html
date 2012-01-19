@@ -118,6 +118,10 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8c737d1bb7a2acd3c6e3f16ab507b6b2"></a><!-- doxytag: member="NdefNfcGeoRecord::NdefNfcGeoRecord" ref="a8c737d1bb7a2acd3c6e3f16ab507b6b2" args="(const QGeoCoordinate &amp;geoCoordinate)" -->
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ndef_nfc_geo_record.html#a8c737d1bb7a2acd3c6e3f16ab507b6b2">NdefNfcGeoRecord</a> (const QGeoCoordinate &amp;geoCoordinate)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a Geo record based on the record passed through the argument. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QUrl&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ndef_nfc_geo_record.html#a82a938d5cda860515fd8ce3ffca844e0">webServiceUrl</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current web service URL.  <a href="#a82a938d5cda860515fd8ce3ffca844e0"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ndef_nfc_geo_record.html#afd580afcee5373f21b377fa0c49b4db2">setWebServiceUrl</a> (const QUrl &amp;webServiceUrl)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the web service URL.  <a href="#afd580afcee5373f21b377fa0c49b4db2"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab059da3f3f2d121da1c214af418e0c6c"></a><!-- doxytag: member="NdefNfcGeoRecord::location" ref="ab059da3f3f2d121da1c214af418e0c6c" args="() const " -->
 QGeoCoordinate&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_ndef_nfc_geo_record.html#ab059da3f3f2d121da1c214af418e0c6c">location</a> () const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current location / geo coordinate. <br/></td></tr>
@@ -140,7 +144,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <p>Geo tags are not standardized by the NFC forum, therefore, this class supports three different types of writing the location to a tag.</p>
 <p>1. GeoUri: write URI based on the "geo:" URI scheme, as specified by RFC5870, available at: <a href="http://geouri.org/">http://geouri.org/</a> Currently supported by MeeGo Harmattan and Android, not recognized by Symbian at the moment.</p>
 <p>2. NokiaMaps: write URI based on a Nokia Maps link, following the "http://m.ovi.me/?c=..." scheme of the Nokia/Ovi Maps Rendering API. Depending on the target device, the phone / web service should then redirect to the best maps representation. On Symbian, the phone will launch the Nokia Maps client. On a desktop computer, the full Nokia Maps web experience will open. On other phones, the HTML 5 client may be available. On MeeGo Harmattan, currently only a static Maps image is shown, making this alternative not suitable for the Nokia N9.</p>
-<p>3. WebRedirect: uses the web service at NfcInteractor.com to check the OS of the phone, and then redirect to the best way of showing maps to the user. On MeeGo Harmattan, this would be the GeoUri (1) scheme; on Symbian, the NokiaMaps-link (2). Essentially, this allows opening the Maps client on all currently available NFC capable Nokia phones. Note the limitations and terms of use of the web service. For real world deployment, outside of development and testing, it's recommended to host the script on your own web server. Find more information at nfcinteractor.com.</p>
+<p>3. WebRedirect: uses the web service at NfcInteractor.com to check the OS of the phone, and then redirect to the best way of showing maps to the user. On MeeGo Harmattan, this would be the GeoUri (1) scheme; on Symbian, the NokiaMaps-link (2). Essentially, this allows opening the Maps client on all currently available NFC capable Nokia phones. Note the limitations and terms of use of the web service. For real world deployment, outside of development and testing, it's recommended to host the script on your own web server. Find more information at nfcinteractor.com. If you host the web service on your own URI, you can change the location using <a class="el" href="class_ndef_nfc_geo_record.html#afd580afcee5373f21b377fa0c49b4db2" title="Set the web service URL.">setWebServiceUrl()</a>.</p>
 <p>As this class is based on the Smart URI base class, the payload is formatted as a URI record initially. When first adding Smart Poster information (like a title), the payload instantly transforms into a Smart Poster.</p>
 <dl class="version"><dt><b>Version:</b></dt><dd>1.0.0 </dd></dl>
 </div><hr/><h2>Member Enumeration Documentation</h2>
@@ -203,6 +207,45 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 </div>
 </div>
+<a class="anchor" id="afd580afcee5373f21b377fa0c49b4db2"></a><!-- doxytag: member="NdefNfcGeoRecord::setWebServiceUrl" ref="afd580afcee5373f21b377fa0c49b4db2" args="(const QUrl &amp;webServiceUrl)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void NdefNfcGeoRecord::setWebServiceUrl </td>
+          <td>(</td>
+          <td class="paramtype">const QUrl &amp;&#160;</td>
+          <td class="paramname"><em>webServiceUrl</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Set the web service URL. </p>
+<p>The parameter should contain the complete URL, including the "?c=" part. The script will then add longitude and latitude, separated by a comma. </p>
+
+</div>
+</div>
+<a class="anchor" id="a82a938d5cda860515fd8ce3ffca844e0"></a><!-- doxytag: member="NdefNfcGeoRecord::webServiceUrl" ref="a82a938d5cda860515fd8ce3ffca844e0" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QUrl NdefNfcGeoRecord::webServiceUrl </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Get the current web service URL. </p>
+<p>By default, the web service hosted at nfcinteractor.com is used. See terms and conditions at nfcinteractor.com </p>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="ndefnfcgeorecord_8h_source.html">ndefnfcgeorecord.h</a></li>
 <li>ndefnfcgeorecord.cpp</li>
@@ -225,7 +268,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 18 2012 16:01:21 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 19 2012 16:04:47 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

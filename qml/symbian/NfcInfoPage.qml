@@ -67,10 +67,8 @@ Page {
         delegate: listDelegate
         // Automatically scroll down when a new element is added
         onCountChanged: {
-            //positionViewAtIndex(count - 1, ListView.End)
             positionViewAtEnd();
         }
-        //anchors { top: writeNdefButton.bottom; left: parent.left; right: parent.right; bottom: parent.bottom }
         anchors.fill: parent
         Component.onCompleted: positionViewAtBeginning(); //positionViewAtIndex(0, ListView.Beginning)
     }
@@ -132,7 +130,6 @@ Page {
     tools: ToolBarLayout {
         ToolButton {
             flat: true
-            //iconSource: "tb_quit.svg"
             iconSource: "toolbar-back";
             onClicked: pageStack.depth <= 1 ? Qt.quit() : pageStack.pop()
         }

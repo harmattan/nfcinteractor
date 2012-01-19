@@ -40,6 +40,10 @@
 
 #include "nfcrecordmodel.h"
 
+/*!
+  \brief Constructor to create a new record model, whose items can be used
+  to compose and define an NDEF message.
+  */
 NfcRecordModel::NfcRecordModel(QObject *parent) :
     QAbstractListModel(parent)
 {
@@ -63,42 +67,38 @@ NfcRecordModel::~NfcRecordModel()
     m_recordItems.clear();
 }
 
+/*!
+  \brief Convert all the record items currently stored in the model
+  to a QNdefMessage.
+  */
 QNdefMessage* NfcRecordModel::convertToNdefMessage()
 {
     return m_nfcModelToNdef->convertToNdefMessage();
 }
 
+/*!
+  \brief How many items are present in the record model.
+  */
 int NfcRecordModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
     return m_recordItems.size();
 }
 
+/*!
+  \brief Get the appropriate data (specified by the role) from the references item.
+  */
 QVariant NfcRecordModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid() || index.row() < 0 || index.row() >= m_recordItems.size())
         return QVariant();
 
     return m_recordItems.at(index.row())->data(role);
-//    const NfcRecordItem &recordItem = recordItems[index.row()];
-//    switch (role) {
-//    case TitleRole:
-//        return recordItem.title();
-//    case MessageTypeRole:
-//        return recordItem.messageType();
-//    case RecordContentRole:
-//        return recordItem.recordContent();
-//    case CurrentTextRole:
-//        return recordItem.currentText();
-//    case RemoveVisibleRole:
-//        return recordItem.removeVisible();
-//    case AddVisibleRole:
-//        return recordItem.addVisible();
-//    default:
-//        return QVariant();
-//    }
 }
 
+/*!
+  \brief Search for the record \a item and return its index in the model.
+  */
 QModelIndex NfcRecordModel::indexFromItem(const NfcRecordItem *item) const
 {
     Q_ASSERT(item);
@@ -108,6 +108,13 @@ QModelIndex NfcRecordModel::indexFromItem(const NfcRecordItem *item) const
     return QModelIndex();
 }
 
+/*!
+  \brief Relay the information that an item has been changed.
+
+  Received through a signal from the individual item that has been changed,
+  and further emitted by this class that data has been changed (to comply with
+  Qt model requirements), and that the record items have been modified (custom).
+  */
 void NfcRecordModel::handleItemChange()
 {
     NfcRecordItem* item = static_cast<NfcRecordItem*>(sender());
@@ -120,17 +127,29 @@ void NfcRecordModel::handleItemChange()
     }
 }
 
+/*!
+  \brief Append a new record item to the model, specifying the data directly and
+  using int variables for type enums (for QML use).
+
+  Casts the int values to enums and calls the 'real' addRecord() method.
+  */
 void NfcRecordModel::addRecord(const QString &title, const int messageType, const int recordContent, const QString &currentText, const bool removeVisible, const bool addVisible, const int recordId)
 {
     addRecord(title, (NfcTypes::MessageType)messageType, (NfcTypes::RecordContent)recordContent, currentText, removeVisible, addVisible, recordId);
 }
 
+/*!
+  \brief Append a new record item to the model, specifying the data directly and using enums.
+  */
 void NfcRecordModel::addRecord(const QString &title, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent recordContent, const QString &currentText, const bool removeVisible, const bool addVisible, const int recordId)
 {
     NfcRecordItem* newRecordItem = new NfcRecordItem(title, messageType, recordContent, currentText, removeVisible, addVisible, recordId, this);
     addRecordItem(newRecordItem);
 }
 
+/*!
+  \brief Append a new record item to the model.
+  */
 void NfcRecordModel::addRecordItem(NfcRecordItem *newRecordItem)
 {
     beginInsertRows(QModelIndex(), rowCount(), rowCount());
@@ -141,6 +160,9 @@ void NfcRecordModel::addRecordItem(NfcRecordItem *newRecordItem)
     emit recordItemsModified();
 }
 
+/*!
+  \brief Insert a new record item at a specific position to the model.
+  */
 void NfcRecordModel::insertRecordItem(const int row, NfcRecordItem *newRecordItem)
 {
     beginInsertRows(QModelIndex(), row, row);
@@ -151,6 +173,12 @@ void NfcRecordModel::insertRecordItem(const int row, NfcRecordItem *newRecordIte
     emit recordItemsModified();
 }
 
+/*!
+  \brief Append the default info for a new message to the record model.
+
+  Depending on the MessageType, this will add one or more record items
+  with their default values to the record model.
+  */
 void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
 {
     // Get next available record ID
@@ -198,6 +226,8 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
         break; }
     case NfcTypes::MsgStore: {
         addRecord("Store Record", NfcTypes::MsgStore, NfcTypes::RecordHeader, "", true, true, recordId);
+        // Have a different default store type depending on if the app is executed
+        // on Symbian or MeeGo
 #ifdef MEEGO_EDITION_HARMATTAN
         simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordStoreMeeGoHarmattan, true, recordId);
 #else
@@ -250,7 +280,9 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
     }
 }
 
-
+/*!
+  \brief Update data in a specific record item.
+  */
 bool NfcRecordModel::setData ( const QModelIndex & index, const QVariant & value, int role )
 {
     //qDebug() << "NfcRecordModel::setData()";
@@ -262,6 +294,13 @@ bool NfcRecordModel::setData ( const QModelIndex & index, const QVariant & value
     return false;
 }
 
+/*!
+  \brief Update data in a specific record item, with parameters of
+  generic types that can be called from QML.
+
+  The method needs to have a different name from setData(), so that the correct
+  version is called from QML.
+  */
 void NfcRecordModel::setDataValue(int index, const QVariant &value, const QString &role)
 {
     //qDebug() << "NfcRecordModel::setDataValue (before): index = " << index << ", value = " << value << ", role = " << role;
@@ -281,12 +320,19 @@ Qt::ItemFlags NfcRecordModel::flags ( const QModelIndex & index ) const
     return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
 }
 
+/*!
+  \brief Add a new record item to an existing message, using default types.
+
+  Uses int values for specifying the message and content type, so that it
+  can be called from QML.
+
+  If adding for example a text, this method will also add the language.
+  */
 void NfcRecordModel::addContentToRecord(int recordIndex, int messageTypeInt, int contentTypeInt)
 {
     if (recordIndex < 0 || recordIndex > m_recordItems.count())
         return;
 
-    //qDebug() << "Add content to record";
     // Search the end of the record, so that we can add the new info at the end
     const int parentRecordId = m_recordItems[recordIndex]->recordId();
     //qDebug() << "Parent record index: " << recordIndex << ", id: " << parentRecordId;
@@ -298,6 +344,7 @@ void NfcRecordModel::addContentToRecord(int recordIndex, int messageTypeInt, int
     {
         // Add two items for the text record, therefore handle it here
         // and not in the generic simpleInsertRecordItem() method.
+        // (text is always together with language)
         simpleInsertRecordItem(insertPosition, messageType, NfcTypes::RecordTextLanguage, false, parentRecordId);
         simpleInsertRecordItem(insertPosition, messageType, NfcTypes::RecordText, true, parentRecordId);
         break;
@@ -308,6 +355,7 @@ void NfcRecordModel::addContentToRecord(int recordIndex, int messageTypeInt, int
         break;
     default:
     {
+        // Any other item: add it using the default values
         simpleInsertRecordItem(insertPosition, messageType, contentType, true, parentRecordId);
         break;
     }
@@ -324,6 +372,11 @@ void NfcRecordModel::addContentToRecord(int recordIndex, int messageTypeInt, int
     }
 }
 
+/*!
+  \brief Add a single item to the model using its defaults at the specified position.
+
+  Used by addContentToRecord().
+  */
 void NfcRecordModel::simpleInsertRecordItem(const int insertPosition, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const bool removeVisible, const int parentRecordId)
 {
     QString defaultTitle;
@@ -344,6 +397,9 @@ void NfcRecordModel::simpleInsertRecordItem(const int insertPosition, const NfcT
 }
 
 
+/*!
+  \brief append a single item to the model using its defaults at the specified position.
+  */
 void NfcRecordModel::simpleAppendRecordItem(const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const bool removeVisible, const int parentRecordId)
 {
     simpleInsertRecordItem(rowCount(), messageType, contentType, removeVisible, parentRecordId);
@@ -352,6 +408,7 @@ void NfcRecordModel::simpleAppendRecordItem(const NfcTypes::MessageType messageT
 
 /*!
   \brief Return the model index after the last entry of the specified record.
+
   This can be used to insert a new content item at the end of the record.
   */
 int NfcRecordModel::lastRecordContentIndex(const int recordIndex) {
@@ -370,7 +427,11 @@ int NfcRecordModel::lastRecordContentIndex(const int recordIndex) {
 }
 
 
+/*!
+  \brief Check if the specified record content item is already part of the message.
 
+  Uses int values instead of enums for compatibility to QML.
+  */
 bool NfcRecordModel::isContentInRecord(const int recordIndex, const int searchForRecordContent) {
     return isContentInRecord(recordIndex, (NfcTypes::RecordContent)searchForRecordContent);
 }
@@ -475,6 +536,13 @@ void NfcRecordModel::removeRecord(const int removeRecordIndex) {
 
 }
 
+/*!
+  \brief Actually modify the model to remove an individual record from the model.
+
+  Should usually be called from within a more intelligent method like
+  removeRecord(), which knows if removing an item should also trigger
+  removing related items, or if the visibility of the add button needs changed.
+  */
 void NfcRecordModel::removeRecordFromModel(const int removeRecordIndex)
 {
     if (m_recordItems.size() > removeRecordIndex) {
@@ -485,12 +553,27 @@ void NfcRecordModel::removeRecordFromModel(const int removeRecordIndex)
     }
 }
 
+/*!
+  \brief Count how many items are in the record model.
+  */
 int NfcRecordModel::size() const
 {
     return m_recordItems.size();
 }
 
 
+/*!
+  \brief Return a list of record items that can possibly be added to the
+  messageType / NDEF record.
+
+  For example, the custom record can only define the payload once. If it
+  is already present, it should no longer be offered to the user to add
+  the payload record item.
+
+  In contrast, a text item can in many cases be added as many times as needed,
+  as Smart Posters support text in different languages, so that the reader
+  can choose which language to show.
+  */
 QList<QObject*> NfcRecordModel::possibleContentForRecord(int recordIndex)
 {
     QList<QObject*> possibleContent;
@@ -611,6 +694,9 @@ void NfcRecordModel::checkPossibleContentForRecord(QList<QObject*> &contentList,
 
 }
 
+/*!
+  \brief Get default values for a new record item that is part of a specific message type.
+  */
 void NfcRecordModel::getDefaultsForRecordContent(const NfcTypes::MessageType msgType, const NfcTypes::RecordContent contentType, QString& defaultTitle, QString& defaultContents)
 {
     defaultTitle = "";
@@ -813,6 +899,12 @@ void NfcRecordModel::getDefaultsForRecordContent(const NfcTypes::MessageType msg
     }
 }
 
+/*!
+  \brief Get possible selection items for a new record item.
+
+  \param contentType record content type to get the possible selection items for
+  \param defaultSelectedItem which item should be selected by default
+  */
 QVariantList NfcRecordModel::getSelectionItemsForRecordContent(const NfcTypes::RecordContent contentType, int& defaultSelectedItem)
 {
     QVariantList selectionItems;
@@ -833,6 +925,7 @@ QVariantList NfcRecordModel::getSelectionItemsForRecordContent(const NfcTypes::R
         selectionItems << "LinkedIn";
         selectionItems << "Facebook";
         selectionItems << "Xing";
+        // vKontakte.ru
         selectionItems << QString::fromWCharArray(L"\x0412\x041A\x043E\x043D\x0442\x0430\x043A\x0442\x0435");
         break;
     case NfcTypes::RecordTypeNameFormat:

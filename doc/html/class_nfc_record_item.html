@@ -119,53 +119,72 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7bae00f66a16680e7a038f89a08a3164"></a><!-- doxytag: member="NfcRecordItem::NfcRecordItem" ref="a7bae00f66a16680e7a038f89a08a3164" args="(QObject *parent=0)" -->
 &#160;</td><td class="memItemRight" valign="bottom"><b>NfcRecordItem</b> (QObject *parent=0)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7bcaf16ea72f06566864039f310493fc"></a><!-- doxytag: member="NfcRecordItem::NfcRecordItem" ref="a7bcaf16ea72f06566864039f310493fc" args="(const QString &amp;title, NfcTypes::MessageType messageType, NfcTypes::RecordContent recordContent, const QString &amp;currentText, bool removeVisible, bool addVisible, int recordId, QObject *parent=0)" -->
-&#160;</td><td class="memItemRight" valign="bottom"><b>NfcRecordItem</b> (const QString &amp;title, <a class="el" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f">NfcTypes::MessageType</a> messageType, <a class="el" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691">NfcTypes::RecordContent</a> recordContent, const QString &amp;currentText, bool removeVisible, bool addVisible, int recordId, QObject *parent=0)</td></tr>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#a7bcaf16ea72f06566864039f310493fc">NfcRecordItem</a> (const QString &amp;title, <a class="el" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f">NfcTypes::MessageType</a> messageType, <a class="el" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691">NfcTypes::RecordContent</a> recordContent, const QString &amp;currentText, bool removeVisible, bool addVisible, int recordId, QObject *parent=0)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct a new record item with the supplied information and an optional parent. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a153abc99ecccf35a1b094d5e5c2f3e4c"></a><!-- doxytag: member="NfcRecordItem::data" ref="a153abc99ecccf35a1b094d5e5c2f3e4c" args="(int role) const " -->
-QVariant&#160;</td><td class="memItemRight" valign="bottom"><b>data</b> (int role) const </td></tr>
+QVariant&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#a153abc99ecccf35a1b094d5e5c2f3e4c">data</a> (int role) const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the current data of the instance, based on the <em>role</em>. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad3dce406ae2db40736c7e8e1cf35ccd4"></a><!-- doxytag: member="NfcRecordItem::setData" ref="ad3dce406ae2db40736c7e8e1cf35ccd4" args="(const QVariant &amp;value, const QString &amp;role)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setData</b> (const QVariant &amp;value, const QString &amp;role)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#ad3dce406ae2db40736c7e8e1cf35ccd4">setData</a> (const QVariant &amp;value, const QString &amp;role)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set data of the item using the role name as a string. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aee1afdcddb2a011a5d882aa3caf62067"></a><!-- doxytag: member="NfcRecordItem::setData" ref="aee1afdcddb2a011a5d882aa3caf62067" args="(const QVariant &amp;value, const int role)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setData</b> (const QVariant &amp;value, const int role)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#aee1afdcddb2a011a5d882aa3caf62067">setData</a> (const QVariant &amp;value, const int role)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set data of the item using the role name as an int (based on the enum, which is not supported by QML). <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af4a7f0e7422892612e27a101e2c2d277"></a><!-- doxytag: member="NfcRecordItem::roleNames" ref="af4a7f0e7422892612e27a101e2c2d277" args="() const " -->
-QHash&lt; int, QByteArray &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>roleNames</b> () const </td></tr>
+QHash&lt; int, QByteArray &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#af4a7f0e7422892612e27a101e2c2d277">roleNames</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get all role names supported for this item, to be used by the model for generic setting and retrieving data. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3c06dffe3784b607998835bc6df79a6d"></a><!-- doxytag: member="NfcRecordItem::title" ref="a3c06dffe3784b607998835bc6df79a6d" args="() const " -->
-Q_INVOKABLE QString&#160;</td><td class="memItemRight" valign="bottom"><b>title</b> () const </td></tr>
+Q_INVOKABLE QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#a3c06dffe3784b607998835bc6df79a6d">title</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the title text / header of the record item. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae18f03ef8b5feadfa2b7dd29fb152dee"></a><!-- doxytag: member="NfcRecordItem::setTitle" ref="ae18f03ef8b5feadfa2b7dd29fb152dee" args="(const QString &amp;title)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setTitle</b> (const QString &amp;title)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#ae18f03ef8b5feadfa2b7dd29fb152dee">setTitle</a> (const QString &amp;title)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the title text / header of the record item. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4d92d401ae4cae96898a4e317c66030e"></a><!-- doxytag: member="NfcRecordItem::messageType" ref="a4d92d401ae4cae96898a4e317c66030e" args="() const " -->
-Q_INVOKABLE <a class="el" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f">NfcTypes::MessageType</a>&#160;</td><td class="memItemRight" valign="bottom"><b>messageType</b> () const </td></tr>
+Q_INVOKABLE <a class="el" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f">NfcTypes::MessageType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#a4d92d401ae4cae96898a4e317c66030e">messageType</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the message type this item adds info to. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a87845bde127bd7ca871d8170d78fb846"></a><!-- doxytag: member="NfcRecordItem::setMessageType" ref="a87845bde127bd7ca871d8170d78fb846" args="(const NfcTypes::MessageType messageType)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setMessageType</b> (const <a class="el" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f">NfcTypes::MessageType</a> messageType)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#a87845bde127bd7ca871d8170d78fb846">setMessageType</a> (const <a class="el" href="class_nfc_types.html#a1ff0384b1733be7e1cb8baaf52ce891f">NfcTypes::MessageType</a> messageType)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the message type this item adds info to. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1d199f2b3af825191131e06c5dc6c042"></a><!-- doxytag: member="NfcRecordItem::recordContent" ref="a1d199f2b3af825191131e06c5dc6c042" args="() const " -->
-Q_INVOKABLE <a class="el" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691">NfcTypes::RecordContent</a>&#160;</td><td class="memItemRight" valign="bottom"><b>recordContent</b> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a23ee50fa06359524bf792f21aa17e940"></a><!-- doxytag: member="NfcRecordItem::recordContentInt" ref="a23ee50fa06359524bf792f21aa17e940" args="() const " -->
-Q_INVOKABLE int&#160;</td><td class="memItemRight" valign="bottom"><b>recordContentInt</b> () const </td></tr>
+Q_INVOKABLE <a class="el" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691">NfcTypes::RecordContent</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#a1d199f2b3af825191131e06c5dc6c042">recordContent</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the record content - the detail of the NDEF record that is stored by this specific instance. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#a23ee50fa06359524bf792f21aa17e940">recordContentInt</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the record content - the detail of the NDEF record that is stored by this specific instance.  <a href="#a23ee50fa06359524bf792f21aa17e940"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a476f0648dd9495a3244bd9f9295658a0"></a><!-- doxytag: member="NfcRecordItem::setRecordContent" ref="a476f0648dd9495a3244bd9f9295658a0" args="(const NfcTypes::RecordContent recordContent)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setRecordContent</b> (const <a class="el" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691">NfcTypes::RecordContent</a> recordContent)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ac5c9c51b22217986fd1db45f2c613c3e"></a><!-- doxytag: member="NfcRecordItem::currentText" ref="ac5c9c51b22217986fd1db45f2c613c3e" args="() const " -->
-QString&#160;</td><td class="memItemRight" valign="bottom"><b>currentText</b> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3b0780d833ac21b95b35bf67ed07eb75"></a><!-- doxytag: member="NfcRecordItem::setCurrentText" ref="a3b0780d833ac21b95b35bf67ed07eb75" args="(const QString &amp;currentText)" -->
-Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><b>setCurrentText</b> (const QString &amp;currentText)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#a476f0648dd9495a3244bd9f9295658a0">setRecordContent</a> (const <a class="el" href="class_nfc_types.html#ae29245a8a2a4d24dd3de2f9d3db83691">NfcTypes::RecordContent</a> recordContent)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the record content - the detail of the NDEF record that is stored by this specific instance. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#ac5c9c51b22217986fd1db45f2c613c3e">currentText</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The current text of the record item.  <a href="#ac5c9c51b22217986fd1db45f2c613c3e"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">Q_INVOKABLE void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#a3b0780d833ac21b95b35bf67ed07eb75">setCurrentText</a> (const QString &amp;currentText)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the current text of the record item.  <a href="#a3b0780d833ac21b95b35bf67ed07eb75"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a78ee4066d905c7dff0784c5e58f3618d"></a><!-- doxytag: member="NfcRecordItem::selectOptions" ref="a78ee4066d905c7dff0784c5e58f3618d" args="() const " -->
-QVariantList&#160;</td><td class="memItemRight" valign="bottom"><b>selectOptions</b> () const </td></tr>
+QVariantList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#a78ee4066d905c7dff0784c5e58f3618d">selectOptions</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the list of option items / radio buttons for this record item, in case it is of a type that uses a selection instead of a text field. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaad619a7b1b89c64d64eb18c2cace6a6"></a><!-- doxytag: member="NfcRecordItem::setSelectOptions" ref="aaad619a7b1b89c64d64eb18c2cace6a6" args="(const QVariantList selectOptions)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setSelectOptions</b> (const QVariantList selectOptions)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#aaad619a7b1b89c64d64eb18c2cace6a6">setSelectOptions</a> (const QVariantList selectOptions)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the list of option items / radio buttons for this record item, in case it is of a type that uses a selection instead of a text field. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a265edde61756915e6482e124dd69552f"></a><!-- doxytag: member="NfcRecordItem::selectedOption" ref="a265edde61756915e6482e124dd69552f" args="() const " -->
-int&#160;</td><td class="memItemRight" valign="bottom"><b>selectedOption</b> () const </td></tr>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#a265edde61756915e6482e124dd69552f">selectedOption</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the currently selected option / radio button for this record item, in case it is of a type that uses a selection instead of a text field. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a1417d058227ccfd36f427d5a793dca08"></a><!-- doxytag: member="NfcRecordItem::setSelectedOption" ref="a1417d058227ccfd36f427d5a793dca08" args="(const int selectedOption)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setSelectedOption</b> (const int selectedOption)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#a1417d058227ccfd36f427d5a793dca08">setSelectedOption</a> (const int selectedOption)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the currently selected option / radio button for this record item, in case it is of a type that uses a selection instead of a text field. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a618d736a09bd92f75bcd663f2c7ad8bd"></a><!-- doxytag: member="NfcRecordItem::removeVisible" ref="a618d736a09bd92f75bcd663f2c7ad8bd" args="() const " -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>removeVisible</b> () const </td></tr>
+bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#a618d736a09bd92f75bcd663f2c7ad8bd">removeVisible</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether this record item can be removed again from the message. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab79de4af0c8ec60e11979f619a20085e"></a><!-- doxytag: member="NfcRecordItem::setRemoveVisible" ref="ab79de4af0c8ec60e11979f619a20085e" args="(const bool removeVisible)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setRemoveVisible</b> (const bool removeVisible)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad38d6168008e264150f60314aa8895b4"></a><!-- doxytag: member="NfcRecordItem::addVisible" ref="ad38d6168008e264150f60314aa8895b4" args="() const " -->
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>addVisible</b> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad2481ede899f1c5025ab4abcb959d529"></a><!-- doxytag: member="NfcRecordItem::setAddVisible" ref="ad2481ede899f1c5025ab4abcb959d529" args="(const bool addVisible)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setAddVisible</b> (const bool addVisible)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#ab79de4af0c8ec60e11979f619a20085e">setRemoveVisible</a> (const bool removeVisible)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether this record item can be removed again from the message. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#ad38d6168008e264150f60314aa8895b4">addVisible</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a sub-item can be added after this record item to the same message type, providing more detail.  <a href="#ad38d6168008e264150f60314aa8895b4"></a><br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#ad2481ede899f1c5025ab4abcb959d529">setAddVisible</a> (const bool addVisible)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Whether a sub-item can be added after this record item to the same message type, providing more detail.  <a href="#ad2481ede899f1c5025ab4abcb959d529"></a><br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a4c178302d84d67c2be9fdf1a4877674c"></a><!-- doxytag: member="NfcRecordItem::recordId" ref="a4c178302d84d67c2be9fdf1a4877674c" args="() const " -->
-int&#160;</td><td class="memItemRight" valign="bottom"><b>recordId</b> () const </td></tr>
+int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#a4c178302d84d67c2be9fdf1a4877674c">recordId</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the record id this record item belongs to. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a41d1b0364f93d6a5ec2abb9fd95b5c55"></a><!-- doxytag: member="NfcRecordItem::setRecordId" ref="a41d1b0364f93d6a5ec2abb9fd95b5c55" args="(const int recordId)" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setRecordId</b> (const int recordId)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_item.html#a41d1b0364f93d6a5ec2abb9fd95b5c55">setRecordId</a> (const int recordId)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the record id this record item belongs to. <br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Individual record item contained in the <a class="el" href="class_nfc_record_model.html" title="Stores and manages the editable data, which can be transformed to an NDEF message.">NfcRecordModel</a>. </p>
@@ -186,6 +205,104 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setRecordId</b> (cons
 </div>
 <div class="memdoc">
 <p>Roles according to data stored in a Qt model, which can then be requested from this class. </p>
+
+</div>
+</div>
+<hr/><h2>Member Function Documentation</h2>
+<a class="anchor" id="ad38d6168008e264150f60314aa8895b4"></a><!-- doxytag: member="NfcRecordItem::addVisible" ref="ad38d6168008e264150f60314aa8895b4" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool NfcRecordItem::addVisible </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Whether a sub-item can be added after this record item to the same message type, providing more detail. </p>
+<p>This is usually only the case for header items. Could be combined with the message header type to save this boolean in the future, if there is no need for a separate <a class="el" href="class_nfc_record_item.html#ad38d6168008e264150f60314aa8895b4" title="Whether a sub-item can be added after this record item to the same message type, providing more detai...">addVisible()</a> when more different item editors are added. </p>
+
+</div>
+</div>
+<a class="anchor" id="ac5c9c51b22217986fd1db45f2c613c3e"></a><!-- doxytag: member="NfcRecordItem::currentText" ref="ac5c9c51b22217986fd1db45f2c613c3e" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">QString NfcRecordItem::currentText </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>The current text of the record item. </p>
+<p>Used by most record items (exception being for example the selection item) </p>
+
+</div>
+</div>
+<a class="anchor" id="a23ee50fa06359524bf792f21aa17e940"></a><!-- doxytag: member="NfcRecordItem::recordContentInt" ref="a23ee50fa06359524bf792f21aa17e940" args="() const " -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int NfcRecordItem::recordContentInt </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Get the record content - the detail of the NDEF record that is stored by this specific instance. </p>
+<p>The record content is actually stored as an enum, but to communicate with QML, this is casted to an int. </p>
+
+</div>
+</div>
+<a class="anchor" id="ad2481ede899f1c5025ab4abcb959d529"></a><!-- doxytag: member="NfcRecordItem::setAddVisible" ref="ad2481ede899f1c5025ab4abcb959d529" args="(const bool addVisible)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void NfcRecordItem::setAddVisible </td>
+          <td>(</td>
+          <td class="paramtype">const bool&#160;</td>
+          <td class="paramname"><em>addVisible</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Whether a sub-item can be added after this record item to the same message type, providing more detail. </p>
+<p>This is usually only the case for header items. Could be combined with the message header type to save this boolean in the future, if there is no need for a separate <a class="el" href="class_nfc_record_item.html#ad38d6168008e264150f60314aa8895b4" title="Whether a sub-item can be added after this record item to the same message type, providing more detai...">addVisible()</a> when more different item editors are added. </p>
+
+</div>
+</div>
+<a class="anchor" id="a3b0780d833ac21b95b35bf67ed07eb75"></a><!-- doxytag: member="NfcRecordItem::setCurrentText" ref="a3b0780d833ac21b95b35bf67ed07eb75" args="(const QString &amp;currentText)" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void NfcRecordItem::setCurrentText </td>
+          <td>(</td>
+          <td class="paramtype">const QString &amp;&#160;</td>
+          <td class="paramname"><em>currentText</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+
+<p>Set the current text of the record item. </p>
+<p>Used by most record items (exception being for example the selection item) </p>
 
 </div>
 </div>
@@ -211,7 +328,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setRecordId</b> (cons
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 18 2012 16:01:21 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 19 2012 16:04:48 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

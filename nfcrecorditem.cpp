@@ -40,6 +40,9 @@
 
 #include "nfcrecorditem.h"
 
+/*!
+  \brief Construct a new record item with the supplied information and an optional parent.
+  */
 NfcRecordItem::NfcRecordItem(const QString& title, NfcTypes::MessageType messageType,
                              NfcTypes::RecordContent recordContent, const QString& currentText,
                              bool removeVisible, bool addVisible, int recordId, QObject* parent) :
@@ -67,7 +70,10 @@ NfcRecordItem::NfcRecordItem(const QString& title, NfcTypes::MessageType message
 //    qDebug() << "[NfcRecordItem Copy Constructor]";
 //}
 
-
+/*!
+  \brief Get all role names supported for this item, to be used by the model
+  for generic setting and retrieving data.
+  */
 QHash<int, QByteArray> NfcRecordItem::roleNames() const
 {
     QHash<int, QByteArray> roles;
@@ -83,6 +89,9 @@ QHash<int, QByteArray> NfcRecordItem::roleNames() const
     return roles;
 }
 
+/*!
+  \brief Get the current data of the instance, based on the \a role.
+  */
 QVariant NfcRecordItem::data(int role) const
 {
     switch (role) {
@@ -122,6 +131,9 @@ QVariant NfcRecordItem::data(int role) const
 //    return roleNames().key(role);
 //}
 
+/*!
+  \brief Set data of the item using the role name as a string.
+  */
 void NfcRecordItem::setData(const QVariant& value, const QString& role)
 {
     // Convert QString to enum
@@ -129,6 +141,10 @@ void NfcRecordItem::setData(const QVariant& value, const QString& role)
     setData(value, roleInt);
 }
 
+/*!
+  \brief Set data of the item using the role name as an int (based on
+  the enum, which is not supported by QML).
+  */
 void NfcRecordItem::setData(const QVariant& value, const int role)
 {
     switch (role) {
@@ -145,7 +161,6 @@ void NfcRecordItem::setData(const QVariant& value, const int role)
         setCurrentText(value.toString());
         break;
     case SelectOptionsRole:
-        // Should work, but not tested
         if (value.canConvert<QVariantList>()) {
             setSelectOptions(value.value<QVariantList>());
         }
@@ -165,41 +180,78 @@ void NfcRecordItem::setData(const QVariant& value, const int role)
     }
 }
 
+/*!
+  \brief Get the title text / header of the record item.
+  */
 QString NfcRecordItem::title() const
 {
     return m_title;
 }
 
+/*!
+  \brief Get the message type this item adds info to.
+  */
 NfcTypes::MessageType NfcRecordItem::messageType() const
 {
     return m_messageType;
 }
 
+/*!
+  \brief Get the record content - the detail of the NDEF record that is
+  stored by this specific instance.
+  */
 NfcTypes::RecordContent NfcRecordItem::recordContent() const
 {
     return m_recordContent;
 }
 
+/*!
+  \brief Get the record content - the detail of the NDEF record that is
+  stored by this specific instance.
+
+  The record content is actually stored as an enum, but to communicate with
+  QML, this is casted to an int.
+  */
 int NfcRecordItem::recordContentInt() const
 {
     return (int)m_recordContent;
 }
 
+/*!
+  \brief The current text of the record item.
+
+  Used by most record items (exception being for example the selection item)
+  */
 QString NfcRecordItem::currentText() const
 {
     return m_currentText;
 }
 
+/*!
+  \brief Whether this record item can be removed again from the message.
+  */
 bool NfcRecordItem::removeVisible() const
 {
     return m_removeVisible;
 }
 
+/*!
+  \brief Whether a sub-item can be added after this record item to the
+  same message type, providing more detail.
+
+  This is usually only the case for header items. Could be combined
+  with the message header type to save this boolean in the future, if
+  there is no need for a separate addVisible() when more different
+  item editors are added.
+  */
 bool NfcRecordItem::addVisible() const
 {
     return m_addVisible;
 }
 
+/*!
+  \brief Get the record id this record item belongs to.
+  */
 int NfcRecordItem::recordId() const
 {
     return m_recordId;
@@ -207,6 +259,9 @@ int NfcRecordItem::recordId() const
 
 
 
+/*!
+  \brief Set the title text / header of the record item.
+  */
 void NfcRecordItem::setTitle(const QString &title)
 {
     if (m_title != title) {
@@ -215,6 +270,9 @@ void NfcRecordItem::setTitle(const QString &title)
     }
 }
 
+/*!
+  \brief Set the message type this item adds info to.
+  */
 void NfcRecordItem::setMessageType(const NfcTypes::MessageType messageType)
 {
     if (m_messageType != messageType) {
@@ -223,6 +281,10 @@ void NfcRecordItem::setMessageType(const NfcTypes::MessageType messageType)
     }
 }
 
+/*!
+  \brief Set the record content - the detail of the NDEF record that is
+  stored by this specific instance.
+  */
 void NfcRecordItem::setRecordContent(const NfcTypes::RecordContent recordContent)
 {
     if (m_recordContent != recordContent) {
@@ -231,6 +293,11 @@ void NfcRecordItem::setRecordContent(const NfcTypes::RecordContent recordContent
     }
 }
 
+/*!
+  \brief Set the current text of the record item.
+
+  Used by most record items (exception being for example the selection item)
+  */
 void NfcRecordItem::setCurrentText(const QString &currentText)
 {
     if (m_currentText != currentText) {
@@ -240,6 +307,9 @@ void NfcRecordItem::setCurrentText(const QString &currentText)
     }
 }
 
+/*!
+  \brief Whether this record item can be removed again from the message.
+  */
 void NfcRecordItem::setRemoveVisible(const bool removeVisible)
 {
     if (m_removeVisible != removeVisible) {
@@ -248,6 +318,15 @@ void NfcRecordItem::setRemoveVisible(const bool removeVisible)
     }
 }
 
+/*!
+  \brief Whether a sub-item can be added after this record item to the
+  same message type, providing more detail.
+
+  This is usually only the case for header items. Could be combined
+  with the message header type to save this boolean in the future, if
+  there is no need for a separate addVisible() when more different
+  item editors are added.
+  */
 void NfcRecordItem::setAddVisible(const bool addVisible)
 {
     if (m_addVisible != addVisible) {
@@ -256,6 +335,9 @@ void NfcRecordItem::setAddVisible(const bool addVisible)
     }
 }
 
+/*!
+  \brief Set the record id this record item belongs to.
+  */
 void NfcRecordItem::setRecordId(const int recordId)
 {
     if (m_recordId != recordId) {
@@ -264,11 +346,19 @@ void NfcRecordItem::setRecordId(const int recordId)
     }
 }
 
+/*!
+  \brief Get the list of option items / radio buttons for this record item,
+  in case it is of a type that uses a selection instead of a text field.
+  */
 QVariantList NfcRecordItem::selectOptions() const
 {
     return m_selectOptions;
 }
 
+/*!
+  \brief Set the list of option items / radio buttons for this record item,
+  in case it is of a type that uses a selection instead of a text field.
+  */
 void NfcRecordItem::setSelectOptions(const QVariantList selectOptions)
 {
     if (m_selectOptions != selectOptions) {
@@ -277,11 +367,19 @@ void NfcRecordItem::setSelectOptions(const QVariantList selectOptions)
     }
 }
 
+/*!
+  \brief Get the currently selected option / radio button for this record item,
+  in case it is of a type that uses a selection instead of a text field.
+  */
 int NfcRecordItem::selectedOption() const
 {
     return m_selectedOption;
 }
 
+/*!
+  \brief Set the currently selected option / radio button for this record item,
+  in case it is of a type that uses a selection instead of a text field.
+  */
 void NfcRecordItem::setSelectedOption(const int selectedOption)
 {
     if (m_selectedOption != selectedOption) {

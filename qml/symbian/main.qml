@@ -49,7 +49,6 @@ PageStackWindow {
     initialPage: nfcInfoPage
     showStatusBar: true
     showToolBar: true
-    //platformSoftwareInputPanelEnabled: true
 
     NfcInfoPage {
         id: nfcInfoPage
@@ -91,7 +90,6 @@ PageStackWindow {
         function logImage(imgId)
         {
             nfcInfoPage.logMessage("", "white", ("image://nfcimageprovider/"+imgId))
-            //nfcInfoPage.messageModel.append( {"infoMsg": "", "textColor": "white", "image": ("image://nfcimageprovider/"+imgId)} )
         }
 
         onNfcStatusUpdate: {

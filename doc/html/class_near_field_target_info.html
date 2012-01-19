@@ -106,10 +106,18 @@ Public Types</h2></td></tr>
  }</td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9812f6292697a6b678a95132b9ee2a01"></a><!-- doxytag: member="NearFieldTargetInfo::NearFieldTargetInfo" ref="a9812f6292697a6b678a95132b9ee2a01" args="()" -->
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_near_field_target_info.html#a9812f6292697a6b678a95132b9ee2a01">NearFieldTargetInfo</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">New target info, using default values. <br/></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aa11ffd470469898763478e0ffd8b5df2"></a><!-- doxytag: member="NearFieldTargetInfo::resetInfo" ref="aa11ffd470469898763478e0ffd8b5df2" args="()" -->
-void&#160;</td><td class="memItemRight" valign="bottom"><b>resetInfo</b> ()</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">NearFieldTargetInfo::NfcTagAccessStatus&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_near_field_target_info.html#a068168d709b463a6ca35c2bb2d89a566">combinedReadAccess</a> () const </td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">NearFieldTargetInfo::NfcTagAccessStatus&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_near_field_target_info.html#a5e4a5aac162f16c858bbafc44d9a849e">combinedWriteAccess</a> () const </td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_near_field_target_info.html#aa11ffd470469898763478e0ffd8b5df2">resetInfo</a> ()</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Reset all stored data to the defaults. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a068168d709b463a6ca35c2bb2d89a566"></a><!-- doxytag: member="NearFieldTargetInfo::combinedReadAccess" ref="a068168d709b463a6ca35c2bb2d89a566" args="() const " -->
+NearFieldTargetInfo::NfcTagAccessStatus&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_near_field_target_info.html#a068168d709b463a6ca35c2bb2d89a566">combinedReadAccess</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if both the lock bits of the tag as well as the capability container (CC) indicate that the tag is readable. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a5e4a5aac162f16c858bbafc44d9a849e"></a><!-- doxytag: member="NearFieldTargetInfo::combinedWriteAccess" ref="a5e4a5aac162f16c858bbafc44d9a849e" args="() const " -->
+NearFieldTargetInfo::NfcTagAccessStatus&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_near_field_target_info.html#a5e4a5aac162f16c858bbafc44d9a849e">combinedWriteAccess</a> () const </td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if both the lock bits of the tag as well as the capability container (CC) indicate that the tag is writable. <br/></td></tr>
 <tr><td colspan="2"><h2><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a3f6b903fb418f45d654121ccb3864508"></a><!-- doxytag: member="NearFieldTargetInfo::tagMajorVersion" ref="a3f6b903fb418f45d654121ccb3864508" args="" -->
@@ -133,42 +141,7 @@ NfcTagMemoryType&#160;</td><td class="memItemRight" valign="bottom"><b>tagMemory
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Stores additional information about a QNearFieldTarget. </p>
-</div><hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a068168d709b463a6ca35c2bb2d89a566"></a><!-- doxytag: member="NearFieldTargetInfo::combinedReadAccess" ref="a068168d709b463a6ca35c2bb2d89a566" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">NearFieldTargetInfo::NfcTagAccessStatus NearFieldTargetInfo::combinedReadAccess </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Check if both the lock bits of the tag as well as the capability container (CC) indicate that the tag is readable. </p>
-
-</div>
-</div>
-<a class="anchor" id="a5e4a5aac162f16c858bbafc44d9a849e"></a><!-- doxytag: member="NearFieldTargetInfo::combinedWriteAccess" ref="a5e4a5aac162f16c858bbafc44d9a849e" args="() const " -->
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">NearFieldTargetInfo::NfcTagAccessStatus NearFieldTargetInfo::combinedWriteAccess </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div>
-<div class="memdoc">
-<p>Check if both the lock bits of the tag as well as the capability container (CC) indicate that the tag is writable. </p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following files:<ul>
+</div><hr/>The documentation for this class was generated from the following files:<ul>
 <li><a class="el" href="nearfieldtargetinfo_8h_source.html">nearfieldtargetinfo.h</a></li>
 <li>nearfieldtargetinfo.cpp</li>
 </ul>
@@ -190,7 +163,7 @@ NfcTagMemoryType&#160;</td><td class="memItemRight" valign="bottom"><b>tagMemory
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Wed Jan 18 2012 16:01:21 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Thu Jan 19 2012 16:04:48 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

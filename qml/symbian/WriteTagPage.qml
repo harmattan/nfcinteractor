@@ -11,12 +11,6 @@ Page {
                 pageStack.depth <= 1 ? Qt.quit() : pageStack.pop();
             }
         }
-//        ToolButton {
-//            iconSource: "end.svg"
-//            onClicked: {
-//                startWriting();
-//            }
-//        }
     }
 
     function resetPage() {

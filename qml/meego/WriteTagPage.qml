@@ -10,12 +10,6 @@ Page {
                 pageStack.depth <= 1 ? Qt.quit() : pageStack.pop();
             }
         }
-//        ToolIcon {
-//            iconId: "toolbar-back"
-//            onClicked: {
-//                startWriting();
-//            }
-//        }
     }
 
     function resetPage() {
