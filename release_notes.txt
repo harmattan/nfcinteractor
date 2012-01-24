@@ -44,10 +44,11 @@ Tag writing:
 
 Easily reusable code for developers including:
 - NDEF record classes for: Smart Poster, Mime/vCard (Business Cards), Mime/Image, Geo coordinates, App Store links, Social Networks (Twitter, LinkedIn, Facebook, Xing, vKontakte), SMS, Smart URI (depending on content requirements uses Smart Poster or URI to create the smallest possible message)
-- Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2, Symbian only)
+- Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2**)
 
 Known bugs / issues (work-in-progress):
-- Complete source code comments
+- Add android to geo: redirect for m.php script
+- Refactor record item defaults out of nfcrecordmodel.cpp
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)

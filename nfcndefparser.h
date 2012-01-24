@@ -43,6 +43,11 @@
 #include <QObject>
 #include <QDebug>
 
+// Clipboard
+#include <QApplication>
+#include <QClipboard>
+#include <QMimeData>
+
 // NDEF
 #include <QNdefMessage>
 #include <QNdefRecord>
@@ -92,7 +97,7 @@ signals:
 public:
     QString parseNdefMessage(const QNdefMessage &message);
 
-private:
+    private:
     QString parseUriRecord(const QNdefNfcUriRecord &record);
     QString parseTextRecord(const QNdefNfcTextRecord &record);
     QString textRecordToString(const QNdefNfcTextRecord &textRecord);
@@ -103,9 +108,24 @@ private:
     QString convertRecordTypeNameToString(const QNdefRecord::TypeNameFormat typeName);
 
 private:
+    void storeClipboard(const QString &text, const QString &locale);
+    void storeClipboard(const QUrl &uri);
+    void setStoredClipboard();
+
+private:
     /*! Used for storing images found on the tags. */
     TagImageCache* m_imgCache;    // Not owned by this class
-    
+
+    enum ClipboardContents {
+        ClipboardEmpty,
+        ClipboardUri,
+        ClipboardText,
+        ClipboardTextEn // Give preference to English text for storing on the clipboard
+    };
+    ClipboardContents m_clipboardContents;
+    QUrl m_clipboardUri;
+    QString m_clipboardText;
+
 };
 
 #endif // NFCNDEFPARSER_H

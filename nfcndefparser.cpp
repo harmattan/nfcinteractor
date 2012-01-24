@@ -70,6 +70,7 @@ QString NfcNdefParser::parseNdefMessage(const QNdefMessage &message)
 
     // Total string that will contain the parsed contents.
     QString tagContents;
+    m_clipboardContents = ClipboardEmpty;
 
     // Message size
     QByteArray rawMessage = message.toByteArray();
@@ -146,7 +147,66 @@ QString NfcNdefParser::parseNdefMessage(const QNdefMessage &message)
         }
         numRecord++;
     }
+
+    // If we found records that can be stored in a clipboard,
+    // apply the contents now.
+    setStoredClipboard();
     return tagContents;
+}
+
+void NfcNdefParser::storeClipboard(const QString& text, const QString& locale)
+{
+    if (m_clipboardContents == ClipboardUri ||
+            m_clipboardContents == ClipboardTextEn)  {
+        // Don't override clipboard if it already stores an URI or an English text
+        return;
+    }
+    // Empty clipboard so far, or nothing with higher priority stored -> store new
+    // text to clipboard
+    m_clipboardText = text;
+    // Set the contents to either contain text, or English text
+    // (which has higher priority than others; one language has to have
+    // highest priority if there are multiple languages stored on a tag,
+    // and English makes most sense).
+    m_clipboardContents = (locale.toLower() == "en") ? ClipboardTextEn : ClipboardText;
+}
+
+void NfcNdefParser::storeClipboard(const QUrl& uri)
+{
+    if (m_clipboardContents == ClipboardUri) {
+        // Already have an URI stored in the clipboard cache
+        return;
+    }
+    // Otherwise, storing the URI on the clipboard has higher priority than text
+    m_clipboardContents = ClipboardUri;
+    m_clipboardUri = uri;
+}
+
+void NfcNdefParser::setStoredClipboard()
+{
+    if (m_clipboardContents == ClipboardEmpty)
+        return;
+
+    QClipboard *clipboard = QApplication::clipboard();
+    if (clipboard) {
+        // We have new contents for sure - clear the clipboard first
+        clipboard->clear();
+        if (m_clipboardContents == ClipboardUri) {
+            // Cached clipboard contains URI as highest priority
+            // Storing as URI doesn't allow pasting into other text fields
+            // on Symbian and MeeGo Harmattan - still store it as text.
+            //QMimeData* mimeData = new QMimeData();
+            //mimeData->setUrls(QList<QUrl>() << m_clipboardUri);
+            // Ownership of mimeData transfers to clipboard
+            //clipboard->setMimeData(mimeData);
+            clipboard->setText(m_clipboardUri.toString());
+            qDebug() << "Stored URI to clipboard: " << m_clipboardUri;
+        } else {
+            // Clipboard contains text
+            clipboard->setText(m_clipboardText);
+            qDebug() << "Stored text to clipboard: " << m_clipboardText;
+        }
+    }
 }
 
 /*!
@@ -160,6 +220,7 @@ QString NfcNdefParser::parseUriRecord(const QNdefNfcUriRecord& record)
 {
     QString tagContents("[URI]\n");
     tagContents.append(record.uri().toString());
+    storeClipboard(record.uri());
     return tagContents;
 }
 
@@ -191,6 +252,7 @@ QString NfcNdefParser::textRecordToString(const QNdefNfcTextRecord& textRecord)
     txt.append("Locale: " + textRecord.locale() + "\n");
     const QString textEncoding = textRecord.encoding() == QNdefNfcTextRecord::Utf8 ? "UTF-8" : "UTF-16";
     txt.append("Encoding: " + textEncoding + "\n");
+    storeClipboard(textRecord.text(), textRecord.locale());
     return txt;
 }
 

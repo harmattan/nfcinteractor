@@ -26,7 +26,6 @@ exists($$QMAKE_INCDIR_QT"/../qmsystem2/qmkeys.h"):!contains(MEEGO_EDITION,harmat
 QML_IMPORT_PATH =
 
 OTHER_FILES += \
-    qml/common/*.qml \
     qml/images/*.svg \
     qml/images/*.png
 
