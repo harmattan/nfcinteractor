@@ -213,8 +213,22 @@ Page {
             break;
         }
 
-        nfcInfo.recordModel.addCompleteRecordWithDefault(newRecordType);
+        //nfcInfo.recordModel.addCompleteRecordWithDefault(newRecordType);
+        delayAddCompleteRecord.newRecordType = newRecordType;
+        delayAddCompleteRecord.start();
     }
+
+    Timer {
+        id: delayAddCompleteRecord
+        interval: 250
+        running: false
+        repeat: false
+        property int newRecordType
+        onTriggered: {
+            nfcInfo.recordModel.addCompleteRecordWithDefault(newRecordType);
+        }
+    }
+
 
     property Dialog dialog
     function showRecordHelp(index, title, messageType, recordContent)
