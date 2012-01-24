@@ -179,7 +179,7 @@ void NfcNdefParser::storeClipboard(const QUrl& uri)
     }
     // Otherwise, storing the URI on the clipboard has higher priority than text
     m_clipboardContents = ClipboardUri;
-    m_clipboardUri = uri;
+    m_clipboardText = uri.toString();
 }
 
 void NfcNdefParser::setStoredClipboard()
@@ -191,21 +191,7 @@ void NfcNdefParser::setStoredClipboard()
     if (clipboard) {
         // We have new contents for sure - clear the clipboard first
         clipboard->clear();
-        if (m_clipboardContents == ClipboardUri) {
-            // Cached clipboard contains URI as highest priority
-            // Storing as URI doesn't allow pasting into other text fields
-            // on Symbian and MeeGo Harmattan - still store it as text.
-            //QMimeData* mimeData = new QMimeData();
-            //mimeData->setUrls(QList<QUrl>() << m_clipboardUri);
-            // Ownership of mimeData transfers to clipboard
-            //clipboard->setMimeData(mimeData);
-            clipboard->setText(m_clipboardUri.toString());
-            qDebug() << "Stored URI to clipboard: " << m_clipboardUri;
-        } else {
-            // Clipboard contains text
-            clipboard->setText(m_clipboardText);
-            qDebug() << "Stored text to clipboard: " << m_clipboardText;
-        }
+        clipboard->setText(m_clipboardText);
     }
 }
 

@@ -46,7 +46,6 @@
 // Clipboard
 #include <QApplication>
 #include <QClipboard>
-#include <QMimeData>
 
 // NDEF
 #include <QNdefMessage>
@@ -89,15 +88,17 @@ public:
     void setImageCache(TagImageCache* tagImageCache);
 
 signals:
-    /*! The tag contained an image. The parameter contains
-      the image id that can be used to fetch it from the
-      tag image cache class. */
+    /*! \brief The tag contained an image.
+      The parameter contains the image id that can be used
+      to fetch it from the tag image cache class. */
     void nfcTagImage(const int nfcImgId);
 
 public:
+    /*! \brief Parse the NDEF message and return its contents
+      as human-readable text. */
     QString parseNdefMessage(const QNdefMessage &message);
 
-    private:
+private:
     QString parseUriRecord(const QNdefNfcUriRecord &record);
     QString parseTextRecord(const QNdefNfcTextRecord &record);
     QString textRecordToString(const QNdefNfcTextRecord &textRecord);
@@ -116,6 +117,10 @@ private:
     /*! Used for storing images found on the tags. */
     TagImageCache* m_imgCache;    // Not owned by this class
 
+    /*! Content that's currently stored in m_clipboardText.
+      Used to prioritize what's going to be written to the clipboard,
+      in the following priority order:
+      Uri > Text (English) > Text (any other language). */
     enum ClipboardContents {
         ClipboardEmpty,
         ClipboardUri,
@@ -123,7 +128,6 @@ private:
         ClipboardTextEn // Give preference to English text for storing on the clipboard
     };
     ClipboardContents m_clipboardContents;
-    QUrl m_clipboardUri;
     QString m_clipboardText;
 
 };

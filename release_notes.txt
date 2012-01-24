@@ -26,6 +26,7 @@ Tag reading:
 - List of all individual NDEF records
 - Parses Smart Poster, URI, text, image and business card (vCard) records
 - App is automatically launched for custom record with external RTD: "nokia.com:nfcinteractor"
+- Stores parsed URI or text to the clipboard
 
 Tag writing:
 - Dynamic UI to create a message consisting of multiple NDEF records, and to add information to each record
