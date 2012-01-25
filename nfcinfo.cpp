@@ -239,7 +239,7 @@ void NfcInfo::targetDetected(QNearFieldTarget *target)
 
     startedTagInteraction();
     // Check if the target includes a NDEF message
-    const bool targetHasNdefMessage = target->hasNdefMessage();
+    bool targetHasNdefMessage = target->hasNdefMessage();
     if (targetHasNdefMessage) {
         emit nfcStatusUpdate("NDEF target detected");
     } else {
@@ -254,6 +254,14 @@ void NfcInfo::targetDetected(QNearFieldTarget *target)
     QNearFieldTarget::AccessMethods accessMethods = target->accessMethods();
     if (accessMethods.testFlag(QNearFieldTarget::NdefAccess)) {
 
+#ifdef Q_OS_SYMBIAN
+        // Bug workaround on Symbian: hasNdefMessage() always returns false
+        // for a NFC Forum Tag Type 4, even if an NDEF message is present on the tag.
+        // See: https://bugreports.qt.nokia.com/browse/QTMOBILITY-2018
+        if (target->type() == QNearFieldTarget::NfcTagType4 && !targetHasNdefMessage) {
+            targetHasNdefMessage = true;
+        }
+#endif
         // Is a write operation pending?
         if (!m_pendingWriteNdef)
         {
@@ -267,6 +275,11 @@ void NfcInfo::targetDetected(QNearFieldTarget *target)
                 connect(target, SIGNAL(ndefMessageRead(QNdefMessage)),
                         this, SLOT(ndefMessageRead(QNdefMessage)));
                 m_cachedRequestId = target->readNdefMessages();
+            } else {
+                // No NDEF message detected
+                qDebug() << "No NDEF message detected";
+                emit nfcTagContents(tr("No NDEF message detected"));
+                stoppedTagInteraction();
             }
         } else {
             // Write operation is pending, so attempt writing the message.
