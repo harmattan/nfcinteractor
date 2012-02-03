@@ -134,7 +134,6 @@ Page {
 
     function doAddContentToRecord(recordIndex, messageType, newRecordContent) {
         nfcInfo.recordModel.addContentToRecord(recordIndex, messageType, newRecordContent)
-        addContentDialogLoader.sourceComponent = undefined
     }
 
 
@@ -142,6 +141,7 @@ Page {
       \brief Show a dialog to add the possible content items to the specified record.
       */
     function queryAddContentToRecord(recordIndex, messageType) {
+        addContentDialogLoader.sourceComponent = undefined;
         addContentDialogLoader.sourceComponent = addContentDialogComponent
         prepareAddContentDialog(recordIndex, messageType);
 
@@ -176,6 +176,7 @@ Page {
         for (var i = 0; i < contentList.length; i++) {
             addContentDialogLoader.item.model.append({"modelData": contentList[i].title(), "type": contentList[i].recordContentInt()})
         }
+        addContentDialogLoader.item.selectedIndex = -1;
     }
 
 
@@ -302,7 +303,10 @@ Page {
         QueryDialog {
             id: helpDialog
             acceptButtonText: "Ok"
-            onAccepted: helpDialog.destroy()
+            // Don't call only helpDialog.destroy() on Symbian, as it causes
+            // the app to stall on SR2.
+            // https://bugreports.qt-project.org/browse/QTCOMPONENTS-1225
+            onAccepted: destroy()
         }
     }
 }
