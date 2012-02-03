@@ -42,6 +42,10 @@
 
 #include <QObject>
 
+// Used for the QSettings file, for stats and IAP
+#define SETTINGS_ORG "Nokia"
+#define SETTINGS_APP "NfcInteractor"
+
 /*!
   \brief Important enums that are shared between QML and C++.
 
@@ -73,17 +77,21 @@ public:
       different aspects of the message.
       */
     enum MessageType {
-        MsgSmartPoster,
-        MsgUri,
-        MsgText,
+        MsgSmartPoster, // Note: do not change the order of the message types.
+        MsgUri,         // The values are used to save & load stats and should
+        MsgText,        // work after the app has been updated.
         MsgSms,
         MsgBusinessCard,
         MsgSocialNetwork,
         MsgGeo,
         MsgStore,
         MsgImage,
-        MsgAnnotatedUrl,
         MsgCustom,
+        // Msg Types below this are not actually added to the model,
+        // but just expand to a collection of the basic types listed above.
+        // As such, no stats for these types are stored, the order can be changed.
+        // If adding a new type that is included in stats, add it before here.
+        MsgAnnotatedUrl,
         MsgCombination,
         MsgNfcAutostart
     };

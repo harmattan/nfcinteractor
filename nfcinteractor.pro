@@ -1,10 +1,18 @@
 TARGET = nfcinteractor
 VERSION = 2.00.0
 
-# If your application uses the Qt Mobility libraries, uncomment
-# the following lines and add the respective components to the
-# MOBILITY variable.
+symbian {
+    # IAP only available on the Symbian platform
+    DEFINES += USE_IAP
+    # Enables test mode for IAP
+    DEFINES += IAP_TEST_MODE
+}
+
 CONFIG += mobility qt-components
+# In App Purchasing
+contains(DEFINES,USE_IAP) {
+    symbian:CONFIG += inapppurchasing
+}
 MOBILITY += sensors connectivity systeminfo versit contacts location
 
 # Define QMLJSDEBUGGER to allow debugging of QML in debug builds
@@ -15,19 +23,18 @@ MOBILITY += sensors connectivity systeminfo versit contacts location
 # Only needed for experimental / beta Harmattan SDKs.
 # Will be defined by default in the final SDK.
 exists($$QMAKE_INCDIR_QT"/../qmsystem2/qmkeys.h"):!contains(MEEGO_EDITION,harmattan): {
-  MEEGO_VERSION_MAJOR     = 1
-  MEEGO_VERSION_MINOR     = 2
-  MEEGO_VERSION_PATCH     = 0
-  MEEGO_EDITION           = harmattan
-  DEFINES += MEEGO_EDITION_HARMATTAN
+    MEEGO_VERSION_MAJOR     = 1
+    MEEGO_VERSION_MINOR     = 2
+    MEEGO_VERSION_PATCH     = 0
+    MEEGO_EDITION           = harmattan
+    DEFINES += MEEGO_EDITION_HARMATTAN
 }
-
-# Additional import path used to resolve QML modules in Creator's code model
-QML_IMPORT_PATH =
 
 OTHER_FILES += \
     qml/images/*.svg \
-    qml/images/*.png
+    qml/images/*.png \
+    qml/symbian/IapPage.qml \
+    qml/symbian/IapItem.qml
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
@@ -46,7 +53,8 @@ SOURCES += main.cpp \
     ndefnfcsmsrecord.cpp \
     nearfieldtargetinfo.cpp \
     ndefnfcsocialrecord.cpp \
-    ndefnfcstorelinkrecord.cpp
+    ndefnfcstorelinkrecord.cpp \
+    nfcstats.cpp
 
 HEADERS += \
     nfcinfo.h \
@@ -65,7 +73,8 @@ HEADERS += \
     ndefnfcsmsrecord.h \
     nearfieldtargetinfo.h \
     ndefnfcsocialrecord.h \
-    ndefnfcstorelinkrecord.h
+    ndefnfcstorelinkrecord.h \
+    nfcstats.h
 
 simulator {
     # The simulator uses the QML and images from Symbian,
@@ -179,6 +188,56 @@ symbian {
 
     deployment_vendor.pkg_prerules += vendorinfo
     DEPLOYMENT += deployment_vendor
+
+    # In App Purchasing
+    contains(DEFINES,USE_IAP) {
+        message(Using In-App Purchasing)
+#        LIBS += -lcaf \
+#            -lcafutils \
+#            -lapmime \
+
+        # *** including inappbilling below
+        LIBS += -liapclientapi
+        # NOTE: this is enabling stdlib to prevent error 'undefined symbol __aeabi_atexit'
+        LIBS += -lusrt2_2
+
+        # capabilities required for IAP API
+        TARGET.CAPABILITY += NetworkServices
+
+        iap_dependency.pkg_prerules = "; Has dependency on IAP component" \
+                                      "(0x200345C8), 0, 2, 2, {\"IAP\"}"
+        DEPLOYMENT += iap_dependency
+
+        SOURCES += \
+            iap/iapmanager.cpp \
+            iap/iapproduct.cpp
+
+        HEADERS += \
+            iap/iapmanager.h \
+            iap/iapproduct.h
+
+        DEPENDPATH += iap
+
+        # IAP API files to include in package
+        addIapFiles.sources = ./iap_data/IAP_VARIANTID.txt
+        addIapFiles.path = ./
+
+        # For testing In-App Purchase without Nokia Store
+        contains(DEFINES, IAP_TEST_MODE) {
+            message(In-App Purchase API in TEST_MODE)
+            addIapTestFiles.sources = ./iap_data/TEST_MODE.txt
+            addIapTestFiles.path = .
+            DEPLOYMENT += addIapTestFiles
+        }
+
+        # resources to be DRM protected
+        addDrmFiles01.sources = ./iap_data/advancedtags/active.dat
+        addDrmFiles01.path = ./drm/data/resourceid_524700/
+
+        addDrmFiles02.sources = ./iap_data/removeads/active.dat
+        addDrmFiles02.path = ./drm/data/resourceid_524701/
+        DEPLOYMENT += addIapFiles addDrmFiles01 addDrmFiles02
+    }
 }
 
 contains(MEEGO_EDITION,harmattan) {

@@ -50,6 +50,11 @@ NfcModelToNdef::NfcModelToNdef(QList<NfcRecordItem*> &nfcRecordItems, QObject *p
 {
 }
 
+void NfcModelToNdef::setNfcStats(NfcStats *nfcStats)
+{
+    m_nfcStats = nfcStats;
+}
+
 
 /*!
   \brief Convert the current data in the record model to an NDEF message.
@@ -61,6 +66,9 @@ QNdefMessage* NfcModelToNdef::convertToNdefMessage()
     NfcTypes::MessageType curMessageType;
     NfcTypes::RecordContent curRecordContent;
     int curRecordIndex = 0;
+    if (m_nfcStats) {
+        m_nfcStats->resetComposedMsgCount();
+    }
     //qDebug() << "NfcModelToNdef::convertToNdefMessage() Record item array size: " << recordItems.size();
     // Go through array and convert the data to Ndef Records
     while(curRecordIndex < m_recordItems.size())
@@ -76,6 +84,9 @@ QNdefMessage* NfcModelToNdef::convertToNdefMessage()
             // Starting a new Ndef Record
             int parseEndIndex = -1;
             curMessageType = curItem->messageType();
+            if (m_nfcStats) {
+                m_nfcStats->incComposedMsgCount(curMessageType);
+            }
             switch (curMessageType) {
             case NfcTypes::MsgSmartPoster:
                 ndefMessage->append(*convertSpFromModel(curRecordIndex, parseEndIndex));

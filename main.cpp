@@ -50,6 +50,15 @@
 #include "nfctypes.h"
 #include "nfcrecordmodel.h"
 #include "nfcrecorditem.h"
+#ifdef USE_IAP
+#include "iapmanager.h"
+
+// Define content IDs
+#define IAP_ID_ADV_TAGS "524700"
+#define IAP_ID_REMOVE_ADS "524701"
+#endif
+
+
 
 /*!
   \brief Get the height of a font, including its line spacing.
@@ -76,6 +85,10 @@ int getFontHeight(const QString& fontName, const int fontPixelSize) {
 int main(int argc, char *argv[])
 {
     QApplication app(argc, argv);
+
+#ifdef USE_IAP
+    qDebug() << "Using IAP";
+#endif
 
 #ifdef Q_OS_SYMBIAN
     // Translation for NFC Status messages
@@ -126,6 +139,7 @@ int main(int argc, char *argv[])
     platformStyle->insert("paddingLarge", QVariant(12));
     platformStyle->insert("fontSizeSmall", QVariant(18));
     platformStyle->insert("colorNormalLight", QVariant(QColor(255, 255, 255)));
+    platformStyle->insert("colorNormalMid", QVariant(QColor(153, 153, 153)));
 #if defined(MEEGO_EDITION_HARMATTAN)
     qDebug() << "MeeGo UI platform style";
     platformStyle->insert("fontFamilyRegular", QVariant(QString("Nokia Pure Text")));
@@ -145,6 +159,20 @@ int main(int argc, char *argv[])
     TagImageCache *tagImageCache = new TagImageCache();
     viewer.engine()->addImageProvider(QLatin1String("nfcimageprovider"), tagImageCache);
 
+#ifdef USE_IAP
+    // In App Purchasing
+    IapManager iapManager;
+    // Add the known items to the list
+    // Also retrieves if the user has already purchased the items
+    // from the internal DB, to prevent the need to go online
+    // every time.
+    iapManager.addIapProduct(IAP_ID_ADV_TAGS);
+    iapManager.addIapProduct(IAP_ID_REMOVE_ADS);
+    viewer.rootContext()->setContextProperty("iapManager", &iapManager);
+    viewer.rootContext()->setContextProperty("iapIdAdvTags", QVariant(IAP_ID_ADV_TAGS));
+    viewer.rootContext()->setContextProperty("iapIdRemoveAds", QVariant(IAP_ID_REMOVE_ADS));
+#endif
+
     // Finally, load the main QML file to the viewer.
     viewer.setMainQmlFile(QLatin1String("qml/main.qml"));
 
@@ -161,6 +189,9 @@ int main(int argc, char *argv[])
         // so that it can raise the app to the foreground when an
         // autostart tag is touched and the app is already running.
         nfcInfoObj->setDeclarativeView(viewer);
+#ifdef USE_IAP
+        nfcInfoObj->setUnlimitedAdvancedMsgs(iapManager.isProductPurchased(IAP_ID_ADV_TAGS));
+#endif
     }
 
     viewer.showExpanded();

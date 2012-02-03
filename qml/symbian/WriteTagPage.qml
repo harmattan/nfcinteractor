@@ -20,6 +20,7 @@ Page {
         writeStatusGroup.visible = false;
         writeStatusBg.visible = false;
         separator.visible = false;
+        upgradeAdvTagsButton.visible = false;
     }
 
     function startWriting() {
@@ -56,6 +57,20 @@ Page {
         writeStatusBg.gradient = writeSuccessGradient;
         separator.gradient = writeSuccessGradient;
         startAnimation();
+    }
+
+    function tagWriteExceeded() {
+        var errorMsg;
+        if (platform === 0) {
+            // Symbian - In App Purchasing
+            errorMsg = qsTr("Please purchase the 'Advanced Tags' upgrade to write an unlimited number of advanced tag formats!");
+        } else {
+            // Harmattan - Full version in the Nokia Store
+            errorMsg = qsTr("Please purchase the unlimited version of the Nfc Interactor from the Nokia Store, to write an unlimited number of advanced tag formats!");
+        }
+        upgradeAdvTagsButton.visible = true;
+        tagWriteError(errorMsg);
+        // TODO: also link to the Nokia Store / IAP page
     }
 
     function tagWriteError(errorMsg) {
@@ -239,6 +254,16 @@ Page {
                     color: customPlatformStyle.colorNormalLight
                     width: parent.width
                     wrapMode: Text.WordWrap
+                }
+
+                Button {
+                    id: upgradeAdvTagsButton
+                    visible: false
+                    text: "Upgrade the App"
+                    iconSource: "buy.svg";
+                    onClicked: window.loadIapPage()
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.margins: customPlatformStyle.paddingMedium
                 }
 
                 Image {

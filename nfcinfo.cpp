@@ -48,9 +48,12 @@ NfcInfo::NfcInfo(QObject *parent) :
     m_writeOneTagOnly(true),
     m_cachedNdefMessage(NULL),
     m_cachedNdefMessageSize(0),
-    m_cachedRequestType(NfcIdle)
+    m_cachedRequestType(NfcIdle),
+    m_unlimitedAdvancedMsgs(true)
 {
     m_nfcRecordModel = new NfcRecordModel(this);
+    m_nfcStats = new NfcStats(this);
+    m_nfcRecordModel->setNfcStats(m_nfcStats);
     connect(m_nfcRecordModel, SIGNAL(recordItemsModified()), this, SLOT(nfcRecordModelChanged()));
     m_nfcTargetAnalyzer = new NfcTargetAnalyzer(this);
     m_nfcNdefParser = new NfcNdefParser(this);
@@ -129,6 +132,11 @@ bool NfcInfo::initAndStartNfc()
 NfcRecordModel * NfcInfo::recordModel() const
 {
     return m_nfcRecordModel;
+}
+
+void NfcInfo::setUnlimitedAdvancedMsgs(const bool unlimited)
+{
+    m_unlimitedAdvancedMsgs = unlimited;
 }
 
 /*!
@@ -236,6 +244,10 @@ void NfcInfo::targetDetected(QNearFieldTarget *target)
     // Cache the target in any case for future writing
     // (so that we can also write on tags that are empty as of now)
     m_cachedTarget = target;
+    qDebug() << "Access methods: " << target->accessMethods();
+    int accessmethodsint = target->accessMethods();
+    qDebug() << "Access methods: " << accessmethodsint;
+    qDebug() << "value for ndef access: " << QNearFieldTarget::NdefAccess;
 
     startedTagInteraction();
     // Check if the target includes a NDEF message
@@ -250,9 +262,23 @@ void NfcInfo::targetDetected(QNearFieldTarget *target)
     emit nfcInfoUpdate(m_nfcTargetAnalyzer->analyzeTarget(target));
     m_currentActivity = NfcIdle;
 
+    if (!m_pendingWriteNdef) {
+        // Count number of tags read with the app
+        // (don't count when in write mode)
+        m_nfcStats->incTagReadCount();
+    }
+
+
     // Check if we have NDEF access and can read or write to the tag
     QNearFieldTarget::AccessMethods accessMethods = target->accessMethods();
-    if (accessMethods.testFlag(QNearFieldTarget::NdefAccess)) {
+    // Work with NDEF both when NdefAccess or TagTypeSpecificAccess is set
+    // This is due to the way the enum is defined (NdefAccess = 0x0,
+    // TagTypeSpecificAccess = 0x1).
+    // When testing for a flag, it is therefore impossible for a tag that has
+    // tag type specific access to also report NdefAccess.
+    // See: https://bugreports.qt-project.org/browse/QTMOBILITY-2024
+    if (accessMethods.testFlag(QNearFieldTarget::NdefAccess) ||
+            accessMethods.testFlag(QNearFieldTarget::TagTypeSpecificAccess)) {
 
 #ifdef Q_OS_SYMBIAN
         // Bug workaround on Symbian: hasNdefMessage() always returns false
@@ -365,6 +391,7 @@ bool NfcInfo::nfcWriteTag(const bool writeOneTagOnly)
 
     // Convert the model into a NDEF message
     QNdefMessage* message = recordModel()->convertToNdefMessage();
+    m_cachedNdefContainsAdvMsg = recordModel()->containsAdvMsg();
 
     QByteArray rawMessage = message->toByteArray();
     emit nfcStatusUpdate("Created message (size: " + QString::number(rawMessage.size()) + " bytes)");
@@ -398,34 +425,52 @@ bool NfcInfo::writeCachedNdefMessage()
     bool success = false;
     if (m_pendingWriteNdef && m_cachedNdefMessage)
     {
-        if (m_cachedTarget)
-        {
-            // Check target access mode
-            QNearFieldManager::TargetAccessModes accessModes = m_nfcManager->targetAccessModes();
-            // Writing access is active - we should be able to write
-            if (accessModes.testFlag(QNearFieldManager::NdefWriteTargetAccess))
+        if (m_cachedNdefContainsAdvMsg &&
+                !m_unlimitedAdvancedMsgs &&
+                m_nfcStats->advMsgWrittenCount() > ADV_MSG_WRITE_COUNT) {
+            // Not allowed to write more advanced tags in trial mode
+            // Setting success to true will trigger the signal that the
+            // tag interaction is stopped.
+            success = true;
+            // Don't switch to reading mode by default, as the app would still stay
+            // in the write page and then no longer show any writing issues,
+            // but instead succeed in reading the tag.
+            if (!m_writeOneTagOnly) {
+                // If writing only one tag, deactivate the writing mode again.
+                m_pendingWriteNdef = false;
+                emit nfcModeChanged(NfcTypes::nfcReading);
+            }
+            emit nfcTagWriteExceeded();
+        } else {
+            if (m_cachedTarget)
             {
-                qDebug() << "Writing message: " << m_cachedNdefMessage->toByteArray();
-                m_currentActivity = NfcNdefWriting;
-                m_cachedRequestType = NfcNdefWriting;
-                m_cachedRequestId = m_cachedTarget->writeNdefMessages(QList<QNdefMessage>() << (*m_cachedNdefMessage));
-                emit nfcStatusUpdate("Writing message to the tag.");
-                success = true;
-                if (!m_writeOneTagOnly) {
-                    // If writing only one tag, deactivate the writing mode again.
-                    m_pendingWriteNdef = false;
-                    emit nfcModeChanged(NfcTypes::nfcReading);
-                    //#ifdef MEEGO_EDITION_HARMATTAN
-                    //                nfcManager->setTargetAccessModes(QNearFieldManager::NdefReadTargetAccess);
-                    //#endif
+                // Check target access mode
+                QNearFieldManager::TargetAccessModes accessModes = m_nfcManager->targetAccessModes();
+                // Writing access is active - we should be able to write
+                if (accessModes.testFlag(QNearFieldManager::NdefWriteTargetAccess))
+                {
+                    qDebug() << "Writing message: " << m_cachedNdefMessage->toByteArray();
+                    m_currentActivity = NfcNdefWriting;
+                    m_cachedRequestType = NfcNdefWriting;
+                    m_cachedRequestId = m_cachedTarget->writeNdefMessages(QList<QNdefMessage>() << (*m_cachedNdefMessage));
+                    emit nfcStatusUpdate("Writing message to the tag.");
+                    success = true;
+                    if (!m_writeOneTagOnly) {
+                        // If writing only one tag, deactivate the writing mode again.
+                        m_pendingWriteNdef = false;
+                        emit nfcModeChanged(NfcTypes::nfcReading);
+                        //#ifdef MEEGO_EDITION_HARMATTAN
+                        //                nfcManager->setTargetAccessModes(QNearFieldManager::NdefReadTargetAccess);
+                        //#endif
+                    }
+                } else {
+                    // Device is not in writing mode
+                    emit nfcStatusUpdate("Please touch the tag again to write the message.");
                 }
             } else {
-                // Device is not in writing mode
-                emit nfcStatusUpdate("Please touch the tag again to write the message.");
+                // Can't write - no cached target available
+                emit nfcStatusUpdate("Please touch a tag to write the message.");
             }
-        } else {
-            // Can't write - no cached target available
-            emit nfcStatusUpdate("Please touch a tag to write the message.");
         }
     }
     if (!success) {
@@ -662,6 +707,8 @@ void NfcInfo::requestCompleted(const QNearFieldTarget::RequestId &id)
   */
 void NfcInfo::ndefMessageWritten()
 {
+    // Store the composed message type count to the actual written count
+    m_nfcStats->commitComposedToWrittenCount();
     emit nfcTagWritten();
     stoppedTagInteraction();
 

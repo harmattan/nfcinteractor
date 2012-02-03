@@ -44,6 +44,39 @@ import com.nokia.symbian 1.1 // Symbian Qt Quick components
 import Nfc 1.0
 
 Page {
+
+    // TODO: debug
+    Text {
+        id: iapTest1
+        anchors.bottom: parent.bottom
+        anchors.right: parent.right
+        text: "Adv Tags " + (window.isAdvTagsPurchased() ? "yes" : "no");
+        color: customPlatformStyle.colorNormalLight;
+        font.family: customPlatformStyle.fontFamilyRegular
+        font.pixelSize: customPlatformStyle.fontSizeMedium
+    }
+    Text {
+        id: iapTest2
+        anchors.bottom: iapTest1.top
+        anchors.right: parent.right
+        text: "Remove ads " + (window.isRemoveAdsPurchased() ? "yes" : "no");
+        color: customPlatformStyle.colorNormalLight;
+        font.family: customPlatformStyle.fontFamilyRegular
+        font.pixelSize: customPlatformStyle.fontSizeMedium
+    }
+    Button {
+        text: "Refresh (?)"
+        anchors.bottom: iapTest2.top
+        anchors.right: parent.right
+        onClicked: {
+            iapTest1.text = "Adv Tags " + (window.isAdvTagsPurchased() ? "yes" : "no");
+            iapTest2.text = "Remove ads " + (window.isRemoveAdsPurchased() ? "yes" : "no");
+        }
+        z: 200
+    }
+
+    // TODO: end debug
+
     function logMessage(text, color, img)
     {
         messageModel.append( {"infoMsg": text, "textColor": color, "image": img} )
@@ -65,12 +98,10 @@ Page {
         model: messageModel
         clip: true
         delegate: listDelegate
-        // Automatically scroll down when a new element is added
-        onCountChanged: {
-            positionViewAtEnd();
-        }
         anchors.fill: parent
-        Component.onCompleted: positionViewAtBeginning(); //positionViewAtIndex(0, ListView.Beginning)
+        // Automatically scroll down when a new element is added
+        onCountChanged: positionViewAtEnd();
+        Component.onCompleted: positionViewAtBeginning();
     }
 
     // Delegate for showing an individual line of the model
@@ -136,8 +167,17 @@ Page {
         ToolButton {
             flat: true
             iconSource: "info.svg";
+            visible: instructionsLoader.status === Loader.Ready
             onClicked: {
-                pageStack.push(instructionsPage)
+                pageStack.push(instructionsLoader.item)
+            }
+        }
+        // TODO: Don't load when using the simulator
+        ToolButton {
+            flat: true
+            iconSource: "buy.svg";
+            onClicked: {
+                loadIapPage();
             }
         }
         ToolButton {

@@ -72,6 +72,10 @@
 #include "nfcrecordmodel.h"
 #include "nfcrecorditem.h"
 
+// Stats
+#include "nfcstats.h"
+#define ADV_MSG_WRITE_COUNT 10
+
 #ifdef Q_OS_SYMBIAN
 #include "nfcsettings.h"
 #endif
@@ -153,6 +157,8 @@ signals:
     void nfcTagWritten();
     /*! An error occured while writing the tag. */
     void nfcTagWriteError(const QString& nfcTagError);
+    /*! Written too many tags without having the unlimited version. */
+    void nfcTagWriteExceeded();
     /*! Switched to a different operation mode. Using int for better compatibility to QML. */
     void nfcModeChanged(const int nfcNewMode);
     /*! The byte-size of the NDEF message resulting from the current NfcRecordModel changed. */
@@ -166,6 +172,8 @@ public slots:
     bool nfcWriteTag(const bool writeOneTagOnly);
     void nfcStopWritingTags();
     NfcRecordModel* recordModel() const;
+public:
+    Q_INVOKABLE void setUnlimitedAdvancedMsgs(const bool unlimited);
 
 private slots:
     void nfcRecordModelChanged();
@@ -240,6 +248,10 @@ private:
       one request and not the whole class status, where for example the
       analysis phase can include multiple individual requests. */
     NfcRequestStatus m_cachedRequestType;
+
+    bool m_unlimitedAdvancedMsgs;
+    bool m_cachedNdefContainsAdvMsg;
+    NfcStats* m_nfcStats;
 
     /*! Needed on MeeGo Harmattan to raise the app to the foreground when
       it's autostarted. */

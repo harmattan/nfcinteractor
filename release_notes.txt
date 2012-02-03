@@ -50,6 +50,10 @@ Easily reusable code for developers including:
 Known bugs / issues (work-in-progress):
 - Add android to geo: redirect for m.php script
 - Refactor record item defaults out of nfcrecordmodel.cpp
+- Add IAA
+- Get real IAP item IDs
+- Icons for IAP items
+- Store redirect for Harmattan version regarding advanced tags
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)
@@ -134,7 +138,7 @@ Build & installation instructions using Qt SDK
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 1. Open NfcInteractor.pro
-   File > Open File or Project, select nfcinfo.pro.
+   File > Open File or Project, select nfcinteractor.pro.
 
 2. Symbian: Select the 'Qt 4.7.4 for Symbian Anna" target
    (compatible to phones with Symbian Belle).

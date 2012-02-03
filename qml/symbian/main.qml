@@ -54,6 +54,47 @@ PageStackWindow {
         id: nfcInfoPage
     }
 
+    // IAP
+    // --------------------------------------------------------------
+    // TODO: Don't load when using the simulator, or with Symbian
+    // when IAP is deactivated
+    Loader {
+        id: iapLoader
+        anchors.fill: parent
+        onStatusChanged: {
+            if (status === Loader.Ready) {
+                // Make sure we navigate first to the main page
+                // (e.g., if using the button on the write tag page)
+                pageStack.pop(null, true);
+                pageStack.push(iapLoader.item);
+            }
+        }
+    }
+    function loadIapPage() {
+        if (iapLoader.status === Loader.Ready) {
+            // Already loaded IAP page
+            // Make sure we navigate first to the main page
+            // (e.g., if using the button on the write tag page)
+            pageStack.pop(null, true);
+            pageStack.push(iapLoader.item);
+        } else {
+            // Load IAP page.
+            // Will push itself to the page stack when it's ready
+            iapLoader.source = Qt.resolvedUrl("IapPage.qml");
+        }
+    }
+    function isAdvTagsPurchased() {
+        return iapManager.isProductPurchased(iapIdAdvTags);
+    }
+    function isRemoveAdsPurchased() {
+        return iapManager.isProductPurchased(iapIdRemoveAds);
+    }
+    function setUnlimitedAdvancedMsgs(unlimited) {
+        nfcInfo.setUnlimitedAdvancedMsgs(unlimited);
+    }
+
+    // --------------------------------------------------------------
+
     ComposeTagPage {
         id: composeTagPage
     }
@@ -61,9 +102,10 @@ PageStackWindow {
     WriteTagPage {
         id: writeTagPage
     }
-
-    InstructionsPage {
-        id: instructionsPage
+	
+    Loader {
+        id: instructionsLoader
+        anchors.fill: parent
     }
 
     NfcInfo {
@@ -138,6 +180,10 @@ PageStackWindow {
             logMessage(nfcTagError, "coral", "nfcSymbolError.png");
             writeTagPage.tagWriteError(nfcTagError);
         }
+        onNfcTagWriteExceeded: {
+            writeTagPage.tagWriteExceeded();
+        }
+
         onNfcModeChanged: {
             if (nfcNewMode === 0) {
                 // Reading; 1 would be writing, but the NfcInfo class will
@@ -152,5 +198,19 @@ PageStackWindow {
         }
     }
 
+	
+    Component.onCompleted: {
+        // Start loading the sub-pages (instructions)
+        timer.restart();
+    }
+
+    Timer {
+        id: timer
+        interval: 10
+        repeat: false
+        onTriggered: {
+            instructionsLoader.source = Qt.resolvedUrl("InstructionsPage.qml");
+        }
+    }
 
 }

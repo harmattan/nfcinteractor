@@ -55,6 +55,7 @@
 #include "ndefnfcsmsrecord.h"
 #include "ndefnfcsocialrecord.h"
 #include "ndefnfcstorelinkrecord.h"
+#include "nfcstats.h"
 
 // Contact handling
 #include "ndefnfcmimevcardrecord.h"
@@ -79,6 +80,7 @@ class NfcModelToNdef : public QObject
 
 public:
     explicit NfcModelToNdef(QList<NfcRecordItem*> &nfcRecordItems, QObject *parent = 0);
+    void setNfcStats(NfcStats* nfcStats);
     QNdefMessage * convertToNdefMessage();
 
 private:
@@ -96,6 +98,8 @@ private:
 
 private:
     QList<NfcRecordItem*> &m_recordItems;    // Not owned by this class
+    /*! Count the number of tags read and messages written. (Not owned by this class) */
+    NfcStats* m_nfcStats;
 
 };
 

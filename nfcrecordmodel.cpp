@@ -67,6 +67,12 @@ NfcRecordModel::~NfcRecordModel()
     m_recordItems.clear();
 }
 
+void NfcRecordModel::setNfcStats(NfcStats *nfcStats)
+{
+    m_nfcStats = nfcStats;
+    m_nfcModelToNdef->setNfcStats(nfcStats);
+}
+
 /*!
   \brief Convert all the record items currently stored in the model
   to a QNdefMessage.
@@ -74,6 +80,16 @@ NfcRecordModel::~NfcRecordModel()
 QNdefMessage* NfcRecordModel::convertToNdefMessage()
 {
     return m_nfcModelToNdef->convertToNdefMessage();
+}
+
+bool NfcRecordModel::containsAdvMsg()
+{
+    foreach(NfcRecordItem* curItem, m_recordItems) {
+        if (m_nfcStats->isAdvMsgType(curItem->messageType())) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /*!

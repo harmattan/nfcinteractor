@@ -52,6 +52,7 @@
 #include "ndefnfcsprecord.h"
 #include "ndefnfcmimeimagerecord.h"
 #include "ndefnfcmimevcardrecord.h"
+#include "nfcstats.h"
 
 // Forward declarations
 class NfcModelToNdef;
@@ -81,6 +82,8 @@ public:
     explicit NfcRecordModel(QObject *parent = 0);
     ~NfcRecordModel();
 
+    void setNfcStats(NfcStats* nfcStats);
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role) const;
 
@@ -92,6 +95,8 @@ public:
 
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
     QNdefMessage* convertToNdefMessage();
+    /*! Check if the message currently contained in the model contains an advanced message type. */
+    bool containsAdvMsg();
     QModelIndex indexFromItem(const NfcRecordItem *item) const;
 
     int size() const;
@@ -145,7 +150,8 @@ private:
     QList<NfcRecordItem*> m_recordItems;
     /*! Converter to parse the record items and create an NDEF message. */
     NfcModelToNdef* m_nfcModelToNdef;
-
+    /*! Count the number of tags read and messages written. (Not owned by this class) */
+    NfcStats* m_nfcStats;
 };
 
 #endif // NFCRECORDMODEL_H

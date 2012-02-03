@@ -1,0 +1,3 @@
+[simulation]
+524700=simulated_ok
+524701=simulated_payment_declined
