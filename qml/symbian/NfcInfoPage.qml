@@ -45,38 +45,6 @@ import Nfc 1.0
 
 Page {
 
-    // TODO: debug
-    Text {
-        id: iapTest1
-        anchors.bottom: parent.bottom
-        anchors.right: parent.right
-        text: "Adv Tags " + (window.isAdvTagsPurchased() ? "yes" : "no");
-        color: customPlatformStyle.colorNormalLight;
-        font.family: customPlatformStyle.fontFamilyRegular
-        font.pixelSize: customPlatformStyle.fontSizeMedium
-    }
-    Text {
-        id: iapTest2
-        anchors.bottom: iapTest1.top
-        anchors.right: parent.right
-        text: "Remove ads " + (window.isRemoveAdsPurchased() ? "yes" : "no");
-        color: customPlatformStyle.colorNormalLight;
-        font.family: customPlatformStyle.fontFamilyRegular
-        font.pixelSize: customPlatformStyle.fontSizeMedium
-    }
-    Button {
-        text: "Refresh (?)"
-        anchors.bottom: iapTest2.top
-        anchors.right: parent.right
-        onClicked: {
-            iapTest1.text = "Adv Tags " + (window.isAdvTagsPurchased() ? "yes" : "no");
-            iapTest2.text = "Remove ads " + (window.isRemoveAdsPurchased() ? "yes" : "no");
-        }
-        z: 200
-    }
-
-    // TODO: end debug
-
     function logMessage(text, color, img)
     {
         messageModel.append( {"infoMsg": text, "textColor": color, "image": img} )
