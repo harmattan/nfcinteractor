@@ -50,7 +50,24 @@ Page {
 
                 Text {
                     id: instructionsText2
-                    text: qsTr("v2.0.0 RC\n2011 - 2012 Andreas Jakl\nNfcInteractor.com\n\nTouch NFC tags to analyze their contents.\nTap the 'write' toolbar button to compose your own NDEF message (consisting of one or more records), then tap the finish flag to finalize the contents. Now touch a tag to write the message to the tag.")
+                    text: qsTr("v2.0.0 RC\n2011 - 2012 Andreas Jakl\nNfcInteractor.com")
+                    horizontalAlignment: Text.AlignHCenter
+                    width: parent.width
+                    wrapMode: Text.WordWrap
+                    color: customPlatformStyle.colorNormalLight
+                    font.family: customPlatformStyle.fontFamilyRegular;
+                    font.pixelSize: customPlatformStyle.fontSizeMedium
+                }
+                Button {
+                    id: instructionsLinkButton
+                    text: "NfcInteractor.com"
+                    onClicked: Qt.openUrlExternally("http://www.nfcinteractor.com/");
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+
+                Text {
+                    id: instructionsText3
+                    text: qsTr("Touch NFC tags to analyze their contents.\nTap the 'write' toolbar button to compose your own NDEF message (consisting of one or more records), then tap the finish flag to finalize the contents. Now touch a tag to write the message to the tag.")
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     wrapMode: Text.WordWrap
