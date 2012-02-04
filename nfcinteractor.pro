@@ -1,11 +1,26 @@
 TARGET = nfcinteractor
 VERSION = 2.00.0
 
+# Define for detecting Harmattan in .cpp files.
+# Only needed for experimental / beta Harmattan SDKs.
+# Will be defined by default in the final SDK.
+exists($$QMAKE_INCDIR_QT"/../qmsystem2/qmkeys.h"):!contains(MEEGO_EDITION,harmattan): {
+    MEEGO_VERSION_MAJOR     = 1
+    MEEGO_VERSION_MINOR     = 2
+    MEEGO_VERSION_PATCH     = 0
+    MEEGO_EDITION           = harmattan
+    DEFINES += MEEGO_EDITION_HARMATTAN
+}
+
 symbian {
     # IAP only available on the Symbian platform
     DEFINES += USE_IAP
     # Enables test mode for IAP
     DEFINES += IAP_TEST_MODE
+}
+contains(MEEGO_EDITION,harmattan) {
+    # Unlimited version if not enabled
+    #DEFINES += USE_IAP
 }
 
 CONFIG += mobility qt-components
@@ -18,17 +33,6 @@ MOBILITY += sensors connectivity systeminfo versit contacts location
 # Define QMLJSDEBUGGER to allow debugging of QML in debug builds
 # (This might significantly increase build time)
 # DEFINES += QMLJSDEBUGGER
-
-# Define for detecting Harmattan in .cpp files.
-# Only needed for experimental / beta Harmattan SDKs.
-# Will be defined by default in the final SDK.
-exists($$QMAKE_INCDIR_QT"/../qmsystem2/qmkeys.h"):!contains(MEEGO_EDITION,harmattan): {
-    MEEGO_VERSION_MAJOR     = 1
-    MEEGO_VERSION_MINOR     = 2
-    MEEGO_VERSION_PATCH     = 0
-    MEEGO_EDITION           = harmattan
-    DEFINES += MEEGO_EDITION_HARMATTAN
-}
 
 OTHER_FILES += \
     qml/images/*.svg \
@@ -229,14 +233,6 @@ symbian {
             addIapTestFiles.path = .
             DEPLOYMENT += addIapTestFiles
         }
-
-        # resources to be DRM protected
-        addDrmFiles01.sources = ./iap_data/advancedtags/active.dat
-        addDrmFiles01.path = ./drm/data/resourceid_524700/
-
-        addDrmFiles02.sources = ./iap_data/removeads/active.dat
-        addDrmFiles02.path = ./drm/data/resourceid_524701/
-        DEPLOYMENT += addIapFiles addDrmFiles01 addDrmFiles02
     }
 }
 
