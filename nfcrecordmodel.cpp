@@ -281,7 +281,7 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
         simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordStoreCustomName, true, recordId);
         m_recordItems.last()->setCurrentText("ni");
         simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordText, true,  recordId);
-        m_recordItems.last()->setCurrentText("Download Nfc Interactor");
+        m_recordItems.last()->setCurrentText("Get App");
         simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordTextLanguage, false,  recordId);
         break;
     }
