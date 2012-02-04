@@ -4,6 +4,8 @@ import com.nfcinfo.types 1.0
 
 
 Page {
+    id: composeTagPage
+
     tools: ToolBarLayout {
         ToolButton {
             flat: true
@@ -21,8 +23,10 @@ Page {
             iconSource: "end.svg"
             onClicked: {
                 nfcInfo.nfcWriteTag(true);
-                writeTagPage.resetPage();
-                pageStack.push(writeTagPage);
+                if (writeTagPageLoader.status === Loader.Ready) {
+                    writeTagPageLoader.item.resetPage();
+                    pageStack.push(writeTagPageLoader.item);
+                }
             }
         }
         // TODO: button to save the tag format, or to load it from previously read tag

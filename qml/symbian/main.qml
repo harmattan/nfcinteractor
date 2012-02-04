@@ -56,8 +56,6 @@ PageStackWindow {
 
     // IAP
     // --------------------------------------------------------------
-    // TODO: Don't load when using the simulator, or with Symbian
-    // when IAP is deactivated
     Loader {
         id: iapLoader
         anchors.fill: parent
@@ -95,14 +93,14 @@ PageStackWindow {
 
     // --------------------------------------------------------------
 
-    ComposeTagPage {
-        id: composeTagPage
+    Loader {
+        id: composeTagPageLoader
+        anchors.fill: parent
     }
-
-    WriteTagPage {
-        id: writeTagPage
+    Loader {
+        id: writeTagPageLoader
+        anchors.fill: parent
     }
-	
     Loader {
         id: instructionsLoader
         anchors.fill: parent
@@ -157,9 +155,10 @@ PageStackWindow {
         }
 
         onNfcStartingTagInteraction: {
-            if (writeTagPage.status === PageStatus.Active) {
+            if (writeTagPageLoader.status === Loader.Ready &&
+                    writeTagPageLoader.item.status === PageStatus.Active) {
                 // Active page is writing page - start busy animation
-                writeTagPage.startWriting();
+                writeTagPageLoader.item.startWriting();
             } else if (nfcInfoPage.status === PageStatus.Active) {
                 nfcInfoPage.showHideBusy(true);
             }
@@ -169,19 +168,27 @@ PageStackWindow {
             // Hide the busy animation in any case - the user might have
             // switched away from the page while tag reading was active.
             nfcInfoPage.showHideBusy(false);
-            writeTagPage.cancelWriting();
+            if (writeTagPageLoader.status === Loader.Ready) {
+                writeTagPageLoader.item.cancelWriting();
+            }
         }
 
         onNfcTagWritten: {
             logMessage("Message written to the tag.", "aliceblue", "nfcSymbolSuccess.png");
-            writeTagPage.tagWritten();
+            if (writeTagPageLoader.status === Loader.Ready) {
+                writeTagPageLoader.item.tagWritten();
+            }
         }
         onNfcTagWriteError: {
             logMessage(nfcTagError, "coral", "nfcSymbolError.png");
-            writeTagPage.tagWriteError(nfcTagError);
+            if (writeTagPageLoader.status === Loader.Ready) {
+                writeTagPageLoader.item.tagWriteError(nfcTagError);
+            }
         }
         onNfcTagWriteExceeded: {
-            writeTagPage.tagWriteExceeded();
+            if (writeTagPageLoader.status === Loader.Ready) {
+                writeTagPageLoader.item.tagWriteExceeded();
+            }
         }
 
         onNfcModeChanged: {
@@ -194,23 +201,26 @@ PageStackWindow {
         }
 
         onStoredMessageSizeChanged: {
-            composeTagPage.updateHeader(ndefMessageSize)
+            if (composeTagPageLoader.status === Loader.Ready) {
+                composeTagPageLoader.item.updateHeader(ndefMessageSize)
+            }
         }
     }
 
 	
     Component.onCompleted: {
-        // Start loading the sub-pages (instructions)
+        // Start loading the sub-pages
         timer.restart();
     }
 
     Timer {
         id: timer
-        interval: 10
+        interval: 50
         repeat: false
         onTriggered: {
             instructionsLoader.source = Qt.resolvedUrl("InstructionsPage.qml");
+            writeTagPageLoader.source = Qt.resolvedUrl("WriteTagPage.qml");
+            composeTagPageLoader.source = Qt.resolvedUrl("ComposeTagPage.qml");
         }
     }
-
 }

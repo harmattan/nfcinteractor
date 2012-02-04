@@ -126,7 +126,15 @@ Page {
 
     // -------------------------------------------------------------------------
     // Toolbar
-    tools: ToolBarLayout {
+    // TODO: ToolButton to save the log
+    // TODO: ToolButton to go to the editor with the last tag contents? Or rather a click in the list.
+    tools: useIap ? toolBarNfcInfoPageIap : toolBarNfcInfoPage;
+    // Just setting a ToolButton to invisible would still leave its
+    // space free in the ToolBarLayout. Therefore, we need to define
+    // two separate ToolBarLayouts and switch depending on if IAP is enabled
+    // or not.
+    ToolBarLayout {
+        id: toolBarNfcInfoPage
         ToolButton {
             flat: true
             iconSource: "toolbar-back";
@@ -136,26 +144,39 @@ Page {
             flat: true
             iconSource: "info.svg";
             visible: instructionsLoader.status === Loader.Ready
-            onClicked: {
-                pageStack.push(instructionsLoader.item)
-            }
-        }
-        // TODO: Don't load when using the simulator
-        ToolButton {
-            flat: true
-            iconSource: "buy.svg";
-            onClicked: {
-                loadIapPage();
-            }
+            onClicked: pageStack.push(instructionsLoader.item)
         }
         ToolButton {
             flat: true
             iconSource: "create_message.svg";
-            onClicked: {
-                pageStack.push(composeTagPage)
-            }
+            visible: composeTagPageLoader.status === Loader.Ready
+            onClicked: pageStack.push(composeTagPageLoader.item)
         }
-        // TODO: ToolButton to save the log
-        // TODO: ToolButton to go to the editor with the last tag contents? Or rather a click in the list.
     }
+    ToolBarLayout {
+        id: toolBarNfcInfoPageIap
+        ToolButton {
+            flat: true
+            iconSource: "toolbar-back";
+            onClicked: pageStack.depth <= 1 ? Qt.quit() : pageStack.pop()
+        }
+        ToolButton {
+            flat: true
+            iconSource: "info.svg";
+            visible: instructionsLoader.status === Loader.Ready
+            onClicked: pageStack.push(instructionsLoader.item)
+        }
+        ToolButton {
+            flat: true
+            iconSource: "buy.svg";
+            onClicked: loadIapPage();
+        }
+        ToolButton {
+            flat: true
+            iconSource: "create_message.svg";
+            visible: composeTagPageLoader.status === Loader.Ready
+            onClicked: pageStack.push(composeTagPageLoader.item)
+        }
+    }
+
 }

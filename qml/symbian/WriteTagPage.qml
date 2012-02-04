@@ -2,6 +2,8 @@ import QtQuick 1.1
 import com.nokia.symbian 1.1 // Symbian Qt Quick components
 
 Page {
+    id: writeTagPage
+
     tools: ToolBarLayout {
         ToolButton {
             flat: true
@@ -66,11 +68,10 @@ Page {
             errorMsg = qsTr("Please purchase the 'Advanced Tags' upgrade to write an unlimited number of advanced tag formats!");
         } else {
             // Harmattan - Full version in the Nokia Store
-            errorMsg = qsTr("Please purchase the unlimited version of the Nfc Interactor from the Nokia Store, to write an unlimited number of advanced tag formats!");
+            errorMsg = qsTr("Please purchase the unlimited version of the Nfc Interactor from the Nokia Store, to write an unlimited number of advanced messages to tags!");
         }
         upgradeAdvTagsButton.visible = true;
         tagWriteError(errorMsg);
-        // TODO: also link to the Nokia Store / IAP page
     }
 
     function tagWriteError(errorMsg) {
@@ -223,7 +224,7 @@ Page {
             Column {
                 id: writeStatusGroup
                 width: parent.width
-                spacing: customPlatformStyle.paddingSmall
+                spacing: customPlatformStyle.paddingMedium
 
                 PropertyAnimation {
                     id: writeStatusAnimation
