@@ -52,7 +52,8 @@
 QTM_USE_NAMESPACE
 
 #define DEFAULT_GEOTAG_NOKIAMAPS_URL "http://m.ovi.me/?c="
-#define DEFAULT_GEOTAG_WEBSERVICE_URL "http://NfcInteractor.com/m.php?c="
+// Web server is using a rule to rewrite "m" to "m.php"
+#define DEFAULT_GEOTAG_WEBSERVICE_URL "http://NfcInteractor.com/m?c="
 
 /*!
   \brief Store longitude and latitude on a tag, to allow the user
