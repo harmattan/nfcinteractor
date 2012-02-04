@@ -277,21 +277,12 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
         simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeNameFormat, false,  recordId);
         simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeName, true,  recordId);
         m_recordItems.last()->setCurrentText("nokia.com:nfcinteractor");
-        addRecord("Smart Poster Record", NfcTypes::MsgSmartPoster, NfcTypes::RecordHeader, "", true, true, recordId);
-        simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordUri, false,  recordId);
-        m_recordItems.last()->setCurrentText("http://nfcinteractor.com");
-        simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordText, true,  recordId);
+        addRecord("Store Record", NfcTypes::MsgStore, NfcTypes::RecordHeader, "", true, true, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordStoreCustomName, true, recordId);
+        m_recordItems.last()->setCurrentText("ni");
+        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordText, true,  recordId);
         m_recordItems.last()->setCurrentText("Download Nfc Interactor");
-        simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordTextLanguage, false,  recordId);
-        // TODO: when app is in the store, change to store record
-//        addRecord("Store Record", NfcTypes::MsgStore, NfcTypes::RecordHeader, "", true, true, recordId);
-//        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordStoreMeeGoHarmattan, true, recordId);
-//        m_recordItems[m_recordItems.count()]->setCurrentText("");
-//        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordStoreSymbian, true, recordId);
-//        m_recordItems[m_recordItems.count()]->setCurrentText("");
-//        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordText, true,  recordId);
-//        m_recordItems.last()->setCurrentText("Download Nfc Interactor");
-//        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordTextLanguage, false,  recordId);
+        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordTextLanguage, false,  recordId);
         break;
     }
 }
@@ -906,8 +897,8 @@ void NfcRecordModel::getDefaultsForRecordContent(const NfcTypes::MessageType msg
         defaultTitle = "BlackBerry App World ID";
         break;
     case NfcTypes::RecordStoreCustomName:
-        defaultTitle = "nfcinteractor.com app name";
-        defaultContents = "nfcinteractor";
+        defaultTitle = "Registered app name";
+        defaultContents = "ni";
         break;
     default:
         qDebug() << "Warning: don't have defaults for requested content type in NfcRecordModel::getDefaultsForRecordContent().";
