@@ -11,7 +11,8 @@
 
 QTM_USE_NAMESPACE
 
-#define DEFAULT_STORELINK_WEBSERVICE_URL "http://nfcinteractor.com/dl.php"
+// Web server is using a rule to rewrite "dl" to "dl.php"
+#define DEFAULT_STORELINK_WEBSERVICE_URL "http://nfcinteractor.com/dl"
 
 /*!
   \brief Create an app store link to download the app, either direct

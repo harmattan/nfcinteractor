@@ -131,7 +131,8 @@ QUrl NdefNfcStoreLinkRecord::generateStoreLink(const NdefNfcStoreLinkRecord::App
         link = "http://appworld.blackberry.com/webstore/clientlaunch/" + appId;
         break;
     case StoreCustomName:
-        link = "http://nfcinteractor.com/dl.php?c=" + appId;
+        link = m_webServiceUrl;
+        link.addQueryItem("c", appId);
         break;
     }
     return link;
@@ -143,7 +144,7 @@ QUrl NdefNfcStoreLinkRecord::generateStoreLink(const NdefNfcStoreLinkRecord::App
   */
 QUrl NdefNfcStoreLinkRecord::generateMultiStoreLink()
 {
-    QUrl link("http://nfcinteractor.com/dl.php");
+    QUrl link(m_webServiceUrl);
     QHash<AppStore, QString>::const_iterator i = m_appIds.constBegin();
     while (i != m_appIds.constEnd()) {
         //cout << i.key() << ": " << i.value() << endl;
