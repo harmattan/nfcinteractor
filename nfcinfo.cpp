@@ -244,10 +244,6 @@ void NfcInfo::targetDetected(QNearFieldTarget *target)
     // Cache the target in any case for future writing
     // (so that we can also write on tags that are empty as of now)
     m_cachedTarget = target;
-    qDebug() << "Access methods: " << target->accessMethods();
-    int accessmethodsint = target->accessMethods();
-    qDebug() << "Access methods: " << accessmethodsint;
-    qDebug() << "value for ndef access: " << QNearFieldTarget::NdefAccess;
 
     startedTagInteraction();
     // Check if the target includes a NDEF message
@@ -425,6 +421,9 @@ bool NfcInfo::writeCachedNdefMessage()
     bool success = false;
     if (m_pendingWriteNdef && m_cachedNdefMessage)
     {
+        if (!m_unlimitedAdvancedMsgs) {
+            qDebug() << "Advanced messages written: " << m_nfcStats->advMsgWrittenCount();
+        }
         if (m_cachedNdefContainsAdvMsg &&
                 !m_unlimitedAdvancedMsgs &&
                 m_nfcStats->advMsgWrittenCount() > ADV_MSG_WRITE_COUNT) {
