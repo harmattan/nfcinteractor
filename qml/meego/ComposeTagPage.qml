@@ -4,6 +4,8 @@ import com.nfcinfo.types 1.0
 
 
 Page {
+    id: composeTagPage
+
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "toolbar-back"
@@ -18,8 +20,10 @@ Page {
             iconId: "toolbar-done"
             onClicked: {
                 nfcInfo.nfcWriteTag(true);
-                writeTagPage.resetPage();
-                pageStack.push(writeTagPage);
+                if (writeTagPageLoader.status === Loader.Ready) {
+                    writeTagPageLoader.item.resetPage();
+                    pageStack.push(writeTagPageLoader.item);
+                }
             }
         }
         // TODO: button to save the tag format, or to load it from previously read tag
@@ -108,7 +112,7 @@ Page {
       \brief Show a dialog to add the possible content items to the specified record.
       */
     function queryAddContentToRecord(recordIndex, messageType) {
-        addContentDialogLoader.sourceComponent = undefined
+        addContentDialogLoader.sourceComponent = undefined;
         addContentDialogLoader.sourceComponent = addContentDialogComponent
         prepareAddContentDialog(recordIndex, messageType);
 

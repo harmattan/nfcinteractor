@@ -48,12 +48,10 @@ Easily reusable code for developers including:
 - Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2**)
 
 Known bugs / issues (work-in-progress):
-- Add android to geo: redirect for m.php script
-- Refactor record item defaults out of nfcrecordmodel.cpp
 - Add IAA
 - Get real IAP item IDs
 - Icons for IAP items
-- Store redirect for Harmattan version regarding advanced tags
+- Create item in Nokia Publisher portal
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)
@@ -68,7 +66,8 @@ Ideas for future updates:
 - Image writing support (file selection UI)
 - Geocoding (enter address, write coordinates to the tag - interactive UI)
 - SNEP sending and receiving (through LLCP)
-- Faster startup-time by loading application screens on demand
+- Refactor record item defaults out of nfcrecordmodel.cpp
+- Splash screen for Symbian
 
 * Disclaimer: The services hosted on nfcinteractor.com (e.g., the generic geo-tag redirection script) have no service or uptime guarantee. They are intended for testing purposes only and could be removed at any point. You should host the required server-side scripts on your own webserver for real-world deployment.
 ** MeeGo Harmattan currently does not allow tag type specific access through Qt APIs; therefore, it's not possible to access functionality not offered by Qt classes, such as getting tag specific information or locking tags.

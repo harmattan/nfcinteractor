@@ -31,7 +31,7 @@ Page {
 
                 Text {
                     id: instructionsText1
-                    text: qsTr("<strong>Nfc Interactor</strong>")
+                    text: qsTr("<strong>Nfc Interactor</strong>") + (useIap ? "" : "\nUnlimited");
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     wrapMode: Text.WordWrap
@@ -50,7 +50,7 @@ Page {
 
                 Text {
                     id: instructionsText2
-                    text: qsTr("v2.0.0 RC\n2011 - 2012 Andreas Jakl\nNfcInteractor.com")
+                    text: qsTr("v2.0.0\n2011 - 2012 Andreas Jakl")
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     wrapMode: Text.WordWrap

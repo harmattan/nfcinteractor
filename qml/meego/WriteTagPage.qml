@@ -2,6 +2,8 @@ import QtQuick 1.1
 import com.nokia.meego 1.0
 
 Page {
+    id: writeTagPage
+
     tools: ToolBarLayout {
         ToolIcon {
             iconId: "toolbar-back"
@@ -19,6 +21,7 @@ Page {
         writeStatusGroup.visible = false;
         writeStatusBg.visible = false;
         separator.visible = false;
+        upgradeAdvTagsButton.visible = false;
     }
 
     function startWriting() {
@@ -55,6 +58,19 @@ Page {
         writeStatusBg.gradient = writeSuccessGradient;
         separator.gradient = writeSuccessGradient;
         startAnimation();
+    }
+
+    function tagWriteExceeded() {
+        var errorMsg;
+        if (platform === 0) {
+            // Symbian - In App Purchasing
+            errorMsg = qsTr("Please purchase the 'Advanced Tags' upgrade to write an unlimited number of advanced tag formats!");
+        } else {
+            // Harmattan - Full version in the Nokia Store
+            errorMsg = qsTr("Please purchase the unlimited version of the Nfc Interactor from the Nokia Store, to write an unlimited number of advanced messages to tags!");
+        }
+        upgradeAdvTagsButton.visible = true;
+        tagWriteError(errorMsg);
     }
 
     function tagWriteError(errorMsg) {
@@ -206,7 +222,7 @@ Page {
             Column {
                 id: writeStatusGroup
                 width: parent.width
-                spacing: customPlatformStyle.paddingSmall
+                spacing: customPlatformStyle.paddingMedium
 
                 PropertyAnimation {
                     id: writeStatusAnimation
@@ -237,6 +253,15 @@ Page {
                     color: customPlatformStyle.colorNormalLight
                     width: parent.width
                     wrapMode: Text.WordWrap
+                }
+
+                Button {
+                    id: upgradeAdvTagsButton
+                    visible: false
+                    text: "Upgrade the App"
+                    //iconSource: "buy.svg";    // When using the icon, the text is left-aligned, which doesn't look good here
+                    onClicked: Qt.openUrlExternally("http://www.nfcinteractor.com/dl.php?c=nfcinteractor")
+                    anchors.horizontalCenter: parent.horizontalCenter
                 }
 
                 Image {

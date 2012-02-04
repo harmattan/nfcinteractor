@@ -65,12 +65,10 @@ Page {
         model: messageModel
         clip: true
         delegate: listDelegate
-        // Automatically scroll down when a new element is added
-        onCountChanged: {
-            positionViewAtEnd();
-        }
         anchors.fill: parent
-        Component.onCompleted: positionViewAtBeginning(); //positionViewAtIndex(0, ListView.Beginning)
+        // Automatically scroll down when a new element is added
+        onCountChanged: positionViewAtEnd();
+        Component.onCompleted: positionViewAtBeginning();
     }
 
     // Delegate for showing an individual line of the model
@@ -126,24 +124,21 @@ Page {
 
     // -------------------------------------------------------------------------
     // Toolbar
-    tools: ToolBarLayout {
-//        ToolIcon {
-//            iconId: "toolbar-back";
-//            onClicked: pageStack.depth <= 1 ? Qt.quit() : pageStack.pop()
-//        }
+    // TODO: ToolButton to save the log
+    // TODO: ToolButton to go to the editor with the last tag contents? Or rather a click in the list.
+    tools: toolBarNfcInfoPage
+
+    ToolBarLayout {
+        id: toolBarNfcInfoPage
         ToolIcon {
             iconSource: "image://theme/icon-s-description-inverse"
-            onClicked: {
-                pageStack.push(instructionsPage)
-            }
+            visible: instructionsLoader.status === Loader.Ready
+            onClicked: pageStack.push(instructionsLoader.item)
         }
         ToolIcon {
             iconId: "toolbar-new-email"
-            onClicked: {
-                pageStack.push(composeTagPage)
-            }
+            visible: composeTagPageLoader.status === Loader.Ready
+            onClicked: pageStack.push(composeTagPageLoader.item)
         }
-        // TODO: ToolButton to save the log
-        // TODO: ToolButton to go to the editor with the last tag contents? Or rather a click in the list.
     }
 }

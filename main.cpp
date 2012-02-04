@@ -43,14 +43,14 @@
 #include <QtDeclarative>
 #include <QDeclarativePropertyMap>
 #ifdef Q_OS_SYMBIAN
-#include <QSystemScreenSaver>
+//#include <QSystemScreenSaver>
 #endif
 #include "nfcinfo.h"
 #include "tagimagecache.h"
 #include "nfctypes.h"
 #include "nfcrecordmodel.h"
 #include "nfcrecorditem.h"
-#ifdef USE_IAP
+#if defined(USE_IAP) && defined (Q_OS_SYMBIAN)
 #include "iapmanager.h"
 
 // Define content IDs
@@ -160,17 +160,25 @@ int main(int argc, char *argv[])
     viewer.engine()->addImageProvider(QLatin1String("nfcimageprovider"), tagImageCache);
 
 #ifdef USE_IAP
-    // In App Purchasing
-    IapManager iapManager;
-    // Add the known items to the list
-    // Also retrieves if the user has already purchased the items
-    // from the internal DB, to prevent the need to go online
-    // every time.
-    iapManager.addIapProduct(IAP_ID_ADV_TAGS);
-    iapManager.addIapProduct(IAP_ID_REMOVE_ADS);
-    viewer.rootContext()->setContextProperty("iapManager", &iapManager);
-    viewer.rootContext()->setContextProperty("iapIdAdvTags", QVariant(IAP_ID_ADV_TAGS));
-    viewer.rootContext()->setContextProperty("iapIdRemoveAds", QVariant(IAP_ID_REMOVE_ADS));
+    viewer.rootContext()->setContextProperty("useIap", QVariant(true));
+    #if defined(Q_OS_SYMBIAN)
+        // In App Purchasing APIs on Symbian
+        IapManager iapManager;
+        // Add the known items to the list
+        // Also retrieves if the user has already purchased the items
+        // from the internal DB, to prevent the need to go online
+        // every time.
+        iapManager.addIapProduct(IAP_ID_ADV_TAGS);
+        iapManager.addIapProduct(IAP_ID_REMOVE_ADS);
+        viewer.rootContext()->setContextProperty("iapManager", &iapManager);
+        viewer.rootContext()->setContextProperty("iapIdAdvTags", QVariant(IAP_ID_ADV_TAGS));
+        viewer.rootContext()->setContextProperty("iapIdRemoveAds", QVariant(IAP_ID_REMOVE_ADS));
+    #else
+        // Unlimited version on Harmattan
+        // No IAP APIs available -> separate product on Nokia Store
+    #endif
+#else
+    viewer.rootContext()->setContextProperty("useIap", QVariant(false));
 #endif
 
     // Finally, load the main QML file to the viewer.
@@ -190,7 +198,11 @@ int main(int argc, char *argv[])
         // autostart tag is touched and the app is already running.
         nfcInfoObj->setDeclarativeView(viewer);
 #ifdef USE_IAP
+    #ifdef Q_OS_SYMBIAN
         nfcInfoObj->setUnlimitedAdvancedMsgs(iapManager.isProductPurchased(IAP_ID_ADV_TAGS));
+    #else
+        nfcInfoObj->setUnlimitedAdvancedMsgs(false);
+    #endif
 #endif
     }
 
