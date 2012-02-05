@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     // "platformStyle" on Symbian and set a "platformStyle" on MeeGo,
     // because the Window already has platformStyle property, which
     // would have preference over setting a context property from here)
-    QDeclarativePropertyMap *platformStyle = new QDeclarativePropertyMap();
+    QScopedPointer<QDeclarativePropertyMap> platformStyle(new QDeclarativePropertyMap());
     platformStyle->insert("paddingSmall", QVariant(4));
     platformStyle->insert("paddingMedium", QVariant(8));
     platformStyle->insert("paddingLarge", QVariant(12));
@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
     platformStyle->insert("fontHeightMedium", QVariant(getFontHeight(QFont().defaultFamily(), 20)));
     platformStyle->insert("fontSizeLarge", QVariant(22));
 #endif
-    viewer.rootContext()->setContextProperty("customPlatformStyle", platformStyle);
+    viewer.rootContext()->setContextProperty("customPlatformStyle", platformStyle.data());
 
     // Register the image provider class to QML
     TagImageCache *tagImageCache = new TagImageCache();

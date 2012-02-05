@@ -48,8 +48,6 @@ Easily reusable code for developers including:
 - Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2**)
 
 Known bugs / issues (work-in-progress):
-- Get real IAP item IDs
-- Create item in Nokia Publisher portal
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)
