@@ -47,11 +47,6 @@ bool NfcStats::isAdvMsgType(NfcTypes::MessageType msgType)
             msgType == NfcTypes::MsgCustom);
 }
 
-//void NfcStats::incComposedMsgCountInt(int msgType)
-//{
-//    incComposedMsgCount(static_cast<NfcTypes::MessageType>(msgType));
-//}
-
 void NfcStats::resetComposedMsgCount()
 {
     m_composedMsgCount.clear();

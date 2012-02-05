@@ -22,7 +22,6 @@ public:
     Q_INVOKABLE int advMsgWrittenCount();
     bool isAdvMsgType(NfcTypes::MessageType msgType);
 
-    //void incComposedMsgCountInt(int msgType);
     void resetComposedMsgCount();
     void incComposedMsgCount(NfcTypes::MessageType msgType);
     void commitComposedToWrittenCount();
