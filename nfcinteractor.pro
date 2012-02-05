@@ -25,15 +25,6 @@ contains(MEEGO_EDITION,harmattan) {
     #DEFINES += USE_IAP
 }
 
-contains(DEFINES,USE_IAA) {
-    #message(Using In-App Advertising)
-    #include(iaa/component.pro)
-
-    # Additional import path used to resolve QML modules in Creator's code model
-    #QML_IMPORT_PATH = $$OUT_PWD/../import
-}
-
-
 CONFIG += mobility qt-components
 # In App Purchasing
 contains(DEFINES,USE_IAP) {
@@ -47,10 +38,7 @@ MOBILITY += sensors connectivity systeminfo versit contacts location
 
 OTHER_FILES += \
     qml/images/*.svg \
-    qml/images/*.png \
-    qml/symbian/IapPage.qml \
-    qml/symbian/IapItem.qml \
-    qml/symbian/IaaAd.qml
+    qml/images/*.png
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
@@ -134,19 +122,12 @@ symbian {
     imagesFolderSymbian.target = qml
     DEPLOYMENTFOLDERS += imagesFolderSymbian
 
-    #qmlImages.sources = qml/images/*
-    #qmlImages.path = .
-    #DEPLOYMENT += qmlImages
-
     # Smart Installer package's UID
     # This UID is from the protected range and therefore the package will
     # fail to install if self-signed. By default qmake uses the unprotected
     # range value if unprotected UID is defined for the application and
     # 0x2002CCCF value if protected UID is given to the application
     #symbian:DEPLOYMENT.installer_header = 0x2002CCCF
-
-    # Add dependency to symbian components
-    # CONFIG += qtquickcomponents
 	
     # Autostart
     ndefhandler.sources = ndefhandler_nfcinteractor.xml
@@ -208,9 +189,6 @@ symbian {
     # In App Purchasing
     contains(DEFINES,USE_IAP) {
         message(Using In-App Purchasing)
-#        LIBS += -lcaf \
-#            -lcafutils \
-#            -lapmime \
 
         # *** including inappbilling below
         LIBS += -liapclientapi
