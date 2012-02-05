@@ -285,6 +285,27 @@ contains(MEEGO_EDITION,harmattan) {
     launchericon.files = nfcinteractor80.png splash-nfcinteractor-l.png splash-nfcinteractor-p.png
     launchericon.path = /opt/nfcinteractor/
     INSTALLS += launchericon
+
+    contains(DEFINES,USE_IAA) {
+        message(Using In-App Advertising)
+
+        INCLUDEPATH += iaa
+        DEPENDPATH += iaa
+        SOURCES += \
+            iaa/adinterface.cpp \
+            iaa/requestqueue.cpp \
+            iaa/uachecker.cpp
+        HEADERS += \
+            iaa/adinterface.h \
+            iaa/requestqueue.h \
+            iaa/uachecker.h
+        OTHER_FILES += \
+            qml/iaa/*.qml
+        iaaFolder.source = qml/iaa/*
+        iaaFolder.target = qml
+        DEPLOYMENTFOLDERS += iaaFolder
+        QML_IMPORT_PATH += qml/iaa
+    }
 }
 
 commonFolder.source = qml/common/*

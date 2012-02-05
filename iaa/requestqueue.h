@@ -1,0 +1,46 @@
+#ifndef REQUESTQUEUE_H
+#define REQUESTQUEUE_H
+
+#include <QObject>
+#include <QQueue>
+
+class QNetworkAccessManager;
+class QNetworkReply;
+class AdInterface;
+class QNetworkSession;
+class QNetworkConfigurationManager;
+class RequestQueue : public QObject
+{
+    Q_OBJECT
+public:
+    explicit RequestQueue(AdInterface *parent = 0);
+    ~RequestQueue();
+
+    void setUserAgent(const QByteArray &ua) { m_userAgent = ua; }
+
+    bool isOnline() const;
+signals:
+
+public slots:
+    void addToQueue(QObject *object);
+
+private:
+
+private slots:
+    void handleRequests();
+    void adRequestFinished(QNetworkReply *req);
+
+signals:
+    void requestReady();
+
+private:
+    QQueue<QObject*> m_adItemQueue;
+    QNetworkAccessManager *m_nam;
+    QByteArray m_userAgent;
+    bool m_requestRunning;
+    QNetworkConfigurationManager *m_confman;
+    QNetworkSession *m_nsession;
+    bool m_onlineCheck;
+};
+
+#endif // REQUESTQUEUE_H
