@@ -212,7 +212,7 @@ NdefNfcSpRecord* NfcModelToNdef::convertSpFromModel(const int startIndex, int& e
         //curIndex ++;  // Already incremented by convert...() methods.
     }
     endIndex = curIndex;
-    qDebug() << "Sp payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
+    //qDebug() << "Sp payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
     return newRecord;
 }
 
@@ -331,8 +331,8 @@ NdefNfcSmsRecord* NfcModelToNdef::convertSmsFromModel(const int startIndex, int&
     }
     endIndex = curIndex;
 
-    qDebug() << "Sms payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
-    qDebug() << "Is Sp: " << newRecord->isSp();
+    //qDebug() << "Sms payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
+    //qDebug() << "Is Sp: " << newRecord->isSp();
     return newRecord;
 }
 
@@ -410,7 +410,7 @@ NdefNfcMimeVcardRecord* NfcModelToNdef::convertBusinessCardFromModel(const int s
     }
     endIndex = curIndex;
     newRecord->setContact(contact);
-    qDebug() << "Contact payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
+    //qDebug() << "Contact payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
     return newRecord;
 }
 
@@ -541,8 +541,8 @@ NdefNfcSocialRecord *NfcModelToNdef::convertSocialNetworkFromModel(const int sta
         //curIndex ++;  // Already incremented by convert...() methods.
     }
     endIndex = curIndex;
-    qDebug() << "Social payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
-    qDebug() << "Is Social == Sp: " << newRecord->isSp();
+    //qDebug() << "Social payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
+    //qDebug() << "Is Social == Sp: " << newRecord->isSp();
     return newRecord;
 }
 
@@ -593,8 +593,8 @@ NdefNfcGeoRecord *NfcModelToNdef::convertGeoFromModel(const int startIndex, int 
         //curIndex ++;  // Already incremented by convert...() methods.
     }
     endIndex = curIndex;
-    qDebug() << "Geo payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
-    qDebug() << "Is Geo == Sp: " << newRecord->isSp();
+    //qDebug() << "Geo payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
+    //qDebug() << "Is Geo == Sp: " << newRecord->isSp();
     return newRecord;
 }
 
@@ -644,8 +644,8 @@ NdefNfcStoreLinkRecord *NfcModelToNdef::convertStoreFromModel(const int startInd
         //curIndex ++;  // Already incremented by convert...() methods.
     }
     endIndex = curIndex;
-    qDebug() << "Store payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
-    qDebug() << "Is Store == Sp: " << newRecord->isSp();
+    //qDebug() << "Store payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
+    //qDebug() << "Is Store == Sp: " << newRecord->isSp();
     return newRecord;
 }
 
@@ -739,6 +739,6 @@ QNdefRecord *NfcModelToNdef::convertCustomFromModel(const int startIndex, int &e
     }
 
     endIndex = curIndex;
-    qDebug() << "Custom payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
+    //qDebug() << "Custom payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
     return newRecord;
 }
