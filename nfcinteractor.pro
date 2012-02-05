@@ -13,15 +13,26 @@ exists($$QMAKE_INCDIR_QT"/../qmsystem2/qmkeys.h"):!contains(MEEGO_EDITION,harmat
 }
 
 symbian {
-    # IAP only available on the Symbian platform
+    # In App Purchasing APIs only available on the Symbian platform
     DEFINES += USE_IAP
     # Enables test mode for IAP
     DEFINES += IAP_TEST_MODE
+    # In App Advertising
+    DEFINES += USE_IAA
 }
 contains(MEEGO_EDITION,harmattan) {
     # Unlimited version if not enabled
     #DEFINES += USE_IAP
 }
+
+contains(DEFINES,USE_IAA) {
+    #message(Using In-App Advertising)
+    #include(iaa/component.pro)
+
+    # Additional import path used to resolve QML modules in Creator's code model
+    #QML_IMPORT_PATH = $$OUT_PWD/../import
+}
+
 
 CONFIG += mobility qt-components
 # In App Purchasing
@@ -38,7 +49,8 @@ OTHER_FILES += \
     qml/images/*.svg \
     qml/images/*.png \
     qml/symbian/IapPage.qml \
-    qml/symbian/IapItem.qml
+    qml/symbian/IapItem.qml \
+    qml/symbian/IaaAd.qml
 
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
@@ -89,7 +101,7 @@ simulator {
 
     qmlFolder.source = qml/symbian/*
     qmlFolder.target = qml
-    QML_IMPORT_PATH = qml/symbian
+    QML_IMPORT_PATH += qml/symbian
 
     OTHER_FILES += \
         qml/images-symbian/*.qml
@@ -113,7 +125,7 @@ symbian {
 
     qmlFolder.source = qml/symbian/*
     qmlFolder.target = qml
-    QML_IMPORT_PATH = qml/symbian
+    QML_IMPORT_PATH += qml/symbian
 
     # Symbian specific images
     OTHER_FILES += \
@@ -234,6 +246,31 @@ symbian {
             DEPLOYMENT += addIapTestFiles
         }
     }
+    contains(DEFINES,USE_IAA) {
+        message(Using In-App Advertising)
+
+        TARGET.CAPABILITY += NetworkServices
+        LIBS += -lbrowserengine -lcone
+
+        INCLUDEPATH += iaa
+        DEPENDPATH += iaa
+        SOURCES += \
+            iaa/adinterface.cpp \
+            iaa/inneractive_plugin.cpp \
+            iaa/requestqueue.cpp \
+            iaa/uachecker.cpp
+        HEADERS += \
+            iaa/adinterface.h \
+            iaa/inneractive_plugin.h \
+            iaa/requestqueue.h \
+            iaa/uachecker.h
+        OTHER_FILES += \
+            qml/iaa/*.qml
+        iaaFolder.source = qml/iaa/*
+        iaaFolder.target = qml
+        DEPLOYMENTFOLDERS += iaaFolder
+        QML_IMPORT_PATH += qml/iaa
+    }
 }
 
 contains(MEEGO_EDITION,harmattan) {
@@ -250,7 +287,7 @@ contains(MEEGO_EDITION,harmattan) {
 
     qmlFolder.source = qml/meego/*
     qmlFolder.target = qml
-    QML_IMPORT_PATH = qml/meego
+    QML_IMPORT_PATH += qml/meego
 
     # Don't use nfcinfo_harmattan.desktop. Otherwise,
     # the NDEF Autostart handler won't find the desktop file and

@@ -66,7 +66,15 @@ Page {
         model: messageModel
         clip: true
         delegate: listDelegate
-        anchors.fill: parent
+        //anchors.fill: parent
+        anchors {
+            top: iaaLoader.bottom
+            left: parent.left
+            right: parent.right
+            bottom: parent.bottom
+        }
+        anchors.topMargin: customPlatformStyle.paddingLarge
+
         // Automatically scroll down when a new element is added
         onCountChanged: positionViewAtEnd();
         Component.onCompleted: positionViewAtBeginning();
@@ -106,6 +114,26 @@ Page {
         }
     }
 
+    // In App Advertising
+    // -------------------------------------------------------------------------
+    Loader {
+        id: iaaLoader
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+    }
+    function loadAds() {
+        if (!window.isRemoveAdsPurchased()) {
+            iaaLoader.source = Qt.resolvedUrl("IaaAd.qml");
+        }
+    }
+    function hideAds() {
+        iaaLoader.sourceComponent = undefined
+        iaaLoader.height = 0
+    }
+
+    Component.onCompleted: loadAds()
+
     // -------------------------------------------------------------------------
     // Working indicator
     function showHideBusy(showBusy) {
@@ -128,7 +156,7 @@ Page {
     // Toolbar
     // TODO: ToolButton to save the log
     // TODO: ToolButton to go to the editor with the last tag contents? Or rather a click in the list.
-    tools: useIap ? toolBarNfcInfoPageIap : toolBarNfcInfoPage;
+    tools: (!useIap || (window.isAdvTagsPurchased() && window.isRemoveAdsPurchased() && !iapTestMode)) ? toolBarNfcInfoPage : toolBarNfcInfoPageIap;
     // Just setting a ToolButton to invisible would still leave its
     // space free in the ToolBarLayout. Therefore, we need to define
     // two separate ToolBarLayouts and switch depending on if IAP is enabled

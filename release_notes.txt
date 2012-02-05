@@ -1,4 +1,4 @@
-Nfc Interactor Professional
+Nfc Interactor
 http://www.nfcinteractor.com
 -------------------------------------------------------------------------------
 
@@ -48,9 +48,7 @@ Easily reusable code for developers including:
 - Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2**)
 
 Known bugs / issues (work-in-progress):
-- Add IAA
 - Get real IAP item IDs
-- Icons for IAP items
 - Create item in Nokia Publisher portal
 
 Ideas for future updates:

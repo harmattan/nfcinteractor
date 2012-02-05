@@ -90,6 +90,13 @@ PageStackWindow {
     function setUnlimitedAdvancedMsgs(unlimited) {
         nfcInfo.setUnlimitedAdvancedMsgs(unlimited);
     }
+    function setRemoveAds(removeAds) {
+        if (removeAds) {
+            nfcInfoPage.hideAds();
+        } else {
+            nfcInfoPage.loadAds();
+        }
+    }
 
     // --------------------------------------------------------------
 

@@ -9,15 +9,15 @@ Page {
             iconSource: "toolbar-back";
             onClicked: pageStack.depth <= 1 ? Qt.quit() : pageStack.pop()
         }
-//        ToolButton {
-//            flat: true
-//            visible: !allItemPurchased()
-//            text: "Restore"
-//            onClicked: iapManager.restoreItems()
-//        }
         ToolButton {
             flat: true
-            // TODO: debug only
+            visible: iapTestMode
+            text: "Restore"
+            onClicked: iapManager.restoreItems()
+        }
+        ToolButton {
+            flat: true
+            visible: iapTestMode
             iconSource: "toolbar-delete";
             onClicked: {
                 iapManager.removePurchasedProduct(iapIdAdvTags);
@@ -55,6 +55,8 @@ Page {
         applyToItem.textColor = color;
         if (productId === iapIdAdvTags) {
             window.setUnlimitedAdvancedMsgs(isPurchased);
+        } else if (productId == iapIdRemoveAds) {
+            window.setRemoveAds(isPurchased);
         }
     }
 
@@ -108,16 +110,16 @@ Page {
             id: iapAdvTagsItem
             productId: iapIdAdvTags
             anchors.top: parent.top
-            imageUrl: "icon.png"
+            imageUrl: "iapAdvTags.png"
             title: qsTr("Advanced Tag Writing")
-            description: qsTr("Write an unlimited number of advanced tag types, like business cards, geo tags or social network tags.")
+            description: qsTr("Write an unlimited number of advanced message types, like business cards, geo tags or social network tags.")
             price: qsTr("Checking...")
         }
         IapItem {
             id: iapRemoveAdsItem
             productId: iapIdRemoveAds
             anchors.top: iapAdvTagsItem.bottom
-            imageUrl: "icon.png"
+            imageUrl: "iapRemoveAds.png"
             title: qsTr("Remove Ads")
             description: qsTr("Use the application without ads, also enabling the use in offline mode and without data connection when roaming.")
             price: qsTr("Checking...")

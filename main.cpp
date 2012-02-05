@@ -58,6 +58,9 @@
 #define IAP_ID_REMOVE_ADS "524701"
 #endif
 
+#if defined(USE_IAA)
+#include "iaa/adinterface.h"
+#endif
 
 
 /*!
@@ -160,6 +163,7 @@ int main(int argc, char *argv[])
     viewer.engine()->addImageProvider(QLatin1String("nfcimageprovider"), tagImageCache);
 
 #ifdef USE_IAP
+    // In App Purchasing
     viewer.rootContext()->setContextProperty("useIap", QVariant(true));
     #if defined(Q_OS_SYMBIAN)
         // In App Purchasing APIs on Symbian
@@ -179,6 +183,20 @@ int main(int argc, char *argv[])
     #endif
 #else
     viewer.rootContext()->setContextProperty("useIap", QVariant(false));
+#endif
+#ifdef IAP_TEST_MODE
+    viewer.rootContext()->setContextProperty("iapTestMode", QVariant(true));
+#else
+    viewer.rootContext()->setContextProperty("iapTestMode", QVariant(false));
+#endif
+
+#ifdef USE_IAA
+    // In App Advertising
+    AdInterface adI;
+    viewer.rootContext()->setContextProperty("adInterface", &adI);
+    viewer.rootContext()->setContextProperty("useIaa", QVariant(true));
+#else
+    viewer.rootContext()->setContextProperty("useIaa", QVariant(false));
 #endif
 
     // Finally, load the main QML file to the viewer.
