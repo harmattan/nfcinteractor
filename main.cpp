@@ -87,7 +87,7 @@ int getFontHeight(const QString& fontName, const int fontPixelSize) {
 
 int main(int argc, char *argv[])
 {
-    QApplication app(argc, argv);
+    QScopedPointer<QApplication> app(createApplication(argc, argv));
 
 #ifdef USE_IAP
     qDebug() << "Using IAP";
@@ -99,7 +99,7 @@ int main(int argc, char *argv[])
 
     QTranslator translator;
     translator.load(QString("nfcinteractor_") + locale);
-    app.installTranslator(&translator);
+    app->installTranslator(&translator);
 
     QTextCodec::setCodecForTr(QTextCodec::codecForName("utf8"));
 #endif
@@ -167,14 +167,14 @@ int main(int argc, char *argv[])
     viewer.rootContext()->setContextProperty("useIap", QVariant(true));
     #if defined(Q_OS_SYMBIAN)
         // In App Purchasing APIs on Symbian
-        IapManager iapManager;
+        QScopedPointer<IapManager> iapManager(new IapManager());
         // Add the known items to the list
         // Also retrieves if the user has already purchased the items
         // from the internal DB, to prevent the need to go online
         // every time.
-        iapManager.addIapProduct(IAP_ID_ADV_TAGS);
-        iapManager.addIapProduct(IAP_ID_REMOVE_ADS);
-        viewer.rootContext()->setContextProperty("iapManager", &iapManager);
+        iapManager->addIapProduct(IAP_ID_ADV_TAGS);
+        iapManager->addIapProduct(IAP_ID_REMOVE_ADS);
+        viewer.rootContext()->setContextProperty("iapManager", iapManager.data());
         viewer.rootContext()->setContextProperty("iapIdAdvTags", QVariant(IAP_ID_ADV_TAGS));
         viewer.rootContext()->setContextProperty("iapIdRemoveAds", QVariant(IAP_ID_REMOVE_ADS));
     #else
@@ -184,6 +184,7 @@ int main(int argc, char *argv[])
 #else
     viewer.rootContext()->setContextProperty("useIap", QVariant(false));
 #endif
+
 #ifdef IAP_TEST_MODE
     viewer.rootContext()->setContextProperty("iapTestMode", QVariant(true));
 #else
@@ -192,10 +193,34 @@ int main(int argc, char *argv[])
 
 #ifdef USE_IAA
     // In App Advertising
-    AdInterface adI;
-    viewer.rootContext()->setContextProperty("adInterface", &adI);
-    viewer.rootContext()->setContextProperty("useIaa", QVariant(true));
+    #if defined(Q_OS_SYMBIAN) && defined(USE_IAP)
+        // Define the pointer here; creating it in the if would instantly
+        // destroy it again after the if ends, but we obviously need to
+        // keep the instance alive till the app exits.
+        // Use a scoped pointer so that we only need to create the instance
+        // when the user hasn't purchased the remove ads upgrade, to speed
+        // up app startup time if he has.
+        QScopedPointer<AdInterface> adI;
+        // Symbian & using IAP - only start the ad interface if the user
+        // didn't already purchase the remove ads upgrade
+        if (!iapManager->isProductPurchased(IAP_ID_REMOVE_ADS)) {
+            // IAA Upgrade not purchased - use IAA
+            //AdInterface adI;
+            adI.reset(new AdInterface());
+            viewer.rootContext()->setContextProperty("adInterface", adI.data());
+            viewer.rootContext()->setContextProperty("useIaa", QVariant(true));
+        } else {
+            // IAA Upgrade purchased - don't use IAA
+            viewer.rootContext()->setContextProperty("useIaa", QVariant(false));
+        }
+    #else
+        // [Symbian and no IAP] or Harmattan
+        QScopedPointer<AdInterface> adI(new AdInterface());
+        viewer.rootContext()->setContextProperty("adInterface", adI.data());
+        viewer.rootContext()->setContextProperty("useIaa", QVariant(true));
+    #endif
 #else
+    // IAA not activated
     viewer.rootContext()->setContextProperty("useIaa", QVariant(false));
 #endif
 
@@ -217,8 +242,11 @@ int main(int argc, char *argv[])
         nfcInfoObj->setDeclarativeView(viewer);
 #ifdef USE_IAP
     #ifdef Q_OS_SYMBIAN
-        nfcInfoObj->setUnlimitedAdvancedMsgs(iapManager.isProductPurchased(IAP_ID_ADV_TAGS));
+        // Symbian: set unlimited tags according to whether it has been purchased already
+        nfcInfoObj->setUnlimitedAdvancedMsgs(iapManager->isProductPurchased(IAP_ID_ADV_TAGS));
     #else
+        // Harmattan: set unlimited tags according to whether IAP is enabled in the .pro file.
+        // (if it is enabled, limit tag writing. If USE_IAP isn't set, use unlimited tag writing)
         nfcInfoObj->setUnlimitedAdvancedMsgs(false);
     #endif
 #endif
@@ -232,5 +260,5 @@ int main(int argc, char *argv[])
 //    screensaver->setScreenSaverInhibit();
 //#endif
 
-    return app.exec();
+    return app->exec();
 }

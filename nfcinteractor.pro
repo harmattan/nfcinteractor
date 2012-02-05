@@ -21,8 +21,10 @@ symbian {
     DEFINES += USE_IAA
 }
 contains(MEEGO_EDITION,harmattan) {
-    # Unlimited version if not enabled
+    # Unlimited version: disable USE_IAP and USE_IAA
+    # Ad-supported limited version: enable USE_IAP and USE_IAA
     #DEFINES += USE_IAP
+    #DEFINES += USE_IAA
 }
 
 CONFIG += mobility qt-components
