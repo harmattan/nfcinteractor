@@ -16,7 +16,7 @@ symbian {
     # In App Purchasing APIs only available on the Symbian platform
     DEFINES += USE_IAP
     # Enables test mode for IAP
-    DEFINES += IAP_TEST_MODE
+    #DEFINES += IAP_TEST_MODE
     # In App Advertising
     DEFINES += USE_IAA
 }
@@ -176,7 +176,7 @@ symbian {
     translationfiles.source = loc/*.qm
     DEPLOYMENTFOLDERS += translationfiles
 
-    vendorName = "Nokia"
+    vendorName = "Andreas Jakl"
     vendorinfo = \
         "; Localised Vendor name" \
         "%{$$addLanguageDependentPkgItem(vendorName)}" \
