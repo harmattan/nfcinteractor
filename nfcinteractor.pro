@@ -234,12 +234,10 @@ symbian {
         DEPENDPATH += iaa
         SOURCES += \
             iaa/adinterface.cpp \
-            iaa/inneractive_plugin.cpp \
             iaa/requestqueue.cpp \
             iaa/uachecker.cpp
         HEADERS += \
             iaa/adinterface.h \
-            iaa/inneractive_plugin.h \
             iaa/requestqueue.h \
             iaa/uachecker.h
         OTHER_FILES += \
