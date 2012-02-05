@@ -167,6 +167,7 @@ PageStackWindow {
         }
     }
 
+	
     Component.onCompleted: {
         // MeeGo: set black theme
         theme.inverted = true
