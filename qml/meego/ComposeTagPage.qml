@@ -13,8 +13,7 @@ Page {
         }
         ToolIcon {
             iconId: "toolbar-add"
-            onClicked: writeNdefSelection.open()
-
+            onClicked: openAddNewRecordDialog()
         }
         ToolIcon {
             iconId: "toolbar-done"
@@ -150,11 +149,17 @@ Page {
         addContentDialogLoader.item.selectedIndex = -1;
     }
 
+    function openAddNewRecordDialog() {
+        // Reset selected index to -1 so that not the previously
+        // selected item is marked in the UI
+        writeNdefSelection.selectedIndex = -1;
+        writeNdefSelection.open();
+    }
 
     SelectionDialog {
         id: writeNdefSelection
         titleText: "Choose record to add"
-        selectedIndex: 0
+        selectedIndex: -1
         onAccepted: addRecordUi(writeNdefSelection.model.get(writeNdefSelection.selectedIndex).name)
 
         model: ListModel {

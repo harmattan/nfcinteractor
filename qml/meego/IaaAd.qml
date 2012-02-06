@@ -5,7 +5,7 @@ Item {
     id: iaaAd
 
     height: iaaItem.height
-    //property int contentHeight: iaaItem.height
+
     AdParameters {
         id: params
         applicationId: "Mopius_NfcInteractor_OVI"
