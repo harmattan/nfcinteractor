@@ -8,7 +8,7 @@ Item {
     property alias title: iapItemTitle.text
     property alias description: iapItemDescription.text
     property alias price: iapItemPrice.text
-    property color textColor: customPlatformStyle.colorNormalLight
+    property bool isPurchased: false
 
     anchors.left: parent.left
     anchors.right: parent.right
@@ -18,7 +18,9 @@ Item {
     MouseArea {
         anchors.fill:parent
         onClicked: {
-            iapManager.purchaseProduct(productId);
+            if (!isPurchased) {
+                iapManager.purchaseProduct(productId);
+            }
         }
     }
 
@@ -43,7 +45,7 @@ Item {
         height: customPlatformStyle.fontSizeLarge
         font.family: customPlatformStyle.fontFamilyRegular;
         font.pixelSize: customPlatformStyle.fontSizeLarge
-        color: textColor
+        color: isPurchased ? customPlatformStyle.colorNormalMid : customPlatformStyle.colorNormalLight;
     }
     Text {
         id: iapItemDescription
@@ -54,7 +56,7 @@ Item {
         anchors.margins: customPlatformStyle.paddingMedium
         font.family: customPlatformStyle.fontFamilyRegular;
         font.pixelSize: customPlatformStyle.fontSizeMedium
-        color: textColor
+        color: isPurchased ? customPlatformStyle.colorNormalMid : customPlatformStyle.colorNormalLight;
     }
     Text {
         id: iapItemPrice
@@ -66,7 +68,7 @@ Item {
         font.family: customPlatformStyle.fontFamilyRegular;
         font.italic: true
         font.pixelSize: customPlatformStyle.fontSizeMedium
-        color: textColor
+        color: isPurchased ? customPlatformStyle.colorNormalMid : customPlatformStyle.colorNormalLight;
     }
 
     BusyIndicator {

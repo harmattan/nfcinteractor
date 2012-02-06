@@ -56,6 +56,7 @@ public:
     
 
 public:
+    Q_INVOKABLE void initIapEngine();
     Q_INVOKABLE void getProductData();
     Q_INVOKABLE bool isProductPurchased(const QString &productId);
     Q_INVOKABLE QString productPrice(const QString &productId);

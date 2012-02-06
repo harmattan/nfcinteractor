@@ -56,6 +56,7 @@
 // Define content IDs
 #define IAP_ID_ADV_TAGS "818680"
 #define IAP_ID_REMOVE_ADS "818679"
+#define IAP_ID_UNLIMITED "818769"
 #endif
 
 #if defined(USE_IAA)
@@ -174,9 +175,11 @@ int main(int argc, char *argv[])
         // every time.
         iapManager->addIapProduct(IAP_ID_ADV_TAGS);
         iapManager->addIapProduct(IAP_ID_REMOVE_ADS);
+        iapManager->addIapProduct(IAP_ID_UNLIMITED);
         viewer.rootContext()->setContextProperty("iapManager", iapManager.data());
         viewer.rootContext()->setContextProperty("iapIdAdvTags", QVariant(IAP_ID_ADV_TAGS));
         viewer.rootContext()->setContextProperty("iapIdRemoveAds", QVariant(IAP_ID_REMOVE_ADS));
+        viewer.rootContext()->setContextProperty("iapIdUnlimited", QVariant(IAP_ID_UNLIMITED));
     #else
         // Unlimited version on Harmattan
         // No IAP APIs available -> separate product on Nokia Store
@@ -243,7 +246,7 @@ int main(int argc, char *argv[])
 #ifdef USE_IAP
     #ifdef Q_OS_SYMBIAN
         // Symbian: set unlimited tags according to whether it has been purchased already
-        nfcInfoObj->setUnlimitedAdvancedMsgs(iapManager->isProductPurchased(IAP_ID_ADV_TAGS));
+        nfcInfoObj->setUnlimitedAdvancedMsgs(iapManager->isProductPurchased(IAP_ID_ADV_TAGS) || iapManager->isProductPurchased(IAP_ID_UNLIMITED));
     #else
         // Harmattan: set unlimited tags according to whether IAP is enabled in the .pro file.
         // (if it is enabled, limit tag writing. If USE_IAP isn't set, use unlimited tag writing)

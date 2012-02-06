@@ -87,6 +87,9 @@ PageStackWindow {
     function isRemoveAdsPurchased() {
         return iapManager.isProductPurchased(iapIdRemoveAds);
     }
+    function isUnlimitedPurchased() {
+        return iapManager.isProductPurchased(iapIdUnlimited);
+    }
     function setUnlimitedAdvancedMsgs(unlimited) {
         nfcInfo.setUnlimitedAdvancedMsgs(unlimited);
     }

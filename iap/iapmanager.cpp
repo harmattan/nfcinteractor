@@ -67,6 +67,13 @@ void IapManager::addIapProduct(const QString& productId)
     iDbCheckProductPurchased(productId);
 }
 
+void IapManager::initIapEngine()
+{
+    // Ensure that the IAP manager has been instantiated already,
+    // or create a new instance otherwise.
+    checkIapClientInstance();
+}
+
 void IapManager::getProductData()
 {
     // Ensure that the IAP manager has been instantiated already,
@@ -160,7 +167,11 @@ void IapManager::productDataReceived(int requestId, QString status, IAPClient::P
         // Getting product data OK
         // Get ID of the product data item we got additional info for
 #ifdef IAP_TEST_MODE
-        const QString productId = "524700";
+        // Debug only - in test mode, the APIs unfortunately don't return
+        // the product ID we requested info for. So just set one of our
+        // own. Note that then of course the UI will only show a €5 price
+        // for this one item, while the others will remain in "checking" state.
+        const QString productId = "818680";
 #else
         const QString productId = productData.value("id").toString();
 #endif

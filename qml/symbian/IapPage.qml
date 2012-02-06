@@ -22,8 +22,10 @@ Page {
             onClicked: {
                 iapManager.removePurchasedProduct(iapIdAdvTags);
                 iapManager.removePurchasedProduct(iapIdRemoveAds);
+                iapManager.removePurchasedProduct(iapIdUnlimited);
                 applyPurchaseStatus(iapIdAdvTags);
                 applyPurchaseStatus(iapIdRemoveAds);
+                applyPurchaseStatus(iapIdUnlimited);
             }
         }
     }
@@ -48,21 +50,66 @@ Page {
     function applyPurchaseStatus(productId) {
         // Get purchase status from the item
         var isPurchased = iapManager.isProductPurchased(productId);
-        console.log("isPurchased: " + isPurchased);
-        var color = isPurchased ? customPlatformStyle.colorNormalMid : customPlatformStyle.colorNormalLight;
+        // Update the price on the IAP-page
         applyPurchasePrice(productId);
         var applyToItem = getQmlItemForProductId(productId);
-        applyToItem.textColor = color;
+        applyToItem.isPurchased = isPurchased;
+        // Check which product was purchased and apply actions in the app
         if (productId === iapIdAdvTags) {
+            // Advanced tags
             window.setUnlimitedAdvancedMsgs(isPurchased);
-        } else if (productId == iapIdRemoveAds) {
+        } else if (productId === iapIdRemoveAds) {
+            // Remove ads
             window.setRemoveAds(isPurchased);
+        } else if (productId === iapIdUnlimited) {
+            if (isPurchased) {
+                // Unlimited (includes all other IAP items)
+                // When Unlimited is purchased, remove ads and set unlimited tag writing.
+                // Note that when the Unlimited isn't purchased, we shouldn't deactivate
+                // the others here, as they might still have been individually purchased.
+                window.setUnlimitedAdvancedMsgs(isPurchased);
+                window.setRemoveAds(isPurchased);
+            }
+        }
+        // Apply the status also to other items that might be affected
+        // (both individuals purchased -> mark unlimited as purchased.
+        //  unlimited purchased -> mark both individuals as purchased)
+        applyMetaPurchaseStatus();
+    }
+
+    function applyMetaPurchaseStatus() {
+        if (iapManager.isProductPurchased(iapIdAdvTags) && iapManager.isProductPurchased(iapIdRemoveAds)) {
+            // Purchased both advanced tags and remove ads
+            // -> Also apply unlimited IAP item
+            getQmlItemForProductId(iapIdUnlimited).isPurchased = true;
+            applyPurchasePrice(iapIdUnlimited);
+        } else if (iapManager.isProductPurchased(iapIdUnlimited)) {
+            // Unlimited is purchased:
+            // -> also mark the other items as purchased
+            getQmlItemForProductId(iapIdAdvTags).isPurchased = true;
+            applyPurchasePrice(iapIdAdvTags);
+            getQmlItemForProductId(iapIdRemoveAds).isPurchased = true;
+            applyPurchasePrice(iapIdRemoveAds);
         }
     }
 
     function applyPurchasePrice(productId) {
         var price = iapManager.productPrice(productId);
         var isPurchased = iapManager.isProductPurchased(productId);
+        if (iapManager.isProductPurchased(iapIdUnlimited)) {
+            // If unlimited is purchased, all the others should appear
+            // as purchased as well
+            // (even if they are not in the backend, but that doesn't matter).
+            isPurchased = true;
+        } else if (productId === iapIdUnlimited &&
+                   iapManager.isProductPurchased(iapIdAdvTags) &&
+                   iapManager.isProductPurchased(iapIdRemoveAds)) {
+            // Processing unlimited item:
+            // If all others are already purchased, set this unlimited to be
+            // purchased as well
+            isPurchased = true;
+        }
+
         var applyToItem = getQmlItemForProductId(productId);
         console.log("Price: " + price + ", isPurchased: " + isPurchased + ", item: " + applyToItem);
 
@@ -74,11 +121,22 @@ Page {
     }
 
     function getQmlItemForProductId(productId) {
-        return (productId === iapIdAdvTags) ? iapAdvTagsItem : iapRemoveAdsItem;
+        switch (productId) {
+        case iapIdAdvTags:
+            return iapAdvTagsItem;
+        case iapIdRemoveAds:
+            return iapRemoveAdsItem;
+        case iapIdUnlimited:
+            return iapUnlimitedItem;
+        default:
+            console.log("No QML item available for product id " + productId);
+            break;
+        }
     }
 
     function allItemPurchased() {
-        return iapManager.isProductPurchased(iapIdAdvTags) && iapManager.isProductPurchased(iapIdRemoveAds);
+        return ((iapManager.isProductPurchased(iapIdAdvTags) && iapManager.isProductPurchased(iapIdRemoveAds)) ||
+                iapManager.isProductPurchased(iapIdUnlimited));
     }
 
     Text {
@@ -102,7 +160,7 @@ Page {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        contentHeight: iapAdvTagsItem.height + iapRemoveAdsItem.height
+        contentHeight: iapAdvTagsItem.height + iapRemoveAdsItem.height + iapUnlimitedItem.height
         contentWidth: parent.width
         clip: true
 
@@ -124,6 +182,15 @@ Page {
             description: qsTr("Use the application without ads, also enabling the use in offline mode and without data connection when roaming.")
             price: qsTr("Checking...")
         }
+        IapItem {
+            id: iapUnlimitedItem
+            productId: iapIdUnlimited
+            anchors.top: iapRemoveAdsItem.bottom
+            imageUrl: "iapUnlimited.png"
+            title: qsTr("Unlimited")
+            description: qsTr("Combines the other items into one purchase: remove ads to use Nfc Interactor in offline mode, and write an unlimited number of advanced tags!")
+            price: qsTr("Checking...")
+        }
     }
 
 
@@ -131,15 +198,29 @@ Page {
         // Check if the products have been purchased already
         applyPurchaseStatus(iapIdAdvTags);
         applyPurchaseStatus(iapIdRemoveAds);
+        applyPurchaseStatus(iapIdUnlimited);
         // Let the page transition animations finish, and then
         // put the IAP APIs into use (which will stall the app
         // briefly as the IAP Client APIs initialize themselves).
-        timer.restart();
+        initIapTimer.restart();
     }
 
     Timer {
-        id: timer
+        id: initIapTimer
         interval: 500   // Give enough time for page transitions to finish
+        repeat: false
+        onTriggered: {
+            // Connect to the IAP service and check the product data
+            console.log("QML: Initializing IAP engine");
+            iapManager.initIapEngine();
+            // Start timer to check products
+            checkProductsTimer.restart();
+        }
+    }
+
+    Timer {
+        id: checkProductsTimer
+        interval: 1000   // Give enough time for page transitions to finish
         repeat: false
         onTriggered: {
             // Connect to the IAP service and check the product data

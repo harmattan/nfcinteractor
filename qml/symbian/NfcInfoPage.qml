@@ -123,7 +123,7 @@ Page {
         anchors.right: parent.right
     }
     function loadAds() {
-        if (!window.isRemoveAdsPurchased()) {
+        if (!(window.isRemoveAdsPurchased() || window.isUnlimitedPurchased())) {
             iaaLoader.source = Qt.resolvedUrl("IaaAd.qml");
         }
     }
@@ -156,7 +156,9 @@ Page {
     // Toolbar
     // TODO: ToolButton to save the log
     // TODO: ToolButton to go to the editor with the last tag contents? Or rather a click in the list.
-    tools: (!useIap || (window.isAdvTagsPurchased() && window.isRemoveAdsPurchased() && !iapTestMode)) ? toolBarNfcInfoPage : toolBarNfcInfoPageIap;
+    tools: (!useIap ||
+            (window.isAdvTagsPurchased() && window.isRemoveAdsPurchased() && !iapTestMode) ||
+            (window.isUnlimitedPurchased() && !iapTestMode)) ? toolBarNfcInfoPage : toolBarNfcInfoPageIap;
     // Just setting a ToolButton to invisible would still leave its
     // space free in the ToolBarLayout. Therefore, we need to define
     // two separate ToolBarLayouts and switch depending on if IAP is enabled
