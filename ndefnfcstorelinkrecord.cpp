@@ -95,9 +95,9 @@ void NdefNfcStoreLinkRecord::updatePayload()
     }
 
     // No app id set
-    qDebug() << "Store URI before check: " << tagStoreUri;
+    //qDebug() << "Store URI before check: " << tagStoreUri;
     if (tagStoreUri.isEmpty()) {
-        qDebug() << "isEmpty";
+        //qDebug() << "isEmpty";
         tagStoreUri.setUrl("http://store.ovi.com");
     }
 
