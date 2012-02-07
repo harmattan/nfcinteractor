@@ -135,9 +135,9 @@ void NfcRecordModel::handleItemChange()
 {
     NfcRecordItem* item = static_cast<NfcRecordItem*>(sender());
     QModelIndex index = indexFromItem(item);
-    qDebug() << "NfcRecordModel::handleItemChange(): " << m_recordItems.at(index.row())->currentText();
+    //qDebug() << "NfcRecordModel::handleItemChange(): " << m_recordItems.at(index.row())->currentText();
     if(index.isValid()) {
-        qDebug() << "NfcRecordModel::handleItemChange: emitting dataChanged signal";
+        //qDebug() << "NfcRecordModel::handleItemChange: emitting dataChanged signal";
         emit dataChanged(index, index);
         emit recordItemsModified();
     }
@@ -677,7 +677,7 @@ QList<QObject*> NfcRecordModel::possibleContentForRecord(int recordIndex)
         break;
     }
     }
-    qDebug() << "Number of possible additional content items (C++): " << possibleContent.size();
+    //qDebug() << "Number of possible additional content items (C++): " << possibleContent.size();
     return possibleContent;
 }
 
