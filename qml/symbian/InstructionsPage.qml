@@ -62,7 +62,7 @@ Page {
                 Button {
                     id: instructionsLinkButton
                     text: "NfcInteractor.com"
-                    onClicked: Qt.openUrlExternally("http://www.nfcinteractor.com/");
+                    onClicked: Qt.openUrlExternally("http://www.nfcinteractor.com/r?ni");
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
 
