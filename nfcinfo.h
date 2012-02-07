@@ -46,6 +46,7 @@
 #include <QVariant>
 #include <QUrl>
 #include <QDeclarativeView>
+#include <QSystemInfo>
 
 #include <QNearFieldManager>
 #include <QNdefFilter>
@@ -256,6 +257,7 @@ private:
     /*! Needed on MeeGo Harmattan to raise the app to the foreground when
       it's autostarted. */
     QDeclarativeView* m_declarativeView;
+    bool m_harmattanPr10;
 };
 
 #endif // NFCINFO_H

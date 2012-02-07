@@ -49,8 +49,20 @@ NfcInfo::NfcInfo(QObject *parent) :
     m_cachedNdefMessage(NULL),
     m_cachedNdefMessageSize(0),
     m_cachedRequestType(NfcIdle),
-    m_unlimitedAdvancedMsgs(true)
+    m_unlimitedAdvancedMsgs(true),
+    m_harmattanPr10(false)
 {
+#if defined(MEEGO_EDITION_HARMATTAN)
+    // Determine Harmattan FW version
+    // PR 1.0 doesn't support activating read and write NDEF access at the same time,
+    // so we need to switch between both modes depending on what the app intends to do.
+    QSystemInfo* sysInfo = new QSystemInfo(this);
+    if (sysInfo->version(QSystemInfo::Os) == "1.2" && sysInfo->version(QSystemInfo::Firmware).contains("10.2011.34")) {
+        qDebug() << "Running Harmattan PR 1.0";
+        m_harmattanPr10 = true;
+    }
+#endif
+
     m_nfcRecordModel = new NfcRecordModel(this);
     m_nfcStats = new NfcStats(this);
     m_nfcRecordModel->setNfcStats(m_nfcStats);
@@ -62,6 +74,7 @@ NfcInfo::NfcInfo(QObject *parent) :
     // Images are stored in the m_imgCache variable; both this and
     // the m_nfcNdefParser have a reference to it.
     connect(m_nfcNdefParser, SIGNAL(nfcTagImage(int)), this, SIGNAL(nfcTagImage(int)));
+
 }
 
 NfcInfo::~NfcInfo() {
@@ -97,12 +110,12 @@ bool NfcInfo::initAndStartNfc()
         emit nfcStatusError("Qt reports: NFC is not available");
     }
 
-    // MeeGo Harmattan PR 1.0 only allows one target access mode to be active at the same time
-//#ifdef MEEGO_EDITION_HARMATTAN
-//    nfcManager->setTargetAccessModes(QNearFieldManager::NdefReadTargetAccess);
-//#else
-    m_nfcManager->setTargetAccessModes(QNearFieldManager::NdefReadTargetAccess | QNearFieldManager::NdefWriteTargetAccess | QNearFieldManager::TagTypeSpecificTargetAccess);
-//#endif
+    if (m_harmattanPr10) {
+        // MeeGo Harmattan PR 1.0 only allows one target access mode to be active at the same time
+        m_nfcManager->setTargetAccessModes(QNearFieldManager::NdefReadTargetAccess);
+    } else {
+        m_nfcManager->setTargetAccessModes(QNearFieldManager::NdefReadTargetAccess | QNearFieldManager::NdefWriteTargetAccess | QNearFieldManager::TagTypeSpecificTargetAccess);
+    }
 
     // Required for autostart tags
     m_nfcManager->registerNdefMessageHandler(this, SLOT(targetMessageDetected(QNdefMessage,QNearFieldTarget*)));
@@ -305,9 +318,9 @@ void NfcInfo::targetDetected(QNearFieldTarget *target)
             }
         } else {
             // Write operation is pending, so attempt writing the message.
-            //#ifdef MEEGO_EDITION_HARMATTAN
-            //            nfcManager->setTargetAccessModes(QNearFieldManager::NdefWriteTargetAccess);
-            //#endif
+            if (m_harmattanPr10) {
+                m_nfcManager->setTargetAccessModes(QNearFieldManager::NdefWriteTargetAccess);
+            }
             writeCachedNdefMessage();
         }
     } else {
@@ -384,6 +397,9 @@ void NfcInfo::ndefMessageRead(const QNdefMessage &message)
 bool NfcInfo::nfcWriteTag(const bool writeOneTagOnly)
 {
     emit nfcModeChanged(NfcTypes::nfcWriting);
+    if (m_harmattanPr10) {
+        m_nfcManager->setTargetAccessModes(QNearFieldManager::NdefWriteTargetAccess);
+    }
 
     // Convert the model into a NDEF message
     QNdefMessage* message = recordModel()->convertToNdefMessage();
@@ -409,6 +425,9 @@ void NfcInfo::nfcStopWritingTags()
     m_pendingWriteNdef = false;
     m_writeOneTagOnly = false;
     emit nfcModeChanged(NfcTypes::nfcReading);
+    if (m_harmattanPr10) {
+        m_nfcManager->setTargetAccessModes(QNearFieldManager::NdefReadTargetAccess);
+    }
 }
 
 /*!
@@ -438,6 +457,9 @@ bool NfcInfo::writeCachedNdefMessage()
                 // If writing only one tag, deactivate the writing mode again.
                 m_pendingWriteNdef = false;
                 emit nfcModeChanged(NfcTypes::nfcReading);
+                if (m_harmattanPr10) {
+                    m_nfcManager->setTargetAccessModes(QNearFieldManager::NdefReadTargetAccess);
+                }
             }
             emit nfcTagWriteExceeded();
         } else {
@@ -458,9 +480,9 @@ bool NfcInfo::writeCachedNdefMessage()
                         // If writing only one tag, deactivate the writing mode again.
                         m_pendingWriteNdef = false;
                         emit nfcModeChanged(NfcTypes::nfcReading);
-                        //#ifdef MEEGO_EDITION_HARMATTAN
-                        //                nfcManager->setTargetAccessModes(QNearFieldManager::NdefReadTargetAccess);
-                        //#endif
+                        if (m_harmattanPr10) {
+                            m_nfcManager->setTargetAccessModes(QNearFieldManager::NdefReadTargetAccess);
+                        }
                     }
                 } else {
                     // Device is not in writing mode
