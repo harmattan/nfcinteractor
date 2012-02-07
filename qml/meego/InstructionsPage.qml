@@ -61,7 +61,7 @@ Page {
                 Button {
                     id: instructionsLinkButton
                     text: "NfcInteractor.com"
-                    onClicked: Qt.openUrlExternally("http://www.nfcinteractor.com/");
+                    onClicked: Qt.openUrlExternally(((useIap) ? "http://www.nfcinteractor.com/r?ni" : "http://www.nfcinteractor.com/r?niu"));
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
 
@@ -70,6 +70,18 @@ Page {
                     text: qsTr("Touch NFC tags to analyze their contents.\nTap the 'write' toolbar button to compose your own NDEF message (consisting of one or more records), then tap the finish flag to finalize the contents. Now touch a tag to write the message to the tag.")
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
+                    wrapMode: Text.WordWrap
+                    color: customPlatformStyle.colorNormalLight
+                    font.family: customPlatformStyle.fontFamilyRegular;
+                    font.pixelSize: customPlatformStyle.fontSizeMedium
+                }
+
+                Text {
+                    id: instructionsText4
+                    text: qsTr("Upgrade to the Nfc Interactor Unlimited to write more than 10 advanced tags and enjoy usage without ads (no network connection required)! Click the button above for more information.")
+                    horizontalAlignment: Text.AlignHCenter
+                    width: parent.width
+                    visible: useIap
                     wrapMode: Text.WordWrap
                     color: customPlatformStyle.colorNormalLight
                     font.family: customPlatformStyle.fontFamilyRegular;
