@@ -175,6 +175,6 @@ void NdefNfcGeoRecord::updatePayload()
     }
 
     NdefNfcSmartUriRecord::setUri(uri);
-    qDebug() << "Geo coordinates (lat, long): " << latString << "," << longString;
+    //qDebug() << "Geo coordinates (lat, long): " << latString << "," << longString;
 }
 
