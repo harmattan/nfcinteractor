@@ -1,5 +1,8 @@
-TARGET = nfcinteractor
-VERSION = 2.00.0
+# When switching between the unlimited version and the
+# normal version, also call the corresponding .bat
+# file if compiling for Harmattan, to change the
+# names in the debian package files!
+#DEFINES += UNLIMITED_VERSION
 
 # Define for detecting Harmattan in .cpp files.
 # Only needed for experimental / beta Harmattan SDKs.
@@ -12,19 +15,35 @@ exists($$QMAKE_INCDIR_QT"/../qmsystem2/qmkeys.h"):!contains(MEEGO_EDITION,harmat
     DEFINES += MEEGO_EDITION_HARMATTAN
 }
 
+contains(DEFINES,UNLIMITED_VERSION) {
+    contains(MEEGO_EDITION,harmattan) {
+        TARGET = nfcinteractorunlimited
+    } else {
+        TARGET = nfcinteractor
+    }
+} else {
+    TARGET = nfcinteractor
+}
+VERSION = 2.00.0
+
+
 symbian {
-    # In App Purchasing APIs only available on the Symbian platform
-    DEFINES += USE_IAP
-    # Enables test mode for IAP
-    #DEFINES += IAP_TEST_MODE
-    # In App Advertising
-    DEFINES += USE_IAA
+    !contains(DEFINES,UNLIMITED_VERSION) {
+        # In App Purchasing APIs only available on the Symbian platform
+        DEFINES += USE_IAP
+        # Enables test mode for IAP
+        #DEFINES += IAP_TEST_MODE
+        # In App Advertising
+        DEFINES += USE_IAA
+    }
 }
 contains(MEEGO_EDITION,harmattan) {
     # Unlimited version: disable USE_IAP and USE_IAA
     # Ad-supported limited version: enable USE_IAP and USE_IAA
-    #DEFINES += USE_IAP
-    #DEFINES += USE_IAA
+    !contains(DEFINES,UNLIMITED_VERSION) {
+        DEFINES += USE_IAP
+        DEFINES += USE_IAA
+    }
 }
 
 CONFIG += mobility qt-components
@@ -258,7 +277,15 @@ contains(MEEGO_EDITION,harmattan) {
     # Speed up launching on MeeGo/Harmattan when using applauncherd daemon
     CONFIG += qdeclarative-boostable
 
-    OTHER_FILES += qtc_packaging/debian_harmattan/*
+    OTHER_FILES += qtc_packaging/debian_harmattan/changelog \
+        qtc_packaging/debian_harmattan/compat \
+        qtc_packaging/debian_harmattan/control \
+        qtc_packaging/debian_harmattan/copyright \
+        qtc_packaging/debian_harmattan/manifest.aegis \
+        qtc_packaging/debian_harmattan/README \
+        qtc_packaging/debian_harmattan/rules \
+        qtc_packaging/debian_harmattan/$${TARGET}.postinst \
+        qtc_packaging/debian_harmattan/$${TARGET}.prerm
 
     OTHER_FILES += \
         qml/meego/*.qml
@@ -271,19 +298,19 @@ contains(MEEGO_EDITION,harmattan) {
     # the NDEF Autostart handler won't find the desktop file and
     # will not be able to auto-launch this app on tag-touch.
     # See: https://bugreports.qt.nokia.com/browse/QTMOBILITY-1848
-    harmattandesktopfile.files = nfcinteractor.desktop
+    harmattandesktopfile.files = $${TARGET}.desktop
     harmattandesktopfile.path = /usr/share/applications
     INSTALLS += harmattandesktopfile
 
     # To avoid conflicts, recommended to name this file according to the
     # full service name instead of just the app name.
     # See: https://bugreports.qt.nokia.com/browse/QTMOBILITY-1848
-    ndefhandler_service.files = com.nokia.qtmobility.nfc.nfcinteractor.service
+    ndefhandler_service.files = com.nokia.qtmobility.nfc.$${TARGET}.service
     ndefhandler_service.path = /usr/share/dbus-1/services/
     INSTALLS += ndefhandler_service
 	
     launchericon.files = nfcinteractor80.png splash-nfcinteractor-l.png splash-nfcinteractor-p.png
-    launchericon.path = /opt/nfcinteractor/
+    launchericon.path = /opt/$${TARGET}/
     INSTALLS += launchericon
 
     contains(DEFINES,USE_IAA) {

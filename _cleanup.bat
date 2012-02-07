@@ -1,6 +1,8 @@
 @ECHO OFF
 SET _prjname=nfcinteractor
 
+del nfcinteractorunlimited
+
 del .make.cache
 del bld.inf
 del build-stamp

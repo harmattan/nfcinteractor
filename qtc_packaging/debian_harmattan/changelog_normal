@@ -1,0 +1,4 @@
+nfcinteractor (2.0.0) unstable; urgency=low
+  * Initial release of the Qt Nfc Interactor, based on Nfc Info and replacing the Java ME-based Nfc Interactor.
+
+ -- Andreas Jakl <>  Fri, 18 Nov 2011 11:22:49 +0200
