@@ -4,6 +4,13 @@
 # names in the debian package files!
 #DEFINES += UNLIMITED_VERSION
 
+# When compiling for publishing the app, activate this
+# to change to the 0x2... UID and the right UID for the
+# Smart Installer. Using those UIDs requires a development
+# certificate.
+# For self signed versions, remove / comment the following line.
+DEFINES += DEPLOY_VERSION
+
 # Define for detecting Harmattan in .cpp files.
 # Only needed for experimental / beta Harmattan SDKs.
 # Will be defined by default in the final SDK.
@@ -121,7 +128,11 @@ simulator {
 
 symbian {
     DEPLOYMENT.display_name = "NfcInteractor"
-    TARGET.UID3 = 0xE0D154A1
+    contains(DEFINES,DEPLOY_VERSION) {
+        TARGET.UID3 = 0x2005CE03
+    } else {
+        TARGET.UID3 = 0xE0D154A1
+    }
 
     # Allow network access on Symbian
     TARGET.CAPABILITY += NetworkServices LocalServices
@@ -148,7 +159,9 @@ symbian {
     # fail to install if self-signed. By default qmake uses the unprotected
     # range value if unprotected UID is defined for the application and
     # 0x2002CCCF value if protected UID is given to the application
-    #symbian:DEPLOYMENT.installer_header = 0x2002CCCF
+    contains(DEFINES,DEPLOY_VERSION) {
+        DEPLOYMENT.installer_header = 0x2002CCCF
+    }
 	
     # Autostart
     ndefhandler.sources = ndefhandler_nfcinteractor.xml
@@ -220,7 +233,7 @@ symbian {
         TARGET.CAPABILITY += NetworkServices
 
         iap_dependency.pkg_prerules = "; Has dependency on IAP component" \
-                                      "(0x200345C8), 0, 2, 2, {\"IAP\"}"
+                                      "(0x200345C8), 0, 2, 6, {\"IAP\"}"
         DEPLOYMENT += iap_dependency
 
         SOURCES += \
@@ -236,6 +249,7 @@ symbian {
         # IAP API files to include in package
         addIapFiles.sources = ./iap_data/IAP_VARIANTID.txt
         addIapFiles.path = ./
+        DEPLOYMENT += addIapFiles
 
         # For testing In-App Purchase without Nokia Store
         contains(DEFINES, IAP_TEST_MODE) {
