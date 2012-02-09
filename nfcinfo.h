@@ -257,6 +257,9 @@ private:
     /*! Needed on MeeGo Harmattan to raise the app to the foreground when
       it's autostarted. */
     QDeclarativeView* m_declarativeView;
+    /*! Running on Harmattan PR 1.0? Then, need to switch between reading
+      and writng NDEF messages from/to tags, as this FW can't have both
+      modes activated at the same time. This has been improved in PR 1.1+. */
     bool m_harmattanPr10;
 };
 
