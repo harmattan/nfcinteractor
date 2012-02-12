@@ -82,13 +82,13 @@ PageStackWindow {
         }
     }
     function isAdvTagsPurchased() {
-        return iapManager.isProductPurchased(iapIdAdvTags);
+        return useIap ? iapManager.isProductPurchased(iapIdAdvTags) : true;
     }
     function isRemoveAdsPurchased() {
-        return iapManager.isProductPurchased(iapIdRemoveAds);
+        return useIap ? iapManager.isProductPurchased(iapIdRemoveAds) : true;
     }
     function isUnlimitedPurchased() {
-        return iapManager.isProductPurchased(iapIdUnlimited);
+        return useIap ? iapManager.isProductPurchased(iapIdUnlimited) : true;
     }
     function setUnlimitedAdvancedMsgs(unlimited) {
         nfcInfo.setUnlimitedAdvancedMsgs(unlimited);
