@@ -1,6 +1,12 @@
 import QtQuick 1.1
 import "adFunctions.js" as AdF
-
+/*!
+  \qmlclass AdItem
+  \ingroup com.inneractive
+  \brief Item to show Ad banner.
+  AdItem shows image and optionaly text (see \l {showText}).
+  The AdItem component is part of the \l {inneractive QML Components} module.
+  */
 Item {
     id: root
     Component.onCompleted: {
@@ -9,23 +15,94 @@ Item {
     width: scaleAd ? width : adImage.width
     height: scaleAd ? height : (showText ? adImage.height + adText.paintedHeight : adImage.height)
 
+    /*!
+        \qmlproperty string AdItem::adTextString
+         Text string of ad.
+         Read-only
+      */
     property alias adTextString: adText.text
+    /*!
+      \qmlproperty string AdItem::adImageUrl
+      Url of image shown in ad.
+      Read-only
+      */
     property alias adImageUrl: adImage.source
+    /*!
+      Url which is opened when user clicks ad.
+      Read-only
+      */
     property url adClickUrl
+    /*!
+        \qmlproperty boolean AdItem::textClip
+         Clip text of ad. See Text::clip.
+      */
     property alias textClip: adText.clip
+    /*!
+      Show text in AdItem.
+      The default value is true
+      */
     property bool showText: true
+    /*!
+      Hide ad after user has clicked it open.
+      The default value is true
+      */
     property bool hideOnClick: true
+    /*!
+      Scale ad image to fit width and height.
+      If false, AdItem will be scaled to contain image and text.
+      The default value is false
+      */
     property bool scaleAd: false
+    /*!
+      Ad request is automatically retried if previous request fails.
+      The default value is false
+      */
     property bool retryOnError: false
-    property int rotationInterval: 0 // interval in seconds to get new ad, 0 no rotate
-    property string status: "Null" //Null, Loading, Error, Done
+    /*!
+      Interval at which AdItem requests new ad, in seconds.
+      Value 0 disables automatic requests and requestAd() needs to be called to get new ad.
+      The default value is 0
+      */
+    property int rotationInterval: 0
+    /*!
+      Status of the ad request.
+      \list
+        \o "Null" request not done yet
+        \o "Loading" request is not yet ready
+        \o "Error" request failed, error message set to \l {errorString}
+        \o "Done" ad request loaded successfully
+      \endlist
+      Read-only
+      */
+    property string status: "Null"
+    /*!
+      Readable cause of last occured error.
+      Read-only
+      */
     property string errorString
+    /*!
+      Parameters used in ad request.
+      This is mandatory and AdParameters have to contain \l {AdParameters::applicationId}{applicationId} and \l {AdParameters::distributionId}{distributionId}.
+      */
     property AdParameters parameters: null
 
+    /*!
+      This signal is emited when ad request has completed and no error has occured.
+      */
     signal adLoaded()
+    /*!
+      This signal is emited when ad request has failed.
+      errorString contains message why request failed.
+      */
     signal adError(string errorString)
+    /*!
+      This signal is emited when ad is clicked.
+      */
     signal adClicked()
-
+    /*!
+      \brief Requests new Ad
+      Status will update to "Loading".
+    */
     function requestAd()
     {
         rotationTimer.running = false;
@@ -33,20 +110,33 @@ Item {
         status = "Loading";
         adInterface.requestAd(root);
     }
-
+    /*!
+      \internal
+      Property alias for RequestQueue to set reply xml
+      */
     property alias __xml: adModel.xml
+    /*!
+      \internal
+      */
     property url __query
-
+    /*!
+      \internal
+      Used by RequestQueue to create __query url
+      */
     function __createQuery()
     {
         AdF.createQuery(root);
     }
+    /*!
+      \internal
+      Used by RequestQueue to update AdParameters::__clientId
+      */
     function __idUpdated(id)
     {
         parameters.__clientId = id;
     }
 
-    // Handle networkaccessibility changing
+    // Handle networkaccessibility change
     Connections {
         target: adInterface
         onNetworkAccessibilityChanged: {
@@ -60,7 +150,7 @@ Item {
     onAdError: {
         status = "Error";
         root.errorString = errorString;
-        if (retryOnError)
+        if (retryOnError && adInterface.networkAccessible)
             retryTimer.start();
         console.debug("Ad Error: " + errorString);
     }
@@ -129,7 +219,7 @@ Item {
         id: clickArea
         anchors.fill: root
         onClicked: {
-            Qt.openUrlExternally(root.adClickUrl);
+            adInterface.openAd(root.adClickUrl);
             adClicked();
             if (root.hideOnClick) {
                 root.visible = false;

@@ -1,6 +1,6 @@
 // Helper functions
 .pragma library
-var __baseUrl = "http://m2m1.inner-active.com/simpleM2M/clientRequestAd"
+var __baseUrl = "http://m2m1.inner-active.mobi/simpleM2M/clientRequestAd"
 
 function createQuery(adItem)
 {
