@@ -2,14 +2,16 @@
 # normal version, also call the corresponding .bat
 # file if compiling for Harmattan, to change the
 # names in the debian package files!
-#DEFINES += UNLIMITED_VERSION
+DEFINES += UNLIMITED_VERSION
 
 # When compiling for publishing the app, activate this
 # to change to the 0x2... UID and the right UID for the
 # Smart Installer. Using those UIDs requires a development
 # certificate.
 # For self signed versions, remove / comment the following line.
-DEFINES += DEPLOY_VERSION
+# Note: IAA on Symbian requires DEPLOY_VERSION to be set.
+# Use a developer certificate during development for Symbian IAA.
+#DEFINES += DEPLOY_VERSION
 
 # Define for detecting Harmattan in .cpp files.
 # Only needed for experimental / beta Harmattan SDKs.
@@ -262,8 +264,8 @@ symbian {
     contains(DEFINES,USE_IAA) {
         message(Using In-App Advertising)
 
-        TARGET.CAPABILITY += NetworkServices
-        LIBS += -lbrowserengine -lcone
+        TARGET.CAPABILITY += NetworkServices SwEvent
+        LIBS += -lbrowserengine -lcone -lapgrfx
 
         INCLUDEPATH += iaa
         DEPENDPATH += iaa
