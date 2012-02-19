@@ -90,10 +90,6 @@ int main(int argc, char *argv[])
 {
     QScopedPointer<QApplication> app(createApplication(argc, argv));
 
-#ifdef USE_IAP
-    qDebug() << "Using IAP";
-#endif
-
 #ifdef Q_OS_SYMBIAN
     // Translation for NFC Status messages
     QString locale = QLocale::system().name();
@@ -165,6 +161,7 @@ int main(int argc, char *argv[])
 
 #ifdef USE_IAP
     // In App Purchasing
+    qDebug() << "Using IAP";
     viewer.rootContext()->setContextProperty("useIap", QVariant(true));
     #if defined(Q_OS_SYMBIAN)
         // In App Purchasing APIs on Symbian
@@ -189,6 +186,7 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef IAP_TEST_MODE
+    qDebug() << "IAP Test Mode";
     viewer.rootContext()->setContextProperty("iapTestMode", QVariant(true));
 #else
     viewer.rootContext()->setContextProperty("iapTestMode", QVariant(false));
@@ -196,6 +194,7 @@ int main(int argc, char *argv[])
 
 #ifdef USE_IAA
     // In App Advertising
+    qDebug() << "Using IAA";
     #if defined(Q_OS_SYMBIAN) && defined(USE_IAP)
         // Define the pointer here; creating it in the if would instantly
         // destroy it again after the if ends, but we obviously need to
