@@ -5,6 +5,7 @@
 #include <QQueue>
 
 class RequestQueue;
+class QUrl;
 class AdInterface : public QObject
 {
     Q_OBJECT
@@ -15,13 +16,11 @@ public:
     explicit AdInterface(QObject *parent = 0);
 
     bool networkAccessible() const;
-
+    Q_INVOKABLE void requestAd(const QVariant &adItem);
+    Q_INVOKABLE void openAd(const QUrl &adUrl);
 signals:
     void networkAccessibilityChanged(bool accessibility);
     void networkNotAccessible();
-
-public slots:
-    void requestAd(const QVariant &adItem);
 
 private:
     void checkUserAgent();

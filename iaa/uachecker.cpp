@@ -34,7 +34,7 @@ UAChecker::UAChecker(QObject *parent) :
 #elif defined(MEEGO_EDITION_HARMATTAN)
     m_userAgent = "Mozilla/5.0 (MeeGo; NokiaN9) AppleWebKit/534.13 (KHTML, like Gecko) NokiaBrowser/8.5.0 Mobile Safari/534.13";
 #elif defined(Q_WS_MAEMO_5)
-    m_userAgent = "Mozilla/5.0 (X11; U; Linux armv7l; en-GB;rv:1.9.2.3pre) Gecko/20100723 Firefox/3.5 Maemo Browser 1.7.4.8 RX-51 N900"
+    m_userAgent = "Mozilla/5.0 (X11; U; Linux armv7l; en-GB; rv:1.9.2.3pre) Gecko/20100723 Firefox/3.5 Maemo Browser 1.7.4.8 RX-51 N900"
 #else
     m_userAgent = "Mozilla/5.0 Safari";
 #endif
@@ -55,23 +55,25 @@ void UAChecker::readData()
     QTcpSocket *sock = qobject_cast<QTcpSocket*>(sender());
     if (!sock)
         return;
-
+    bool gotUA = false;
     while (sock->canReadLine()) {
         QByteArray data = sock->readLine();
         if (data.startsWith("User-Agent: ")) {
             data.replace("User-Agent: ", "");
             data.replace('\n', "");
             m_userAgent = data;
-            m_serv->close();
-            delete iBrCtlInterface;
-            m_serv->deleteLater();
-            iBrCtlInterface = 0;
-            m_serv = 0;
-            emit gotUserAgent();
-            return;
+            gotUA = true;
         }
     }
-    qDebug() << "Can't check User-Agent. Using generic E7 User-Agent";
-    m_userAgent = "Mozilla/5.0 (Symbian/3; Series60/5.2 NokiaE7-00/025.007; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/533.4 (KHTML, like Gecko) NokiaBrowser/7.3.1.37 Mobile Safari/533.4 3gpp-gba";
+    if (!gotUA) {
+        qDebug() << "Can't check User-Agent. Using generic E7 User-Agent";
+        m_userAgent = "Mozilla/5.0 (Symbian/3; Series60/5.2 NokiaE7-00/025.007; Profile/MIDP-2.1 Configuration/CLDC-1.1 ) AppleWebKit/533.4 (KHTML, like Gecko) NokiaBrowser/7.3.1.37 Mobile Safari/533.4 3gpp-gba";
+    }
+    m_serv->close();
+    delete iBrCtlInterface;
+    m_serv->deleteLater();
+    iBrCtlInterface = 0;
+    m_serv = 0;
+    emit gotUserAgent();
 }
 #endif

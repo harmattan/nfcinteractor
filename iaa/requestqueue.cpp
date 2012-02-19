@@ -1,4 +1,6 @@
 #include "requestqueue.h"
+#include "adinterface.h"
+#include <qplatformdefs.h>
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
 #include <QNetworkReply>
@@ -6,13 +8,9 @@
 #include <QDateTime>
 #include <QTimer>
 #include <QDebug>
-#include <qplatformdefs.h>
-#include "adinterface.h"
 #include <QNetworkConfigurationManager>
 #include <QNetworkSession>
-namespace {
-const QLatin1String baseUrl("http://m2m1.inner-active.com/simpleM2M/clientRequestAd");
-}
+
 RequestQueue::RequestQueue(AdInterface *parent) :
     QObject(parent)
   , m_nam(new QNetworkAccessManager(this))
@@ -20,21 +18,35 @@ RequestQueue::RequestQueue(AdInterface *parent) :
   , m_confman(new QNetworkConfigurationManager(this))
   , m_nsession(0)
   , m_onlineCheck(false)
+  , m_networkError(false)
 {
-    connect(m_confman, SIGNAL(onlineStateChanged(bool)), parent, SIGNAL(networkAccessibilityChanged(bool)));
     connect(m_nam, SIGNAL(finished(QNetworkReply*)), this, SLOT(adRequestFinished(QNetworkReply*)));
     m_nsession = new QNetworkSession(m_confman->defaultConfiguration(), this);
+    connect(m_nsession, SIGNAL(stateChanged(QNetworkSession::State)),
+            this, SLOT(netSessionStateChanged(QNetworkSession::State)));
+    connect(m_nsession, SIGNAL(opened()), this, SLOT(netSessionStateChanged()));
 }
 
 RequestQueue::~RequestQueue()
 {
 }
 
-bool RequestQueue::isOnline() const
+void RequestQueue::netSessionStateChanged(QNetworkSession::State state)
 {
-    return m_confman->isOnline();
+    AdInterface *adInterface = qobject_cast<AdInterface*>(parent());
+    if (state == QNetworkSession::Connected) {
+        emit adInterface->networkAccessibilityChanged(true);
+    } else {
+        emit adInterface->networkAccessibilityChanged(m_nsession->isOpen());
+    }
 }
 
+bool RequestQueue::isOnline() const
+{
+    return m_nsession->isOpen();
+}
+
+// Adds AdItem to request queue and calls handleRequests
 void RequestQueue::addToQueue(QObject *object)
 {
     // no need to add same object multipletimes
@@ -44,8 +56,10 @@ void RequestQueue::addToQueue(QObject *object)
     }
 }
 
+// Takes AdItem from queue and creates request for ad
 void RequestQueue::handleRequests()
 {
+    // return if request queue is empty or other ad request is running
     if (m_adItemQueue.isEmpty() || m_requestRunning)
         return;
     m_requestRunning = true;
@@ -55,37 +69,44 @@ void RequestQueue::handleRequests()
     QUrl requestUrl = adItem->property("__query").toUrl();
     if (!requestUrl.isValid()) {
         QMetaObject::invokeMethod(adItem, "adError",
-                                  Q_ARG(QString, QLatin1String("Not valid query url!")));
+                                  Q_ARG(QString, tr("Not valid query url")));
         m_requestRunning = false;
         return;
     }
 #if defined(Q_OS_SYMBIAN) || defined(MEEGO_EDITION_HARMATTAN) || defined(Q_WS_MAEMO_5)
-    // online checking works only on mobile
-    if (!m_onlineCheck && !m_confman->isOnline()) {
-        m_onlineCheck = true;
-        m_nsession->open();
-        if (!m_nsession->waitForOpened()) {
-            AdInterface *adI = qobject_cast<AdInterface*>(parent());
-            emit adI->networkNotAccessible();
+    // online checking only on mobile
+    if (!m_nsession->isOpen()) {
+        if (!m_onlineCheck) {
+            m_onlineCheck = true;
+            m_nsession->open();
+            if (!m_nsession->waitForOpened()) {
+                AdInterface *adI = qobject_cast<AdInterface*>(parent());
+                emit adI->networkNotAccessible();
+                m_networkError = true;
+            }
+        } else {
+            if (!m_networkError) {
+                m_networkError = true;
+                AdInterface *adI = qobject_cast<AdInterface*>(parent());
+                emit adI->networkNotAccessible();
+            }
+            QMetaObject::invokeMethod(adItem, "adError",
+                                      Q_ARG(QString, tr("Network not accessible")));
+            m_requestRunning = false;
+            return;
         }
-    }
-
-    if (!m_confman->isOnline()) {
-        QMetaObject::invokeMethod(adItem, "adError",
-                                  Q_ARG(QString, QLatin1String("Network not accessible!")));
-        m_requestRunning = false;
-        return;
     }
 #endif
 
-    // Add timestamp
+    // Add timestamp to request
     requestUrl.addQueryItem(QLatin1String("t"), QString::number(QDateTime::currentDateTime().toTime_t()));
 
     // Set User-Agent header
     QNetworkRequest req(requestUrl);
     req.setRawHeader("User-Agent", m_userAgent);
 
-    qDebug() << "AdRequest:" << req.url() << "\nUA:" << m_userAgent;
+    qDebug() << "AdRequest:" << req.url();
+    qDebug() << "UA:" << m_userAgent;
     QNetworkReply *rep = m_nam->get(req);
 
     rep->setProperty("AdItem", QVariant::fromValue(adItem));

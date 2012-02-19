@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QQueue>
+#include <QNetworkSession>
 
 class QNetworkAccessManager;
 class QNetworkReply;
@@ -29,6 +30,7 @@ private:
 private slots:
     void handleRequests();
     void adRequestFinished(QNetworkReply *req);
+    void netSessionStateChanged(QNetworkSession::State state = QNetworkSession::Connected);
 
 signals:
     void requestReady();
@@ -41,6 +43,7 @@ private:
     QNetworkConfigurationManager *m_confman;
     QNetworkSession *m_nsession;
     bool m_onlineCheck;
+    bool m_networkError;
 };
 
 #endif // REQUESTQUEUE_H
