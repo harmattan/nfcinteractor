@@ -69,6 +69,9 @@ void NdefNfcSocialRecord::updatePayload()
     case VKontakte:
         uri = "http://vkontakte.ru/" + m_socialUserName;
         break;
+    case Foursquare:
+        uri = "https://foursquare.com/v/" + m_socialUserName;
+        break;
     }
 
     NdefNfcSmartUriRecord::setUri(uri);

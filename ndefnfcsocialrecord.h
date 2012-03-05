@@ -24,7 +24,7 @@ QTM_USE_NAMESPACE
   adding Smart Poster information (like a title), the payload
   instantly transforms into a Smart Poster.
 
-  \version 1.0.0
+  \version 1.1.0
   */
 class NdefNfcSocialRecord : public NdefNfcSmartUriRecord
 {
@@ -38,7 +38,8 @@ public:
         LinkedIn,
         Facebook,
         Xing,
-        VKontakte
+        VKontakte,
+        Foursquare
     };
 
 public:

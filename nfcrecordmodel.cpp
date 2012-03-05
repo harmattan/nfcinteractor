@@ -778,7 +778,7 @@ void NfcRecordModel::getDefaultsForRecordContent(const NfcTypes::MessageType msg
         defaultTitle = "Social Network";
         break;
     case NfcTypes::RecordSocialNetworkName:
-        defaultTitle = "User name";
+        defaultTitle = "User name / ID";
         defaultContents = "mopius";
         break;
         // ----------------------------------------------------------------
@@ -934,6 +934,7 @@ QVariantList NfcRecordModel::getSelectionItemsForRecordContent(const NfcTypes::R
         selectionItems << "Xing";
         // vKontakte.ru
         selectionItems << QString::fromWCharArray(L"\x0412\x041A\x043E\x043D\x0442\x0430\x043A\x0442\x0435");
+        selectionItems << "Foursquare";
         break;
     case NfcTypes::RecordTypeNameFormat:
         selectionItems << "Empty";
