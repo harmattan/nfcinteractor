@@ -143,7 +143,13 @@ QString NfcNdefParser::parseNdefMessage(const QNdefMessage &message)
         {
             // ------------------------------------------------
             // Record type not parsed by this class
-            tagContents.append("[Not parsed]\n");
+            tagContents.append("\nRaw payload: ");
+            if (record.payload().isNull() || record.payload().isEmpty()) {
+                tagContents.append("[Empty]");
+            } else {
+                tagContents.append(record.payload());
+            }
+            tagContents.append("\n");
         }
         numRecord++;
     }
