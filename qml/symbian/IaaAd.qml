@@ -9,9 +9,6 @@ Item {
     AdParameters {
         id: params
         applicationId: "Mopius_NfcInteractor_OVI"
-        distributionId: "551"
-        usePositioning: false
-        useLocation: false
     }
 
     Connections {
