@@ -150,20 +150,23 @@ might not get rebuilt.
 COMPATIBILITY
 -------------------------------------------------------------------------------
 
-- Qt SDK 1.1.4 / Qt Creator 2.4
+- Qt SDK 1.2
 - QtMobility 1.2
 - Qt 4.7.4
 - Qt Quick Components 1.1
 
 Tested on: 
-- Nokia C7-00 with Symbian Anna Firmware and Qt 4.7.4 / QtM 1.2
-- Nokia C7-00 and 701 with Symbian Belle Firmware
-- Nokia N9 PR 1.1 / PR 1.2
+- Nokia C7-00 with Symbian Anna and Qt 4.7.4 / QtM 1.2
+- Nokia C7-00 and 701 with Nokia Belle
+- Nokia N9 PR 1.0 / 1.1 / 1.2
 
 
 CHANGE HISTORY
 --------------------------------------------------------------------------------
 
+2.1 Added support for writing Foursquare tags.
+    Print raw payload for external tag types.
+	Updated In-App-Advertising library version.
 2.0 Renamed from previous "Nfc Info" name to "Nfc Interactor" due to the bigger
 	scope of the new version that also supports writing.
 	Tag write support with dynamic tag editor UI.
