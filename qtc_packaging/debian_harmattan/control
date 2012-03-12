@@ -1,4 +1,4 @@
-Source: nfcinteractor
+Source: nfcinteractorunlimited
 Section: user/other
 Priority: optional
 Maintainer: Andreas Jakl
@@ -6,7 +6,7 @@ Build-Depends: debhelper (>= 5), libqt4-dev
 Standards-Version: 3.7.3
 Homepage: <insert the upstream URL, if relevant>
 
-Package: nfcinteractor
+Package: nfcinteractorunlimited
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Powerful tool for reading and writing NFC tags.
