@@ -60,7 +60,8 @@
 #endif
 
 #if defined(USE_IAA)
-#include "iaa/adinterface.h"
+//#include "iaa/adinterface.h"
+#include <inneractiveplugin.h>
 #endif
 
 
@@ -202,14 +203,15 @@ int main(int argc, char *argv[])
         // Use a scoped pointer so that we only need to create the instance
         // when the user hasn't purchased the remove ads upgrade, to speed
         // up app startup time if he has.
-        QScopedPointer<AdInterface> adI;
+        //QScopedPointer<AdInterface> adI;
         // Symbian & using IAP - only start the ad interface if the user
         // didn't already purchase the remove ads upgrade
         if (!iapManager->isProductPurchased(IAP_ID_REMOVE_ADS)) {
             // IAA Upgrade not purchased - use IAA
             //AdInterface adI;
-            adI.reset(new AdInterface());
-            viewer.rootContext()->setContextProperty("adInterface", adI.data());
+            //adI.reset(new AdInterface());
+            //viewer.rootContext()->setContextProperty("adInterface", adI.data());
+            inneractivePlugin::initializeEngine(viewer.engine());
             viewer.rootContext()->setContextProperty("useIaa", QVariant(true));
         } else {
             // IAA Upgrade purchased - don't use IAA
@@ -217,8 +219,9 @@ int main(int argc, char *argv[])
         }
     #else
         // [Symbian and no IAP] or Harmattan
-        QScopedPointer<AdInterface> adI(new AdInterface());
-        viewer.rootContext()->setContextProperty("adInterface", adI.data());
+        //QScopedPointer<AdInterface> adI(new AdInterface());
+        //viewer.rootContext()->setContextProperty("adInterface", adI.data());
+        inneractivePlugin::initializeEngine(viewer.engine());
         viewer.rootContext()->setContextProperty("useIaa", QVariant(true));
     #endif
 #else
