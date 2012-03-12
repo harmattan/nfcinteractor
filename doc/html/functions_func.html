@@ -29,7 +29,7 @@
   
   <td style="padding-left: 0.5em;">
    <div id="projectname">Nfc Interactor
-   
+   &#160;<span id="projectnumber">2.1.0</span>
    </div>
    <div id="projectbrief">Shows all information about NFC tags available through Qt Mobility APIs. Includes reusable convenience classes for handling additional tag types: Smart Poster, Image and vCard.</div>
   </td>
@@ -103,6 +103,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       <li><a href="#index_t"><span>t</span></a></li>
       <li><a href="#index_u"><span>u</span></a></li>
       <li><a href="#index_w"><span>w</span></a></li>
+      <li><a href="#index_0x7e"><span>~</span></a></li>
     </ul>
   </div>
 </div>
@@ -170,12 +171,15 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>contacts()
 : <a class="el" href="class_ndef_nfc_mime_vcard_record.html#a03906d07ac54282f05021778736cc33d">NdefNfcMimeVcardRecord</a>
 </li>
+<li>containsAdvMsg()
+: <a class="el" href="class_nfc_record_model.html#af15a558c5cff708daab96872d093e2b2">NfcRecordModel</a>
+</li>
 <li>convertTagTypeToString()
 : <a class="el" href="class_nfc_target_analyzer.html#a11bfe253a458a48ec2d8f0597e8b33a8">NfcTargetAnalyzer</a>
 </li>
 <li>convertToNdefMessage()
-: <a class="el" href="class_nfc_model_to_ndef.html#a4de92fc048e032c0db62c2e1884d5437">NfcModelToNdef</a>
-, <a class="el" href="class_nfc_record_model.html#ae0695fe0faf5713ff6de17b51cc6c87a">NfcRecordModel</a>
+: <a class="el" href="class_nfc_record_model.html#ae0695fe0faf5713ff6de17b51cc6c87a">NfcRecordModel</a>
+, <a class="el" href="class_nfc_model_to_ndef.html#a4de92fc048e032c0db62c2e1884d5437">NfcModelToNdef</a>
 </li>
 <li>currentText()
 : <a class="el" href="class_nfc_record_item.html#ac5c9c51b22217986fd1db45f2c613c3e">NfcRecordItem</a>
@@ -187,6 +191,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>data()
 : <a class="el" href="class_nfc_record_item.html#a153abc99ecccf35a1b094d5e5c2f3e4c">NfcRecordItem</a>
 , <a class="el" href="class_nfc_record_model.html#a21071e905a2e5a8fa18bdad68876a991">NfcRecordModel</a>
+</li>
+<li>DoCancel()
+: <a class="el" href="class_c_active_wait.html#a1d0ed61cc579ef69a43856a890c792b5">CActiveWait</a>
 </li>
 </ul>
 
@@ -304,6 +311,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>NearFieldTargetInfo()
 : <a class="el" href="class_near_field_target_info.html#a9812f6292697a6b678a95132b9ee2a01">NearFieldTargetInfo</a>
 </li>
+<li>NewL()
+: <a class="el" href="class_c_active_wait.html#af89257d2ce659fd21ba52d4fee079b14">CActiveWait</a>
+</li>
+<li>NewLC()
+: <a class="el" href="class_c_active_wait.html#a14052074ed4000fd8628d90f45ed4deb">CActiveWait</a>
+</li>
 <li>nextAvailableRecordId()
 : <a class="el" href="class_nfc_record_model.html#a25d6219f1112970fd9ee3afc6adb3742">NfcRecordModel</a>
 </li>
@@ -347,11 +360,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_nfc_info.html#a6bcf867555cecd04e4cea39875d7a2b8">NfcInfo</a>
 </li>
 <li>nfcTagImage()
-: <a class="el" href="class_nfc_ndef_parser.html#a921e03d815898443d25805db363f2943">NfcNdefParser</a>
-, <a class="el" href="class_nfc_info.html#a759e842a08d75b2658f727d47068c730">NfcInfo</a>
+: <a class="el" href="class_nfc_info.html#a759e842a08d75b2658f727d47068c730">NfcInfo</a>
+, <a class="el" href="class_nfc_ndef_parser.html#a921e03d815898443d25805db363f2943">NfcNdefParser</a>
 </li>
 <li>nfcTagWriteError()
 : <a class="el" href="class_nfc_info.html#a9d16e34aec95be7d257cd64386c02549">NfcInfo</a>
+</li>
+<li>nfcTagWriteExceeded()
+: <a class="el" href="class_nfc_info.html#a2b8ca86876d46261c085225aadd13423">NfcInfo</a>
 </li>
 <li>nfcTagWritten()
 : <a class="el" href="class_nfc_info.html#ac12f320cda1fb1a8bd220111e7e44160">NfcInfo</a>
@@ -415,6 +431,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>rowCount()
 : <a class="el" href="class_nfc_record_model.html#ab9a950c7fb6ac2f67807120db40af4aa">NfcRecordModel</a>
 </li>
+<li>RunL()
+: <a class="el" href="class_c_active_wait.html#afe1eb7cf5602f018cf03c75ca42dba7c">CActiveWait</a>
+</li>
 </ul>
 
 
@@ -430,11 +449,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="class_ndef_nfc_sp_record.html#a2a240b64df374e41a518ac5b7b38f625">NdefNfcSpRecord</a>
 , <a class="el" href="class_ndef_nfc_smart_uri_record.html#a3845d35ebfe4e7e34e29fc98d0808166">NdefNfcSmartUriRecord</a>
 </li>
+<li>SetActive()
+: <a class="el" href="class_c_active_wait.html#a68bd7b8010ff782f324f1f1f738b9a76">CActiveWait</a>
+</li>
 <li>setAddVisible()
 : <a class="el" href="class_nfc_record_item.html#ad2481ede899f1c5025ab4abcb959d529">NfcRecordItem</a>
 </li>
 <li>setContact()
-: <a class="el" href="class_ndef_nfc_mime_vcard_record.html#a07893ee05e43ea51721568f36ff5c945">NdefNfcMimeVcardRecord</a>
+: <a class="el" href="class_ndef_nfc_mime_vcard_record.html#ad8d93c3cb178b6d7649cc5ff169a0ad5">NdefNfcMimeVcardRecord</a>
 </li>
 <li>setCurrentText()
 : <a class="el" href="class_nfc_record_item.html#a3b0780d833ac21b95b35bf67ed07eb75">NfcRecordItem</a>
@@ -517,17 +539,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_nfc_record_item.html#ae18f03ef8b5feadfa2b7dd29fb152dee">NfcRecordItem</a>
 </li>
 <li>setTitleList()
-: <a class="el" href="class_ndef_nfc_smart_uri_record.html#a113e57ff10073ee7c9378ff869afe9ea">NdefNfcSmartUriRecord</a>
-, <a class="el" href="class_ndef_nfc_sp_record.html#a0553ad691be3cd4fc8a504388df52ef8">NdefNfcSpRecord</a>
+: <a class="el" href="class_ndef_nfc_sp_record.html#a0553ad691be3cd4fc8a504388df52ef8">NdefNfcSpRecord</a>
+, <a class="el" href="class_ndef_nfc_smart_uri_record.html#a113e57ff10073ee7c9378ff869afe9ea">NdefNfcSmartUriRecord</a>
 </li>
 <li>setUri()
-: <a class="el" href="class_ndef_nfc_smart_uri_record.html#ad1ffcc7fe4263cf8ba6925f3febd6617">NdefNfcSmartUriRecord</a>
+: <a class="el" href="class_ndef_nfc_smart_uri_record.html#a37915e5d89655439fc8faa613195e8eb">NdefNfcSmartUriRecord</a>
 , <a class="el" href="class_ndef_nfc_sp_record.html#af2587902e2c7a802836ed4f54e8f87b9">NdefNfcSpRecord</a>
-, <a class="el" href="class_ndef_nfc_smart_uri_record.html#a37915e5d89655439fc8faa613195e8eb">NdefNfcSmartUriRecord</a>
+, <a class="el" href="class_ndef_nfc_smart_uri_record.html#ad1ffcc7fe4263cf8ba6925f3febd6617">NdefNfcSmartUriRecord</a>
 </li>
 <li>setWebServiceUrl()
-: <a class="el" href="class_ndef_nfc_store_link_record.html#a1cba6465d662b8c3ac8e1d84153bc7d2">NdefNfcStoreLinkRecord</a>
-, <a class="el" href="class_ndef_nfc_geo_record.html#afd580afcee5373f21b377fa0c49b4db2">NdefNfcGeoRecord</a>
+: <a class="el" href="class_ndef_nfc_geo_record.html#afd580afcee5373f21b377fa0c49b4db2">NdefNfcGeoRecord</a>
+, <a class="el" href="class_ndef_nfc_store_link_record.html#a1cba6465d662b8c3ac8e1d84153bc7d2">NdefNfcStoreLinkRecord</a>
 </li>
 <li>simpleAppendRecordItem()
 : <a class="el" href="class_nfc_record_model.html#a28c345a87023c984234ad1d6f1661ab2">NfcRecordModel</a>
@@ -536,9 +558,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 : <a class="el" href="class_nfc_record_model.html#a1467040cf6c617bd5431a7495c6fbdb7">NfcRecordModel</a>
 </li>
 <li>size()
-: <a class="el" href="class_ndef_nfc_sp_record.html#a9c1ea51b4446a461409ed874be293ad9">NdefNfcSpRecord</a>
+: <a class="el" href="class_nfc_record_model.html#abf3347ebfdeb7312d8e921cbdf33a9e7">NfcRecordModel</a>
 , <a class="el" href="class_ndef_nfc_sp_record_1_1_ndef_nfc_size_record.html#ae29114425f9ba2ab7a720e76133e3eb9">NdefNfcSpRecord::NdefNfcSizeRecord</a>
-, <a class="el" href="class_nfc_record_model.html#abf3347ebfdeb7312d8e921cbdf33a9e7">NfcRecordModel</a>
+, <a class="el" href="class_ndef_nfc_sp_record.html#a9c1ea51b4446a461409ed874be293ad9">NdefNfcSpRecord</a>
 </li>
 <li>sizeInUse()
 : <a class="el" href="class_ndef_nfc_sp_record.html#a65305e3fb21f42410d984b2e6055ffeb">NdefNfcSpRecord</a>
@@ -555,6 +577,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <li>socialUserName()
 : <a class="el" href="class_ndef_nfc_social_record.html#ae16b8a601c079852aba2d5b1210d6d2a">NdefNfcSocialRecord</a>
 </li>
+<li>StartTagDiscoveryL()
+: <a class="el" href="class_nfc_tags_discovery_private.html#a58e1ad4a0e0bb73ab86262799b00363d">NfcTagsDiscoveryPrivate</a>
+</li>
 <li>storedMessageSizeChanged()
 : <a class="el" href="class_nfc_info.html#a94079009d2515e4d155b3cdd61d10935">NfcInfo</a>
 </li>
@@ -562,6 +587,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <h3><a class="anchor" id="index_t"></a>- t -</h3><ul>
+<li>TagOperationCompleted()
+: <a class="el" href="class_nfc_tags_discovery_private.html#a2e93742e2a1232b4a0885bd145603769">NfcTagsDiscoveryPrivate</a>
+</li>
 <li>title()
 : <a class="el" href="class_ndef_nfc_sp_record.html#af785ae37b3c45b7666899096802525e6">NdefNfcSpRecord</a>
 , <a class="el" href="class_nfc_record_item.html#a3c06dffe3784b607998835bc6df79a6d">NfcRecordItem</a>
@@ -594,6 +622,13 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 , <a class="el" href="class_ndef_nfc_store_link_record.html#a527400f58827b59bf4956c87594010a6">NdefNfcStoreLinkRecord</a>
 </li>
 </ul>
+
+
+<h3><a class="anchor" id="index_0x7e"></a>- ~ -</h3><ul>
+<li>~CActiveWait()
+: <a class="el" href="class_c_active_wait.html#adc624af1045f6deedf080ddd3cd441f6">CActiveWait</a>
+</li>
+</ul>
 </div>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -612,7 +647,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 19 2012 16:04:47 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Mar 12 2012 13:29:09 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

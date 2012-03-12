@@ -29,7 +29,7 @@
   
   <td style="padding-left: 0.5em;">
    <div id="projectname">Nfc Interactor
-   
+   &#160;<span id="projectnumber">2.1.0</span>
    </div>
    <div id="projectbrief">Shows all information about NFC tags available through Qt Mobility APIs. Includes reusable convenience classes for handling additional tag types: Smart Poster, Image and vCard.</div>
   </td>
@@ -95,36 +95,39 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr><td colspan="2"><h2><a name="signals"></a>
 Signals</h2></td></tr>
-<tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_ndef_parser.html#a921e03d815898443d25805db363f2943">nfcTagImage</a> (const int nfcImgId)</td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a921e03d815898443d25805db363f2943"></a><!-- doxytag: member="NfcNdefParser::nfcTagImage" ref="a921e03d815898443d25805db363f2943" args="(const int nfcImgId)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_ndef_parser.html#a921e03d815898443d25805db363f2943">nfcTagImage</a> (const int nfcImgId)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">The tag contained an image. The parameter contains the image id that can be used to fetch it from the tag image cache class. <br/></td></tr>
 <tr><td colspan="2"><h2><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab8a770b086f3ee14d3385d937ef25cf6"></a><!-- doxytag: member="NfcNdefParser::NfcNdefParser" ref="ab8a770b086f3ee14d3385d937ef25cf6" args="(QObject *parent=0)" -->
 &#160;</td><td class="memItemRight" valign="bottom"><b>NfcNdefParser</b> (QObject *parent=0)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_ndef_parser.html#ad16bce04a9961a5cd8e20c83406ed867">setImageCache</a> (<a class="el" href="class_tag_image_cache.html">TagImageCache</a> *tagImageCache)</td></tr>
-<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9baa416b8e93dabcc40cb638d6eedf76"></a><!-- doxytag: member="NfcNdefParser::parseNdefMessage" ref="a9baa416b8e93dabcc40cb638d6eedf76" args="(const QNdefMessage &amp;message)" -->
-QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_ndef_parser.html#a9baa416b8e93dabcc40cb638d6eedf76">parseNdefMessage</a> (const QNdefMessage &amp;message)</td></tr>
-<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse the NDEF <em>message</em> and return its contents in human-readable textual format. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_ndef_parser.html#a9baa416b8e93dabcc40cb638d6eedf76">parseNdefMessage</a> (const QNdefMessage &amp;message)</td></tr>
+<tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Parse the NDEF message and return its contents as human-readable text.  <a href="#a9baa416b8e93dabcc40cb638d6eedf76"></a><br/></td></tr>
 </table>
 <hr/><a name="details" id="details"></a><h2>Detailed Description</h2>
 <div class="textblock"><p>Parse the contents of an NDEF message and return the contents of known records in human-readable textual form. </p>
 <p>The output contains information about all the records contained in the message. More details are reported for records of type: Uri, Text, Smart Poster, Image and Mime/vCard.</p>
 <p>The <a class="el" href="class_nfc_target_analyzer.html" title="Analyze the NFC target and return the gathered information in human-readable textual form...">NfcTargetAnalyzer</a> has a similar task, but returns the general tag information in textual form. </p>
 </div><hr/><h2>Member Function Documentation</h2>
-<a class="anchor" id="a921e03d815898443d25805db363f2943"></a><!-- doxytag: member="NfcNdefParser::nfcTagImage" ref="a921e03d815898443d25805db363f2943" args="(const int nfcImgId)" -->
+<a class="anchor" id="a9baa416b8e93dabcc40cb638d6eedf76"></a><!-- doxytag: member="NfcNdefParser::parseNdefMessage" ref="a9baa416b8e93dabcc40cb638d6eedf76" args="(const QNdefMessage &amp;message)" -->
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void NfcNdefParser::nfcTagImage </td>
+          <td class="memname">QString NfcNdefParser::parseNdefMessage </td>
           <td>(</td>
-          <td class="paramtype">const int&#160;</td>
-          <td class="paramname"><em>nfcImgId</em></td><td>)</td>
-          <td><code> [signal]</code></td>
+          <td class="paramtype">const QNdefMessage &amp;&#160;</td>
+          <td class="paramname"><em>message</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
 </div>
 <div class="memdoc">
-<p>The tag contained an image. The parameter contains the image id that can be used to fetch it from the tag image cache class. </p>
+
+<p>Parse the NDEF message and return its contents as human-readable text. </p>
+<p>Parse the NDEF <em>message</em> and return its contents in human-readable textual format. </p>
 
 </div>
 </div>
@@ -168,7 +171,7 @@ QString&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="c
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 19 2012 16:04:48 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Mar 12 2012 13:29:09 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>

@@ -29,7 +29,7 @@
   
   <td style="padding-left: 0.5em;">
    <div id="projectname">Nfc Interactor
-   
+   &#160;<span id="projectnumber">2.1.0</span>
    </div>
    <div id="projectbrief">Shows all information about NFC tags available through Qt Mobility APIs. Includes reusable convenience classes for handling additional tag types: Smart Poster, Image and vCard.</div>
   </td>
@@ -144,6 +144,8 @@ Public Member Functions</h2></td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab9c45360986047a9806d6b53675f8779"></a><!-- doxytag: member="NfcRecordModel::NfcRecordModel" ref="ab9c45360986047a9806d6b53675f8779" args="(QObject *parent=0)" -->
 &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_model.html#ab9c45360986047a9806d6b53675f8779">NfcRecordModel</a> (QObject *parent=0)</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor to create a new record model, whose items can be used to compose and define an NDEF message. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a2f7ca8afc528cda4255b05e880419317"></a><!-- doxytag: member="NfcRecordModel::setNfcStats" ref="a2f7ca8afc528cda4255b05e880419317" args="(NfcStats *nfcStats)" -->
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setNfcStats</b> (<a class="el" href="class_nfc_stats.html">NfcStats</a> *nfcStats)</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab9a950c7fb6ac2f67807120db40af4aa"></a><!-- doxytag: member="NfcRecordModel::rowCount" ref="ab9a950c7fb6ac2f67807120db40af4aa" args="(const QModelIndex &amp;parent=QModelIndex()) const " -->
 int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_model.html#ab9a950c7fb6ac2f67807120db40af4aa">rowCount</a> (const QModelIndex &amp;parent=QModelIndex()) const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">How many items are present in the record model. <br/></td></tr>
@@ -160,6 +162,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae0695fe0faf5713ff6de17b51cc6c87a"></a><!-- doxytag: member="NfcRecordModel::convertToNdefMessage" ref="ae0695fe0faf5713ff6de17b51cc6c87a" args="()" -->
 QNdefMessage *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_model.html#ae0695fe0faf5713ff6de17b51cc6c87a">convertToNdefMessage</a> ()</td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert all the record items currently stored in the model to a QNdefMessage. <br/></td></tr>
+<tr><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_model.html#af15a558c5cff708daab96872d093e2b2">containsAdvMsg</a> ()</td></tr>
 <tr><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ad1e32d3c0f7a8939f5cf4f2a39138665"></a><!-- doxytag: member="NfcRecordModel::indexFromItem" ref="ad1e32d3c0f7a8939f5cf4f2a39138665" args="(const NfcRecordItem *item) const " -->
 QModelIndex&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_nfc_record_model.html#ad1e32d3c0f7a8939f5cf4f2a39138665">indexFromItem</a> (const <a class="el" href="class_nfc_record_item.html">NfcRecordItem</a> *item) const </td></tr>
 <tr><td class="mdescLeft">&#160;</td><td class="mdescRight">Search for the record <em>item</em> and return its index in the model. <br/></td></tr>
@@ -286,6 +289,23 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 
 <p>Append a new record item to the model, specifying the data directly and using int variables for type enums (for QML use). </p>
 <p>Casts the int values to enums and calls the 'real' <a class="el" href="class_nfc_record_model.html#a3b2511ef6081b874013b2f3a8da8a56f" title="Append a new record item to the model, specifying the data directly and using int variables for type ...">addRecord()</a> method. </p>
+
+</div>
+</div>
+<a class="anchor" id="af15a558c5cff708daab96872d093e2b2"></a><!-- doxytag: member="NfcRecordModel::containsAdvMsg" ref="af15a558c5cff708daab96872d093e2b2" args="()" -->
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool NfcRecordModel::containsAdvMsg </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div>
+<div class="memdoc">
+<p>Check if the message currently contained in the model contains an advanced message type. </p>
 
 </div>
 </div>
@@ -537,7 +557,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class
 
 
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Jan 19 2012 16:04:48 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Mar 12 2012 13:29:09 for Nfc Interactor by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.7.5.1
 </small></address>
