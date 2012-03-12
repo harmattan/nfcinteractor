@@ -1,6 +1,6 @@
 /*
 *
-* adinterface.h
+* inneractiveplugin.h
 * © Copyrights 2012 inneractive LTD, Nokia. All rights reserved
 *
 * This file is part of inneractiveAdQML.	
@@ -19,36 +19,24 @@
 * along with inneractiveAdQML. If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef INNERINTERFACE_H
-#define INNERINTERFACE_H
+#ifndef INNERACTIVEPLUGIN_H
+#define INNERACTIVEPLUGIN_H
 
-#include <QObject>
-#include <QQueue>
-
-class RequestQueue;
-class QUrl;
-class AdInterface : public QObject
+class QDeclarativeEngine;
+/*!
+ * \brief The inneractivePlugin class
+ */
+class inneractivePlugin
 {
-    Q_OBJECT
-    Q_PROPERTY(bool networkAccessible READ networkAccessible NOTIFY networkAccessibilityChanged)
-    friend class RequestQueue;
-
 public:
-    explicit AdInterface(QObject *parent = 0);
+    /*!
+     * \brief initializeEngine
+     *Initializes QDeclarativeEngine to use inneractive QML components.
+     *AdInterface object will be registered as context property with name "adInterface"
+     * \param engine QDeclarativeEngine where AdInterface will be registered
+     */
+    static void initializeEngine(QDeclarativeEngine *engine);
 
-    bool networkAccessible() const;
-    Q_INVOKABLE void requestAd(const QVariant &adItem);
-    Q_INVOKABLE void openAd(const QUrl &adUrl);
-signals:
-    void networkAccessibilityChanged(bool accessibility);
-    void networkNotAccessible();
-
-private:
-    void checkUserAgent();
-
-    mutable QByteArray m_userAgent;
-
-    RequestQueue* m_requestQueue;
 };
 
-#endif // INNERINTERFACE_H
+#endif // INNERACTIVEPLUGIN_H

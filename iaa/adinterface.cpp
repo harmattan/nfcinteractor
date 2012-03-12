@@ -1,5 +1,25 @@
+/*
+*
+* adinterface.cpp
+* © Copyrights 2012 inneractive LTD, Nokia. All rights reserved
+*
+* This file is part of inneractiveAdQML.	
+*
+* inneractiveAdQML is free software: you can redistribute it and/or modify 
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* inneractiveAdQML is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with inneractiveAdQML. If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "adinterface.h"
-#include "uachecker.h"
 #include "requestqueue.h"
 #include <qplatformdefs.h>
 #include <QEventLoop>
@@ -14,6 +34,7 @@
 #include <APGTASK.H>
 #include <APGCLI.H>
 #include <EIKENV.H>
+#include <cuseragent/cuseragent.h>
 #endif
 
 /*!
@@ -90,18 +111,23 @@ void AdInterface::openAd(const QUrl &adUrl)
 #endif
 }
 
-// Checks User-Agent using UAChecker
 void AdInterface::checkUserAgent()
 {
-    if (m_userAgent.isEmpty()) {
-        UAChecker uachecker;
-        if (uachecker.userAgent().isEmpty()) {
-            QEventLoop loop;
-            QTimer::singleShot(5000, &loop, SLOT(quit())); // timeout timer
-            connect(&uachecker, SIGNAL(gotUserAgent()), &loop, SLOT(quit()));
-            loop.exec();
-        }
-        m_userAgent = uachecker.userAgent();
-    }
+#ifdef Q_OS_SYMBIAN
+    CUserAgent *ua = 0;
+    HBufC8 *uabuf = 0;
+    QT_TRAP_THROWING(ua = CUserAgent::NewL());
+    QT_TRAP_THROWING(uabuf = ua->UserAgentL());
+    m_userAgent = QByteArray((char*)uabuf->Des().Ptr(),uabuf->Length());
+    m_userAgent.append(" 3gpp-gba");
+    delete ua;
+    delete uabuf;
+#elif defined(MEEGO_EDITION_HARMATTAN)
+    m_userAgent = "Mozilla/5.0 (MeeGo; NokiaN9) AppleWebKit/534.13 (KHTML, like Gecko) NokiaBrowser/8.5.0 Mobile Safari/534.13";
+#elif defined(Q_WS_MAEMO_5)
+    m_userAgent = "Mozilla/5.0 (X11; U; Linux armv7l; en-GB; rv:1.9.2.3pre) Gecko/20100723 Firefox/3.5 Maemo Browser 1.7.4.8 RX-51 N900";
+#else
+    m_userAgent = "Mozilla/5.0 Safari";
+#endif
     m_requestQueue->setUserAgent(m_userAgent);
 }
