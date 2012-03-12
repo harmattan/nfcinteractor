@@ -2,7 +2,7 @@
 # normal version, also call the corresponding .bat
 # file if compiling for Harmattan, to change the
 # names in the debian package files!
-DEFINES += UNLIMITED_VERSION
+#DEFINES += UNLIMITED_VERSION
 
 # When compiling for publishing the app, activate this
 # to change to the 0x2... UID and the right UID for the
@@ -11,7 +11,7 @@ DEFINES += UNLIMITED_VERSION
 # For self signed versions, remove / comment the following line.
 # Note: IAA on Symbian requires DEPLOY_VERSION to be set.
 # Use a developer certificate during development for Symbian IAA.
-#DEFINES += DEPLOY_VERSION
+DEFINES += DEPLOY_VERSION
 
 # Define for detecting Harmattan in .cpp files.
 # Only needed for experimental / beta Harmattan SDKs.
@@ -33,7 +33,7 @@ contains(DEFINES,UNLIMITED_VERSION) {
 } else {
     TARGET = nfcinteractor
 }
-VERSION = 2.00.0
+VERSION = 2.10.0
 
 
 symbian {
@@ -264,25 +264,11 @@ symbian {
     contains(DEFINES,USE_IAA) {
         message(Using In-App Advertising)
 
-        TARGET.CAPABILITY += NetworkServices SwEvent
-        LIBS += -lbrowserengine -lcone -lapgrfx
-
-        INCLUDEPATH += iaa
-        DEPENDPATH += iaa
-        SOURCES += \
-            iaa/adinterface.cpp \
-            iaa/requestqueue.cpp \
-            iaa/uachecker.cpp
-        HEADERS += \
-            iaa/adinterface.h \
-            iaa/requestqueue.h \
-            iaa/uachecker.h
-        OTHER_FILES += \
-            qml/iaa/*.qml
-        iaaFolder.source = qml/iaa/*
-        iaaFolder.target = qml
-        DEPLOYMENTFOLDERS += iaaFolder
-        QML_IMPORT_PATH += qml/iaa
+        include(iaa/component.pri)
+        iaa_components.source = iaa/inneractive/*
+        iaa_components.target = qml
+        DEPLOYMENTFOLDERS += iaa_components
+        QML_IMPORT_PATH += iaa/inneractive
     }
 }
 
@@ -332,22 +318,28 @@ contains(MEEGO_EDITION,harmattan) {
     contains(DEFINES,USE_IAA) {
         message(Using In-App Advertising)
 
-        INCLUDEPATH += iaa
-        DEPENDPATH += iaa
-        SOURCES += \
-            iaa/adinterface.cpp \
-            iaa/requestqueue.cpp \
-            iaa/uachecker.cpp
-        HEADERS += \
-            iaa/adinterface.h \
-            iaa/requestqueue.h \
-            iaa/uachecker.h
-        OTHER_FILES += \
-            qml/iaa/*.qml
-        iaaFolder.source = qml/iaa/*
-        iaaFolder.target = qml
-        DEPLOYMENTFOLDERS += iaaFolder
-        QML_IMPORT_PATH += qml/iaa
+        include(iaa/component.pri)
+        iaa_components.source = iaa/inneractive/*
+        iaa_components.target = qml
+        DEPLOYMENTFOLDERS += iaa_components
+        QML_IMPORT_PATH += iaa/inneractive
+
+#        INCLUDEPATH += iaa
+#        DEPENDPATH += iaa
+#        SOURCES += \
+#            iaa/adinterface.cpp \
+#            iaa/requestqueue.cpp \
+#            iaa/uachecker.cpp
+#        HEADERS += \
+#            iaa/adinterface.h \
+#            iaa/requestqueue.h \
+#            iaa/uachecker.h
+#        OTHER_FILES += \
+#            qml/iaa/*.qml
+#        iaaFolder.source = qml/iaa/*
+#        iaaFolder.target = qml
+#        DEPLOYMENTFOLDERS += iaaFolder
+#        QML_IMPORT_PATH += qml/iaa
     }
 }
 
