@@ -1,3 +1,10 @@
+nfcinteractorunlimited (2.1.0) unstable; urgency=low
+  * Added support for writing Foursquare tags.
+  * Print raw payload for external tag types.
+  * Updated In-App-Advertising library version.
+
+ -- Andreas Jakl <>  Mon, 12 Mar 2012 13:10:59 +0200
+
 nfcinteractorunlimited (2.0.0) unstable; urgency=low
   * Initial release of the Qt Nfc Interactor, based on Nfc Info and replacing the Java ME-based Nfc Interactor.
 
