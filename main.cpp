@@ -54,8 +54,8 @@
 #include "iapmanager.h"
 
 // Define content IDs
-#define IAP_ID_ADV_TAGS "818680"
-#define IAP_ID_REMOVE_ADS "818679"
+#define IAP_ID_ADV_TAGS "818679"
+#define IAP_ID_REMOVE_ADS "818680"
 #define IAP_ID_UNLIMITED "818769"
 #endif
 
