@@ -65,6 +65,7 @@ Ideas for future updates:
 - Refactor record item defaults out of nfcrecordmodel.cpp
 - Splash screen for Symbian
 - Write empty message first, then full message, if writing fails? Increases stability on non-formatted tags.
+- Support for writing AAR records (Android Application Record): http://stackoverflow.com/questions/9016944/android-application-record-compatibility-with-pre-ics
 
 * Disclaimer: The services hosted on nfcinteractor.com (e.g., the generic geo-tag redirection script) have no service or uptime guarantee. They are intended for testing purposes only and could be removed at any point. You should host the required server-side scripts on your own webserver for real-world deployment.
 ** MeeGo Harmattan currently does not allow tag type specific access through Qt APIs; therefore, it's not possible to access functionality not offered by Qt classes, such as getting tag specific information or locking tags.
@@ -105,7 +106,7 @@ BUILD & INSTALLATION INSTRUCTIONS
 MeeGo Harmattan
 ~~~~~~~~~~~~~~~
 The example will work out of the box with the Harmattan target 
-of the Qt SDK 1.1.4. Make sure you have the latest firmware version
+of the Qt SDK 1.2. Make sure you have the latest firmware version
 on your Nokia N9. The Nokia N950 doesn't support NFC.
 
 
@@ -113,7 +114,8 @@ Symbian
 ~~~~~~~
 Compatible phones:
 C7-00/Oro/Astound and 801T with Symbian Anna/Belle,
-Nokia 603, 700 and 701 with Belle
+Nokia 603, 700, 701 with Belle
+Nokia 808 PureView
 (plus all upcoming NFC capable phones)
 
 Device Preparation
