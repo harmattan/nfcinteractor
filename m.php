@@ -40,7 +40,7 @@
 
 /*
    Nfc Geo Tags Redirection Script
-   v1.0.0
+   v1.1.0
 
    Summary
    ---------------------------------------------------------------------------
@@ -194,13 +194,13 @@ if ($ua_enc == 'h' || $ua_enc == 'a') {
 <head>
 <script type="text/javascript">
 <!--
-window.location = "http://m.ovi.me/?c=<?php echo $location; ?>";
+window.location = "http://m.ovi.me/?c=<?php echo $location; ?>&z=15";
 //-->
 </script>
 </head>
 <body>
 <noscript>
-<font face="Tahoma,Arial"><a href="http://m.ovi.me/?c=<?php echo $location; ?>">Open Nokia Maps</a></font>
+<font face="Tahoma,Arial"><a href="http://m.ovi.me/?c=<?php echo $location; ?>&z=15">Open Nokia Maps</a></font>
 </noscript>
 </body>
 </html>
