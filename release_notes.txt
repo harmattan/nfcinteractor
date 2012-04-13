@@ -48,6 +48,11 @@ Easily reusable code for developers including:
 - Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2**)
 
 Known bugs / issues (work-in-progress):
+- Create settings screen to select folder for images
+- Save & load settings
+- Bring image functionalities to MeeGo
+- Support stand-alone image record
+- Support images in business cards
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)
@@ -113,10 +118,8 @@ on your Nokia N9. The Nokia N950 doesn't support NFC.
 Symbian
 ~~~~~~~
 Compatible phones:
-C7-00/Oro/Astound and 801T with Symbian Anna/Belle,
-Nokia 603, 700, 701 with Belle
-Nokia 808 PureView
-(plus all upcoming NFC capable phones)
+C7-00/Oro/Astound, 801T with Symbian Anna / Belle
+Nokia 603, 700, 701, 808 PureView
 
 Device Preparation
 C7-00 with Symbian Anna: install using the Smart Installer.
@@ -126,7 +129,7 @@ C:\QtSDK\Symbian\sis\Symbian_Anna\Qt\4.7.4\QtWebKit-4.8.1-for-Anna.sis
 C:\QtSDK\Symbian\sis\Symbian_Anna\QtMobility\1.2.1\QtMobility-1.2.1-for-Anna.sis
 C:\QtSDK\Symbian\sis\Symbian_Anna\QtQuickComponents\1.1\QtQuickComponents-1.1-for-Anna-Belle.sis
 
-Symbian Belle: install using the Smart Installer.
+Nokia Belle: install using the Smart Installer.
 For manual device preparation, you only need to install Qt Quick Components, as Belle already includes Qt 4.7.4 and Qt Mobility 1.2:
 C:\QtSDK\Symbian\sis\Symbian_Belle\QtQuickComponents\1.1\QtQuickComponents-1.1-for-Anna-Belle.sis 
 
