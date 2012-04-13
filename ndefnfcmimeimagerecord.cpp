@@ -83,6 +83,17 @@ NdefNfcMimeImageRecord::NdefNfcMimeImageRecord(const QImage &img, const QByteArr
 }
 
 /*!
+  \brief Create a new Mime/Image record by reading the specified file.
+
+  The mime type will be determined automatically.
+  */
+NdefNfcMimeImageRecord::NdefNfcMimeImageRecord(const QString &fileName)
+    : QNdefRecord(IMAGERECORD_DEFAULT_TNF, IMAGERECORD_DEFAULT_TYPE)
+{
+    setImage(fileName);
+}
+
+/*!
   \brief Decode the payload and return it as a pixel image (QImage).
 
   If the payload is empty or Qt cannot parse the decode the image format,
@@ -146,6 +157,42 @@ bool NdefNfcMimeImageRecord::setImage(QByteArray& imageRawData)
     imgFormat = imgFormat.prepend("image/");
     setType(imgFormat);
     setPayload(imageRawData);
+    return true;
+}
+
+/*!
+  \brief Set the payload of the record by reading the specified image file.
+  The mime type of the image will be determined automatically.
+
+  \param fileName filename to load, including the complete path.
+  */
+bool NdefNfcMimeImageRecord::setImage(const QString& fileName)
+{
+    // Determine the mime type of the image file
+    QByteArray imgFormat = QImageReader::imageFormat(fileName);
+    //qDebug() << "Setting image as payload, determined mime type of " << fileName << ": " << imgFormat << "/" << imgFormat.length();
+
+    // Check if Qt supports the image format (needed to set the mime type automatically)
+    if (imgFormat.isEmpty()) {
+        qDebug() << "Unable to determine mime type of image.";
+        return false;
+    }
+
+    // Read the file directly to the payload
+    QFile imgFile(fileName);
+    if (!imgFile.open(QIODevice::ReadOnly)) {
+        qDebug() << "Unable to open the image file for reading.";
+        return false;
+    }
+
+    // Add "image/" to the Qt image type in order to get to a mime type
+    imgFormat = imgFormat.toLower();
+    imgFormat = imgFormat.prepend("image/");
+    setType(imgFormat);
+
+    setPayload(imgFile.readAll());
+    imgFile.close();
+
     return true;
 }
 

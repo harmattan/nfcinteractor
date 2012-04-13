@@ -41,6 +41,7 @@
 #define NDEFNFCMIMEIMAGERECORD_H
 
 #include <QString>
+#include <QFile>
 #include <QImage>
 #include <QImageWriter>
 #include <QImageReader>
@@ -88,7 +89,7 @@ QTM_USE_NAMESPACE
       QImage img = imgRecord.image();
   }
 
-  \version 1.0.0
+  \version 1.1.0
   */
 class NdefNfcMimeImageRecord : public QNdefRecord
 {
@@ -98,6 +99,7 @@ public:
     NdefNfcMimeImageRecord(const QNdefRecord &other);
     NdefNfcMimeImageRecord(const QByteArray &mimeType);
     NdefNfcMimeImageRecord(const QImage &img, const QByteArray &mimeType);
+    NdefNfcMimeImageRecord(const QString &fileName);
 
 public:
     QByteArray format() const;
@@ -107,9 +109,10 @@ public:
     QByteArray imageRawData() const;
 
     bool setImage(QByteArray &imageRawData);
+    bool setImage(const QString &fileName);
     bool setImage(const QImage &image, const QByteArray &mimeType);
 
-private:
+    private:
     QByteArray checkImageFormat(const QByteArray &format);
 };
 
