@@ -198,10 +198,18 @@ NdefNfcSpRecord* NfcModelToNdef::convertSpFromModel(const int startIndex, int& e
             newRecord->setMimeType(curItem->currentText());
             curIndex ++;
             break;
-        case NfcTypes::RecordImageFilename:
-            // TODO: not supported yet
+        case NfcTypes::RecordImageFilename: {
+            NdefNfcMimeImageRecord* imgRecord = new NdefNfcMimeImageRecord();
+            if (imgRecord->setImage(curItem->currentText())) {
+                // Loading the image was successful
+                newRecord->setImage(*imgRecord);
+            } else {
+                // Not successful in loading the image
+                qDebug() << "Error loading the image for creating the payload.";
+                delete imgRecord;
+            }
             curIndex ++;
-            break;
+            break; }
         default:
             // Unknown record content that doesn't belong to this record
             reachedRecordEnd = true;
