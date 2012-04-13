@@ -251,7 +251,8 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
 #endif
         break; }
     case NfcTypes::MsgImage:
-        // TODO: not supported yet
+        addRecord("Image Record", NfcTypes::MsgImage, NfcTypes::RecordHeader, "", true, false, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgImage, NfcTypes::RecordImageFilename, false,  recordId);
         break;
     case NfcTypes::MsgAnnotatedUrl:
         addRecord("URI Record", NfcTypes::MsgUri, NfcTypes::RecordHeader, "", true, false, recordId);
@@ -603,7 +604,7 @@ QList<QObject*> NfcRecordModel::possibleContentForRecord(int recordIndex)
         checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordUri);
         checkPossibleContentForRecord(possibleContent, false, recordIndex, messageType, NfcTypes::RecordText);
         checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordSpAction);
-        //checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordImageFilename);
+        checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordImageFilename);
         checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordSpType);
         checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordSpSize);
         break;
@@ -626,7 +627,8 @@ QList<QObject*> NfcRecordModel::possibleContentForRecord(int recordIndex)
         checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordOrganizationRole);
         checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordOrganizationTitle);
 
-        //RecordBirthday, // not implemented yet, would require a date editor field
+        //RecordBirthday, // TODO: not implemented yet, would require a date editor field
+        // TODO: Image
         checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordNote);
 
         checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordCountry);
@@ -749,7 +751,7 @@ void NfcRecordModel::getDefaultsForRecordContent(const NfcTypes::MessageType msg
         // Selection item - no default contents string
         break;
     case NfcTypes::RecordImageFilename:
-        defaultTitle = "Image filename";
+        defaultTitle = "Image";
         break;
     case NfcTypes::RecordSpType:
         defaultTitle = "Type of linked content";
