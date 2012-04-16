@@ -174,14 +174,14 @@ bool NdefNfcMimeImageRecord::setImage(const QString& fileName)
 
     // Check if Qt supports the image format (needed to set the mime type automatically)
     if (imgFormat.isEmpty()) {
-        qDebug() << "Unable to determine mime type of image.";
+        qDebug() << "Unable to determine mime type of image: " << fileName;
         return false;
     }
 
     // Read the file directly to the payload
     QFile imgFile(fileName);
     if (!imgFile.open(QIODevice::ReadOnly)) {
-        qDebug() << "Unable to open the image file for reading.";
+        qDebug() << "Unable to open the image file for reading: " << fileName;
         return false;
     }
 
