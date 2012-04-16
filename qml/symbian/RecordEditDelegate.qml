@@ -101,7 +101,7 @@ Item {
                   && recordContent !== NfcTypes.RecordSocialNetworkType)
 
         // ... button for file selection
-        platformRightMargin: selectFileImg.visible ? selectFileImg.width + platformStyle.paddingMedium : 0;
+        platformRightMargin: selectFileImg.visible ? selectFileImg.width + customPlatformStyle.paddingMedium : 0;
         Image {
             id: selectFileImg
             visible: recordContent === NfcTypes.RecordImageFilename
