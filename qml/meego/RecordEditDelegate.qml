@@ -31,7 +31,6 @@ Item {
         anchors.top: parent.top
         visible: (recordContent === NfcTypes.RecordHeader)
     }
-
     Rectangle {
         anchors.top:parent.top
         anchors.topMargin: 3
@@ -76,7 +75,6 @@ Item {
             visible: removeVisible
         }
     }
-
     Text {
         id: titleDescription
         text: title
@@ -107,6 +105,26 @@ Item {
                   && recordContent !== NfcTypes.RecordGeoType
                   && recordContent !== NfcTypes.RecordTypeNameFormat
                   && recordContent !== NfcTypes.RecordSocialNetworkType)
+
+        // ... button for file selection
+        platformStyle: TextFieldStyle { paddingRight: selectFileImg.visible ? selectFileImg.width + customPlatformStyle.paddingMedium : 0 }
+        Image {
+            id: selectFileImg
+            visible: recordContent === NfcTypes.RecordImageFilename
+            anchors { top: parent.top; right: parent.right }
+            height: parent.height; width: parent.height
+            smooth: true
+            fillMode: Image.PreserveAspectFit
+            source: selectImgBtn.pressed ? "textfield_browse_pressed.svg"
+                                : "textfield_browse.svg"
+
+            MouseArea {
+                id: selectImgBtn
+                anchors.fill: parent
+                onClicked: showFileDialog()
+            }
+        }
+
         onActiveFocusChanged: {
             // Note that this needs to be onActiveFocusChanged, not just onFocusChanged, which
             // wouldn't have the desired effect.
@@ -129,6 +147,32 @@ Item {
             //            console.log("QML: editText.text = " + editText.text)
             //            console.log("QML: currentText = " + currentText)
         }
+    }
+
+    // --------------------------------------------------------------------------------
+    // File selection
+    function showFileDialog() {
+        console.log("Launch file dialog");
+        fileDialogLoader.source = Qt.resolvedUrl("FileSelector.qml");
+        editText.platformCloseSoftwareInputPanel();
+    }
+    Loader {
+        id: fileDialogLoader
+        onStatusChanged: {
+            if (status === Loader.Ready) {
+                fileDialogLoader.item.open();
+            }
+        }
+    }
+    Connections {
+        target: fileDialogLoader.item;
+        onAccepted: {
+            console.log("Accepted file: " + fileDialogLoader.item.selectedFileName);
+            editText.text = fileDialogLoader.item.selectedFilePath;
+            fileDialogLoader.sourceComponent = undefined;
+        }
+        //onClickedOutside: { fileDialogLoader.sourceComponent = undefined; }
+        onRejected: { fileDialogLoader.sourceComponent = undefined; }
     }
 
     // --------------------------------------------------------------------------------
