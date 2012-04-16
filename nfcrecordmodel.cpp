@@ -628,8 +628,8 @@ QList<QObject*> NfcRecordModel::possibleContentForRecord(int recordIndex)
         checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordOrganizationTitle);
 
         //RecordBirthday, // TODO: not implemented yet, would require a date editor field
-        // TODO: Image
         checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordNote);
+        checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordImageFilename);
 
         checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordCountry);
         checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordLocality);
