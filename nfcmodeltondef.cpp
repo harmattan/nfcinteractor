@@ -113,8 +113,7 @@ QNdefMessage* NfcModelToNdef::convertToNdefMessage()
                 ndefMessage->append(*convertStoreFromModel(curRecordIndex, parseEndIndex));
                 break;
             case NfcTypes::MsgImage:
-                // TODO: not supported yet
-//                ndefMessage->append(*convertImageFromModel(curRecordIndex, parseEndIndex));
+                ndefMessage->append(*convertImageFromModel(curRecordIndex, parseEndIndex, true));
                 break;
             case NfcTypes::MsgCustom:
                 ndefMessage->append(*convertCustomFromModel(curRecordIndex, parseEndIndex));
@@ -167,13 +166,13 @@ NdefNfcSpRecord* NfcModelToNdef::convertSpFromModel(const int startIndex, int& e
             // Next record starts - quit!
             reachedRecordEnd = true;
             break;
-        case NfcTypes::RecordUri:
+        case NfcTypes::RecordUri: {
             newRecord->setUri(*convertUriFromModel(curIndex, curIndex, false));
-            break;
+            break; }
         case NfcTypes::RecordText:
-        case NfcTypes::RecordTextLanguage:
+        case NfcTypes::RecordTextLanguage: {
             newRecord->addTitle(*convertTextFromModel(curIndex, curIndex, false));
-            break;
+            break; }
         case NfcTypes::RecordSpAction: {
             NdefNfcSpRecord::NfcAction selectedAction = NdefNfcSpRecord::RFU;
             switch (curItem->selectedOption()) {
@@ -199,16 +198,7 @@ NdefNfcSpRecord* NfcModelToNdef::convertSpFromModel(const int startIndex, int& e
             curIndex ++;
             break;
         case NfcTypes::RecordImageFilename: {
-            NdefNfcMimeImageRecord* imgRecord = new NdefNfcMimeImageRecord();
-            if (imgRecord->setImage(curItem->currentText())) {
-                // Loading the image was successful
-                newRecord->setImage(*imgRecord);
-            } else {
-                // Not successful in loading the image
-                qDebug() << "Error loading the image for creating the payload.";
-                delete imgRecord;
-            }
-            curIndex ++;
+            newRecord->setImage(*convertImageFromModel(curIndex, curIndex, false));
             break; }
         default:
             // Unknown record content that doesn't belong to this record
@@ -291,6 +281,32 @@ QNdefNfcTextRecord* NfcModelToNdef::convertTextFromModel(const int startIndex, i
         curIndex ++;
     }
     endIndex = curIndex;
+    return newRecord;
+}
+
+NdefNfcMimeImageRecord* NfcModelToNdef::convertImageFromModel(const int startIndex, int& endIndex, bool expectHeader)
+{
+    NdefNfcMimeImageRecord* newRecord = new NdefNfcMimeImageRecord();
+    int curIndex = startIndex;
+    if (expectHeader) {
+        if (m_recordItems[startIndex]->messageType() != NfcTypes::MsgImage ||
+                m_recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
+            return newRecord;
+        }
+        // Start at the next item after the header
+        curIndex = startIndex + 1;
+    }
+    if (curIndex >= m_recordItems.size())
+        return newRecord;
+    NfcRecordItem* curItem = m_recordItems[curIndex];
+    if (newRecord->setImage(curItem->currentText())) {
+        // Loading the image was successful
+    } else {
+        // Not successful in loading the image
+        qDebug() << "Error loading the image for creating the payload.";
+    }
+    endIndex = curIndex + 1;
+
     return newRecord;
 }
 
@@ -399,6 +415,9 @@ NdefNfcMimeVcardRecord* NfcModelToNdef::convertBusinessCardFromModel(const int s
         case NfcTypes::RecordNote:
             contactSetDetail<QContactNote>(contact, contentType, value);
             break;
+        case NfcTypes::RecordImageFilename:
+            contactSetDetail<QContactThumbnail>(contact, contentType, value);
+            break;
         case NfcTypes::RecordCountry:
         case NfcTypes::RecordLocality:
         case NfcTypes::RecordPostOfficeBox:
@@ -480,6 +499,9 @@ template<class T> bool NfcModelToNdef::contactSetDetail(QContact& contact, const
     case NfcTypes::RecordNote:
         contactField = QContactNote::FieldNote.latin1();
         break;
+    case NfcTypes::RecordImageFilename:
+        contactField = QContactThumbnail::FieldThumbnail.latin1();
+        break;
     case NfcTypes::RecordCountry:
         contactField = QContactAddress::FieldCountry.latin1();
         break;
@@ -503,7 +525,17 @@ template<class T> bool NfcModelToNdef::contactSetDetail(QContact& contact, const
         contactField = "Unknown";
         break;
     }
-    curDetail.setValue(contactField, value);
+    if (contentType == NfcTypes::RecordImageFilename) {
+        // Image-based detail
+        QImage contactImg(value);
+        if (!contactImg.isNull()) {
+            // Succeeded in loading the image
+            curDetail.setValue(contactField, contactImg);
+        }
+    } else {
+        // Text-based detail
+        curDetail.setValue(contactField, value);
+    }
     return contact.saveDetail(&curDetail);
 }
 
@@ -693,6 +725,7 @@ NdefNfcStoreLinkRecord::AppStore NfcModelToNdef::appStoreFromRecordContentType(c
         break;
     }
 }
+
 
 
 

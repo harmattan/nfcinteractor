@@ -70,6 +70,7 @@
 #include <QContactAddress>
 #include <QContactNote>
 #include <QContactBirthday>
+#include <QContactThumbnail>
 
 /*!
   \brief Builds an NDEF message based on the data stored in the NfcRecordModel.
@@ -87,6 +88,7 @@ private:
     NdefNfcSpRecord *convertSpFromModel(const int startIndex, int &endIndex);
     QNdefNfcUriRecord *convertUriFromModel(const int startIndex, int &endIndex, bool expectHeader = true);
     QNdefNfcTextRecord *convertTextFromModel(const int startIndex, int &endIndex, bool expectHeader = true);
+    NdefNfcMimeImageRecord *convertImageFromModel(const int startIndex, int &endIndex, bool expectHeader = true);
     NdefNfcSmsRecord *convertSmsFromModel(const int startIndex, int& endIndex);
     NdefNfcMimeVcardRecord *convertBusinessCardFromModel(const int startIndex, int &endIndex);
     template<class T> bool contactSetDetail(QContact &contact, const NfcTypes::RecordContent contentType, const QString &value);
