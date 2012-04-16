@@ -48,11 +48,7 @@ Easily reusable code for developers including:
 - Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2**)
 
 Known bugs / issues (work-in-progress):
-- Create settings screen to select folder for images
-- Save & load settings
-- Bring image functionalities to MeeGo
-- Support stand-alone image record
-- Support images in business cards
+- Create settings screen to select folder for images, at least on Symbian where ".." item isn't available in the folder model - or add that ".." manually to the dialog (might be better choice)
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)
