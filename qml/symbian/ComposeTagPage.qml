@@ -204,7 +204,7 @@ Page {
             ListElement { name: "Social Network" }
             ListElement { name: "Geo" }
             ListElement { name: "App Store" }
-            //ListElement { name: "Image" }
+            ListElement { name: "Image" }
             ListElement { name: "Annotated URL" }
             ListElement { name: "Custom" }
             ListElement { name: "Combination" }
