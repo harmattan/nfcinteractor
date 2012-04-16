@@ -151,6 +151,7 @@ PageStackWindow {
                 writeTagPageLoader.item.tagWriteExceeded();
             }
         }
+
         onNfcModeChanged: {
             if (nfcNewMode === 0) {
                 // Reading; 1 would be writing, but the NfcInfo class will

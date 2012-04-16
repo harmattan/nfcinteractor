@@ -44,6 +44,7 @@ import com.nokia.meego 1.0
 import Nfc 1.0
 
 Page {
+
     function logMessage(text, color, img)
     {
         messageModel.append( {"infoMsg": text, "textColor": color, "image": img} )
@@ -169,4 +170,5 @@ Page {
             onClicked: pageStack.push(composeTagPageLoader.item)
         }
     }
+
 }
