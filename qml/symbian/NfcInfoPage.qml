@@ -66,6 +66,8 @@ Page {
         model: messageModel
         clip: true
         delegate: listDelegate
+        highlight: highlight
+        highlightFollowsCurrentItem: true
         //anchors.fill: parent
         anchors {
             top: iaaLoader.bottom
@@ -111,6 +113,13 @@ Page {
                     anchors.rightMargin: customPlatformStyle.paddingSmall
                 }
             }
+        }
+    }
+
+    Component {
+        id: highlight
+        Rectangle {
+            color: "lightsteelblue"
         }
     }
 

@@ -48,17 +48,17 @@
 #include <QNdefRecord>
 #include <QNdefNfcTextRecord>
 #include <QNdefNfcUriRecord>
-#include "ndefnfcsprecord.h"
-#include "ndefnfcmimeimagerecord.h"
-#include "ndefnfcsmarturirecord.h"
-#include "ndefnfcgeorecord.h"
-#include "ndefnfcsmsrecord.h"
-#include "ndefnfcsocialrecord.h"
-#include "ndefnfcstorelinkrecord.h"
+#include "ndefnfcrecords/ndefnfcsprecord.h"
+#include "ndefnfcrecords/ndefnfcmimeimagerecord.h"
+#include "ndefnfcrecords/ndefnfcsmarturirecord.h"
+#include "ndefnfcrecords/ndefnfcgeorecord.h"
+#include "ndefnfcrecords/ndefnfcsmsrecord.h"
+#include "ndefnfcrecords/ndefnfcsocialrecord.h"
+#include "ndefnfcrecords/ndefnfcstorelinkrecord.h"
 #include "nfcstats.h"
 
 // Contact handling
-#include "ndefnfcmimevcardrecord.h"
+#include "ndefnfcrecords/ndefnfcmimevcardrecord.h"
 #include <QContact>
 #include <QContactDetail>
 #include <QContactName>

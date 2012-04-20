@@ -52,9 +52,9 @@
 #include <QNdefRecord>
 #include <QNdefNfcUriRecord>
 #include <QNdefNfcTextRecord>
-#include "ndefnfcmimeimagerecord.h"
-#include "ndefnfcsprecord.h"
-#include "ndefnfcmimevcardrecord.h"
+#include "ndefnfcrecords/ndefnfcmimeimagerecord.h"
+#include "ndefnfcrecords/ndefnfcsprecord.h"
+#include "ndefnfcrecords/ndefnfcmimevcardrecord.h"
 
 // Image handling
 #include <QImage>

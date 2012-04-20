@@ -57,11 +57,11 @@
 #include <QNdefRecord>
 #include <QNdefNfcUriRecord>
 #include <QNdefNfcTextRecord>
-#include "ndefnfcmimeimagerecord.h"
-#include "ndefnfcsprecord.h"
-#include "ndefnfcmimevcardrecord.h"
-#include "ndefnfcsmarturirecord.h"
-#include "ndefnfcgeorecord.h"
+#include "ndefnfcrecords/ndefnfcmimeimagerecord.h"
+#include "ndefnfcrecords/ndefnfcsprecord.h"
+#include "ndefnfcrecords/ndefnfcmimevcardrecord.h"
+#include "ndefnfcrecords/ndefnfcsmarturirecord.h"
+#include "ndefnfcrecords/ndefnfcgeorecord.h"
 
 // Analyze and parse targets
 #include "nfctargetanalyzer.h"

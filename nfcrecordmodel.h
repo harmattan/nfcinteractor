@@ -49,9 +49,9 @@
 #include <QNdefRecord>
 #include <QNdefNfcTextRecord>
 #include <QNdefNfcUriRecord>
-#include "ndefnfcsprecord.h"
-#include "ndefnfcmimeimagerecord.h"
-#include "ndefnfcmimevcardrecord.h"
+#include "ndefnfcrecords/ndefnfcsprecord.h"
+#include "ndefnfcrecords/ndefnfcmimeimagerecord.h"
+#include "ndefnfcrecords/ndefnfcmimevcardrecord.h"
 #include "nfcstats.h"
 
 // Forward declarations
