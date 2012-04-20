@@ -9,6 +9,7 @@ SelectionDialog {
     property string selectedFilePath;
     property alias initialFolder: folderModel.folder
     property alias nameFilters: folderModel.nameFilters
+    property variant myButtonTexts: ["Up", "Cancel"]
 
     model: FolderListModel {
         id: folderModel
@@ -20,6 +21,7 @@ SelectionDialog {
         //nameFilters: ["*.*"]
         nameFilters: [ "*.png", "*.jpg", "*.jpeg", "*.gif" ]
     }
+
 
     delegate: fileDelegate
 
@@ -46,4 +48,84 @@ SelectionDialog {
             }
         }
     }
+
+    onButtonClicked: {
+        if (index === 0) {
+            // Up
+            var folder = new String(folderModel.folder);
+            console.log("Up from: " + folder);
+            console.log("Last index of '/': " + folder.lastIndexOf('/'));
+            folderModel.folder = folder.substring(0, folder.lastIndexOf('/'));
+            console.log("Now: " + folderModel.folder)
+        } else {
+            // Cancel
+            reject();
+        }
+    }
+
+    // ---------------------------------------------------------------------------
+    // Symbian: need a way to navigate up in the folder model.
+    // Due to a bug, the showDotAndDotDot doesn't work on a Symbian phone,
+    // only on the simulator and MeeGo Harmattan.
+    // So, we're adding a button to go one directory up.
+    // However, the default behavior of the button is to instantly
+    // close the dialog. As we don't want that, the following is pretty
+    // much a copy of the base CommonDialog, so that we can create our
+    // own buttons that are identical to the default ones, only that they
+    // don't close the dialog.
+    Component.onCompleted: {
+        for (var i = buttonRow.children.length; i > 0; --i) {
+            buttonRow.children[i - 1].destroy()
+        }
+        for (var j = 0; j < myButtonTexts.length; ++j) {
+            var button = buttonComponent.createObject(buttonRow)
+            button.text = myButtonTexts[j]
+            button.index = j
+        }
+    }
+    buttons: Item {
+        id: buttonContainer
+
+        LayoutMirroring.enabled: false
+        LayoutMirroring.childrenInherit: true
+
+        width: parent.width
+        height: myButtonTexts.length ? privateStyle.toolBarHeightLandscape + 2 * platformStyle.paddingSmall : 0
+
+        Row {
+            id: buttonRow
+            objectName: "buttonRow"
+            anchors.centerIn: parent
+            spacing: platformStyle.paddingMedium
+        }
+    }
+    Component {
+        id: buttonComponent
+        ToolButton {
+            property int index
+
+            width: internal.buttonWidth()
+            height: privateStyle.toolBarHeightLandscape
+
+            onClicked: {
+                if (status === DialogStatus.Open) {
+                    buttonClicked(index)
+                }
+            }
+        }
+    }
+
+    QtObject {
+        id: internal
+
+        function buttonWidth() {
+            switch (myButtonTexts.length) {
+                case 0: return 0
+                case 1: return Math.round((privateStyle.dialogMaxSize - 3 * platformStyle.paddingMedium) / 2)
+                default: return (buttonContainer.width - (myButtonTexts.length + 1) *
+                    platformStyle.paddingMedium) / myButtonTexts.length
+            }
+        }
+    }
+
 }
