@@ -50,6 +50,7 @@ NfcInfo::NfcInfo(QObject *parent) :
     m_cachedNdefMessageSize(0),
     m_cachedRequestType(NfcIdle),
     m_unlimitedAdvancedMsgs(true),
+    m_logNdefToFile(false),
     m_harmattanPr10(false)
 {
 #if defined(MEEGO_EDITION_HARMATTAN)
@@ -313,7 +314,7 @@ void NfcInfo::targetDetected(QNearFieldTarget *target)
             } else {
                 // No NDEF message detected
                 qDebug() << "No NDEF message detected";
-                emit nfcTagContents(tr("No NDEF message detected"));
+                emit nfcTagContents(tr("No NDEF message detected"), "");
                 stoppedTagInteraction();
             }
         } else {
@@ -373,7 +374,34 @@ void NfcInfo::targetMessageDetected(const QNdefMessage &message, QNearFieldTarge
   */
 void NfcInfo::ndefMessageRead(const QNdefMessage &message)
 {
-    emit nfcTagContents(m_nfcNdefParser->parseNdefMessage(message));
+    QString fileName = "";
+    if (m_logNdefToFile) {
+        // Store tag contents to the log file if enabled
+        m_logNdefDir = "E:/nfc";    // TODO: testing only
+        if (QDir::setCurrent(m_logNdefDir)) {
+            // Generate file name
+            QDateTime now = QDateTime::currentDateTime();
+            fileName = now.toString("yyyy.MM.dd - hh.mm.ss");
+            if (!m_nfcTargetAnalyzer->m_tagInfo.tagTypeName.isEmpty()) {
+                fileName.append(" - ");
+                fileName.append(m_nfcTargetAnalyzer->m_tagInfo.tagTypeName);
+            }
+            fileName.append(".txt");
+            QFile tagFile(fileName);
+            if (tagFile.open(QIODevice::WriteOnly)) {
+                tagFile.write(message.toByteArray());
+                tagFile.close();
+            } else {
+                qDebug() << "Unable to open file for writing: " << tagFile.fileName();
+            }
+            fileName = m_logNdefDir + fileName;
+        } else {
+            qDebug() << "Unable to set current directory to: " << m_logNdefDir;
+        }
+    }
+    // TODO: emit stored file name along with the tag contents,
+    // to enable editing / cloning of tags.
+    emit nfcTagContents(m_nfcNdefParser->parseNdefMessage(message), fileName);
     stoppedTagInteraction();
 }
 

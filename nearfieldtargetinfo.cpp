@@ -52,6 +52,7 @@ NearFieldTargetInfo::NearFieldTargetInfo()
   */
 void NearFieldTargetInfo::resetInfo()
 {
+    tagTypeName = "";
     tagMajorVersion = 0;
     tagMinorVersion = 0;
     tagMemorySize = -1;

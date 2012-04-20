@@ -61,7 +61,8 @@ QString NfcTargetAnalyzer::analyzeTarget(QNearFieldTarget* target)
     m_tagInfo.resetInfo();
 
     // Tag type
-    nfcInfo.append("Target type: " + convertTagTypeToString(target->type()) + "\n");
+    m_tagInfo.tagTypeName = convertTagTypeToString(target->type());
+    nfcInfo.append("Target type: " + m_tagInfo.tagTypeName + "\n");
     // Tag UID
     QString uidString = QVariant(target->uid().toHex()).toString();
     nfcInfo.append("UID: " + uidString + "\n");

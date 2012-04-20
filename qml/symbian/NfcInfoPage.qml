@@ -45,9 +45,10 @@ import Nfc 1.0
 
 Page {
 
-    function logMessage(text, color, img)
+    function logMessage(text, color, img, nfcDataFileName)
     {
-        messageModel.append( {"infoMsg": text, "textColor": color, "image": img} )
+        nfcDataFileName = typeof nfcDataFileName !== 'undefined' ? nfcDataFileName : "";
+        messageModel.append( {"infoMsg": text, "textColor": color, "image": img, "nfcDataFileName": nfcDataFileName} )
     }
 
     ListModel {
@@ -68,6 +69,8 @@ Page {
         delegate: listDelegate
         highlight: highlight
         highlightFollowsCurrentItem: true
+        focus: true
+        currentIndex: -1
         //anchors.fill: parent
         anchors {
             top: iaaLoader.bottom
@@ -113,13 +116,39 @@ Page {
                     anchors.rightMargin: customPlatformStyle.paddingSmall
                 }
             }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    if (nfcDataFileName) {
+                        itemMenu.open()
+                        messageView.currentIndex = index
+                    }
+                }
+            }
         }
     }
 
+    ContextMenu {
+        id: itemMenu
+        MenuLayout {
+            MenuItem {
+                // Open in compose tag view
+                // Only edits supported contents
+                text: "Edit"
+                //onClicked:
+            }
+            MenuItem {
+                // Go right to write mode to create a 1:1 copy of the tag
+                text: "Clone"
+                //onClicked:
+            }
+        }
+    }
     Component {
         id: highlight
         Rectangle {
-            color: "lightsteelblue"
+            color: "steelblue"
+            opacity: 0.5
         }
     }
 

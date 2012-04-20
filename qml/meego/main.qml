@@ -82,15 +82,15 @@ PageStackWindow {
         Component.onCompleted: initNfc()
 
         // Add a message to the model
-        function logMessage(text, color, img)
+        function logMessage(text, color, img, nfcDataFileName)
         {
-            nfcInfoPage.logMessage(text, color, img)
+            nfcInfoPage.logMessage(text, color, img, nfcDataFileName)
         }
 
         // Add an image to the model (message with empty text but custom image)
         function logImage(imgId)
         {
-            nfcInfoPage.logMessage("", "white", ("image://nfcimageprovider/"+imgId))
+            nfcInfoPage.logMessage("", "white", ("image://nfcimageprovider/"+imgId), "")
         }
 
         onNfcStatusUpdate: {
@@ -106,7 +106,7 @@ PageStackWindow {
             logMessage(nfcInfoText, "aquamarine", "nfcSymbolTag.png");
         }
         onNfcTagContents: {
-            logMessage(nfcTagContents, "lightskyblue", "nfcSymbolTag.png");
+            logMessage(nfcTagContents, "lightskyblue", "nfcSymbolTag.png", nfcDataFileName);
         }
         onNfcTagImage: {
             logImage(nfcImgId);

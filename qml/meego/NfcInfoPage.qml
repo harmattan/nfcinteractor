@@ -45,9 +45,10 @@ import Nfc 1.0
 
 Page {
 
-    function logMessage(text, color, img)
+    function logMessage(text, color, img, nfcDataFileName)
     {
-        messageModel.append( {"infoMsg": text, "textColor": color, "image": img} )
+        nfcDataFileName = typeof nfcDataFileName !== 'undefined' ? nfcDataFileName : "";
+        messageModel.append( {"infoMsg": text, "textColor": color, "image": img, "nfcDataFileName": nfcDataFileName} )
     }
 
     ListModel {

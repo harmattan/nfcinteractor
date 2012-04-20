@@ -69,6 +69,11 @@
 
 #include "tagimagecache.h"
 
+// Logging tags to files
+#include <QDir>
+#include <QFile>
+#include <QDateTime>
+
 // Record model for writing
 #include "nfcrecordmodel.h"
 #include "nfcrecorditem.h"
@@ -147,7 +152,7 @@ signals:
     /*! Finished interacting with the tag. */
     void nfcStoppedTagInteraction();
     /*! Contents of the NDEF message found on the tag. */
-    void nfcTagContents(const QString& nfcTagContents);
+    void nfcTagContents(const QString& nfcTagContents, const QString& nfcDataFileName);
     /*! The tag contained an image. The parameter contains
       the image id that can be used to fetch it from the
       tag image cache class. */
@@ -250,9 +255,19 @@ private:
       analysis phase can include multiple individual requests. */
     NfcRequestStatus m_cachedRequestType;
 
+    /*! Is unlimited advanced tag writing enabled. */
     bool m_unlimitedAdvancedMsgs;
+    /*! Whether the cached message that is waiting to be written contains
+      an advanced record. */
     bool m_cachedNdefContainsAdvMsg;
+    /*! Statistics for reading and writing tags. */
     NfcStats* m_nfcStats;
+
+    /*! Is logging of read tags to files enabled. */
+    bool m_logNdefToFile;
+    /*! If logging tags to files is enabled, in which directory so store them. */
+    QString m_logNdefDir;
+
 
     /*! Needed on MeeGo Harmattan to raise the app to the foreground when
       it's autostarted. */

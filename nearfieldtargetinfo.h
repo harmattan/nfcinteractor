@@ -70,7 +70,7 @@ private:
     NearFieldTargetInfo::NfcTagAccessStatus combineAccess(const NfcTagAccessStatus accessCC, const NfcTagAccessStatus accessLockBits) const;
 
 public:
-
+    QString tagTypeName;
     int tagMajorVersion;
     int tagMinorVersion;
     int tagMemorySize;
@@ -80,6 +80,7 @@ public:
     NfcTagAccessStatus tagReadAccessLockBits;
     NfcTagAccessStatus tagWriteAccessLockBits;
     NfcTagMemoryType tagMemoryType;
+
 };
 
 
