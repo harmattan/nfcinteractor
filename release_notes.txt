@@ -36,6 +36,7 @@ Tag writing:
   - Social Network record: enter the username and choose the network to create a link to follow you. Creates a URI or Smart Poster, depending on if you add an optional title.
   - Business card record: select the data to include from a wealth of available fields, and create your own business card based on the universal vCard standard. Integrates with the Qt Mobility Contacts APIs. Note: usually large tag size requirements.
   - Geo record: enter coordinates and select the Geo Tag type. Supports Geo URI (RFC 5870), Nokia Maps links and a generic redirection script that enables Geo tags on Symbian and MeeGo, hosted at nfcinteractor.com*. Integrates with the Qt Mobility Location APIs for the coordinates. Creates a URI or Smart Poster, depending on if you add an optional title.
+  - Image record: write an image from the file system of your mobile phone to the tag.
   - App Store record: generate a download link to an app store. Creates a direct store link if one ID is specified, or a generic link using a platform detection script at nfcinteractor.com* if more app ids are specified. For Nokia, either specify a generic Nokia Store ID if it's the same for all platforms, or instead specify an own ID for Symbian, MeeGo Harmattan and if needed Series 40. Creates a URI or Smart Poster, depending on if you add an optional title.
   - SMS record: enter number and body to create a working SMS link, useful for example to request information services or for payment via SMS. Creates a URI or Smart Poster, depending on if you add an optional title.
   - Smart Posters: has to contain at least a URI, optionally an unlimited amount of titles in different languages, a recommended action and information about the linked content (size and MIME type).
@@ -48,7 +49,7 @@ Easily reusable code for developers including:
 - Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2**)
 
 Known bugs / issues (work-in-progress):
-- Create settings screen to select folder for images, at least on Symbian where ".." item isn't available in the folder model - or add that ".." manually to the dialog (might be better choice)
+
 
 Ideas for future updates:
 - Tap on tag contents in info view to open it in edit mode (also allows cloning tags)
@@ -60,7 +61,6 @@ Ideas for future updates:
 - Check composed record contents for errors according to specifications
 - Use current location for geo tags (asynchronously updated UI)
 - Birthday support for contacts (date picker UI)
-- Image writing support (file selection UI)
 - Geocoding (enter address, write coordinates to the tag - interactive UI)
 - SNEP sending and receiving (through LLCP)
 - Refactor record item defaults out of nfcrecordmodel.cpp
