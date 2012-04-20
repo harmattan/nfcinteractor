@@ -2,7 +2,7 @@
 # normal version, also call the corresponding .bat
 # file if compiling for Harmattan, to change the
 # names in the debian package files!
-#DEFINES += UNLIMITED_VERSION
+DEFINES += UNLIMITED_VERSION
 
 # When compiling for publishing the app, activate this
 # to change to the 0x2... UID and the right UID for the
@@ -11,7 +11,7 @@
 # For self signed versions, remove / comment the following line.
 # Note: IAA on Symbian requires DEPLOY_VERSION to be set.
 # Use a developer certificate during development for Symbian IAA.
-DEFINES += DEPLOY_VERSION
+#DEFINES += DEPLOY_VERSION
 
 # Define for detecting Harmattan in .cpp files.
 # Only needed for experimental / beta Harmattan SDKs.
@@ -73,42 +73,42 @@ OTHER_FILES += \
 # The .cpp file which was generated for your project. Feel free to hack it.
 SOURCES += main.cpp \
     nfcinfo.cpp \
-    ndefnfcsprecord.cpp \
-    ndefnfcmimevcardrecord.cpp \
+    nearfieldtargetinfo.cpp \
+    nfctargetanalyzer.cpp \
     tagimagecache.cpp \
-    ndefnfcmimeimagerecord.cpp \
     nfcrecordmodel.cpp \
     nfcrecorditem.cpp \
     nfcmodeltondef.cpp \
-    nfctargetanalyzer.cpp \
     nfcndefparser.cpp \
-    ndefnfcgeorecord.cpp \
-    ndefnfcsmarturirecord.cpp \
-    ndefnfcsmsrecord.cpp \
-    nearfieldtargetinfo.cpp \
-    ndefnfcsocialrecord.cpp \
-    ndefnfcstorelinkrecord.cpp \
-    nfcstats.cpp
+    nfcstats.cpp \
+    ndefnfcrecords/ndefnfcsprecord.cpp \
+    ndefnfcrecords/ndefnfcmimeimagerecord.cpp \
+    ndefnfcrecords/ndefnfcmimevcardrecord.cpp \
+    ndefnfcrecords/ndefnfcgeorecord.cpp \
+    ndefnfcrecords/ndefnfcsmarturirecord.cpp \
+    ndefnfcrecords/ndefnfcsmsrecord.cpp \
+    ndefnfcrecords/ndefnfcsocialrecord.cpp \
+    ndefnfcrecords/ndefnfcstorelinkrecord.cpp
 
 HEADERS += \
     nfcinfo.h \
-    ndefnfcsprecord.h \
-    ndefnfcmimevcardrecord.h \
+    nearfieldtargetinfo.h \
+    nfctargetanalyzer.h \
     tagimagecache.h \
-    ndefnfcmimeimagerecord.h \
-    nfctypes.h \
     nfcrecordmodel.h \
     nfcrecorditem.h \
     nfcmodeltondef.h \
-    nfctargetanalyzer.h \
     nfcndefparser.h \
+    nfcstats.h \
+    nfctypes.h \
+    ndefnfcsprecord.h \
+    ndefnfcmimeimagerecord.h \
+    ndefnfcmimevcardrecord.h \
     ndefnfcgeorecord.h \
     ndefnfcsmarturirecord.h \
     ndefnfcsmsrecord.h \
-    nearfieldtargetinfo.h \
     ndefnfcsocialrecord.h \
-    ndefnfcstorelinkrecord.h \
-    nfcstats.h
+    ndefnfcstorelinkrecord.h
 
 simulator {
     # The simulator uses the QML and images from Symbian,
