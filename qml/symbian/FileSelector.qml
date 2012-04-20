@@ -53,10 +53,19 @@ SelectionDialog {
         if (index === 0) {
             // Up
             var folder = new String(folderModel.folder);
-            console.log("Up from: " + folder);
-            console.log("Last index of '/': " + folder.lastIndexOf('/'));
-            folderModel.folder = folder.substring(0, folder.lastIndexOf('/'));
-            console.log("Now: " + folderModel.folder)
+            // Only navigate up if not already at the top level
+            if (folder !== "file://") {
+                if (folder.lastIndexOf('/') === folder.length - 1) {
+                    // "/" at the end of the path name - remove last "/"
+                    // Normally, path names are without "/" at the end, only
+                    // when at directory level it seems to be there
+                    // (e.g., for "file:///D:/")
+                    folder = folder.substring(0, folder.lastIndexOf('/'));
+                }
+                // Remove last part of the directory and set as new folder
+                // for the file model
+                folderModel.folder = folder.substring(0, folder.lastIndexOf('/'));
+            }
         } else {
             // Cancel
             reject();
