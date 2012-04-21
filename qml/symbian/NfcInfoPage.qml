@@ -122,6 +122,7 @@ Page {
                     if (nfcDataFileName) {
                         itemMenu.open()
                         messageView.currentIndex = index
+                        console.log(nfcDataFileName);
                     }
                 }
             }
@@ -135,12 +136,17 @@ Page {
                 // Open in compose tag view
                 // Only edits supported contents
                 text: "Edit"
-                //onClicked:
             }
             MenuItem {
                 // Go right to write mode to create a 1:1 copy of the tag
                 text: "Clone"
-                //onClicked:
+                onClicked: {
+                    nfcInfo.nfcWriteTag(messageModel.get(messageView.currentIndex).nfcDataFileName, true);
+                    if (writeTagPageLoader.status === Loader.Ready) {
+                        writeTagPageLoader.item.resetPage();
+                        pageStack.push(writeTagPageLoader.item);
+                    }
+                }
             }
         }
     }
