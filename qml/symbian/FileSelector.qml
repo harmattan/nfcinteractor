@@ -3,7 +3,7 @@ import com.nokia.symbian 1.1 // Symbian Qt Quick components
 import Qt.labs.folderlistmodel 1.0
 
 SelectionDialog {
-    //id: fileSelectionDialog
+    id: fileSelectionDialog
     titleText: "Select image..."
     property string selectedFileName;
     property string selectedFilePath;
