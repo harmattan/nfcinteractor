@@ -50,7 +50,7 @@ NfcInfo::NfcInfo(QObject *parent) :
     m_cachedNdefMessageSize(0),
     m_cachedRequestType(NfcIdle),
     m_unlimitedAdvancedMsgs(true),
-    m_logNdefToFile(false),
+    m_logNdefToFile(true),
     m_harmattanPr10(false)
 {
 #if defined(MEEGO_EDITION_HARMATTAN)
@@ -377,7 +377,15 @@ void NfcInfo::ndefMessageRead(const QNdefMessage &message)
     QString fileName = "";
     if (m_logNdefToFile) {
         // Store tag contents to the log file if enabled
-        m_logNdefDir = "E:/nfc";    // TODO: testing only
+#if defined(Q_OS_SYMBIAN)
+        m_logNdefDir = "E:/nfc/";    // TODO: testing only
+#elif defined(MEEGO_EDITION_HARMATTAN)
+        m_logNdefDir = "/home/user/MyDocs/nfc/";    // TODO: testing only
+#elif defined(QT_SIMULATOR)
+        m_logNdefDir = "C:/nfc/";    // TODO: testing only
+#endif
+        QDir dir("/");
+        dir.mkpath(m_logNdefDir);
         if (QDir::setCurrent(m_logNdefDir)) {
             // Generate file name
             QDateTime now = QDateTime::currentDateTime();
@@ -409,8 +417,6 @@ void NfcInfo::ndefMessageRead(const QNdefMessage &message)
   \brief Create the message for writing to the tag and attempt
   to write it.
 
-  This method will be extended in future releases of this app.
-
   \param writeOneTagOnly automatically switch back to tag reading
   mode after writing one tag, or stay in tag writing mode and also
   write the same message to further targets.
@@ -424,14 +430,15 @@ void NfcInfo::ndefMessageRead(const QNdefMessage &message)
   */
 bool NfcInfo::nfcWriteTag(const bool writeOneTagOnly)
 {
+    // Convert the model into a NDEF message
+    QNdefMessage* message = recordModel()->convertToNdefMessage();
+    m_cachedNdefContainsAdvMsg = recordModel()->containsAdvMsg();
+
+    // Set to writing mode
     emit nfcModeChanged(NfcTypes::nfcWriting);
     if (m_harmattanPr10) {
         m_nfcManager->setTargetAccessModes(QNearFieldManager::NdefWriteTargetAccess);
     }
-
-    // Convert the model into a NDEF message
-    QNdefMessage* message = recordModel()->convertToNdefMessage();
-    m_cachedNdefContainsAdvMsg = recordModel()->containsAdvMsg();
 
     QByteArray rawMessage = message->toByteArray();
     emit nfcStatusUpdate("Created message (size: " + QString::number(rawMessage.size()) + " bytes)");
@@ -442,6 +449,75 @@ bool NfcInfo::nfcWriteTag(const bool writeOneTagOnly)
     m_cachedNdefMessageSize = m_cachedNdefMessage->toByteArray().size();
     m_pendingWriteNdef = true;
     m_writeOneTagOnly = writeOneTagOnly;
+    return writeCachedNdefMessage();
+}
+
+/*!
+  \brief Load an NDEF message from a file and attempt
+  to write it.
+
+  The specified file has to contain the raw and complete NDEF
+  message contents.
+
+  \param fileName data file that contains the complete, binary
+  contents of an NDEF message.
+
+  \param writeOneTagOnly automatically switch back to tag reading
+  mode after writing one tag, or stay in tag writing mode and also
+  write the same message to further targets.
+
+  \return if it was already possible to write to the tag. If
+  false is returned, the message is cached and will be written
+  when a writable target is available. Only one message is cached;
+  if this method is called a second time before the first message
+  is actually written to a tag, the old message will be discarded
+  and only the later one written to the tag.
+  Additionally, false can also be returned if loading or parsing
+  the file was not successful. In this case, the method will also
+  emit nfcTagWriteError() with the error message, and does not
+  switch the class to write mode.
+  */
+bool NfcInfo::nfcWriteTag(const QString& fileName, const bool writeOneTagOnly)
+{
+    qDebug() << "Write tag: " << fileName;
+    if (fileName.isEmpty()) {
+        emit nfcTagWriteError("No file name specified");
+        return false;
+    }
+    // Load the NDEF message from the specified file name
+    QFile tagFile(fileName);
+    if (!tagFile.open(QIODevice::ReadOnly)) {
+        emit nfcTagWriteError("Unable to open file: " + fileName);
+        return false;
+    }
+    QByteArray rawMessage = tagFile.readAll();
+    tagFile.close();
+    if (rawMessage.isEmpty()) {
+        // Check if reading the file was successful
+        emit nfcTagWriteError("Unable to load file: " + fileName);
+        return false;
+    }
+    emit nfcStatusUpdate("Loaded message (size: " + QString::number(rawMessage.size()) + " bytes)");
+    QNdefMessage message = QNdefMessage::fromByteArray(rawMessage);
+    if (message.isEmpty()) {
+        // Unable to create an NDEF message from the file
+        emit nfcTagWriteError("Unable to create NDEF message from file: " + fileName);
+        return false;
+    }
+
+    // Set to writing mode
+    emit nfcModeChanged(NfcTypes::nfcWriting);
+    if (m_harmattanPr10) {
+        m_nfcManager->setTargetAccessModes(QNearFieldManager::NdefWriteTargetAccess);
+    }
+
+    // Write the message (containing either a URL or plain text) to the target.
+    if (m_cachedNdefMessage) { delete m_cachedNdefMessage; }
+    m_cachedNdefMessage = new QNdefMessage(message);
+    m_cachedNdefMessageSize = m_cachedNdefMessage->toByteArray().size();
+    m_pendingWriteNdef = true;
+    m_writeOneTagOnly = writeOneTagOnly;
+
     return writeCachedNdefMessage();
 }
 

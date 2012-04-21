@@ -176,6 +176,7 @@ public slots:
     bool checkNfcStatus();
     bool initAndStartNfc();
     bool nfcWriteTag(const bool writeOneTagOnly);
+    bool nfcWriteTag(const QString &fileName, const bool writeOneTagOnly);
     void nfcStopWritingTags();
     NfcRecordModel* recordModel() const;
 public:
