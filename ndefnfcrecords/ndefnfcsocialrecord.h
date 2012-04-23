@@ -24,7 +24,7 @@ QTM_USE_NAMESPACE
   adding Smart Poster information (like a title), the payload
   instantly transforms into a Smart Poster.
 
-  \version 1.1.0
+  \version 1.2.0
   */
 class NdefNfcSocialRecord : public NdefNfcSmartUriRecord
 {
