@@ -41,7 +41,7 @@ symbian {
         # In App Purchasing APIs only available on the Symbian platform
         DEFINES += USE_IAP
         # Enables test mode for IAP
-        #DEFINES += IAP_TEST_MODE
+        DEFINES += IAP_TEST_MODE
         # In App Advertising
         DEFINES += USE_IAA
     }
@@ -101,14 +101,14 @@ HEADERS += \
     nfcndefparser.h \
     nfcstats.h \
     nfctypes.h \
-    ndefnfcsprecord.h \
-    ndefnfcmimeimagerecord.h \
-    ndefnfcmimevcardrecord.h \
-    ndefnfcgeorecord.h \
-    ndefnfcsmarturirecord.h \
-    ndefnfcsmsrecord.h \
-    ndefnfcsocialrecord.h \
-    ndefnfcstorelinkrecord.h
+    ndefnfcrecords/ndefnfcsprecord.h \
+    ndefnfcrecords/ndefnfcmimeimagerecord.h \
+    ndefnfcrecords/ndefnfcmimevcardrecord.h \
+    ndefnfcrecords/ndefnfcgeorecord.h \
+    ndefnfcrecords/ndefnfcsmarturirecord.h \
+    ndefnfcrecords/ndefnfcsmsrecord.h \
+    ndefnfcrecords/ndefnfcsocialrecord.h \
+    ndefnfcrecords/ndefnfcstorelinkrecord.h
 
 simulator {
     # The simulator uses the QML and images from Symbian,
