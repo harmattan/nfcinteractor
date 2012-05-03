@@ -69,7 +69,7 @@ NfcInfo::NfcInfo(QObject *parent) :
     m_nfcRecordModel->setNfcStats(m_nfcStats);
     connect(m_nfcRecordModel, SIGNAL(recordItemsModified()), this, SLOT(nfcRecordModelChanged()));
     m_nfcTargetAnalyzer = new NfcTargetAnalyzer(this);
-    m_nfcNdefParser = new NfcNdefParser(this);
+    m_nfcNdefParser = new NfcNdefParser(m_nfcRecordModel, this);
     // Relay the signal when the private ndef parser found an image,
     // so that the QML UI can react to this.
     // Images are stored in the m_imgCache variable; both this and
@@ -479,29 +479,10 @@ bool NfcInfo::nfcWriteTag(const bool writeOneTagOnly)
   */
 bool NfcInfo::nfcWriteTag(const QString& fileName, const bool writeOneTagOnly)
 {
-    qDebug() << "Write tag: " << fileName;
-    if (fileName.isEmpty()) {
-        emit nfcTagWriteError("No file name specified");
-        return false;
-    }
-    // Load the NDEF message from the specified file name
-    QFile tagFile(fileName);
-    if (!tagFile.open(QIODevice::ReadOnly)) {
-        emit nfcTagWriteError("Unable to open file: " + fileName);
-        return false;
-    }
-    QByteArray rawMessage = tagFile.readAll();
-    tagFile.close();
-    if (rawMessage.isEmpty()) {
-        // Check if reading the file was successful
-        emit nfcTagWriteError("Unable to load file: " + fileName);
-        return false;
-    }
-    emit nfcStatusUpdate("Loaded message (size: " + QString::number(rawMessage.size()) + " bytes)");
-    QNdefMessage message = QNdefMessage::fromByteArray(rawMessage);
+    QNdefMessage message = loadNdefFromFile(fileName);
     if (message.isEmpty()) {
-        // Unable to create an NDEF message from the file
-        emit nfcTagWriteError("Unable to create NDEF message from file: " + fileName);
+        // Error while loading from the file - don't switch to writing mode.
+        // Error info has already been emitted by loading method.
         return false;
     }
 
@@ -519,6 +500,58 @@ bool NfcInfo::nfcWriteTag(const QString& fileName, const bool writeOneTagOnly)
     m_writeOneTagOnly = writeOneTagOnly;
 
     return writeCachedNdefMessage();
+}
+
+/*!
+  \brief Load tag contents from file name and put contents into
+  the record model for editing.
+
+  \param fileName data file that contains the complete, binary
+  contents of an NDEF message.
+  */
+bool NfcInfo::nfcEditTag(const QString& fileName)
+{
+    QNdefMessage message = loadNdefFromFile(fileName);
+    if (message.isEmpty()) {
+        // Error while loading from the file - don't switch to writing mode.
+        // Error info has already been emitted by loading method.
+        return false;
+    }
+    // Parse contents of the message into the record model
+    m_nfcNdefParser->setParseToModel(true);
+    m_nfcNdefParser->parseNdefMessage(message);
+    m_nfcNdefParser->setParseToModel(false);
+    return true;
+}
+
+QNdefMessage NfcInfo::loadNdefFromFile(const QString& fileName)
+{
+    qDebug() << "Load tag: " << fileName;
+    if (fileName.isEmpty()) {
+        emit nfcTagWriteError("No file name specified");
+        return QNdefMessage();
+    }
+    // Load the NDEF message from the specified file name
+    QFile tagFile(fileName);
+    if (!tagFile.open(QIODevice::ReadOnly)) {
+        emit nfcTagWriteError("Unable to open file: " + fileName);
+        return QNdefMessage();
+    }
+    QByteArray rawMessage = tagFile.readAll();
+    tagFile.close();
+    if (rawMessage.isEmpty()) {
+        // Check if reading the file was successful
+        emit nfcTagWriteError("Unable to load file: " + fileName);
+        return QNdefMessage();
+    }
+    emit nfcStatusUpdate("Loaded message (size: " + QString::number(rawMessage.size()) + " bytes)");
+    QNdefMessage message = QNdefMessage::fromByteArray(rawMessage);
+    if (message.isEmpty()) {
+        // Unable to create an NDEF message from the file
+        emit nfcTagWriteError("Unable to create NDEF message from file: " + fileName);
+        return QNdefMessage();
+    }
+    return message;
 }
 
 /*!
