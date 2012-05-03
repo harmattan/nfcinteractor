@@ -108,17 +108,22 @@ public slots:
     void addRecordItem(NfcRecordItem *newRecordItem);
 
     void insertRecordItem(const int row, NfcRecordItem *newRecordItem);
+    int simpleAppendRecordHeaderItem(const NfcTypes::MessageType messageType, const bool addVisible);
+    void simpleAppendRecordHeaderItem(const NfcTypes::MessageType messageType, const bool addVisible, const int recordId);
     /** Creates and inserts a new record item, using defaults for some of the most common info (remove is visible, add is invisible). */
-    void simpleInsertRecordItem(const int insertPosition, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const bool removeVisible, const int parentRecordId);
+    void simpleInsertRecordItem(const int insertPosition, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const QString &currentText, const bool removeVisible, const int parentRecordId);
     void simpleAppendRecordItem(const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const bool removeVisible, const int parentRecordId);
+    void simpleAppendRecordItem(const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const QString& currentText, const bool removeVisible, const int parentRecordId);
     void getDefaultsForRecordContent(const NfcTypes::MessageType msgType, const NfcTypes::RecordContent contentType, QString &defaultTitle, QString &defaultContents);
     QVariantList getSelectionItemsForRecordContent(const NfcTypes::RecordContent contentType, int &defaultSelectedItem);
 
     void addContentToRecord(int recordIndex, int messageTypeInt, int newContentType);
+    void addContentToLastRecord(NfcTypes::RecordContent contentType, const QString &currentText, const bool removeVisible);
     bool isContentInRecord(const int recordIndex, const NfcTypes::RecordContent searchForRecordContent);
     bool isContentInRecord(const int recordIndex, const int searchForRecordContent);
 
     void removeRecord(const int removeRecordIndex);
+    void clear();
 
     int findHeaderForIndex(const int recordIndex);
     int nextAvailableRecordId();

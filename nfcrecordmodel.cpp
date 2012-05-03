@@ -203,45 +203,45 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
     //qDebug() << "Add new complete record with default content for type: " << messageTypeInt;
     switch (messageType) {
     case NfcTypes::MsgSmartPoster:
-        addRecord("Smart Poster Record", NfcTypes::MsgSmartPoster, NfcTypes::RecordHeader, "", true, true, recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgSmartPoster, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordUri, false,  recordId);
         simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordText, true,  recordId);
         simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordTextLanguage, false,  recordId);
         break;
     case NfcTypes::MsgUri:
-        addRecord("URI Record", NfcTypes::MsgUri, NfcTypes::RecordHeader, "", true, false, recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgUri, false, recordId);
         simpleAppendRecordItem(NfcTypes::MsgUri, NfcTypes::RecordUri, false,  recordId);
         break;
     case NfcTypes::MsgText:
-        addRecord("Text Record", NfcTypes::MsgText, NfcTypes::RecordHeader, "", true, false, recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgText, false, recordId);
         simpleAppendRecordItem(NfcTypes::MsgText, NfcTypes::RecordText, false,  recordId);
         simpleAppendRecordItem(NfcTypes::MsgText, NfcTypes::RecordTextLanguage, false,  recordId);
         break;
     case NfcTypes::MsgSms:
-        addRecord("SMS Record", NfcTypes::MsgSms, NfcTypes::RecordHeader, "", true, true, recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgSms, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgSms, NfcTypes::RecordPhoneNumber, false,  recordId);
         simpleAppendRecordItem(NfcTypes::MsgSms, NfcTypes::RecordSmsBody, false,  recordId);
         break;
     case NfcTypes::MsgBusinessCard:
-        addRecord("Business Card", NfcTypes::MsgBusinessCard, NfcTypes::RecordHeader, "", true, true, recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgBusinessCard, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgBusinessCard, NfcTypes::RecordFirstName, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgBusinessCard, NfcTypes::RecordLastName, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgBusinessCard, NfcTypes::RecordPhoneNumber, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgBusinessCard, NfcTypes::RecordEmailAddress, true, recordId);
         break;
     case NfcTypes::MsgSocialNetwork:
-        addRecord("Social Network", NfcTypes::MsgSocialNetwork, NfcTypes::RecordHeader, "", true, true, recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgSocialNetwork, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgSocialNetwork, NfcTypes::RecordSocialNetworkType, false, recordId);
         simpleAppendRecordItem(NfcTypes::MsgSocialNetwork, NfcTypes::RecordSocialNetworkName, false, recordId);
         break;
     case NfcTypes::MsgGeo: {
-        addRecord("Geo Record", NfcTypes::MsgGeo, NfcTypes::RecordHeader, "", true, true, recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgGeo, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgGeo, NfcTypes::RecordGeoType, false, recordId);
         simpleAppendRecordItem(NfcTypes::MsgGeo, NfcTypes::RecordGeoLatitude, false, recordId);
         simpleAppendRecordItem(NfcTypes::MsgGeo, NfcTypes::RecordGeoLongitude, false, recordId);
         break; }
     case NfcTypes::MsgStore: {
-        addRecord("Store Record", NfcTypes::MsgStore, NfcTypes::RecordHeader, "", true, true, recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgStore, true, recordId);
         // Have a different default store type depending on if the app is executed
         // on Symbian or MeeGo
 #ifdef MEEGO_EDITION_HARMATTAN
@@ -251,39 +251,36 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
 #endif
         break; }
     case NfcTypes::MsgImage:
-        addRecord("Image Record", NfcTypes::MsgImage, NfcTypes::RecordHeader, "", true, false, recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgImage, false, recordId);
         simpleAppendRecordItem(NfcTypes::MsgImage, NfcTypes::RecordImageFilename, false,  recordId);
         break;
     case NfcTypes::MsgAnnotatedUrl:
-        addRecord("URI Record", NfcTypes::MsgUri, NfcTypes::RecordHeader, "", true, false, recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgUri, false, recordId);
         simpleAppendRecordItem(NfcTypes::MsgUri, NfcTypes::RecordUri, false,  recordId);
-        addRecord("Text Record", NfcTypes::MsgText, NfcTypes::RecordHeader, "", true, false, recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgText, false, recordId);
         simpleAppendRecordItem(NfcTypes::MsgText, NfcTypes::RecordText, false,  recordId);
         simpleAppendRecordItem(NfcTypes::MsgText, NfcTypes::RecordTextLanguage, false,  recordId);
         break;
     case NfcTypes::MsgCustom:
-        addRecord("Custom Record", NfcTypes::MsgCustom, NfcTypes::RecordHeader, "", true, true, recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgCustom, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeNameFormat, false,  recordId);
         simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeName, true,  recordId);
         break;
     case NfcTypes::MsgCombination:
-        addRecord("Custom Record", NfcTypes::MsgCustom, NfcTypes::RecordHeader, "", true, true, recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgCustom, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeNameFormat, false,  recordId);
         simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeName, true,  recordId);
-        addRecord("URI Record", NfcTypes::MsgUri, NfcTypes::RecordHeader, "", true, false, recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgUri, false, recordId);
         simpleAppendRecordItem(NfcTypes::MsgUri, NfcTypes::RecordUri, false,  recordId);
         break;
     case NfcTypes::MsgNfcAutostart:
-        addRecord("Custom Record", NfcTypes::MsgCustom, NfcTypes::RecordHeader, "", true, true, recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgCustom, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeNameFormat, false,  recordId);
-        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeName, true,  recordId);
-        m_recordItems.last()->setCurrentText("nokia.com:nfcinteractor");
-        addRecord("Store Record", NfcTypes::MsgStore, NfcTypes::RecordHeader, "", true, true, recordId);
-        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordStoreCustomName, true, recordId);
-        m_recordItems.last()->setCurrentText("ni");
+        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeName, "nokia.com:nfcinteractor", true,  recordId);
+        simpleAppendRecordHeaderItem(NfcTypes::MsgStore, true, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordStoreCustomName, "ni", true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordText, true,  recordId);
-        m_recordItems.last()->setCurrentText("Get App");
-        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordTextLanguage, false,  recordId);
+        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordTextLanguage, "Get App", false,  recordId);
         break;
     }
 }
@@ -328,6 +325,55 @@ Qt::ItemFlags NfcRecordModel::flags ( const QModelIndex & index ) const
     return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
 }
 
+int NfcRecordModel::simpleAppendRecordHeaderItem(const NfcTypes::MessageType messageType, const bool addVisible)
+{
+    const int recordId = nextAvailableRecordId();
+    simpleAppendRecordHeaderItem(messageType, addVisible, recordId);
+    return recordId;
+}
+
+void NfcRecordModel::simpleAppendRecordHeaderItem(const NfcTypes::MessageType messageType, const bool addVisible, const int recordId)
+{
+    QString itemText = "";
+    switch (messageType) {
+    case NfcTypes::MsgSmartPoster:
+        itemText = "Smart Poster Record";
+        break;
+    case NfcTypes::MsgUri:
+        itemText = "URI Record";
+        break;
+    case NfcTypes::MsgText:
+        itemText = "Text Record";
+        break;
+    case NfcTypes::MsgSms:
+        itemText = "SMS Record";
+        break;
+    case NfcTypes::MsgBusinessCard:
+        itemText = "Business Card";
+        break;
+    case NfcTypes::MsgSocialNetwork:
+        itemText = "Social Network";
+        break;
+    case NfcTypes::MsgGeo:
+        itemText = "Geo Record";
+        break;
+    case NfcTypes::MsgStore:
+        itemText = "Store Record";
+        break;
+    case NfcTypes::MsgImage:
+        itemText = "Image Record";
+        break;
+    case NfcTypes::MsgCustom:
+        itemText = "Custom Record";
+        break;
+    default:
+        qDebug() << "Unknown message type " << messageType << " in simpleAddRecordHeaderItem()";
+        break;
+    }
+
+    addRecord(itemText, messageType, NfcTypes::RecordHeader, "", true, addVisible, recordId);
+}
+
 /*!
   \brief Add a new record item to an existing message, using default types.
 
@@ -353,8 +399,8 @@ void NfcRecordModel::addContentToRecord(int recordIndex, int messageTypeInt, int
         // Add two items for the text record, therefore handle it here
         // and not in the generic simpleInsertRecordItem() method.
         // (text is always together with language)
-        simpleInsertRecordItem(insertPosition, messageType, NfcTypes::RecordTextLanguage, false, parentRecordId);
-        simpleInsertRecordItem(insertPosition, messageType, NfcTypes::RecordText, true, parentRecordId);
+        simpleInsertRecordItem(insertPosition, messageType, NfcTypes::RecordTextLanguage, QString(), false, parentRecordId);
+        simpleInsertRecordItem(insertPosition, messageType, NfcTypes::RecordText, QString(), true, parentRecordId);
         break;
     }
     case NfcTypes::RecordHeader:
@@ -364,7 +410,7 @@ void NfcRecordModel::addContentToRecord(int recordIndex, int messageTypeInt, int
     default:
     {
         // Any other item: add it using the default values
-        simpleInsertRecordItem(insertPosition, messageType, contentType, true, parentRecordId);
+        simpleInsertRecordItem(insertPosition, messageType, contentType, QString(), true, parentRecordId);
         break;
     }
 
@@ -380,16 +426,32 @@ void NfcRecordModel::addContentToRecord(int recordIndex, int messageTypeInt, int
     }
 }
 
+void NfcRecordModel::addContentToLastRecord(NfcTypes::RecordContent contentType, const QString& currentText, const bool removeVisible)
+{
+    const int prevRecordIndex = m_recordItems.size() - 1;
+    const int prevRecordId = m_recordItems[prevRecordIndex]->recordId();
+    const NfcTypes::MessageType prevMessageType = m_recordItems[prevRecordIndex]->messageType();
+    simpleAppendRecordItem(prevMessageType, contentType, currentText, removeVisible, prevRecordId);
+}
+
 /*!
   \brief Add a single item to the model using its defaults at the specified position.
+  Send a QString() to use the default contents, or specify the contents through
+  the parameter.
 
   Used by addContentToRecord().
   */
-void NfcRecordModel::simpleInsertRecordItem(const int insertPosition, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const bool removeVisible, const int parentRecordId)
+void NfcRecordModel::simpleInsertRecordItem(const int insertPosition, const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const QString& currentText, const bool removeVisible, const int parentRecordId)
 {
     QString defaultTitle;
     QString defaultContents;
     getDefaultsForRecordContent(messageType, contentType, defaultTitle, defaultContents);
+    // If contents for this item are specified, use those.
+    // Otherwise, use the defaults.
+    if (!currentText.isNull()) {
+        defaultContents = currentText;
+    }
+
     NfcRecordItem* newRecordItem = new NfcRecordItem(defaultTitle, messageType, contentType, defaultContents, removeVisible, false, parentRecordId, this);
     if (contentType == NfcTypes::RecordSpAction ||
             contentType == NfcTypes::RecordGeoType ||
@@ -404,13 +466,20 @@ void NfcRecordModel::simpleInsertRecordItem(const int insertPosition, const NfcT
     insertRecordItem(insertPosition, newRecordItem);
 }
 
-
 /*!
   \brief append a single item to the model using its defaults at the specified position.
   */
 void NfcRecordModel::simpleAppendRecordItem(const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const bool removeVisible, const int parentRecordId)
 {
-    simpleInsertRecordItem(rowCount(), messageType, contentType, removeVisible, parentRecordId);
+    simpleInsertRecordItem(rowCount(), messageType, contentType, QString(), removeVisible, parentRecordId);
+}
+
+/*!
+  \brief append a single item to the model using its default title and the given content at the specified position.
+  */
+void NfcRecordModel::simpleAppendRecordItem(const NfcTypes::MessageType messageType, const NfcTypes::RecordContent contentType, const QString& currentText, const bool removeVisible, const int parentRecordId)
+{
+    simpleInsertRecordItem(rowCount(), messageType, contentType, currentText, removeVisible, parentRecordId);
 }
 
 
@@ -556,6 +625,19 @@ void NfcRecordModel::removeRecordFromModel(const int removeRecordIndex)
     if (m_recordItems.size() > removeRecordIndex) {
         beginRemoveRows(QModelIndex(), removeRecordIndex, removeRecordIndex);
         m_recordItems.removeAt(removeRecordIndex);
+        endRemoveRows();
+        emit recordItemsModified();
+    }
+}
+
+/*!
+  \brief Remove all records from this model.
+  */
+void NfcRecordModel::clear()
+{
+    if (m_recordItems.size() > 0) {
+        beginRemoveRows(QModelIndex(), 0, m_recordItems.size());
+        m_recordItems.clear();
         endRemoveRows();
         emit recordItemsModified();
     }
