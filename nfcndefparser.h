@@ -42,6 +42,7 @@
 
 #include <QObject>
 #include <QDebug>
+#include "nfcrecordmodel.h"
 
 // Clipboard
 #include <QApplication>
@@ -84,7 +85,7 @@ class NfcNdefParser : public QObject
 {
     Q_OBJECT
 public:
-    explicit NfcNdefParser(QObject *parent = 0);
+    explicit NfcNdefParser(NfcRecordModel *nfcRecordModel, QObject *parent = 0);
     void setImageCache(TagImageCache* tagImageCache);
 
 signals:
@@ -98,6 +99,7 @@ public:
       as human-readable text. */
     QString parseNdefMessage(const QNdefMessage &message);
 
+    void setParseToModel(bool parseToModel);
 private:
     QString parseUriRecord(const QNdefNfcUriRecord &record);
     QString parseTextRecord(const QNdefNfcTextRecord &record);
@@ -116,6 +118,10 @@ private:
 private:
     /*! Used for storing images found on the tags. */
     TagImageCache* m_imgCache;    // Not owned by this class
+    bool m_parseToModel;
+    /*! Stores the editable records of the compose tag view.
+      Not owned by this class.*/
+    NfcRecordModel* m_nfcRecordModel;
 
     /*! Content that's currently stored in m_clipboardText.
       Used to prioritize what's going to be written to the clipboard,

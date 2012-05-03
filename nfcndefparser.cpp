@@ -40,14 +40,16 @@
 
 #include "nfcndefparser.h"
 
-NfcNdefParser::NfcNdefParser(QObject *parent) :
-    QObject(parent)
+NfcNdefParser::NfcNdefParser(NfcRecordModel* nfcRecordModel, QObject *parent) :
+    QObject(parent),
+    m_parseToModel(false),
+    m_nfcRecordModel(nfcRecordModel)
 {
 }
 
 
 /*!
-  Set the image cache to use for storing images retrieved
+  \brief Set the image cache to use for storing images retrieved
   from tags.
   \a tagImageCache instance of the image cache. This
   class will not take ownership of the instance!
@@ -56,6 +58,15 @@ void NfcNdefParser::setImageCache(TagImageCache *tagImageCache)
 {
     // Not owned by this class
     m_imgCache = tagImageCache;
+}
+
+/*!
+  \brief If enabled, additionally parse the contents of the NDEF
+  message to the record model.
+  */
+void NfcNdefParser::setParseToModel(bool parseToModel)
+{
+    m_parseToModel = parseToModel;
 }
 
 /*!
@@ -77,6 +88,11 @@ QString NfcNdefParser::parseNdefMessage(const QNdefMessage &message)
     const int msgSize = rawMessage.size();
     if (msgSize > 0) {
         tagContents.append("Message size: " + QString::number(msgSize) + " bytes\n");
+    }
+
+    // Clear model if set to parse to the record model as well
+    if (m_parseToModel) {
+        m_nfcRecordModel->clear();
     }
 
     // Go through all records in the message
@@ -213,6 +229,10 @@ QString NfcNdefParser::parseUriRecord(const QNdefNfcUriRecord& record)
     QString tagContents("[URI]\n");
     tagContents.append(record.uri().toString());
     storeClipboard(record.uri());
+    if (m_parseToModel) {
+        m_nfcRecordModel->simpleAppendRecordHeaderItem(NfcTypes::MsgUri, false);
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordUri, record.uri().toString(), false);
+    }
     return tagContents;
 }
 
@@ -229,6 +249,11 @@ QString NfcNdefParser::parseTextRecord(const QNdefNfcTextRecord& record)
     // Add the text info to the string, parsed by an extra method
     // as the same content is also present for example in the Smart Poster.
     tagContents.append(textRecordToString(record));
+    if (m_parseToModel) {
+        m_nfcRecordModel->simpleAppendRecordHeaderItem(NfcTypes::MsgText, false);
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordText, record.text(), false);
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordTextLanguage, record.locale(), false);
+    }
     return tagContents;
 }
 
@@ -258,9 +283,15 @@ QString NfcNdefParser::textRecordToString(const QNdefNfcTextRecord& textRecord)
 QString NfcNdefParser::parseSpRecord(const NdefNfcSpRecord& record)
 {
     QString tagContents("[Smart Poster]\n");
+    if (m_parseToModel) {
+        m_nfcRecordModel->simpleAppendRecordHeaderItem(NfcTypes::MsgSmartPoster, true);
+    }
 
     // Uri
     tagContents.append("Uri: " + record.uri().toString() + "\n");
+    if (m_parseToModel) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordUri, record.uri().toString(), false);
+    }
 
     // Title
     tagContents.append("Title count: " + QString::number(record.titleCount()) + "\n");
@@ -268,6 +299,10 @@ QString NfcNdefParser::parseSpRecord(const NdefNfcSpRecord& record)
     {
         foreach (QNdefNfcTextRecord curTitle, record.titles()) {
             tagContents.append(textRecordToString(curTitle));
+            if (m_parseToModel) {
+                m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordText, curTitle.text(), true);
+                m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordTextLanguage, curTitle.locale(), false);
+            }
         }
     }
 
@@ -291,18 +326,28 @@ QString NfcNdefParser::parseSpRecord(const NdefNfcSpRecord& record)
             break;
         }
         tagContents.append("Action: " + spActionString + "\n");
+        if (m_parseToModel) {
+            // TODO
+            //m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordSpAction, , true);
+        }
     }
 
     // Size
     if (record.sizeInUse())
     {
         tagContents.append("Size: " + QString::number(record.size()) + "\n");
+        if (m_parseToModel) {
+            m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordSpSize, QString::number(record.size()), true);
+        }
     }
 
     // Type
     if (record.mimeTypeInUse())
     {
         tagContents.append("Type: " + record.mimeType() + "\n");
+        if (m_parseToModel) {
+            m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordSpType, record.mimeType(), true);
+        }
     }
 
     // Image
@@ -323,6 +368,9 @@ QString NfcNdefParser::parseSpRecord(const NdefNfcSpRecord& record)
             } else {
                 qDebug() << "Image cache not set";
             }
+        }
+        if (m_parseToModel) {
+            // TODO
         }
     }
 
