@@ -136,6 +136,10 @@ Page {
                 // Open in compose tag view
                 // Only edits supported contents
                 text: "Edit"
+                onClicked: {
+                    nfcInfo.nfcEditTag(messageModel.get(messageView.currentIndex).nfcDataFileName);
+                    pageStack.push(composeTagPageLoader.item)
+                }
             }
             MenuItem {
                 // Go right to write mode to create a 1:1 copy of the tag
