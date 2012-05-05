@@ -60,6 +60,11 @@ void NfcNdefParser::setImageCache(TagImageCache *tagImageCache)
     m_imgCache = tagImageCache;
 }
 
+void NfcNdefParser::setAppSettings(AppSettings *appSettings)
+{
+    m_appSettings = appSettings;
+}
+
 /*!
   \brief If enabled, additionally parse the contents of the NDEF
   message to the record model.
@@ -103,6 +108,9 @@ QString NfcNdefParser::parseNdefMessage(const QNdefMessage &message)
         if (recordCount > 1) {
             // More than one record in the message?
             // -> show which one we're parsing now.
+            if (numRecord > 1) {
+                tagContents.append("\n");
+            }
             tagContents.append("Record " + QString::number(numRecord) + "/" + QString::number(recordCount) + "\n");
         }
 
@@ -176,46 +184,6 @@ QString NfcNdefParser::parseNdefMessage(const QNdefMessage &message)
     return tagContents;
 }
 
-void NfcNdefParser::storeClipboard(const QString& text, const QString& locale)
-{
-    if (m_clipboardContents == ClipboardUri ||
-            m_clipboardContents == ClipboardTextEn)  {
-        // Don't override clipboard if it already stores an URI or an English text
-        return;
-    }
-    // Empty clipboard so far, or nothing with higher priority stored -> store new
-    // text to clipboard
-    m_clipboardText = text;
-    // Set the contents to either contain text, or English text
-    // (which has higher priority than others; one language has to have
-    // highest priority if there are multiple languages stored on a tag,
-    // and English makes most sense).
-    m_clipboardContents = (locale.toLower() == "en") ? ClipboardTextEn : ClipboardText;
-}
-
-void NfcNdefParser::storeClipboard(const QUrl& uri)
-{
-    if (m_clipboardContents == ClipboardUri) {
-        // Already have an URI stored in the clipboard cache
-        return;
-    }
-    // Otherwise, storing the URI on the clipboard has higher priority than text
-    m_clipboardContents = ClipboardUri;
-    m_clipboardText = uri.toString();
-}
-
-void NfcNdefParser::setStoredClipboard()
-{
-    if (m_clipboardContents == ClipboardEmpty)
-        return;
-
-    QClipboard *clipboard = QApplication::clipboard();
-    if (clipboard) {
-        // We have new contents for sure - clear the clipboard first
-        clipboard->clear();
-        clipboard->setText(m_clipboardText);
-    }
-}
 
 /*!
   \brief Create a textual description of the contents of the
@@ -327,8 +295,7 @@ QString NfcNdefParser::parseSpRecord(const NdefNfcSpRecord& record)
         }
         tagContents.append("Action: " + spActionString + "\n");
         if (m_parseToModel) {
-            // TODO
-            //m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordSpAction, , true);
+            m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordSpAction, QString::number((int)record.action()), true);
         }
     }
 
@@ -370,7 +337,7 @@ QString NfcNdefParser::parseSpRecord(const NdefNfcSpRecord& record)
             }
         }
         if (m_parseToModel) {
-            // TODO
+            storeImageToFileForModel(spImageRecord, true);
         }
     }
 
@@ -392,6 +359,9 @@ QString NfcNdefParser::parseSpRecord(const NdefNfcSpRecord& record)
 QString NfcNdefParser::parseImageRecord(const NdefNfcMimeImageRecord& record)
 {
     QString tagContents("[Image]\n");
+    if (m_parseToModel) {
+        m_nfcRecordModel->simpleAppendRecordHeaderItem(NfcTypes::MsgImage, true);
+    }
 
     // Read image format (png, gif, jpg, etc.)
     QByteArray imgFormat = record.format();
@@ -415,6 +385,10 @@ QString NfcNdefParser::parseImageRecord(const NdefNfcMimeImageRecord& record)
         } else {
             tagContents.append("Error: Image cache not set\n");
         }
+    }
+
+    if (m_parseToModel) {
+        storeImageToFileForModel(record, false);
     }
 
     return tagContents;
@@ -515,4 +489,76 @@ QString NfcNdefParser::convertRecordTypeNameToString(const QNdefRecord::TypeName
         break;
     }
     return typeNameString;
+}
+
+void NfcNdefParser::storeClipboard(const QString& text, const QString& locale)
+{
+    if (m_clipboardContents == ClipboardUri ||
+            m_clipboardContents == ClipboardTextEn)  {
+        // Don't override clipboard if it already stores an URI or an English text
+        return;
+    }
+    // Empty clipboard so far, or nothing with higher priority stored -> store new
+    // text to clipboard
+    m_clipboardText = text;
+    // Set the contents to either contain text, or English text
+    // (which has higher priority than others; one language has to have
+    // highest priority if there are multiple languages stored on a tag,
+    // and English makes most sense).
+    m_clipboardContents = (locale.toLower() == "en") ? ClipboardTextEn : ClipboardText;
+}
+
+void NfcNdefParser::storeClipboard(const QUrl& uri)
+{
+    if (m_clipboardContents == ClipboardUri) {
+        // Already have an URI stored in the clipboard cache
+        return;
+    }
+    // Otherwise, storing the URI on the clipboard has higher priority than text
+    m_clipboardContents = ClipboardUri;
+    m_clipboardText = uri.toString();
+}
+
+void NfcNdefParser::setStoredClipboard()
+{
+    if (m_clipboardContents == ClipboardEmpty)
+        return;
+
+    QClipboard *clipboard = QApplication::clipboard();
+    if (clipboard) {
+        // We have new contents for sure - clear the clipboard first
+        clipboard->clear();
+        clipboard->setText(m_clipboardText);
+    }
+}
+
+/*!
+  \brief Save the image of an NDEF record to a file and add
+  an item to the record model with the filename.
+
+  \param imgRecord image record to extract the image from.
+  \param removeVisible if the remove button should be visible
+  in the view of the model. Recommended to set to false for an
+  image only record, or to true for a record where the image
+  is optional (e.g., Smart Poster).
+  */
+void NfcNdefParser::storeImageToFileForModel(const NdefNfcMimeImageRecord& imgRecord, const bool removeVisible)
+{
+    if (m_appSettings && m_appSettings->logNdefToFile()) {
+        // Save image to file
+        QDir dir("/");
+        QString fileName = "";
+        dir.mkpath(m_appSettings->logNdefDir());
+        if (QDir::setCurrent(m_appSettings->logNdefDir())) {
+            // Create image name based on current system time
+            QDateTime now = QDateTime::currentDateTime();
+            fileName = now.toString("yyyy.MM.dd - hh.mm.ss");
+            fileName.append(" - image");
+            QString imgFullFileName = imgRecord.saveImageToFile(fileName);
+            qDebug() << "Saved image to file: " << m_appSettings->logNdefDir() + imgFullFileName;
+
+            // Put image name to model
+            m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordImageFilename, m_appSettings->logNdefDir() + imgFullFileName, removeVisible);
+        }
+    }
 }

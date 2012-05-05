@@ -67,6 +67,11 @@
 #include <QVariantMap>
 #include <QContactThumbnail>
 
+// Logging tags/images to files
+#include <QDir>
+#include <QFile>
+#include <QDateTime>
+
 
 QTM_USE_NAMESPACE
 
@@ -87,6 +92,7 @@ class NfcNdefParser : public QObject
 public:
     explicit NfcNdefParser(NfcRecordModel *nfcRecordModel, QObject *parent = 0);
     void setImageCache(TagImageCache* tagImageCache);
+    void setAppSettings(AppSettings* appSettings);
 
 signals:
     /*! \brief The tag contained an image.
@@ -111,6 +117,7 @@ private:
     QString convertRecordTypeNameToString(const QNdefRecord::TypeNameFormat typeName);
 
 private:
+    void storeImageToFileForModel(const NdefNfcMimeImageRecord &imgRecord, const bool removeVisible);
     void storeClipboard(const QString &text, const QString &locale);
     void storeClipboard(const QUrl &uri);
     void setStoredClipboard();
@@ -135,6 +142,9 @@ private:
     };
     ClipboardContents m_clipboardContents;
     QString m_clipboardText;
+
+    /*! Persistent storageof application settings. Not owned by this class. */
+    AppSettings* m_appSettings;
 
 };
 
