@@ -21,7 +21,7 @@ Page {
     property alias logNdefDir: logNdefDirEdit.text
 
     onStatusChanged: {
-        if (status == PageStatus.Activating) {
+        if (status === PageStatus.Activating) {
             console.log("Activating page...");
             applySettingsToPage();
         }
