@@ -89,7 +89,7 @@ QTM_USE_NAMESPACE
       QImage img = imgRecord.image();
   }
 
-  \version 1.1.0
+  \version 1.2.0
   */
 class NdefNfcMimeImageRecord : public QNdefRecord
 {
@@ -107,6 +107,7 @@ public:
 
     QImage image() const;
     QByteArray imageRawData() const;
+    QString saveImageToFile(const QString &fileName) const;
 
     bool setImage(QByteArray &imageRawData);
     bool setImage(const QString &fileName);

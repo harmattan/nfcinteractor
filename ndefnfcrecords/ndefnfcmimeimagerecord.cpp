@@ -129,6 +129,44 @@ QByteArray NdefNfcMimeImageRecord::imageRawData() const
 }
 
 /*!
+  \brief Save the image contained in this record to a file.
+
+  \param fileName name of the image file to create.
+  Note: do not specify the file extension - this will be added
+  automatically, depending on the type of the image.
+  Only specify the full path + name of the image file, e.g.:
+  C:/nfc/myImg
+  If the image is a PNG image, the resulting file name will be:
+  C:/nfc/myImg.png
+
+  \return file name, including the extension.
+  */
+QString NdefNfcMimeImageRecord::saveImageToFile(const QString& fileName) const
+{
+    // Do not use QImage::save(), as this would re-encode the image.
+    // Instead, only determine the file extension and
+    // save the byte array of the payload directly.
+    QByteArray imgExtension = type().toLower();
+    if (imgExtension.startsWith("image/")) {
+        // Remove leading "image/" from the mime type so that only the image
+        // type is left
+        imgExtension = imgExtension.right(imgExtension.size() - 6);
+    }
+    QString fullFileName = fileName + "." + imgExtension;
+
+    QFile imgFile(fullFileName);
+    if (imgFile.open(QIODevice::WriteOnly)) {
+        imgFile.write(payload());
+        imgFile.close();
+    } else {
+        qDebug() << "Unable to open file for writing: " << imgFile.fileName();
+        return QString();
+    }
+
+    return fullFileName;
+}
+
+/*!
   \brief Set the image (= payload) of the record to the byte array.
   This allows passing an encoded image (e.g., png) directly to the class.
 
