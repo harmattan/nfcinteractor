@@ -41,10 +41,7 @@
 #define RECORDTYPES_H
 
 #include <QObject>
-
-// Used for the QSettings file, for stats and IAP
-#define SETTINGS_ORG "Nokia"
-#define SETTINGS_APP "NfcInteractor"
+#include "appsettings.h"
 
 /*!
   \brief Important enums that are shared between QML and C++.
