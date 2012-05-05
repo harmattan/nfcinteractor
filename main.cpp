@@ -45,6 +45,7 @@
 #ifdef Q_OS_SYMBIAN
 //#include <QSystemScreenSaver>
 #endif
+#include "appsettings.h"
 #include "nfcinfo.h"
 #include "tagimagecache.h"
 #include "nfctypes.h"
@@ -114,6 +115,7 @@ int main(int argc, char *argv[])
     int platformId = 3;
 #endif
 
+
     // Register the Nfc interaction classes to the QML environment
     qmlRegisterType<NfcInfo>("Nfc", 1, 0, "NfcInfo");
     qmlRegisterType<NfcRecordModel>("Nfc", 1, 0, "NfcRecordModel");
@@ -125,6 +127,9 @@ int main(int argc, char *argv[])
     QmlApplicationViewer viewer;
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.rootContext()->setContextProperty("platform", platformId);
+
+    AppSettings* settings = new AppSettings();  // Ownership will be transferred to NfcInfo*
+    viewer.rootContext()->setContextProperty("settings", settings);
 
     // Symbian has style constants defined in platformStyle, MeeGo has a
     // different system.
@@ -245,6 +250,7 @@ int main(int argc, char *argv[])
         // so that it can raise the app to the foreground when an
         // autostart tag is touched and the app is already running.
         nfcInfoObj->setDeclarativeView(viewer);
+        nfcInfoObj->setAppSettings(settings);
 #ifdef USE_IAP
     #ifdef Q_OS_SYMBIAN
         // Symbian: set unlimited tags according to whether it has been purchased already

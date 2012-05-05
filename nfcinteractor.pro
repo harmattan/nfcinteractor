@@ -33,7 +33,7 @@ contains(DEFINES,UNLIMITED_VERSION) {
 } else {
     TARGET = nfcinteractor
 }
-VERSION = 2.10.0
+VERSION = 3.00.0
 
 
 symbian {
@@ -81,6 +81,7 @@ SOURCES += main.cpp \
     nfcmodeltondef.cpp \
     nfcndefparser.cpp \
     nfcstats.cpp \
+    appsettings.cpp \
     ndefnfcrecords/ndefnfcsprecord.cpp \
     ndefnfcrecords/ndefnfcmimeimagerecord.cpp \
     ndefnfcrecords/ndefnfcmimevcardrecord.cpp \
@@ -101,6 +102,7 @@ HEADERS += \
     nfcndefparser.h \
     nfcstats.h \
     nfctypes.h \
+    appsettings.h \
     ndefnfcrecords/ndefnfcsprecord.h \
     ndefnfcrecords/ndefnfcmimeimagerecord.h \
     ndefnfcrecords/ndefnfcmimevcardrecord.h \

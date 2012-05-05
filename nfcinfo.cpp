@@ -50,7 +50,6 @@ NfcInfo::NfcInfo(QObject *parent) :
     m_cachedNdefMessageSize(0),
     m_cachedRequestType(NfcIdle),
     m_unlimitedAdvancedMsgs(true),
-    m_logNdefToFile(true),
     m_harmattanPr10(false)
 {
 #if defined(MEEGO_EDITION_HARMATTAN)
@@ -374,19 +373,19 @@ void NfcInfo::targetMessageDetected(const QNdefMessage &message, QNearFieldTarge
   */
 void NfcInfo::ndefMessageRead(const QNdefMessage &message)
 {
+    QString fileName = storeNdefToFile(message);
+    emit nfcTagContents(m_nfcNdefParser->parseNdefMessage(message), fileName);
+    stoppedTagInteraction();
+}
+
+QString NfcInfo::storeNdefToFile(const QNdefMessage &message)
+{
     QString fileName = "";
-    if (m_logNdefToFile) {
+    if (m_appSettings && m_appSettings->logNdefToFile()) {
         // Store tag contents to the log file if enabled
-#if defined(Q_OS_SYMBIAN)
-        m_logNdefDir = "E:/nfc/";    // TODO: testing only
-#elif defined(MEEGO_EDITION_HARMATTAN)
-        m_logNdefDir = "/home/user/MyDocs/nfc/";    // TODO: testing only
-#elif defined(QT_SIMULATOR)
-        m_logNdefDir = "C:/nfc/";    // TODO: testing only
-#endif
         QDir dir("/");
-        dir.mkpath(m_logNdefDir);
-        if (QDir::setCurrent(m_logNdefDir)) {
+        dir.mkpath(m_appSettings->logNdefDir());
+        if (QDir::setCurrent(m_appSettings->logNdefDir())) {
             // Generate file name
             QDateTime now = QDateTime::currentDateTime();
             fileName = now.toString("yyyy.MM.dd - hh.mm.ss");
@@ -402,15 +401,12 @@ void NfcInfo::ndefMessageRead(const QNdefMessage &message)
             } else {
                 qDebug() << "Unable to open file for writing: " << tagFile.fileName();
             }
-            fileName = m_logNdefDir + fileName;
+            fileName = m_appSettings->logNdefDir() + fileName;
         } else {
-            qDebug() << "Unable to set current directory to: " << m_logNdefDir;
+            qDebug() << "Unable to set current directory to: " << m_appSettings->logNdefDir();
         }
     }
-    // TODO: emit stored file name along with the tag contents,
-    // to enable editing / cloning of tags.
-    emit nfcTagContents(m_nfcNdefParser->parseNdefMessage(message), fileName);
-    stoppedTagInteraction();
+    return fileName;
 }
 
 /*!
@@ -929,6 +925,15 @@ QString NfcInfo::convertTargetErrorToString(QNearFieldTarget::Error error)
 void NfcInfo::setDeclarativeView(QDeclarativeView& view)
 {
     m_declarativeView = &view;
+}
+
+void NfcInfo::setAppSettings(AppSettings *appSettings)
+{
+    m_appSettings = appSettings;
+    m_appSettings->setParent(this);
+    if (m_nfcNdefParser) {
+        m_nfcNdefParser->setAppSettings(m_appSettings);
+    }
 }
 
 #ifdef Q_OS_SYMBIAN

@@ -52,6 +52,8 @@
 #include <QNdefFilter>
 #include <QNearFieldTarget>
 
+#include "appsettings.h"
+
 // NDEF
 #include <QNdefMessage>
 #include <QNdefRecord>
@@ -137,6 +139,7 @@ public:
 
     void setImageCache(TagImageCache* tagImageCache);
     void setDeclarativeView(QDeclarativeView& view);
+    void setAppSettings(AppSettings* appSettings);
 
 signals:
     /*! Update on the NFC status (starting target detection, etc.) */
@@ -195,6 +198,7 @@ private slots:
 
 private:
     bool writeCachedNdefMessage();
+    QString storeNdefToFile(const QNdefMessage &message);
     QNdefMessage loadNdefFromFile(const QString &fileName);
 
     QString convertTargetErrorToString(QNearFieldTarget::Error error);
@@ -266,11 +270,8 @@ private:
     /*! Statistics for reading and writing tags. */
     NfcStats* m_nfcStats;
 
-    /*! Is logging of read tags to files enabled. */
-    bool m_logNdefToFile;
-    /*! If logging tags to files is enabled, in which directory so store them. */
-    QString m_logNdefDir;
-
+    /*! Persistent storageof application settings. */
+    AppSettings* m_appSettings;
 
     /*! Needed on MeeGo Harmattan to raise the app to the foreground when
       it's autostarted. */
