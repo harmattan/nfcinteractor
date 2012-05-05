@@ -428,6 +428,14 @@ void NfcRecordModel::addContentToRecord(int recordIndex, int messageTypeInt, int
 
 void NfcRecordModel::addContentToLastRecord(NfcTypes::RecordContent contentType, const QString& currentText, const bool removeVisible)
 {
+    if (m_recordItems.size() == 0) {
+        // Empty model - no previous item to copy the message type from,
+        // therefore, we can't add another item to a non-existing message.
+        // At least the header of a record should already be present
+        // in the model before calling this method.
+        qDebug() << "No previous item found in model in NfcRecordModel::addContentToLastRecord()";
+        return;
+    }
     const int prevRecordIndex = m_recordItems.size() - 1;
     const int prevRecordId = m_recordItems[prevRecordIndex]->recordId();
     const NfcTypes::MessageType prevMessageType = m_recordItems[prevRecordIndex]->messageType();
@@ -460,6 +468,14 @@ void NfcRecordModel::simpleInsertRecordItem(const int insertPosition, const NfcT
         // Selection item - also add the selection options to the item
         int defaultSelectedItem = 0;
         QVariantList selectionItems = getSelectionItemsForRecordContent(contentType, defaultSelectedItem);
+        // Check if the parameter contained a number for the default selected item
+        if (!defaultContents.isNull()) {
+            bool ok = false;
+            int specifiedDefault = defaultContents.toInt(&ok);
+            if (ok) {
+                defaultSelectedItem = specifiedDefault;
+            }
+        }
         newRecordItem->setSelectOptions(selectionItems);
         newRecordItem->setSelectedOption(defaultSelectedItem);
     }
