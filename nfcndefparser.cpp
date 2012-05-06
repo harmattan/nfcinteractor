@@ -404,6 +404,9 @@ QString NfcNdefParser::parseImageRecord(const NdefNfcMimeImageRecord& record)
 QString NfcNdefParser::parseVcardRecord(NdefNfcMimeVcardRecord& record)
 {
     QString tagContents("[vCard]\n");
+    if (m_parseToModel) {
+        m_nfcRecordModel->simpleAppendRecordHeaderItem(NfcTypes::MsgBusinessCard, true);
+    }
 
     // Parse the list of contacts from the record
     QList<QContact> contacts = record.contacts();
@@ -419,6 +422,8 @@ QString NfcNdefParser::parseVcardRecord(NdefNfcMimeVcardRecord& record)
             foreach (QContactDetail curDetail, details) {
                 // Go through all contact details
                 const QString detailName = curDetail.definitionName();
+
+                // Thumbnail
                 if (detailName == QContactThumbnail::DefinitionName) {
                     // Special case: image
                     // Fetch the thumbnail and store it in the image cache.
@@ -433,16 +438,30 @@ QString NfcNdefParser::parseVcardRecord(NdefNfcMimeVcardRecord& record)
                         } else {
                             qDebug() << "Image cache not set";
                         }
+                        if (m_parseToModel) {
+                            // Not optimal as the Qt Mobility contact only has a QImage,
+                            // so we don't know the original encoding of the image.
+                            // Instead, we need to re-encode. Using PNG as default here.
+                            NdefNfcMimeImageRecord imgRecord(contactThumbImage, "PNG");
+                            storeImageToFileForModel(imgRecord, true);
+                        }
                     }
-                } else {
-                    // Any other detail except the image:
-                    // add the detail name and its contents to the description.
+                }
+                else    // Any other contact detail except image
+                {
+                    // Add the detail name and its contents to the description.
                     tagContents.append(detailName + ": ");
 
                     // We just add all values related to the detail converted to a string.
                     QVariantMap valueMap = curDetail.variantValues();
-                    foreach (QVariant curValue, valueMap) {
-                        tagContents.append(curValue.toString() + " ");
+
+                    // Iterate over all contact details
+                    QVariantMap::iterator i;
+                    for (i = valueMap.begin(); i != valueMap.end(); ++i) {
+                        tagContents.append(i.value().toString() + " ");
+                        if (m_parseToModel) {
+                            addContactDetailToModel(i.key(), i.value().toString());
+                        }
                     }
                     tagContents.append("\n");
                 }
@@ -459,6 +478,76 @@ QString NfcNdefParser::parseVcardRecord(NdefNfcMimeVcardRecord& record)
         }
     }
     return tagContents;
+}
+
+/*!
+  \brief Add a new item to the model, corresponding to the detailName
+  (following Qt Mobility definition names) and with the specified
+  detailValue.
+
+  The method checks the known Qt Mobility contact detail definition names,
+  converts that to the corresponding NfcTypes::RecordContent enum and
+  adds an item with that enum and the parameter detailValue to the model.
+
+  Method might be changed later to have the original QVariant as the second
+  parameter, if the need arises to store stuff in another datatype than
+  a string (e.g., for the birthday).
+
+  \param detailName name of the Qt Mobility contact detail, following its
+  DefinitionName.
+  \param detailValue value corresponding to the detail definition name.
+  */
+bool NfcNdefParser::addContactDetailToModel(const QString& detailName, const QString& detailValue)
+{
+    if (detailName == QContactName::FieldPrefix.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordNamePrefix, detailValue, true);
+    } else if (detailName == QContactName::FieldFirstName.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordFirstName, detailValue, true);
+    } else if (detailName == QContactName::FieldMiddleName.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordMiddleName, detailValue, true);
+    } else if (detailName == QContactName::FieldLastName.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordLastName, detailValue, true);
+    } else if (detailName == QContactName::FieldSuffix.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordNameSuffix, detailValue, true);
+    } else if (detailName == QContactNickname::FieldNickname.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordNickname, detailValue, true);
+    } else if (detailName == QContactPhoneNumber::FieldNumber.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordPhoneNumber, detailValue, true);
+    } else if (detailName == QContactEmailAddress::FieldEmailAddress.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordEmailAddress, detailValue, true);
+    } else if (detailName ==QContactUrl::FieldUrl.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordContactUrl, detailValue, true);
+    } else if (detailName == QContactOrganization::FieldName.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordOrganizationName, detailValue, true);
+    } else if (detailName == QContactOrganization::FieldDepartment.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordOrganizationDepartment, detailValue, true);
+    } else if (detailName == QContactOrganization::FieldRole.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordOrganizationRole, detailValue, true);
+    } else if (detailName == QContactOrganization::FieldTitle.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordOrganizationTitle, detailValue, true);
+    } else if (detailName == QContactBirthday::FieldBirthday.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordBirthday, detailValue, true);
+    } else if (detailName == QContactNote::FieldNote.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordNote, detailValue, true);
+//    } else if (detailName == QContactThumbnail::FieldThumbnail.latin1()) {
+//        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordImageFilename, detailValue, true);
+    } else if (detailName == QContactAddress::FieldCountry.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordCountry, detailValue, true);
+    } else if (detailName == QContactAddress::FieldLocality.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordLocality, detailValue, true);
+    } else if (detailName == QContactAddress::FieldPostOfficeBox.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordPostOfficeBox, detailValue, true);
+    } else if (detailName == QContactAddress::FieldPostcode.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordPostcode, detailValue, true);
+    } else if (detailName == QContactAddress::FieldRegion.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordRegion, detailValue, true);
+    } else if (detailName == QContactAddress::FieldStreet.latin1()) {
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordStreet, detailValue, true);
+    } else {
+        qDebug() << "Unknown contact field - can't convert to model: " << detailName << " (" << detailValue << ")";
+        return false;
+    }
+    return true;
 }
 
 /*!

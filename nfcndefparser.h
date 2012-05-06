@@ -114,6 +114,7 @@ private:
     QString parseImageRecord(const NdefNfcMimeImageRecord &record);
     QString parseVcardRecord(NdefNfcMimeVcardRecord &record);
 
+    bool addContactDetailToModel(const QString &detailName, const QString &detailValue);
     QString convertRecordTypeNameToString(const QNdefRecord::TypeNameFormat typeName);
 
 private:
