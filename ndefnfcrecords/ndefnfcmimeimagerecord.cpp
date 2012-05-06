@@ -311,7 +311,7 @@ QByteArray NdefNfcMimeImageRecord::checkImageFormat(const QByteArray& format)
     // Check if the image format is supported by Qt
     bool supported = false;
     foreach (QByteArray supportedFormat, QImageWriter::supportedImageFormats()) {
-        if (checkFormat == supportedFormat) {
+        if (checkFormat == supportedFormat.toUpper()) {
             supported = true;
             break;
         }

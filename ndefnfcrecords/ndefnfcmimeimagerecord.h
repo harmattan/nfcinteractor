@@ -89,7 +89,7 @@ QTM_USE_NAMESPACE
       QImage img = imgRecord.image();
   }
 
-  \version 1.2.0
+  \version 1.2.1
   */
 class NdefNfcMimeImageRecord : public QNdefRecord
 {
