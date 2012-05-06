@@ -12,8 +12,8 @@ consist of multiple NDEF records. Various templates help to format
 the contents.
 
 The app supports the following content: Smart Poster, URI, Text,
-Geo, SMS, social networks, MIME/vCard (business cards), MIME/image
-(reading only), app store links and custom records.
+Geo, SMS, social networks, MIME/vCard (business cards), MIME/image, 
+app store links and custom records.
 
 This tool is made for enthusiasts and developers.
 
