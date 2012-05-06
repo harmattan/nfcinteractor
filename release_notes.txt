@@ -51,10 +51,10 @@ Easily reusable code for developers including:
 - Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2**)
 
 Known bugs / issues (work-in-progress):
-- Logging read NDEF messages to files:
-  Directory selection / settings screen
+- Settings: scroll view for VKB on Symbian
 - Editing tags:
   Work in progress, not all contents supported for editing yet.
+  (Missing: business cards)
 - Dialog to load/open stored tags
   
 Ideas for future updates:
@@ -171,9 +171,13 @@ Tested on:
 CHANGE HISTORY
 --------------------------------------------------------------------------------
 
-3.0 Cloning tags supported (long-press on read tag contents -> Clone)
-    Editing tags supported (long-press on read tag contents -> Edit)
-	Stores all read tags to data directory for later reuse
+3.0 Cloning tags supported (long-press on read tag contents -> Clone).
+    Editing tags supported (long-press on read tag contents -> Edit).
+	Stores all read tags to data directory for later reuse.
+	Extracts and saves images from tags (edit an existing tag, filename shown
+	in the compose view).
+	Settings screen to enable/disable storing all collected tags and to choose
+	the data directory.
 2.1 Added support for writing Foursquare tags.
     Print raw payload for external tag types.
 	Updated In-App-Advertising library version.
