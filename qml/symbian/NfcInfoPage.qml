@@ -119,7 +119,7 @@ Page {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    if (nfcDataFileName) {
+                    if (nfcDataFileName && settings.logNdefToFile) {
                         itemMenu.open()
                         messageView.currentIndex = index
                         console.log(nfcDataFileName);
