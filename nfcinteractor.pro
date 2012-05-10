@@ -160,7 +160,7 @@ symbian {
     DEPLOYMENTFOLDERS += imagesFolderSymbian
 
     # Demo images for writing to tags
-    demoImages.sources = ./data/minimal.gif ./data/minimal.png ./data/nokia.png
+    demoImages.sources = ./demoimages/minimal.gif ./demoimages/minimal.png ./demoimages/nokia.png
     demoImages.path = e:/nfc/
     DEPLOYMENT += demoImages
 
@@ -305,7 +305,7 @@ contains(MEEGO_EDITION,harmattan) {
     QML_IMPORT_PATH += qml/meego
 
     # Demo images for writing to tags - operation not permitted
-    #demoImages.files = ./data/minimal.gif ./data/minimal.png ./data/nokia.png
+    #demoImages.files = ./demoimages/minimal.gif ./demoimages/minimal.png ./demoimages/nokia.png
     #demoImages.path = /home/user/MyDocs/nfc/
     #INSTALLS += demoImages
 
