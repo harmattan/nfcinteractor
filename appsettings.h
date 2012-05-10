@@ -18,6 +18,8 @@
 #elif defined(QT_SIMULATOR)
     #define DEFAULT_NDEF_LOG_DIR "C:/nfc/"
 #endif
+#define COLLECTED_LOG_DIR "collected/"
+#define SAVED_LOG_DIR "saved/"
 
 class AppSettings : public QObject
 {
@@ -32,6 +34,7 @@ public slots:
     bool logNdefToFile();
     void setLogNdefDir(const QString& logNdefDir);
     QString logNdefDir();
+    QString logNdefDir(const bool collected);
     void saveSettings();
 
 private:

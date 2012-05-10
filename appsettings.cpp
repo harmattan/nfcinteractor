@@ -35,9 +35,13 @@ QString AppSettings::logNdefDir()
     return m_logNdefDir;
 }
 
+QString AppSettings::logNdefDir(const bool collected)
+{
+    return m_logNdefDir + (collected ? COLLECTED_LOG_DIR : SAVED_LOG_DIR);
+}
+
 void AppSettings::saveSettings()
 {
-    qDebug() << "Saving settings... (C++)";
     QSettings settings(SETTINGS_ORG, SETTINGS_APP, this);
     settings.setValue("settingsversion", SETTINGS_VERSION);
     settings.setValue("logNdefToFile", m_logNdefToFile);
@@ -46,10 +50,8 @@ void AppSettings::saveSettings()
 
 void AppSettings::loadSettings()
 {
-    qDebug() << "Loading settings... (C++)";
     QSettings settings(SETTINGS_ORG, SETTINGS_APP, this);
     if (settings.value("settingsversion", -1) == 1) {
-        qDebug() << "Found settings... (C++)";
         // Only load settings from version 1 with this code
         m_logNdefToFile = settings.value("logNdefToFile", true).toBool();
         m_logNdefDir = settings.value("logNdefDir", DEFAULT_NDEF_LOG_DIR).toString();
