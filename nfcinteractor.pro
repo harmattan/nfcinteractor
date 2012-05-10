@@ -136,6 +136,7 @@ symbian {
         TARGET.UID3 = 0x2005CE03
     } else {
         TARGET.UID3 = 0xE0D154A1
+        #MMP_RULES += "DEBUGGABLE_UDEBONLY"
     }
 
     # Allow network access on Symbian
@@ -157,6 +158,11 @@ symbian {
     imagesFolderSymbian.source = qml/images-symbian/*
     imagesFolderSymbian.target = qml
     DEPLOYMENTFOLDERS += imagesFolderSymbian
+
+    # Demo images for writing to tags
+    demoImages.sources = ./data/minimal.gif ./data/minimal.png ./data/nokia.png
+    demoImages.path = e:/nfc/
+    DEPLOYMENT += demoImages
 
     # Smart Installer package's UID
     # This UID is from the protected range and therefore the package will
@@ -297,6 +303,11 @@ contains(MEEGO_EDITION,harmattan) {
     qmlFolder.source = qml/meego/*
     qmlFolder.target = qml
     QML_IMPORT_PATH += qml/meego
+
+    # Demo images for writing to tags - operation not permitted
+    #demoImages.files = ./data/minimal.gif ./data/minimal.png ./data/nokia.png
+    #demoImages.path = /home/user/MyDocs/nfc/
+    #INSTALLS += demoImages
 
     # Don't use nfcinfo_harmattan.desktop. Otherwise,
     # the NDEF Autostart handler won't find the desktop file and
