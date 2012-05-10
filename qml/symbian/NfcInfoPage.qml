@@ -228,7 +228,10 @@ Page {
             flat: true
             iconSource: "create_message.svg";
             visible: composeTagPageLoader.status === Loader.Ready
-            onClicked: pageStack.push(composeTagPageLoader.item)
+            onClicked: {
+                composeTagPageLoader.item.updateToolbar()
+                pageStack.push(composeTagPageLoader.item)
+            }
         }
     }
     ToolBarLayout {
@@ -253,7 +256,10 @@ Page {
             flat: true
             iconSource: "create_message.svg";
             visible: composeTagPageLoader.status === Loader.Ready
-            onClicked: pageStack.push(composeTagPageLoader.item)
+            onClicked: {
+                composeTagPageLoader.item.updateToolbar()
+                pageStack.push(composeTagPageLoader.item)
+            }
         }
     }
 

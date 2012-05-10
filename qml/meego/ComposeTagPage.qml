@@ -6,27 +6,7 @@ import com.nfcinfo.types 1.0
 Page {
     id: composeTagPage
 
-    tools: ToolBarLayout {
-        ToolIcon {
-            iconId: "toolbar-back"
-            onClicked: pageStack.depth <= 1 ? Qt.quit() : pageStack.pop()
-        }
-        ToolIcon {
-            iconId: "toolbar-add"
-            onClicked: openAddNewRecordDialog()
-        }
-        ToolIcon {
-            iconId: "toolbar-done"
-            onClicked: {
-                nfcInfo.nfcWriteTag(true);
-                if (writeTagPageLoader.status === Loader.Ready) {
-                    writeTagPageLoader.item.resetPage();
-                    pageStack.push(writeTagPageLoader.item);
-                }
-            }
-        }
-        // TODO: button to save the tag format, or to load it from previously read tag
-    }
+    tools: composeToolbar
 
     Text {
         id: messageHeader
@@ -283,6 +263,149 @@ Page {
             // cause a segmentation fault when leaving the page. See:
             // https://bugreports.qt-project.org/browse/QTCOMPONENTS-1225
             onAccepted: helpDialog.destroy()
+        }
+    }
+
+    // --------------------------------------------------------------------------------
+    // Load NDEF message from file
+    function openLoadMessageFromFileDialog() {
+        fileDialogLoader.source = Qt.resolvedUrl("FileSelector.qml");
+    }
+    Loader {
+        id: fileDialogLoader
+        onStatusChanged: {
+            if (status === Loader.Ready) {
+                fileDialogLoader.item.titleText = "Open Ndef Message..."
+                fileDialogLoader.item.nameFilters = "*.txt";
+                fileDialogLoader.item.open();
+            }
+        }
+    }
+    Connections {
+        target: fileDialogLoader.item;
+        onAccepted: {
+            nfcInfo.nfcEditTag(fileDialogLoader.item.selectedFilePath);
+            fileDialogLoader.sourceComponent = undefined;
+        }
+        //onClickedOutside: { fileDialogLoader.sourceComponent = undefined; }  // non-existent on phone
+        onRejected: { fileDialogLoader.sourceComponent = undefined; }
+    }
+
+
+    // --------------------------------------------------------------------------------
+    // Save NDEF message to file
+    function openSaveMessageToFileDialog()
+    {
+        fileNameDialog.open();
+    }
+
+    // According to the docs, CommonDialog should be available on MeeGo Harmattan
+    // as well, but it isn't :(
+    // -> copied the file from Qt Quick Components source to this project, renamed
+    // to MyCommonDialog to avoid file name conflicts.
+    MyCommonDialog {
+        id: fileNameDialog
+        titleText: "Save composed message"
+        buttons: ButtonRow {
+            style: ButtonStyle { }
+            anchors.horizontalCenter: parent.horizontalCenter
+            Button {
+                text: "Save";
+                onClicked: {
+                    var fullFileName = nfcInfo.nfcSaveModelToFile(fileName.text)
+                    fileNameDialog.close();
+                    // MeeGo doesn't do forced linefeeds for wordwrap when the text is too long
+                    // (it's using Text.WordWrap instead of Text.Wrap)
+                    // -> separate the file name from the directory with a " ", to allow the
+                    // dialog to insert a new line. Otherwise, the text wouldn't usually fit on
+                    // the screen.
+                    var fileNameStartsAt = fullFileName.lastIndexOf("/");
+                    fullFileName = fullFileName.substring(0, fileNameStartsAt + 1) + " " + fullFileName.substring(fileNameStartsAt + 1, fullFileName.length)
+                    console.log("Adapted file name: " + fullFileName)
+                    successDialog.message = "Successfully saved message to file: " + fullFileName
+                    successDialog.open();
+                }
+            }
+        }
+
+        content: Item {
+            width: parent.width
+            anchors.margins: customPlatformStyle.paddingMedium
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: dialogTitle.height + fileName.height + customPlatformStyle.paddingMedium * 3
+            Text {
+                id: dialogTitle
+                width: parent.width
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                wrapMode: Text.WordWrap
+                font.family: customPlatformStyle.fontFamilyRegular;
+                font.pixelSize: customPlatformStyle.fontSizeMedium
+                color: customPlatformStyle.colorNormalLight
+                text: "Store the composed message to a file for later reuse:"
+            }
+            TextField {
+                id: fileName
+                anchors.top: dialogTitle.bottom
+                anchors.topMargin: customPlatformStyle.paddingMedium
+                anchors.left: parent.left
+                anchors.right: parent.right
+                width: parent.width
+                placeholderText: "Name of file to create"
+                focus: true
+            }
+        }
+    }
+
+    QueryDialog {
+        id: successDialog
+        titleText: "Saved"
+        acceptButtonText: "Ok"
+    }
+
+    // --------------------------------------------------------------------------------
+    // Toolbar
+    onStatusChanged: {
+        if (status === PageStatus.Activating) {
+            toolLoadNdef.visible = settings.logNdefToFile();
+            toolSaveNdef.visible = settings.logNdefToFile();
+        }
+    }
+
+    ToolBarLayout {
+        id: composeToolbar
+        ToolIcon {
+            iconId: "toolbar-back"
+            onClicked: pageStack.depth <= 1 ? Qt.quit() : pageStack.pop()
+        }
+        ToolIcon {
+            iconId: "toolbar-add"
+            onClicked: openAddNewRecordDialog()
+        }
+        ToolIcon {
+            id: toolLoadNdef
+            iconId: "toolbar-directory"
+            visible: settings.logNdefToFile()
+            onClicked: openLoadMessageFromFileDialog()
+        }
+        ToolIcon {
+            id: toolSaveNdef
+            iconId: "toolbar-directory-move-to"
+            visible: settings.logNdefToFile()
+            onClicked: openSaveMessageToFileDialog()
+        }
+        ToolIcon {
+            iconId: "toolbar-done"
+            onClicked: {
+                nfcInfo.nfcWriteTag(true);
+                if (writeTagPageLoader.status === Loader.Ready) {
+                    writeTagPageLoader.item.resetPage();
+                    pageStack.push(writeTagPageLoader.item);
+                }
+            }
         }
     }
 }

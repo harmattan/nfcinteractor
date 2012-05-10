@@ -4,7 +4,7 @@ import Qt.labs.folderlistmodel 1.0
 
 SelectionDialog {
     id: fileSelectionDialog
-    titleText: "Select image..."
+    titleText: "Select file..."
     property string selectedFileName;
     property string selectedFilePath;
     property alias initialFolder: folderModel.folder
@@ -16,10 +16,12 @@ SelectionDialog {
         showDirs: true
         showDotAndDotDot: true              // Bug: doesn't work on Symbian
         sortField: FolderListModel.Name
-        folder: "file://"
+        folder: "file:///" + settings.logNdefDir()
+        //folder: "file://"
         //nameFilters: ["*.*"]
         nameFilters: [ "*.png", "*.jpg", "*.jpeg", "*.gif" ]
     }
+
 
     delegate: fileDelegate
 

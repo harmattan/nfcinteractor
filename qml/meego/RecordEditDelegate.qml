@@ -152,7 +152,6 @@ Item {
     // --------------------------------------------------------------------------------
     // File selection
     function showFileDialog() {
-        console.log("Launch file dialog");
         fileDialogLoader.source = Qt.resolvedUrl("FileSelector.qml");
         editText.platformCloseSoftwareInputPanel();
     }
@@ -160,6 +159,8 @@ Item {
         id: fileDialogLoader
         onStatusChanged: {
             if (status === Loader.Ready) {
+                fileDialogLoader.item.titleText = "Select image..."
+                fileDialogLoader.item.nameFilters = [ "*.png", "*.jpg", "*.jpeg", "*.gif" ]
                 fileDialogLoader.item.open();
             }
         }

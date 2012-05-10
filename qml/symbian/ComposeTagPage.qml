@@ -6,30 +6,7 @@ import com.nfcinfo.types 1.0
 Page {
     id: composeTagPage
 
-    tools: ToolBarLayout {
-        ToolButton {
-            flat: true
-            iconSource: "toolbar-back";
-            onClicked: pageStack.depth <= 1 ? Qt.quit() : pageStack.pop()
-        }
-        ToolButton {
-            flat: true
-            iconSource: "add_large.svg"
-            onClicked: openAddNewRecordDialog()
-        }
-        ToolButton {
-            flat: true
-            iconSource: "end.svg"
-            onClicked: {
-                nfcInfo.nfcWriteTag(true);
-                if (writeTagPageLoader.status === Loader.Ready) {
-                    writeTagPageLoader.item.resetPage();
-                    pageStack.push(writeTagPageLoader.item);
-                }
-            }
-        }
-        // TODO: button to save the tag format, or to load it from previously read tag
-    }
+    tools: settings.logNdefToFile() ? composeWithStorage : composeWithoutStorage;
 
     Text {
         id: messageHeader
@@ -316,6 +293,165 @@ Page {
             // the app to stall on SR2.
             // https://bugreports.qt-project.org/browse/QTCOMPONENTS-1225
             onAccepted: destroy()
+        }
+    }
+
+    // --------------------------------------------------------------------------------
+    // Load NDEF message from file
+    function openLoadMessageFromFileDialog() {
+        fileDialogLoader.source = Qt.resolvedUrl("FileSelector.qml");
+    }
+    Loader {
+        id: fileDialogLoader
+        onStatusChanged: {
+            if (status === Loader.Ready) {
+                fileDialogLoader.item.titleText = "Open Ndef Message..."
+                fileDialogLoader.item.nameFilters = "*.txt";
+                fileDialogLoader.item.open();
+            }
+        }
+    }
+    Connections {
+        target: fileDialogLoader.item;
+        onAccepted: {
+            nfcInfo.nfcEditTag(fileDialogLoader.item.selectedFilePath);
+            fileDialogLoader.sourceComponent = undefined;
+        }
+        onClickedOutside: { fileDialogLoader.sourceComponent = undefined; }
+        onRejected: { fileDialogLoader.sourceComponent = undefined; }
+    }
+
+
+    // --------------------------------------------------------------------------------
+    // Save NDEF message to file
+    function openSaveMessageToFileDialog()
+    {
+        fileNameDialog.open();
+    }
+
+    CommonDialog {
+        id: fileNameDialog
+        titleText: "Save composed message"
+        buttonTexts: ["Save", "Cancel"]
+        onButtonClicked: {
+            if (index === 0) {
+                var fullFileName = nfcInfo.nfcSaveModelToFile(fileName.text)
+                successDialog.message = "Successfully saved message to file: " + fullFileName
+                successDialog.open();
+            }
+        }
+
+        content: Item {
+            width: parent.width
+            anchors.margins: customPlatformStyle.paddingMedium
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.right: parent.right
+            height: dialogTitle.height + fileName.height + customPlatformStyle.paddingMedium * 3
+            Text {
+                id: dialogTitle
+                width: parent.width
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                wrapMode: Text.WordWrap
+                font.family: customPlatformStyle.fontFamilyRegular;
+                font.pixelSize: customPlatformStyle.fontSizeMedium
+                color: customPlatformStyle.colorNormalLight
+                text: "Store the composed message to a file for later reuse:"
+            }
+            TextField {
+                id: fileName
+                anchors.top: dialogTitle.bottom
+                anchors.topMargin: customPlatformStyle.paddingMedium
+                anchors.left: parent.left
+                anchors.right: parent.right
+                width: parent.width
+                placeholderText: "Name of file to create"
+                focus: true
+            }
+        }
+    }
+
+    QueryDialog {
+        id: successDialog
+        titleText: "Saved"
+        acceptButtonText: "Ok"
+    }
+
+    // --------------------------------------------------------------------------------
+    // Toolbar with save / load buttons (if caching is active)
+    // Need to create two extra toolbars on Symbian, as changing the visibility
+    // would leave empty spaces in the toolbar.
+
+    // When changing the toolbar in onStatusChanged(PageStatus.Activating),
+    // the old toolbar still stays visible until the page is activated the next
+    // time. Therefore, the toolbar updating is triggered from the outside
+    // before the page is activated.
+    function updateToolbar() {
+        tools = settings.logNdefToFile() ? composeWithStorage : composeWithoutStorage;
+    }
+
+    ToolBarLayout {
+        id: composeWithStorage
+        ToolButton {
+            flat: true
+            iconSource: "toolbar-back";
+            onClicked: pageStack.depth <= 1 ? Qt.quit() : pageStack.pop()
+        }
+        ToolButton {
+            flat: true
+            iconSource: "add_large.svg"
+            onClicked: openAddNewRecordDialog()
+        }
+        ToolButton {
+            id: toolLoadNdef
+            flat: true
+            iconSource: "load.svg"
+            onClicked: openLoadMessageFromFileDialog()
+        }
+        ToolButton {
+            id: toolSaveNdef
+            flat: true
+            iconSource: "save.svg"
+            onClicked: openSaveMessageToFileDialog()
+        }
+        ToolButton {
+            flat: true
+            iconSource: "end.svg"
+            onClicked: {
+                nfcInfo.nfcWriteTag(true);
+                if (writeTagPageLoader.status === Loader.Ready) {
+                    writeTagPageLoader.item.resetPage();
+                    pageStack.push(writeTagPageLoader.item);
+                }
+            }
+        }
+    }
+
+    // Toolbar without save / load buttons (if caching is deactivated)
+    ToolBarLayout {
+        id: composeWithoutStorage
+        ToolButton {
+            flat: true
+            iconSource: "toolbar-back";
+            onClicked: pageStack.depth <= 1 ? Qt.quit() : pageStack.pop()
+        }
+        ToolButton {
+            flat: true
+            iconSource: "add_large.svg"
+            onClicked: openAddNewRecordDialog()
+        }
+        ToolButton {
+            flat: true
+            iconSource: "end.svg"
+            onClicked: {
+                nfcInfo.nfcWriteTag(true);
+                if (writeTagPageLoader.status === Loader.Ready) {
+                    writeTagPageLoader.item.resetPage();
+                    pageStack.push(writeTagPageLoader.item);
+                }
+            }
         }
     }
 }
