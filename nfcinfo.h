@@ -181,6 +181,7 @@ public slots:
     bool nfcWriteTag(const bool writeOneTagOnly);
     bool nfcWriteTag(const QString &fileName, const bool writeOneTagOnly);
     bool nfcEditTag(const QString &fileName);
+    QString nfcSaveModelToFile(const QString &fileName);
     void nfcStopWritingTags();
     NfcRecordModel* recordModel() const;
 public:
@@ -198,7 +199,7 @@ private slots:
 
 private:
     bool writeCachedNdefMessage();
-    QString storeNdefToFile(const QNdefMessage &message);
+    QString storeNdefToFile(const QString &fileName, const QNdefMessage &message, const bool collected);
     QNdefMessage loadNdefFromFile(const QString &fileName);
 
     QString convertTargetErrorToString(QNearFieldTarget::Error error);

@@ -373,40 +373,66 @@ void NfcInfo::targetMessageDetected(const QNdefMessage &message, QNearFieldTarge
   */
 void NfcInfo::ndefMessageRead(const QNdefMessage &message)
 {
-    QString fileName = storeNdefToFile(message);
+    QString fileName = storeNdefToFile(QString(), message, true);
     emit nfcTagContents(m_nfcNdefParser->parseNdefMessage(message), fileName);
     stoppedTagInteraction();
 }
 
-QString NfcInfo::storeNdefToFile(const QNdefMessage &message)
+/*!
+  \brief Store a raw NDEF message to a file.
+
+  The file will be stored inside the directory specified by AppSettings,
+  which is further adapted by the collected parameter.
+
+  \param fileName if specified, the filename to use. The ".txt" extension
+  will be added to the file name automatically if it does not have a ".txt"
+  extension already. If an empty QString is passed ("QString()"), a default
+  file name will be created, based on the current date, time and (if available)
+  the tag type.
+  \param message the NDEF message to store as raw byte array in the file.
+  \param collected influences the sub directory of the data directory.
+  If set to true, it will go to the collected subdirectory for
+  auto-collected/saved tags. If set to true, it will go to the subdirectory
+  for manually saved messages.
+  */
+QString NfcInfo::storeNdefToFile(const QString& fileName, const QNdefMessage &message, const bool collected)
 {
-    QString fileName = "";
+    QString fullFileName = "";
     if (m_appSettings && m_appSettings->logNdefToFile()) {
         // Store tag contents to the log file if enabled
+        const QString writeDir = m_appSettings->logNdefDir(collected);
         QDir dir("/");
-        dir.mkpath(m_appSettings->logNdefDir());
-        if (QDir::setCurrent(m_appSettings->logNdefDir())) {
-            // Generate file name
-            QDateTime now = QDateTime::currentDateTime();
-            fileName = now.toString("yyyy.MM.dd - hh.mm.ss");
-            if (!m_nfcTargetAnalyzer->m_tagInfo.tagTypeName.isEmpty()) {
-                fileName.append(" - ");
-                fileName.append(m_nfcTargetAnalyzer->m_tagInfo.tagTypeName);
+        dir.mkpath(writeDir);
+        if (QDir::setCurrent(writeDir)) {
+            if (fileName.isEmpty()) {
+                // Generate file name
+                QDateTime now = QDateTime::currentDateTime();
+                fullFileName = now.toString("yyyy.MM.dd - hh.mm.ss");
+                if (!m_nfcTargetAnalyzer->m_tagInfo.tagTypeName.isEmpty()) {
+                    fullFileName.append(" - ");
+                    fullFileName.append(m_nfcTargetAnalyzer->m_tagInfo.tagTypeName);
+                }
+                fullFileName.append(".txt");
+            } else {
+                fullFileName = fileName;
+                if (fullFileName.right(4).toLower() != ".txt") {
+                    fullFileName.append(".txt");
+                }
             }
-            fileName.append(".txt");
-            QFile tagFile(fileName);
+            QFile tagFile(fullFileName);
             if (tagFile.open(QIODevice::WriteOnly)) {
                 tagFile.write(message.toByteArray());
                 tagFile.close();
             } else {
                 qDebug() << "Unable to open file for writing: " << tagFile.fileName();
             }
-            fileName = m_appSettings->logNdefDir() + fileName;
+            fullFileName = writeDir + fullFileName;
         } else {
-            qDebug() << "Unable to set current directory to: " << m_appSettings->logNdefDir();
+            emit nfcStatusError("Unable to open data directory (" + writeDir + ") - please check the application settings.");
+            qDebug() << "Unable to set current directory to: " << writeDir;
         }
     }
-    return fileName;
+    return fullFileName;
 }
 
 /*!
@@ -518,6 +544,17 @@ bool NfcInfo::nfcEditTag(const QString& fileName)
     m_nfcNdefParser->parseNdefMessage(message);
     m_nfcNdefParser->setParseToModel(false);
     return true;
+}
+
+QString NfcInfo::nfcSaveModelToFile(const QString &fileName)
+{
+    QString savedFileName = storeNdefToFile(fileName, *m_nfcRecordModel->convertToNdefMessage(), false);
+    if (!savedFileName.isEmpty()) {
+        emit nfcStatusSuccess("Stored NDEF message to " + savedFileName);
+    } else {
+        emit nfcStatusError("Unable to save NDEF message");
+    }
+    return savedFileName;
 }
 
 QNdefMessage NfcInfo::loadNdefFromFile(const QString& fileName)
