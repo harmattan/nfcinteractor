@@ -32,7 +32,8 @@ Tag reading:
 Tag writing:
 - Dynamic UI to create a message consisting of multiple NDEF records, and to add information to each record
 - Clone tag contents (tap on blue NDEF message contents after reading a tag -> clone)
-- Open previously read NDEF message in compose mode for editing and writing again (tap on blue NDEF message contents after reading a tag -> edit)
+- Save own composed tags to the file system on the phone
+- Open previously collected or saved NDEF message in compose mode for editing and writing again (tap on blue NDEF message contents after reading a tag -> edit, or load from compose view)
 - Help for all supported message types
 - NDEF message size calculation
 - Specialized editors for each message type:
@@ -53,7 +54,7 @@ Easily reusable code for developers including:
 
 Known bugs / issues (work-in-progress):
 - Settings: scroll view for VKB on Symbian
-- Dialog to load/open stored tags
+- Maybe add option to automatically write empty message to tags? (-> formatting)
   
 Ideas for future updates:
 - Write a contact from the address book
