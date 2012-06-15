@@ -1,3 +1,8 @@
+nfcinteractorunlimited (4.0.0) unstable; urgency=low
+  * <Add change description here>
+
+ -- Andreas Jakl <>  Wed, 06 Jun 2012 17:15:13 +0300
+
 nfcinteractorunlimited (3.0.0) unstable; urgency=low
   * Cloning tags supported (long-press on read tag contents -> Clone).
   * Eiting tags supported (long-press on read tag contents -> Edit).

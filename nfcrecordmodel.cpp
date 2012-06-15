@@ -1,40 +1,11 @@
 /****************************************************************************
 **
-** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Andreas Jakl (andreas.jakl@nokia.com)
 **
-** This file is part of an NFC example for Qt Mobility.
-**
-** $QT_BEGIN_LICENSE:BSD$
-** You may use this file under the terms of the BSD license as follows:
-**
-** "Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions are
-** met:
-**   * Redistributions of source code must retain the above copyright
-**     notice, this list of conditions and the following disclaimer.
-**   * Redistributions in binary form must reproduce the above copyright
-**     notice, this list of conditions and the following disclaimer in
-**     the documentation and/or other materials provided with the
-**     distribution.
-**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
-**     the names of its contributors may be used to endorse or promote
-**     products derived from this software without specific prior written
-**     permission.
-**
-** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
-** $QT_END_LICENSE$
+** Released under Nokia Example Code License.
+** See license.txt in the main project folder.
 **
 ****************************************************************************/
 
@@ -59,6 +30,7 @@ NfcRecordModel::NfcRecordModel(QObject *parent) :
     // however, the ownership of the items will still stay with
     // the model of course.
     m_nfcModelToNdef = new NfcModelToNdef(m_recordItems, this);
+    m_nfcRecordDefaults = new NfcRecordDefaults(this);
 }
 
 NfcRecordModel::~NfcRecordModel()
@@ -334,45 +306,11 @@ int NfcRecordModel::simpleAppendRecordHeaderItem(const NfcTypes::MessageType mes
 
 void NfcRecordModel::simpleAppendRecordHeaderItem(const NfcTypes::MessageType messageType, const bool addVisible, const int recordId)
 {
-    QString itemText = "";
-    switch (messageType) {
-    case NfcTypes::MsgSmartPoster:
-        itemText = "Smart Poster Record";
-        break;
-    case NfcTypes::MsgUri:
-        itemText = "URI Record";
-        break;
-    case NfcTypes::MsgText:
-        itemText = "Text Record";
-        break;
-    case NfcTypes::MsgSms:
-        itemText = "SMS Record";
-        break;
-    case NfcTypes::MsgBusinessCard:
-        itemText = "Business Card";
-        break;
-    case NfcTypes::MsgSocialNetwork:
-        itemText = "Social Network";
-        break;
-    case NfcTypes::MsgGeo:
-        itemText = "Geo Record";
-        break;
-    case NfcTypes::MsgStore:
-        itemText = "Store Record";
-        break;
-    case NfcTypes::MsgImage:
-        itemText = "Image Record";
-        break;
-    case NfcTypes::MsgCustom:
-        itemText = "Custom Record";
-        break;
-    default:
-        qDebug() << "Unknown message type " << messageType << " in simpleAddRecordHeaderItem()";
-        break;
-    }
+    QString itemText = m_nfcRecordDefaults->itemHeaderTextDefault(messageType);
 
     addRecord(itemText, messageType, NfcTypes::RecordHeader, "", true, addVisible, recordId);
 }
+
 
 /*!
   \brief Add a new record item to an existing message, using default types.
@@ -453,7 +391,7 @@ void NfcRecordModel::simpleInsertRecordItem(const int insertPosition, const NfcT
 {
     QString defaultTitle;
     QString defaultContents;
-    getDefaultsForRecordContent(messageType, contentType, defaultTitle, defaultContents);
+    m_nfcRecordDefaults->itemContentDefault(messageType, contentType, defaultTitle, defaultContents);
     // If contents for this item are specified, use those.
     // Otherwise, use the defaults.
     if (!currentText.isNull()) {
@@ -467,7 +405,7 @@ void NfcRecordModel::simpleInsertRecordItem(const int insertPosition, const NfcT
             contentType == NfcTypes::RecordSocialNetworkType) {
         // Selection item - also add the selection options to the item
         int defaultSelectedItem = 0;
-        QVariantList selectionItems = getSelectionItemsForRecordContent(contentType, defaultSelectedItem);
+        QVariantList selectionItems = m_nfcRecordDefaults->itemSelectionDefault(contentType, defaultSelectedItem);
         // Check if the parameter contained a number for the default selected item
         if (!defaultContents.isNull()) {
             bool ok = false;
@@ -667,7 +605,6 @@ int NfcRecordModel::size() const
     return m_recordItems.size();
 }
 
-
 /*!
   \brief Return a list of record items that can possibly be added to the
   messageType / NDEF record.
@@ -794,264 +731,8 @@ void NfcRecordModel::checkPossibleContentForRecord(QList<QObject*> &contentList,
         if (description.isEmpty()) {
             // No description provided - use the defaulf for this record content type
             QString defaultContents;
-            getDefaultsForRecordContent(searchForMsgType, searchForRecordContent, description, defaultContents);
+            m_nfcRecordDefaults->itemContentDefault(searchForMsgType, searchForRecordContent, description, defaultContents);
         }
         contentList.append(new NfcRecordItem(description, searchForMsgType, searchForRecordContent, QString(), false, false, -1, this));
     }
-
 }
-
-/*!
-  \brief Get default values for a new record item that is part of a specific message type.
-  */
-void NfcRecordModel::getDefaultsForRecordContent(const NfcTypes::MessageType msgType, const NfcTypes::RecordContent contentType, QString& defaultTitle, QString& defaultContents)
-{
-    defaultTitle = "";
-    defaultContents = "";
-    switch (contentType) {
-    case NfcTypes::RecordUri:
-        defaultTitle = "URI";
-        defaultContents = "http://nokia.com";
-        break;
-    case NfcTypes::RecordText: {
-        if (msgType == NfcTypes::MsgText) {
-            defaultTitle = "Text";
-        } else {
-            defaultTitle = "Title text";
-        }
-        switch (msgType) {
-        case NfcTypes::MsgSms:
-            defaultContents = "Send SMS";
-            break;
-        case NfcTypes::MsgSocialNetwork:
-            defaultContents = "Follow me";
-            break;
-        case NfcTypes::MsgGeo:
-            defaultContents = "View location";
-            break;
-        case NfcTypes::MsgStore:
-            defaultContents = "Download app";
-            break;
-        default:
-            defaultContents = "Nokia";
-        }
-        break; }
-    case NfcTypes::RecordTextLanguage:
-        defaultTitle = "Language";
-        defaultContents = "en";
-        break;
-    case NfcTypes::RecordSmsBody:
-        defaultTitle = "SMS Body";
-        defaultContents = "Hello";
-        break;
-    case NfcTypes::RecordSpAction:
-        defaultTitle = "Action";
-        // Selection item - no default contents string
-        break;
-    case NfcTypes::RecordImageFilename:
-        defaultTitle = "Image";
-        break;
-    case NfcTypes::RecordSpType:
-        defaultTitle = "Type of linked content";
-        defaultContents = "text/html";
-        break;
-    case NfcTypes::RecordSpSize:
-        defaultTitle = "Size of linked content";
-        defaultContents = "0";
-        break;
-    case NfcTypes::RecordTypeNameFormat:
-        defaultTitle = "Type Name Format";
-        // Selection item - no default contents string
-        break;
-    case NfcTypes::RecordTypeName:
-        defaultTitle = "Type Name";
-        defaultContents = "nokia.com:custom";
-        break;
-    case NfcTypes::RecordId:
-        defaultTitle = "Id";
-        break;
-    case NfcTypes::RecordRawPayload:
-        defaultTitle = "Raw Payload";
-        defaultContents = "Nokia";
-        break;
-    case NfcTypes::RecordSocialNetworkType:
-        defaultTitle = "Social Network";
-        break;
-    case NfcTypes::RecordSocialNetworkName:
-        defaultTitle = "User name / ID";
-        defaultContents = "mopius";
-        break;
-        // ----------------------------------------------------------------
-        // Contacts
-    case NfcTypes::RecordNamePrefix:
-        defaultTitle = "Name Prefix";
-        break;
-    case NfcTypes::RecordFirstName:
-        defaultTitle = "First name";
-        defaultContents = "Joe";
-        break;
-    case NfcTypes::RecordMiddleName:
-        defaultTitle = "Middle name";
-        break;
-    case NfcTypes::RecordLastName:
-        defaultTitle = "Last name";
-        defaultContents = "Bloggs";
-        break;
-    case NfcTypes::RecordNameSuffix:
-        defaultTitle = "Name suffix";
-        defaultContents = "";
-        break;
-    case NfcTypes::RecordNickname:
-        defaultTitle = "Nickname";
-        break;
-    case NfcTypes::RecordEmailAddress:
-        defaultTitle = "Email address";
-        defaultContents = "joe.bloggs@nokia.com";
-        break;
-    case NfcTypes::RecordPhoneNumber:
-        defaultTitle = "Phone number";
-        defaultContents = "+1234";
-        break;
-    case NfcTypes::RecordContactUrl:
-        defaultTitle = "URL";
-        defaultContents = "http://developer.nokia.com/";
-        break;
-    case NfcTypes::RecordOrganizationName:
-        defaultTitle = "Organization name";
-        break;
-    case NfcTypes::RecordOrganizationDepartment:
-        defaultTitle = "Organization department";
-        break;
-    case NfcTypes::RecordOrganizationRole:
-        defaultTitle = "Organization role";
-        break;
-    case NfcTypes::RecordOrganizationTitle:
-        defaultTitle = "Organization title";
-        break;
-    case NfcTypes::RecordBirthday:
-        defaultTitle = "Birthday (YYYY-MM-DD)";
-        defaultContents = "1980-03-25";
-        break;
-    case NfcTypes::RecordNote:
-        defaultTitle = "Note";
-        break;
-    case NfcTypes::RecordCountry:
-        defaultTitle = "Country";
-        break;
-    case NfcTypes::RecordLocality:
-        defaultTitle = "Locality";
-        break;
-    case NfcTypes::RecordPostOfficeBox:
-        defaultTitle = "Post Office Box";
-        break;
-    case NfcTypes::RecordPostcode:
-        defaultTitle = "Postcode";
-        break;
-    case NfcTypes::RecordRegion:
-        defaultTitle = "Region";
-        break;
-    case NfcTypes::RecordStreet:
-        defaultTitle = "Street";
-        break;
-        // ----------------------------------------------------------------
-        // Geo
-    case NfcTypes::RecordGeoType:
-        defaultTitle = "Geo Tag Type";
-        // Selection item - no default contents string
-        break;
-    case NfcTypes::RecordGeoLatitude:
-        defaultTitle = "Latitude (dec deg., WGS-84)";
-        defaultContents = "60.17";
-        break;
-    case NfcTypes::RecordGeoLongitude:
-        defaultTitle = "Longitude (dec deg., WGS-84)";
-        defaultContents = "24.829";
-        break;
-        // ----------------------------------------------------------------
-        // Store
-    case NfcTypes::RecordStoreNokia:
-        defaultTitle = "Nokia Store generic ID";
-        // TODO: add id of Nfc Interactor by default, once known
-        break;
-    case NfcTypes::RecordStoreSymbian:
-        defaultTitle = "Symbian ID in Nokia Store";
-        defaultContents = "184295";
-        break;
-    case NfcTypes::RecordStoreMeeGoHarmattan:
-        defaultTitle = "MeeGo ID in Nokia Store";
-        defaultContents = "214283";
-        break;
-    case NfcTypes::RecordStoreSeries40:
-        defaultTitle = "Series 40 ID in Nokia Store";
-        break;
-    case NfcTypes::RecordStoreWindowsPhone:
-        defaultTitle = "Windows Phone Marketplace ID";
-        break;
-    case NfcTypes::RecordStoreAndroid:
-        defaultTitle = "Android Marketplace ID";
-        break;
-    case NfcTypes::RecordStoreiOS:
-        defaultTitle = "iOS App Store ID";
-        break;
-    case NfcTypes::RecordStoreBlackberry:
-        defaultTitle = "BlackBerry App World ID";
-        break;
-    case NfcTypes::RecordStoreCustomName:
-        defaultTitle = "Registered app name";
-        defaultContents = "ni";
-        break;
-    default:
-        qDebug() << "Warning: don't have defaults for requested content type in NfcRecordModel::getDefaultsForRecordContent().";
-        break;
-    }
-}
-
-/*!
-  \brief Get possible selection items for a new record item.
-
-  \param contentType record content type to get the possible selection items for
-  \param defaultSelectedItem which item should be selected by default
-  */
-QVariantList NfcRecordModel::getSelectionItemsForRecordContent(const NfcTypes::RecordContent contentType, int& defaultSelectedItem)
-{
-    QVariantList selectionItems;
-    defaultSelectedItem = 0;
-    switch (contentType) {
-    case NfcTypes::RecordSpAction:
-        selectionItems << "Do the action";
-        selectionItems << "Save for later";
-        selectionItems << "Open for editing";
-        break;
-    case NfcTypes::RecordGeoType:
-        selectionItems << "geo: URI scheme";
-        selectionItems << "Nokia Maps link";
-        selectionItems << "Generic redirect NfcInteractor.com";
-        break;
-    case NfcTypes::RecordSocialNetworkType:
-        selectionItems << "Twitter";
-        selectionItems << "LinkedIn";
-        selectionItems << "Facebook";
-        selectionItems << "Xing";
-        // vKontakte.ru
-        selectionItems << QString::fromWCharArray(L"\x0412\x041A\x043E\x043D\x0442\x0430\x043A\x0442\x0435");
-        selectionItems << "Foursquare";
-        break;
-    case NfcTypes::RecordTypeNameFormat:
-        selectionItems << "Empty";
-        selectionItems << "NfcRtd";
-        selectionItems << "Mime";
-        selectionItems << "Uri";
-        selectionItems << "ExternalRtd";
-        selectionItems << "Unknown";
-        defaultSelectedItem = 4;
-        break;
-    default:
-        qDebug() << "Warning: don't have defaults for requested content type in NfcRecordModel::getDefaultSelectionItemsForRecordContent().";
-        break;
-    }
-    return selectionItems;
-
-
-
-}
-

@@ -1,47 +1,21 @@
 /****************************************************************************
 **
-** Copyright (C) 2011 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
 ** Contact: Andreas Jakl (andreas.jakl@nokia.com)
 **
-** This file is part of an NFC example for Qt Mobility.
-**
-** $QT_BEGIN_LICENSE:BSD$
-** You may use this file under the terms of the BSD license as follows:
-**
-** "Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions are
-** met:
-**   * Redistributions of source code must retain the above copyright
-**     notice, this list of conditions and the following disclaimer.
-**   * Redistributions in binary form must reproduce the above copyright
-**     notice, this list of conditions and the following disclaimer in
-**     the documentation and/or other materials provided with the
-**     distribution.
-**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
-**     the names of its contributors may be used to endorse or promote
-**     products derived from this software without specific prior written
-**     permission.
-**
-** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
-** $QT_END_LICENSE$
+** Released under Nokia Example Code License.
+** See license.txt in the main project folder.
 **
 ****************************************************************************/
+
 
 #include "nfcinfo.h"
 
 NfcInfo::NfcInfo(QObject *parent) :
     QObject(parent),
+    m_nfcManager(NULL),
+    m_cachedTarget(NULL),
     m_reportingLevel(OnlyImportantReporting),
     m_pendingWriteNdef(false),
     m_currentActivity(NfcUninitialized),
@@ -50,7 +24,9 @@ NfcInfo::NfcInfo(QObject *parent) :
     m_cachedNdefMessageSize(0),
     m_cachedRequestType(NfcIdle),
     m_unlimitedAdvancedMsgs(true),
-    m_harmattanPr10(false)
+    m_harmattanPr10(false),
+    m_usePeerToPeer(true),
+    m_nfcPeerToPeer(NULL)
 {
 #if defined(MEEGO_EDITION_HARMATTAN)
     // Determine Harmattan FW version
@@ -63,12 +39,16 @@ NfcInfo::NfcInfo(QObject *parent) :
     }
 #endif
 
+    // Record model and stats module
     m_nfcRecordModel = new NfcRecordModel(this);
     m_nfcStats = new NfcStats(this);
     m_nfcRecordModel->setNfcStats(m_nfcStats);
     connect(m_nfcRecordModel, SIGNAL(recordItemsModified()), this, SLOT(nfcRecordModelChanged()));
+
+    // Target analyzer and Ndef parser
     m_nfcTargetAnalyzer = new NfcTargetAnalyzer(this);
     m_nfcNdefParser = new NfcNdefParser(m_nfcRecordModel, this);
+
     // Relay the signal when the private ndef parser found an image,
     // so that the QML UI can react to this.
     // Images are stored in the m_imgCache variable; both this and
@@ -81,6 +61,11 @@ NfcInfo::~NfcInfo() {
     delete m_cachedNdefMessage;
 }
 
+bool NfcInfo::initAndStartNfcAsync()
+{
+    QTimer::singleShot(50, this, SLOT(initAndStartNfc()));
+}
+
 /*!
   \brief Initialize the NFC access for NDEF targets and start target detection.
 
@@ -91,6 +76,20 @@ NfcInfo::~NfcInfo() {
   */
 bool NfcInfo::initAndStartNfc()
 {
+    if (!m_nfcPeerToPeer)
+    {
+        // Peer to peer for SNEP
+        m_nfcPeerToPeer = new NfcPeerToPeer(this);
+        m_nfcPeerToPeer->setAppSettings(m_appSettings);
+        // TODO: Connect all signals of m_nfcPeerToPeer
+        connect(m_nfcPeerToPeer, SIGNAL(nfcStatusUpdate(QString)), this, SIGNAL(nfcStatusUpdate(QString)));
+        connect(m_nfcPeerToPeer, SIGNAL(nfcStatusError(QString)), this, SIGNAL(nfcStatusError(QString)));
+        connect(m_nfcPeerToPeer, SIGNAL(chatMessage(QString)), this, SIGNAL(nfcInfoUpdate(QString)));
+        connect(m_nfcPeerToPeer, SIGNAL(statusMessage(QString)), this, SIGNAL(nfcStatusUpdate(QString)));
+        connect(m_nfcPeerToPeer, SIGNAL(ndefMessage(QNdefMessage)), this, SLOT(ndefMessageRead(QNdefMessage)));
+        connect(m_nfcPeerToPeer, SIGNAL(nfcSnepSuccess()), this, SIGNAL(nfcTagWritten()));
+    }
+
     if (m_nfcRecordModel->size() == 0) {
         nfcRecordModelChanged();
         // Populate write view with items (for development time only, comment out for release)
@@ -101,6 +100,7 @@ bool NfcInfo::initAndStartNfc()
     // NfcInfo (this) is the parent; will automaically delete nfcManager
     if (!m_nfcManager) {
         m_nfcManager = new QNearFieldManager(this);
+        m_nfcPeerToPeer->setNfcManager(m_nfcManager);
     }
 
     const bool nfcAvailable = m_nfcManager->isAvailable();
@@ -125,6 +125,10 @@ bool NfcInfo::initAndStartNfc()
             this, SLOT(targetLost(QNearFieldTarget*)));
     connect(m_nfcManager, SIGNAL(targetDetected(QNearFieldTarget*)),
             this, SLOT(targetDetected(QNearFieldTarget*)));
+
+    if (m_usePeerToPeer) {
+        m_nfcPeerToPeer->initAndStartNfc();
+    }
 
     // Start detecting targets
     bool activationSuccessful = m_nfcManager->startTargetDetection();
@@ -321,6 +325,14 @@ void NfcInfo::targetDetected(QNearFieldTarget *target)
             if (m_harmattanPr10) {
                 m_nfcManager->setTargetAccessModes(QNearFieldManager::NdefWriteTargetAccess);
             }
+            writeCachedNdefMessage();
+        }
+    } else if (accessMethods.testFlag(QNearFieldTarget::LlcpAccess) && m_usePeerToPeer) {
+        // Establish peer to peer connection
+        m_nfcPeerToPeer->targetDetected(target);
+        // Is a write operation pending?
+        if (m_pendingWriteNdef)
+        {
             writeCachedNdefMessage();
         }
     } else {
@@ -638,15 +650,35 @@ bool NfcInfo::writeCachedNdefMessage()
                 // Check target access mode
                 QNearFieldManager::TargetAccessModes accessModes = m_nfcManager->targetAccessModes();
                 // Writing access is active - we should be able to write
-                if (accessModes.testFlag(QNearFieldManager::NdefWriteTargetAccess))
+                if (m_cachedTarget->accessMethods().testFlag(QNearFieldTarget::LlcpAccess) &&
+                        m_usePeerToPeer && m_nfcPeerToPeer)
                 {
-                    qDebug() << "Writing message: " << m_cachedNdefMessage->toByteArray();
+                    // -----------------------------------------------------
+                    // Peer to peer (SNEP)
+                    m_nfcPeerToPeer->sendNdefMessage(m_cachedNdefMessage);
+                }
+                else if (accessModes.testFlag(QNearFieldManager::NdefWriteTargetAccess))
+                {
+                    // -----------------------------------------------------
+                    // NDEF Access
                     m_currentActivity = NfcNdefWriting;
-                    m_cachedRequestType = NfcNdefWriting;
-                    m_cachedRequestId = m_cachedTarget->writeNdefMessages(QList<QNdefMessage>() << (*m_cachedNdefMessage));
-                    emit nfcStatusUpdate("Writing message to the tag.");
+                    if (m_appSettings->deleteTagBeforeWriting() && m_cachedRequestType != NfcNdefDeleting) {
+                        // Write an empty message first
+                        m_cachedRequestType = NfcNdefDeleting;
+                        emit nfcStatusUpdate("Writing empty message to the tag.");
+                        // TODO: check if we need to add an empty record, or if
+                        // formatting is also done like this.
+                        m_cachedRequestId = m_cachedTarget->writeNdefMessages(QList<QNdefMessage>() << (QNdefMessage()));
+                    } else {
+                        qDebug() << "Writing message: " << m_cachedNdefMessage->toByteArray();
+                        // Either the empty message was already written, or
+                        // configuration is not set to delete the message first.
+                        m_cachedRequestType = NfcNdefWriting;
+                        emit nfcStatusUpdate("Writing message to the tag.");
+                        m_cachedRequestId = m_cachedTarget->writeNdefMessages(QList<QNdefMessage>() << (*m_cachedNdefMessage));
+                    }
                     success = true;
-                    if (!m_writeOneTagOnly) {
+                    if (!m_writeOneTagOnly && m_cachedRequestType != NfcNdefDeleting) {
                         // If writing only one tag, deactivate the writing mode again.
                         m_pendingWriteNdef = false;
                         emit nfcModeChanged(NfcTypes::nfcReading);
@@ -654,8 +686,12 @@ bool NfcInfo::writeCachedNdefMessage()
                             m_nfcManager->setTargetAccessModes(QNearFieldManager::NdefReadTargetAccess);
                         }
                     }
-                } else {
-                    // Device is not in writing mode
+
+                }
+                else
+                {
+                    // -----------------------------------------------------
+                    // Not in right mode / not right target
                     emit nfcStatusUpdate("Please touch the tag again to write the message.");
                 }
             } else {
@@ -710,6 +746,9 @@ void NfcInfo::stoppedTagInteraction() {
   */
 void NfcInfo::targetLost(QNearFieldTarget *target)
 {
+    if (m_nfcPeerToPeer) {
+        m_nfcPeerToPeer->targetLost(target);
+    }
     m_cachedTarget = NULL;
     target->deleteLater();
     stoppedTagInteraction();
@@ -728,7 +767,13 @@ void NfcInfo::targetError(QNearFieldTarget::Error error, const QNearFieldTarget:
 {
     QString errorText("Error: " + convertTargetErrorToString(error));
     qDebug() << errorText;
-    if (id == m_cachedRequestId && m_cachedRequestType == NfcNdefWriting) {
+    if (id == m_cachedRequestId && m_cachedRequestType == NfcNdefDeleting) {
+        // Writing the empty message failed - try to write the full message
+        // before reporting the error
+        writeCachedNdefMessage();
+        errorText.append("\n\nFailed to write empty message - attempting to write full NDEF message.");
+        emit nfcTagWriteError(errorText);
+    } else if (id == m_cachedRequestId && m_cachedRequestType == NfcNdefWriting) {
         m_cachedRequestType = NfcIdle;
         if (!m_pendingWriteNdef) {
             m_currentActivity = NfcIdle;
@@ -812,15 +857,33 @@ void NfcInfo::requestCompleted(const QNearFieldTarget::RequestId &id)
     QString message;
     bool showAnotherTagWriteMsg = false;
     if (id == m_cachedRequestId) {
+        bool noStatusChange = false;
         switch (m_cachedRequestType) {
         case NfcIdle: {
             message = "Active request completed.";
             m_currentActivity = NfcIdle;
             break; }
+
         case NfcNdefReading: {
             message = "Read request completed.";
             m_currentActivity = NfcIdle;
             break; }
+
+        case NfcNdefDeleting: {
+            // requestCompleted() is not called on Symbian, only
+            // ndefMessageWritten().
+            // On the n9, both requestCompleted() and ndefMessageWritten()
+            // are called after the empty message has been written.
+            // -> only start writing the "real" message from one place,
+            // so that we don't start two simultaneous write requests on the N9.
+            // Also, don't change the status of the class to say that
+            // we stopped tag interaction.
+            // Plus, the cached request type needs to remain at deleting,
+            // so that the write method knows that it should proceed to the
+            // second step and write the real message now.
+            noStatusChange = true;
+            break; }
+
         case NfcNdefWriting: {
             message = "Write request completed.";
             if (m_pendingWriteNdef) {
@@ -831,20 +894,25 @@ void NfcInfo::requestCompleted(const QNearFieldTarget::RequestId &id)
                 m_currentActivity = NfcIdle;  // Read or write request finished
             }
             break; }
+
         default: {
             message = "Request completed.";
             break; }
         }
-        qDebug() << message;
-        if (!(m_cachedRequestType == NfcNdefWriting && m_reportingLevel == OnlyImportantReporting)) {
-            // Writing success will already be reported by the nfcTagWritten method
-            // (this method is called as well on MeeGo, resulting in 2x status updates).
-            // Therefore, for writing, do not print this status mesesage if
-            // reporting is set to only important.
-            emit nfcStatusSuccess(message);
+        if (!message.isEmpty()) {
+            qDebug() << message;
+            if (!(m_cachedRequestType == NfcNdefWriting && m_reportingLevel == OnlyImportantReporting)) {
+                // Writing success will already be reported by the nfcTagWritten method
+                // (this method is called as well on MeeGo, resulting in 2x status updates).
+                // Therefore, for writing, do not print this status mesesage if
+                // reporting is set to only important.
+                emit nfcStatusSuccess(message);
+            }
         }
-        m_cachedRequestType = NfcIdle;
-        stoppedTagInteraction();
+        if (!noStatusChange) {
+            m_cachedRequestType = NfcIdle;
+            stoppedTagInteraction();
+        }
     } else {
         message = "Request completed.";
         if (m_reportingLevel == DebugReporting) {
@@ -898,6 +966,15 @@ void NfcInfo::requestCompleted(const QNearFieldTarget::RequestId &id)
   */
 void NfcInfo::ndefMessageWritten()
 {
+    if (m_cachedRequestType == NfcNdefDeleting) {
+        // Start writing the full message, now that
+        // the empty message has been written
+        emit nfcStatusSuccess("Empty message written.");
+        // Need to start the second write request with a delay from
+        // a separate thread; wouldn't work otherwise.
+        QTimer::singleShot(50, this, SLOT(writeCachedNdefMessage()));
+        return;
+    }
     // Store the composed message type count to the actual written count
     m_nfcStats->commitComposedToWrittenCount();
     emit nfcTagWritten();
@@ -970,6 +1047,9 @@ void NfcInfo::setAppSettings(AppSettings *appSettings)
     m_appSettings->setParent(this);
     if (m_nfcNdefParser) {
         m_nfcNdefParser->setAppSettings(m_appSettings);
+    }
+    if (m_nfcPeerToPeer) {
+        m_nfcPeerToPeer->setAppSettings(m_appSettings);
     }
 }
 

@@ -1,3 +1,13 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Andreas Jakl (andreas.jakl@nokia.com)
+**
+** Released under Nokia Example Code License.
+** See license.txt in the main project folder.
+**
+****************************************************************************/
 import QtQuick 1.1
 import com.nokia.symbian 1.1 // Symbian Qt Quick components
 
@@ -7,39 +17,10 @@ Page {
             flat: true
             iconSource: "toolbar-back";
             onClicked: {
-                saveSettings();
                 pageStack.depth <= 1 ? Qt.quit() : pageStack.pop()
             }
         }
     }
-
-    // Internal use - for virtual keyboard handling
-    property Item focusedItem
-
-    // Settings
-    property alias logNdefToFile: logNdefToFileEdit.checked
-    property alias logNdefDir: logNdefDirEdit.text
-
-    onStatusChanged: {
-        if (status === PageStatus.Activating) {
-            console.log("Activating page...");
-            applySettingsToPage();
-        }
-    }
-
-    function applySettingsToPage() {
-        logNdefToFile = settings.logNdefToFile;
-        logNdefDir = settings.logNdefDir;
-    }
-
-    function saveSettings() {
-        console.log("Saving settings...");
-        // Apply the new settings to the nfcPeerToPeer object
-        settings.setLogNdefToFile(logNdefToFile);
-        settings.setLogNdefDir(logNdefDir);
-        settings.saveSettings();
-    }
-
 
     Item {
         id: instructionsItem
@@ -85,7 +66,7 @@ Page {
 
                 Text {
                     id: instructionsText2
-                    text: qsTr("v3.0.0 beta\n2011 - 2012 Andreas Jakl")
+                    text: qsTr("v4.0.0 beta\n2011 - 2012 Andreas Jakl")
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     wrapMode: Text.WordWrap
@@ -109,63 +90,6 @@ Page {
                     color: customPlatformStyle.colorNormalLight
                     font.family: customPlatformStyle.fontFamilyRegular;
                     font.pixelSize: customPlatformStyle.fontSizeMedium
-                }
-
-                // ----------------------------------------------------------
-                // Settings
-
-                Rectangle {
-                    id: separator
-                    width: parent.width; height: 1; color: "gray"
-                }
-                Row {
-                    id: settingsHeader
-                    spacing: customPlatformStyle.paddingMedium;
-
-                    Image {
-                        id: settingsImage
-                        source: "settings.svg"
-                        fillMode: Image.PreserveAspectFit
-                        asynchronous: true
-                    }
-
-                    Text {
-                        id: settingsHeaderText
-                        text: qsTr("Settings")
-                        verticalAlignment: Text.AlignVCenter
-                        height: settingsImage.height
-                        font.family: customPlatformStyle.fontFamilyRegular;
-                        color: customPlatformStyle.colorNormalLight
-                        font.pixelSize: customPlatformStyle.fontSizeLarge
-                    }
-                }
-
-                // - Log NDEF messages to files
-                CheckBox {
-                    id: logNdefToFileEdit
-                    checked: true
-                    text: "Save NDEF messages to files\n(required for cloning \& editing)"
-                    onClicked: {
-                        logNdefDirEdit.enabled = logNdefToFileEdit.checked
-                        logNdefDirTitle.color = (logNdefDirEdit.enabled) ? customPlatformStyle.colorNormalLight : customPlatformStyle.colorNormalMid;
-                    }
-                }
-
-                // - Log directory
-                Text {
-                    id: logNdefDirTitle
-                    text: qsTr("Saved NDEF directory")
-                    font.family: customPlatformStyle.fontFamilyRegular;
-                    color: customPlatformStyle.colorNormalLight
-                    font.pixelSize: customPlatformStyle.fontSizeMedium
-                }
-
-                TextField {
-                    id: logNdefDirEdit
-                    width: parent.width
-                    text: ""
-                    maximumLength: 255
-                    onActiveFocusChanged: if (activeFocus) focusedItem = logNdefDirEdit
                 }
             }
         }

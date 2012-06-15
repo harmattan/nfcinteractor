@@ -33,7 +33,7 @@ contains(DEFINES,UNLIMITED_VERSION) {
 } else {
     TARGET = nfcinteractor
 }
-VERSION = 3.00.0
+VERSION = 4.00.0
 
 
 symbian {
@@ -77,11 +77,13 @@ SOURCES += main.cpp \
     nfctargetanalyzer.cpp \
     tagimagecache.cpp \
     nfcrecordmodel.cpp \
+    nfcrecorddefaults.cpp \
     nfcrecorditem.cpp \
     nfcmodeltondef.cpp \
     nfcndefparser.cpp \
     nfcstats.cpp \
     appsettings.cpp \
+    nfcpeertopeer.cpp \
     ndefnfcrecords/ndefnfcsprecord.cpp \
     ndefnfcrecords/ndefnfcmimeimagerecord.cpp \
     ndefnfcrecords/ndefnfcmimevcardrecord.cpp \
@@ -89,7 +91,8 @@ SOURCES += main.cpp \
     ndefnfcrecords/ndefnfcsmarturirecord.cpp \
     ndefnfcrecords/ndefnfcsmsrecord.cpp \
     ndefnfcrecords/ndefnfcsocialrecord.cpp \
-    ndefnfcrecords/ndefnfcstorelinkrecord.cpp
+    ndefnfcrecords/ndefnfcstorelinkrecord.cpp \
+    snepmanager.cpp
 
 HEADERS += \
     nfcinfo.h \
@@ -97,12 +100,14 @@ HEADERS += \
     nfctargetanalyzer.h \
     tagimagecache.h \
     nfcrecordmodel.h \
+    nfcrecorddefaults.h \
     nfcrecorditem.h \
     nfcmodeltondef.h \
     nfcndefparser.h \
     nfcstats.h \
     nfctypes.h \
     appsettings.h \
+    nfcpeertopeer.h \
     ndefnfcrecords/ndefnfcsprecord.h \
     ndefnfcrecords/ndefnfcmimeimagerecord.h \
     ndefnfcrecords/ndefnfcmimevcardrecord.h \
@@ -110,7 +115,8 @@ HEADERS += \
     ndefnfcrecords/ndefnfcsmarturirecord.h \
     ndefnfcrecords/ndefnfcsmsrecord.h \
     ndefnfcrecords/ndefnfcsocialrecord.h \
-    ndefnfcrecords/ndefnfcstorelinkrecord.h
+    ndefnfcrecords/ndefnfcstorelinkrecord.h \
+    snepmanager.h
 
 simulator {
     # The simulator uses the QML and images from Symbian,
@@ -136,7 +142,8 @@ symbian {
         TARGET.UID3 = 0x2005CE03
     } else {
         TARGET.UID3 = 0xE0D154A1
-        #MMP_RULES += "DEBUGGABLE_UDEBONLY"
+        # On device debugging workaround for https://bugreports.qt-project.org/browse/QTBUG-25678
+        MMP_RULES += "DEBUGGABLE_UDEBONLY"
     }
 
     # Allow network access on Symbian
@@ -336,23 +343,6 @@ contains(MEEGO_EDITION,harmattan) {
         iaa_components.target = qml
         DEPLOYMENTFOLDERS += iaa_components
         QML_IMPORT_PATH += iaa/inneractive
-
-#        INCLUDEPATH += iaa
-#        DEPENDPATH += iaa
-#        SOURCES += \
-#            iaa/adinterface.cpp \
-#            iaa/requestqueue.cpp \
-#            iaa/uachecker.cpp
-#        HEADERS += \
-#            iaa/adinterface.h \
-#            iaa/requestqueue.h \
-#            iaa/uachecker.h
-#        OTHER_FILES += \
-#            qml/iaa/*.qml
-#        iaaFolder.source = qml/iaa/*
-#        iaaFolder.target = qml
-#        DEPLOYMENTFOLDERS += iaaFolder
-#        QML_IMPORT_PATH += qml/iaa
     }
 }
 

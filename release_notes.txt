@@ -33,6 +33,7 @@ Tag writing:
 - Dynamic UI to create a message consisting of multiple NDEF records, and to add information to each record
 - Clone tag contents (tap on blue NDEF message contents after reading a tag -> clone)
 - Save own composed tags to the file system on the phone
+- Option to write empty message before real message, to better format factory-empty tags
 - Open previously collected or saved NDEF message in compose mode for editing and writing again (tap on blue NDEF message contents after reading a tag -> edit, or load from compose view)
 - Help for all supported message types
 - NDEF message size calculation
@@ -54,7 +55,8 @@ Easily reusable code for developers including:
 
 Known bugs / issues (work-in-progress):
 - Settings: scroll view for VKB on Symbian
-- Maybe add option to automatically write empty message to tags? (-> formatting)
+- Nfc Interactor autostart: language of store record is "Get App" instead of "en"
+- Info view isn't properly scrolled at app startup
   
 Ideas for future updates:
 - Write a contact from the address book
@@ -66,8 +68,8 @@ Ideas for future updates:
 - Birthday support for contacts (date picker UI)
 - Geocoding (enter address, write coordinates to the tag - interactive UI)
 - SNEP sending and receiving (through LLCP)
-- Refactor record item defaults out of nfcrecordmodel.cpp
 - Splash screen for Symbian
+- Turn NFC on from the app on Symbian: http://www.developer.nokia.com/Community/Wiki/How_to_put_NFC_ON_and_OFF_with_Qt
 - Write empty message first, then full message, if writing fails? Increases stability on non-formatted tags.
 - Support for writing AAR records (Android Application Record): http://stackoverflow.com/questions/9016944/android-application-record-compatibility-with-pre-ics
 

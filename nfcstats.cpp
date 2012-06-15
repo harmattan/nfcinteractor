@@ -1,3 +1,14 @@
+/****************************************************************************
+**
+** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
+** All rights reserved.
+** Contact: Andreas Jakl (andreas.jakl@nokia.com)
+**
+** Released under Nokia Example Code License.
+** See license.txt in the main project folder.
+**
+****************************************************************************/
+
 #include "nfcstats.h"
 
 NfcStats::NfcStats(QObject *parent) :
