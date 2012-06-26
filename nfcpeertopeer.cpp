@@ -242,7 +242,7 @@ void NfcPeerToPeer::targetDetected(QNearFieldTarget *target)
     }
 }
 
-void NfcPeerToPeer::targetLost(QNearFieldTarget *target)
+void NfcPeerToPeer::targetLost(QNearFieldTarget */*target*/)
 {
     if (!m_useConnectionLess && m_nfcClientSocket) {
         // Connection-oriented
@@ -255,8 +255,7 @@ void NfcPeerToPeer::targetLost(QNearFieldTarget *target)
         initClientSocket();
 #endif
     }
-//    target->deleteLater();
-//    target = NULL;
+    // Don't delete target here, it's owned by NfcInfo
 }
 
 
