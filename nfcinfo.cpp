@@ -61,7 +61,7 @@ NfcInfo::~NfcInfo() {
     delete m_cachedNdefMessage;
 }
 
-bool NfcInfo::initAndStartNfcAsync()
+void NfcInfo::initAndStartNfcAsync()
 {
     QTimer::singleShot(50, this, SLOT(initAndStartNfc()));
 }

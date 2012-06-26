@@ -152,7 +152,7 @@ signals:
       needed for the NOTIFY part of the property of this class. */
     void recordModelChanged();
 public slots:
-    bool initAndStartNfcAsync();
+    void initAndStartNfcAsync();
     bool checkNfcStatus();
     bool nfcWriteTag(const bool writeOneTagOnly);
     bool nfcWriteTag(const QString &fileName, const bool writeOneTagOnly);
@@ -259,8 +259,8 @@ private:
       modes activated at the same time. This has been improved in PR 1.1+. */
     bool m_harmattanPr10;
 
-    NfcPeerToPeer* m_nfcPeerToPeer;
     bool m_usePeerToPeer;
+    NfcPeerToPeer* m_nfcPeerToPeer;
 };
 
 #endif // NFCINFO_H
