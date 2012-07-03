@@ -55,8 +55,6 @@ Easily reusable code for developers including:
 
 Known bugs / issues (work-in-progress):
 - Settings: scroll view for VKB on Symbian
-- Nfc Interactor autostart: language of store record is "Get App" instead of "en"
-- Info view isn't properly scrolled at app startup
   
 Ideas for future updates:
 - Write a contact from the address book

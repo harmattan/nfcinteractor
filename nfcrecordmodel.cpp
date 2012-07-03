@@ -176,23 +176,23 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
     switch (messageType) {
     case NfcTypes::MsgSmartPoster:
         simpleAppendRecordHeaderItem(NfcTypes::MsgSmartPoster, true, recordId);
-        simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordUri, false,  recordId);
-        simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordText, true,  recordId);
-        simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordTextLanguage, false,  recordId);
+        simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordUri, false, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordText, true, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgSmartPoster, NfcTypes::RecordTextLanguage, false, recordId);
         break;
     case NfcTypes::MsgUri:
         simpleAppendRecordHeaderItem(NfcTypes::MsgUri, false, recordId);
-        simpleAppendRecordItem(NfcTypes::MsgUri, NfcTypes::RecordUri, false,  recordId);
+        simpleAppendRecordItem(NfcTypes::MsgUri, NfcTypes::RecordUri, false, recordId);
         break;
     case NfcTypes::MsgText:
         simpleAppendRecordHeaderItem(NfcTypes::MsgText, false, recordId);
-        simpleAppendRecordItem(NfcTypes::MsgText, NfcTypes::RecordText, false,  recordId);
-        simpleAppendRecordItem(NfcTypes::MsgText, NfcTypes::RecordTextLanguage, false,  recordId);
+        simpleAppendRecordItem(NfcTypes::MsgText, NfcTypes::RecordText, false, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgText, NfcTypes::RecordTextLanguage, false, recordId);
         break;
     case NfcTypes::MsgSms:
         simpleAppendRecordHeaderItem(NfcTypes::MsgSms, true, recordId);
-        simpleAppendRecordItem(NfcTypes::MsgSms, NfcTypes::RecordPhoneNumber, false,  recordId);
-        simpleAppendRecordItem(NfcTypes::MsgSms, NfcTypes::RecordSmsBody, false,  recordId);
+        simpleAppendRecordItem(NfcTypes::MsgSms, NfcTypes::RecordPhoneNumber, false, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgSms, NfcTypes::RecordSmsBody, false, recordId);
         break;
     case NfcTypes::MsgBusinessCard:
         simpleAppendRecordHeaderItem(NfcTypes::MsgBusinessCard, true, recordId);
@@ -224,35 +224,35 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
         break; }
     case NfcTypes::MsgImage:
         simpleAppendRecordHeaderItem(NfcTypes::MsgImage, false, recordId);
-        simpleAppendRecordItem(NfcTypes::MsgImage, NfcTypes::RecordImageFilename, false,  recordId);
+        simpleAppendRecordItem(NfcTypes::MsgImage, NfcTypes::RecordImageFilename, false, recordId);
         break;
     case NfcTypes::MsgAnnotatedUrl:
         simpleAppendRecordHeaderItem(NfcTypes::MsgUri, false, recordId);
-        simpleAppendRecordItem(NfcTypes::MsgUri, NfcTypes::RecordUri, false,  recordId);
+        simpleAppendRecordItem(NfcTypes::MsgUri, NfcTypes::RecordUri, false, recordId);
         simpleAppendRecordHeaderItem(NfcTypes::MsgText, false, recordId);
-        simpleAppendRecordItem(NfcTypes::MsgText, NfcTypes::RecordText, false,  recordId);
-        simpleAppendRecordItem(NfcTypes::MsgText, NfcTypes::RecordTextLanguage, false,  recordId);
+        simpleAppendRecordItem(NfcTypes::MsgText, NfcTypes::RecordText, false, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgText, NfcTypes::RecordTextLanguage, false, recordId);
         break;
     case NfcTypes::MsgCustom:
         simpleAppendRecordHeaderItem(NfcTypes::MsgCustom, true, recordId);
-        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeNameFormat, false,  recordId);
-        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeName, true,  recordId);
+        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeNameFormat, false, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeName, true, recordId);
         break;
     case NfcTypes::MsgCombination:
         simpleAppendRecordHeaderItem(NfcTypes::MsgCustom, true, recordId);
-        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeNameFormat, false,  recordId);
-        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeName, true,  recordId);
+        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeNameFormat, false, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeName, true, recordId);
         simpleAppendRecordHeaderItem(NfcTypes::MsgUri, false, recordId);
-        simpleAppendRecordItem(NfcTypes::MsgUri, NfcTypes::RecordUri, false,  recordId);
+        simpleAppendRecordItem(NfcTypes::MsgUri, NfcTypes::RecordUri, false, recordId);
         break;
     case NfcTypes::MsgNfcAutostart:
         simpleAppendRecordHeaderItem(NfcTypes::MsgCustom, true, recordId);
-        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeNameFormat, false,  recordId);
-        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeName, "nokia.com:nfcinteractor", true,  recordId);
+        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeNameFormat, false, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeName, "nokia.com:nfcinteractor", true, recordId);
         simpleAppendRecordHeaderItem(NfcTypes::MsgStore, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordStoreCustomName, "ni", true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordText, true,  recordId);
-        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordTextLanguage, "Get App", false,  recordId);
+        simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordTextLanguage, false, recordId);
         break;
     }
 }
