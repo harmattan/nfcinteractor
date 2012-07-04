@@ -24,12 +24,9 @@ Page {
 
     Item {
         id: instructionsItem
-        anchors.top: parent.top
-        anchors.left: parent.left
+        anchors.fill: parent
         anchors.leftMargin: customPlatformStyle.paddingLarge
-        anchors.right: parent.right
         anchors.rightMargin: customPlatformStyle.paddingLarge
-        anchors.bottom: splitViewInput.top
 
         Flickable {
             id: instructionsFlickable
@@ -66,7 +63,7 @@ Page {
 
                 Text {
                     id: instructionsText2
-                    text: qsTr("v4.0.0 beta\n2011 - 2012 Andreas Jakl")
+                    text: qsTr("v4.0.0 RC\n2011 - 2012 Andreas Jakl")
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     wrapMode: Text.WordWrap
@@ -103,39 +100,5 @@ Page {
             orientation: Qt.Vertical
         }
 
-    }
-
-    // --------------------------------------------------------------------------------
-    // Virtual Keyboard handling (VKB)
-    // Resizes the Listview to avoid overlapping the edited item with the VKB.
-    // Only needed on Symbian, MeeGo does that by itself.
-    Item {
-        // This element has the same size as the virtual keyboard and is used to
-        // reduce the size of the recordView whenever the VKB becomes visible.
-        // This is needed to ensure the edited item is visible and not hidden
-        // by the VKB (through overlap).
-        id: splitViewInput
-        anchors { bottom: parent.bottom; left: parent.left; right: parent.right }
-    }
-    Connections {
-        target: inputContext;
-        onVisibleChanged: adjustVkbHeight();
-        onHeightChanged: adjustVkbHeight();
-    }
-    function adjustVkbHeight() {
-        if (platform !== 2) {
-            var prevSplitViewInputHeight = splitViewInput.height;
-            // Only do this when not working with the Simulator, which doesn't draw the
-            // VKB but still reserves the size for it.
-            splitViewInput.height = (inputContext.visible) ? inputContext.height - tools.height : 0;
-            if (prevSplitViewInputHeight !== splitViewInput.height) {
-                // Note that the recordView.currentIndex requires the item to set itself
-                // as the current index when the user starts editing an item.
-                // (in onActiveFocusChanged in the TextField element of the delegate)
-                //recordView.positionViewAtIndex(recordView.currentIndex, ListView.Visible);
-                flickSettings.contentY = focusedItem.y + focusedItem.height
-                flickSettings.returnToBounds();
-            }
-        }
     }
 }
