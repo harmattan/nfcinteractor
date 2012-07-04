@@ -8,7 +8,9 @@ Touch an NFC tag to analyze its format and its contents. Nfc Interactor parses a
 
 Compose your own NDEF messages by combining one or more NDEF records using the dynamic editor interface. Various templates assist you, allowing you to concentrate on the content instead of the format. While editing, Nfc Interactor will always show you the current size. Once your message is finalized, write it to as many tags as you like.
 
-Nfc Interactor is written in Qt and works on Symbian Anna / Belle as well as on MeeGo Harmattan. As an open source example project, it also showcases the use of Qt Quick Components, as well as the integration of C++ with QML.
+Send and receive NDEF messages through a peer-to-peer connection between devices, either using standardized SNEP (Symbian only) or a raw LLCP connection with freely defined settings.
+
+Nfc Interactor is written in Qt and works on Nokia Anna / Belle as well as on MeeGo Harmattan (Nokia N9). As an open source example project, it also showcases the use of Qt Quick Components, as well as the integration of C++ with QML.
 
 
 Note: this version of Nfc Interactor replaces the previous Java ME-based NFCinteractor. The new Qt-version is more powerful and introduces a wealth of new features, plus improved reading support. The Java ME-based project is still useful as a code example and has therefore been renamed to Nfc Creator and is available here: https://projects.developer.nokia.com/nfccreator . This Qt-based Nfc Interactor also succeeds the "Nfc Info" project, which was only capable of reading tags.
@@ -49,12 +51,22 @@ Tag writing:
   - Text records: set text and language.
   - Custom records: Choose the type name format and optionally add a type name and payload. Also useful for application autostart tags.
 
+Peer to peer:
+- SNEP support (Simple NDEF Exchange Protocol) [Symbian only]
+- Send and receive NDEF messages and raw data
+- Connection-oriented and connection-less mode supported
+- Define URI for connection-oriented mode or port for connection-less mode
+- Connection-oriented: connect server and/or client socket, choose which socket to use for sending messages
+  
 Easily reusable code for developers including:
 - NDEF record classes for: Smart Poster, Mime/vCard (Business Cards), Mime/Image, Geo coordinates, App Store links, Social Networks (Twitter, LinkedIn, Facebook, Xing, vKontakte, Foursquare), SMS, Smart URI (depending on content requirements uses Smart Poster or URI to create the smallest possible message)
 - Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2**)
 
-Known bugs / issues (work-in-progress):
-- Settings: scroll view for VKB on Symbian
+Known bugs / issues:
+- No SNEP support on the N9 - would require higher privileges to register for urn:nfc:sn:snep.
+  Possible to use LibNDEFPush: http://harmattan-dev.nokia.com/downloads/QtSDK_additions/
+- Limited SNEP support on Symbian: only possible to use service name urn:nfc:sn:snep, as using a connection-oriented port of 4 is not supported by the Qt APIs
+- Settings: auto-scrolling of settings page when opening virtual keyboard on Symbian not behaving correctly
   
 Ideas for future updates:
 - Write a contact from the address book
@@ -65,10 +77,8 @@ Ideas for future updates:
 - Use current location for geo tags (asynchronously updated UI)
 - Birthday support for contacts (date picker UI)
 - Geocoding (enter address, write coordinates to the tag - interactive UI)
-- SNEP sending and receiving (through LLCP)
 - Splash screen for Symbian
 - Turn NFC on from the app on Symbian: http://www.developer.nokia.com/Community/Wiki/How_to_put_NFC_ON_and_OFF_with_Qt
-- Write empty message first, then full message, if writing fails? Increases stability on non-formatted tags.
 - Support for writing AAR records (Android Application Record): http://stackoverflow.com/questions/9016944/android-application-record-compatibility-with-pre-ics
 
 * Disclaimer: The services hosted on nfcinteractor.com (e.g., the generic geo-tag redirection script) have no service or uptime guarantee. They are intended for testing purposes only and could be removed at any point. You should host the required server-side scripts on your own webserver for real-world deployment.
@@ -112,6 +122,17 @@ MeeGo Harmattan
 The example will work out of the box with the Harmattan target 
 of the Qt SDK 1.2. Make sure you have the latest firmware version
 on your Nokia N9. The Nokia N950 doesn't support NFC.
+
+To install the LibNDEF Push for SNEP support:
+- Download the package and the dev-package from http://harmattan-dev.nokia.com/downloads/QtSDK_additions/
+- Open the MADDE terminal from the start menu
+- Check installed MeeGo targets: 
+  > mad list
+- Set 1.2 target as default:
+  > mad set harmattan_10.2011.34-1_rt1.2
+- Go to directory where you saved the downloaded packages and install:
+  > mad-admin xdpkg -i libndefpush-dev_0.23.2+0m6_armel.deb
+  > mad-admin xdpkg -i libndefpush_0.23.2+0m6_armel.deb
 
 
 Symbian
