@@ -16,7 +16,7 @@ NfcInfo::NfcInfo(QObject *parent) :
     QObject(parent),
     m_nfcManager(NULL),
     m_cachedTarget(NULL),
-    m_reportingLevel(OnlyImportantReporting),
+    m_reportingLevel(AppSettings::OnlyImportantReporting),
     m_pendingWriteNdef(false),
     m_currentActivity(NfcUninitialized),
     m_writeOneTagOnly(true),
@@ -76,18 +76,17 @@ void NfcInfo::initAndStartNfcAsync()
   */
 bool NfcInfo::initAndStartNfc()
 {
+    bool success = false;
     if (!m_nfcPeerToPeer)
     {
         // Peer to peer for SNEP
         m_nfcPeerToPeer = new NfcPeerToPeer(this);
         m_nfcPeerToPeer->setAppSettings(m_appSettings);
         // TODO: Connect all signals of m_nfcPeerToPeer
-        connect(m_nfcPeerToPeer, SIGNAL(nfcStatusUpdate(QString)), this, SIGNAL(nfcStatusUpdate(QString)));
-        connect(m_nfcPeerToPeer, SIGNAL(nfcStatusError(QString)), this, SIGNAL(nfcStatusError(QString)));
-        connect(m_nfcPeerToPeer, SIGNAL(chatMessage(QString)), this, SIGNAL(nfcInfoUpdate(QString)));
-        connect(m_nfcPeerToPeer, SIGNAL(statusMessage(QString)), this, SIGNAL(nfcStatusUpdate(QString)));
+        connect(m_nfcPeerToPeer, SIGNAL(rawMessage(QString)), this, SIGNAL(nfcInfoUpdate(QString)));
         connect(m_nfcPeerToPeer, SIGNAL(ndefMessage(QNdefMessage)), this, SLOT(ndefMessageRead(QNdefMessage)));
-        connect(m_nfcPeerToPeer, SIGNAL(nfcSnepSuccess()), this, SIGNAL(nfcTagWritten()));
+        connect(m_nfcPeerToPeer, SIGNAL(statusMessage(QString)), this, SIGNAL(nfcStatusUpdate(QString)));
+        connect(m_nfcPeerToPeer, SIGNAL(nfcSendNdefSuccess()), this, SIGNAL(nfcTagWritten()));
     }
 
     if (m_nfcRecordModel->size() == 0) {
@@ -134,13 +133,14 @@ bool NfcInfo::initAndStartNfc()
     bool activationSuccessful = m_nfcManager->startTargetDetection();
     if (activationSuccessful) {
         emit nfcStatusUpdate("Successfully started target detection");
-        return true;
+        success = true;
     } else {
         emit nfcStatusError("Error starting NFC target detection");
-        return false;
     }
 
     m_currentActivity = NfcIdle;
+    emit nfcInitialized(success);
+    return success;
 }
 
 /*!
@@ -741,6 +741,16 @@ void NfcInfo::stoppedTagInteraction() {
 }
 
 /*!
+  \brief Apply the new app settings to the NFC manager classes.
+  */
+void NfcInfo::applySettings()
+{
+    if (m_nfcPeerToPeer) {
+        m_nfcPeerToPeer->applySettings();
+    }
+}
+
+/*!
   \brief Slot for handling when the target was lost (usually when
   it gets out of range.
   */
@@ -835,7 +845,7 @@ void NfcInfo::targetError(QNearFieldTarget::Error error, const QNearFieldTarget:
         // access, resulting in InvalidParametersError or UnsupportedError.
         // The analysis part will correctly handle those cases, no need to spam the user
         // with error messages.
-        if (m_reportingLevel == FullReporting ||
+        if (m_reportingLevel == AppSettings::FullReporting ||
                 (error != QNearFieldTarget::InvalidParametersError &&
                  error != QNearFieldTarget::UnsupportedError)) {
             emit nfcTagError(errorText);
@@ -901,7 +911,7 @@ void NfcInfo::requestCompleted(const QNearFieldTarget::RequestId &id)
         }
         if (!message.isEmpty()) {
             qDebug() << message;
-            if (!(m_cachedRequestType == NfcNdefWriting && m_reportingLevel == OnlyImportantReporting)) {
+            if (!(m_cachedRequestType == NfcNdefWriting && m_reportingLevel == AppSettings::OnlyImportantReporting)) {
                 // Writing success will already be reported by the nfcTagWritten method
                 // (this method is called as well on MeeGo, resulting in 2x status updates).
                 // Therefore, for writing, do not print this status mesesage if
@@ -915,7 +925,7 @@ void NfcInfo::requestCompleted(const QNearFieldTarget::RequestId &id)
         }
     } else {
         message = "Request completed.";
-        if (m_reportingLevel == DebugReporting) {
+        if (m_reportingLevel == AppSettings::DebugReporting) {
             qDebug() << message;
         }
     }
@@ -929,7 +939,7 @@ void NfcInfo::requestCompleted(const QNearFieldTarget::RequestId &id)
     // Request the response in case we're in debug reporting mode
     // Usually, if the response is important, it will be handled directly
     // by the requesting method.
-    if (m_reportingLevel == DebugReporting) {
+    if (m_reportingLevel == AppSettings::DebugReporting) {
         // Print the response of the tag to the debug output
         // in case debug reporting is active.
         if (m_cachedTarget)

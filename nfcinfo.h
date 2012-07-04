@@ -101,13 +101,6 @@ class NfcInfo : public QObject
         NfcNdefWriting,
         NfcTargetAnalysis
     };
-    /*! Reporting level, affects mainly the amount of status updates sent as signals,
-      as well some debug output on the console. */
-    enum ReportingLevel {
-        DebugReporting,
-        FullReporting,
-        OnlyImportantReporting
-    };
 
 public:
     explicit NfcInfo(QObject *parent = 0);
@@ -118,6 +111,7 @@ public:
     void setAppSettings(AppSettings* appSettings);
 
 signals:
+    void nfcInitialized(const bool success);
     /*! Update on the NFC status (starting target detection, etc.) */
     void nfcStatusUpdate(const QString& nfcStatusText);
     /*! An important operation finished successfully (reading or writing tags) */
@@ -162,6 +156,7 @@ public slots:
     NfcRecordModel* recordModel() const;
 public:
     Q_INVOKABLE void setUnlimitedAdvancedMsgs(const bool unlimited);
+    Q_INVOKABLE void applySettings();
 
 private slots:
     bool initAndStartNfc();
@@ -209,7 +204,7 @@ private:
 
     /*! Configures mainly how many messages are shown on the screen in the
       Nfc Info view. Also partly affects output to qDebug(). */
-    ReportingLevel m_reportingLevel;
+    AppSettings::ReportingLevel m_reportingLevel;
 
     /*! Set to true if the application requested to write an NDEF message
       to the tag on the next opportunity. */
@@ -248,7 +243,7 @@ private:
     /*! Statistics for reading and writing tags. */
     NfcStats* m_nfcStats;
 
-    /*! Persistent storageof application settings. */
+    /*! Persistent storage of application settings. */
     AppSettings* m_appSettings;
 
     /*! Needed on MeeGo Harmattan to raise the app to the foreground when
