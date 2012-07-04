@@ -14,6 +14,7 @@
 NfcPeerToPeer::NfcPeerToPeer(QObject *parent) :
     QObject(parent),
     m_appSettings(NULL),
+    m_reportingLevel(AppSettings::OnlyImportantReporting),
     m_nfcUri(NULL),
     m_nfcManager(NULL),
     m_nfcTarget(NULL),
@@ -24,7 +25,7 @@ NfcPeerToPeer::NfcPeerToPeer(QObject *parent) :
     m_isBusy(false)
 {
     m_snepManager = new SnepManager(this);
-    connect(m_snepManager, SIGNAL(nfcSnepSuccess()), this, SIGNAL(nfcSnepSuccess()));
+    connect(m_snepManager, SIGNAL(nfcSnepSuccess()), this, SIGNAL(nfcSendNdefSuccess()));
 }
 
 NfcPeerToPeer::~NfcPeerToPeer()
@@ -64,9 +65,9 @@ void NfcPeerToPeer::applySettings()
 
 void NfcPeerToPeer::doApplySettings()
 {
-    qDebug(__PRETTY_FUNCTION__);
-    if (!(m_isResetting && m_isBusy)) {
+    if (!(m_isResetting && m_isBusy) || !m_appSettings) {
         // Allow running this method only if called through applySettings().
+        // Also, don't run this method if m_appSettings isn't set.
         return;
     }
 
@@ -236,7 +237,9 @@ void NfcPeerToPeer::targetDetected(QNearFieldTarget *target)
                 // Connect to the service on Symbian
                 // (on Harmattan, the connection was already established at the beginning)
                 m_nfcClientSocket->connectToService(target, m_nfcUri);
-                emit statusMessage("Connecting to service...");
+                if (m_reportingLevel != AppSettings::OnlyImportantReporting) {
+                    emit statusMessage("Connecting to service...");
+                }
             #endif
         }
     }
@@ -276,7 +279,9 @@ void NfcPeerToPeer::handleNewConnection()
     connect(m_nfcServerSocket, SIGNAL(stateChanged(QLlcpSocket::SocketState)), this, SLOT(serverSocketStateChanged(QLlcpSocket::SocketState)));
     connect(m_nfcServerSocket, SIGNAL(disconnected()), this, SLOT(serverSocketDisconnected()));
 
-    emit statusMessage("New server socket connection");
+    if (m_reportingLevel != AppSettings::OnlyImportantReporting) {
+        emit statusMessage("New server socket connection");
+    }
     sendCachedText();
 }
 
@@ -302,13 +307,25 @@ void NfcPeerToPeer::readText(QLlcpSocket* socket, const bool isServerSocket)
         qint64 datagramSize = socket->pendingDatagramSize();
         char* rawData = new char[datagramSize];
         socket->readDatagram ( rawData, datagramSize );
-        QString data = QString::fromUtf8(rawData, datagramSize);
+
+        // Check if data is NDEF formatted
+        QNdefMessage containedNdef = QNdefMessage::fromByteArray(rawData);
+        if (containedNdef.count() > 0) {
+            // NDEF message found
+            qDebug() << "Raw NDEF message received (" << containedNdef.count() << " records)";
+            emit ndefMessage(containedNdef);
+        }
+        else
+        {
+            // No NDEF message found - output raw data
+            QString data = QString::fromUtf8(rawData, datagramSize);
+            QString dataLength;
+            dataLength.setNum(datagramSize);
+            QString message = (isServerSocket ? "Server" : "Client");
+            message.append(" (" + dataLength + "): " + data);
+            emit rawMessage(message);
+        }
         delete rawData;
-        QString dataLength;
-        dataLength.setNum(datagramSize);
-        QString message = (isServerSocket ? "Server" : "Client");
-        message.append(" (" + dataLength + "): " + data);
-        emit chatMessage(message);
     }
     else
     {
@@ -317,34 +334,58 @@ void NfcPeerToPeer::readText(QLlcpSocket* socket, const bool isServerSocket)
         qDebug() << "Received peer-to-peer data";
         QByteArray rawData = socket->readAll();
         if (m_appSettings->useSnep()) {
-            // TODO: Check if response is SNEP formatted, otherwise
-            // output raw contents
-            // TODO: handle incomping SNEP message, not just response
             QString snepAnalysis;
             QNdefMessage containedNdef = m_snepManager->analyzeSnepMessage(rawData, snepAnalysis);
-            emit chatMessage(snepAnalysis);
+            emit rawMessage(snepAnalysis);
             if (containedNdef.count() > 0) {
-                // Send NDEF message
-                qDebug() << "NDEF message received " << containedNdef.count() << " records";
+                // NDEF message
+                qDebug() << "SNEP NDEF message received (" << containedNdef.count() << " records)";
                 emit ndefMessage(containedNdef);
+
+                // Send back success response
+                emit sendData(m_snepManager->createSnepSuccessResponse());
             } else {
                 qDebug() << "No / empty NDEF message contained";
             }
         } else {
-            // TODO: parse raw NDEF message (if detected)
-            QString data = QString::fromUtf8(rawData.constData(), rawData.size());
-            QString message = (isServerSocket ? "Server" : "Client");
-            message.append(": " + data);
-            emit chatMessage(message);
+            // Check if data is NDEF formatted
+            QNdefMessage containedNdef = QNdefMessage::fromByteArray(rawData);
+
+
+            // TODO: Debug
+            QString arrayContents = "";
+            for (int i = 0; i < rawData.size(); ++i) {
+                arrayContents.append(QString("0x") + QString::number(rawData.at(i), 16) + " ");
+            }
+            qDebug() << "Raw contents of message:\n" << arrayContents;
+
+
+            if (containedNdef.count() > 0) {
+                // NDEF message found
+                qDebug() << "Raw NDEF message received (" << containedNdef.count() << " records)";
+                emit ndefMessage(containedNdef);
+            }
+            else
+            {
+                // No NDEF message found - output raw data
+                QString data = QString::fromUtf8(rawData.constData(), rawData.size());
+                QString message = (isServerSocket ? "Server" : "Client");
+                message.append(": " + data);
+                emit rawMessage(message);
+            }
         }
     }
 }
 
 void NfcPeerToPeer::sendText(const QString& text)
 {
-    bool textQueuedBefore = m_sendDataQueue.isEmpty() ? false : true;
+    sendData(text.toUtf8());
+}
 
-    m_sendDataQueue = text.toUtf8();
+void NfcPeerToPeer::sendData(const QByteArray data)
+{
+    bool textQueuedBefore = m_sendDataQueue.isEmpty() ? false : true;
+    m_sendDataQueue = data;
     if (!sendCachedText()) {
         if (textQueuedBefore) {
             emit statusMessage("Enqueued message replaced");
@@ -370,7 +411,7 @@ void NfcPeerToPeer::sendNdefMessage(const QNdefMessage *message)
 
 bool NfcPeerToPeer::sendCachedText()
 {
-    qDebug() << "NfcPeerToPeer::sendCachedText()";
+    qDebug(__PRETTY_FUNCTION__);
     if (!m_sendDataQueue.isEmpty()) {
 
         if (m_useConnectionLess) {
@@ -380,6 +421,7 @@ bool NfcPeerToPeer::sendCachedText()
                 m_nfcClientSocket->writeDatagram(m_sendDataQueue.data(), (qint64)m_sendDataQueue.size(), m_nfcTarget, m_nfcPort);
                 m_sendDataQueue.clear();
                 emit statusMessage("Datagram sent");
+                emit nfcSendNdefSuccess();
                 return true;
             }
         }
@@ -395,8 +437,14 @@ bool NfcPeerToPeer::sendCachedText()
             }
             if (messageSent) {
                 m_sendDataQueue.clear();
-                QString messageText = (m_appSettings->useSnep() ? "Message sent" : "SNEP message sent");
+                QString messageText = (m_appSettings && m_appSettings->useSnep() ? "SNEP message sent" : "NDEF message sent");
                 emit statusMessage(messageText);
+                if (m_appSettings && !m_appSettings->useSnep())
+                {
+                    // SNEP: success response from other phone will trigger written signal
+                    // Without SNEP (= here), send success when we managed to send the data through the socket.
+                    emit nfcSendNdefSuccess();
+                }
                 return true;
             }
             qDebug() << "Connection not ready for sending message";
@@ -409,7 +457,9 @@ bool NfcPeerToPeer::sendCachedText()
 
 void NfcPeerToPeer::clientSocketDisconnected()
 {
-    emit statusMessage("Client socket disconnected");
+    if (m_reportingLevel != AppSettings::OnlyImportantReporting) {
+        emit statusMessage("Client socket disconnected");
+    }
 #ifdef MEEGO_EDITION_HARMATTAN
     if (!m_isResetting && !m_useConnectionLess && m_connectClientSocket) {
         m_nfcClientSocket->connectToService(0, m_nfcUri);
@@ -419,7 +469,9 @@ void NfcPeerToPeer::clientSocketDisconnected()
 
 void NfcPeerToPeer::serverSocketDisconnected()
 {
-    emit statusMessage("Server socket disconnected");
+    if (m_reportingLevel != AppSettings::OnlyImportantReporting) {
+        emit statusMessage("Server socket disconnected");
+    }
 #ifdef MEEGO_EDITION_HARMATTAN
     if (!m_isResetting && m_nfcServerSocket) {
         m_nfcServerSocket->deleteLater();
@@ -445,12 +497,16 @@ void NfcPeerToPeer::clientSocketError(QLlcpSocket::SocketError socketError)
 
 void NfcPeerToPeer::serverSocketStateChanged(QLlcpSocket::SocketState socketState)
 {
-    emit statusMessage("Server socket state: " + convertSocketStateToString(socketState));
+    if (m_reportingLevel != AppSettings::OnlyImportantReporting) {
+        emit statusMessage("Server socket state: " + convertSocketStateToString(socketState));
+    }
 }
 
 void NfcPeerToPeer::clientSocketStateChanged(QLlcpSocket::SocketState socketState)
 {
-    emit statusMessage("Client socket state: " + convertSocketStateToString(socketState));
+    if (m_reportingLevel != AppSettings::OnlyImportantReporting) {
+        emit statusMessage("Client socket state: " + convertSocketStateToString(socketState));
+    }
     if (socketState == QLlcpSocket::ConnectedState) {
         sendCachedText();
     }

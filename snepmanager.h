@@ -44,6 +44,8 @@ public:
     
     QByteArray wrapNdefInSnepPut(const QNdefMessage* ndefMessage);
     QNdefMessage analyzeSnepMessage(QByteArray &rawMessage, QString &results);
+    QByteArray createSnepSuccessResponse();
+
 signals:
     void nfcSnepSuccess();
     

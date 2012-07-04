@@ -50,6 +50,13 @@ QByteArray SnepManager::wrapNdefInSnepPut(const QNdefMessage* ndefMessage)
 
 QNdefMessage SnepManager::analyzeSnepMessage(QByteArray& rawMessage, QString& results)
 {
+    // TODO: Debug
+    QString arrayContents = "";
+    for (int i = 0; i < rawMessage.size(); ++i) {
+        arrayContents.append(QString("0x") + QString::number(rawMessage.at(i), 16) + " ");
+    }
+    qDebug() << "Raw contents of SNEP message:\n" << arrayContents;
+
     // Version
     QDataStream snepStream(&rawMessage, QIODevice::ReadOnly);
 
@@ -58,9 +65,12 @@ QNdefMessage SnepManager::analyzeSnepMessage(QByteArray& rawMessage, QString& re
 
     if (version != SNEP_VERSION)
     {
-        // TODO: Parse major + minor SNEP version
-        results.append("Unsupported SNEP version (" + QString::number(version) + ")\n");
-        return QNdefMessage();
+        const int majorVersion = version >> 4;      // Most significant nibble
+        const int minorVersion = version & 0x0F;    // Least significant nibble
+        results.append("Warning: Unsupported SNEP version (" + QString::number(majorVersion) + "." +
+                       QString::number(minorVersion) + ")\n");
+
+        // TODO: We could return the SNEP_RES_UNSUPPORTEDVERSION response here.
     }
 
     const int protocolHeaderSize = 6;   // version (1b) + command (1b) + length (4b) = 6 bytes
@@ -82,12 +92,10 @@ QNdefMessage SnepManager::analyzeSnepMessage(QByteArray& rawMessage, QString& re
 
         // Read contents
         if (command == SNEP_REQ_PUT) {
-            // Read NDEF message and send to
+            // Read NDEF message and send back to to
             // NfcInfo::ndefMessageRead
             QNdefMessage containedNdef = QNdefMessage::fromByteArray(rawMessage.mid(protocolHeaderSize));
-            qDebug() << "NDEF message received a " << containedNdef.count() << " records";
 
-            // TODO: send back success
             return containedNdef;
         }
         else
@@ -108,6 +116,22 @@ QNdefMessage SnepManager::analyzeSnepMessage(QByteArray& rawMessage, QString& re
     return QNdefMessage();
 }
 
+QByteArray SnepManager::createSnepSuccessResponse()
+{
+    QByteArray response(6, char(0));
+    response[0] = SNEP_VERSION;
+    response[1] = SNEP_RES_SUCCESS;
+    // 2 - 5 (4b): 0x0 (length = 0, so no data afterwards)
+
+    // TODO: Debug
+    QString arrayContents = "";
+    for (int i = 0; i < response.size(); ++i) {
+        arrayContents.append(QString("0x") + QString::number(response.at(i), 16) + " ");
+    }
+    qDebug() << "Raw contents of SNEP response:\n" << arrayContents;
+
+    return response;
+}
 
 QString SnepManager::convertSnepCommandToText(quint8 command)
 {

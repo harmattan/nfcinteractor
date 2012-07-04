@@ -37,19 +37,18 @@ public:
 
     bool isBusy() const;
 signals:
-    void nfcStatusUpdate(const QString& nfcStatusText);
-    void nfcStatusError(const QString& nfcStatusErrorText);
-    void chatMessage(const QString& nfcClientMessage);
+    void rawMessage(const QString& nfcClientMessage);
     void ndefMessage(const QNdefMessage& nfcNdefMessage);
     void statusMessage(const QString& statusMessage);
+    void nfcSendNdefSuccess();
     void settingsApplied();
     void busyChanged();
-    void nfcSnepSuccess();
 
 public slots:
     void applySettings();
     void initAndStartNfc();
     void sendText(const QString& text);
+    void sendData(const QByteArray data);
     void sendNdefMessage(const QNdefMessage* message);
     void targetDetected(QNearFieldTarget *target);
     void targetLost(QNearFieldTarget *target);
@@ -82,7 +81,13 @@ private:
 
 
 private:
+    /*! Persistent storage of application settings. */
     AppSettings* m_appSettings;
+
+    /*! Configures mainly how many messages are shown on the screen in the
+      Nfc Info view. Also partly affects output to qDebug(). */
+    AppSettings::ReportingLevel m_reportingLevel;
+
     char* m_nfcUri;
     int m_nfcPort;
     QNearFieldManager *m_nfcManager;
