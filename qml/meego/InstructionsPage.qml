@@ -21,7 +21,6 @@ Page {
         }
     }
 
-
     Item {
         id: instructionsItem
         anchors.fill: parent
@@ -63,7 +62,7 @@ Page {
 
                 Text {
                     id: instructionsText2
-                    text: qsTr("v4.0.0 beta\n2011 - 2012 Andreas Jakl")
+                    text: qsTr("v4.0.0 RC\n2011 - 2012 Andreas Jakl")
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     wrapMode: Text.WordWrap
