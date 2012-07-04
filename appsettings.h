@@ -19,7 +19,7 @@
 // Used for the QSettings file, for stats and IAP
 #define SETTINGS_ORG "Nokia"
 #define SETTINGS_APP "NfcInteractor"
-#define SETTINGS_VERSION 3
+#define SETTINGS_VERSION 4
 
 #if defined(Q_OS_SYMBIAN)
     #define DEFAULT_NDEF_LOG_DIR "E:/nfc/"
@@ -41,6 +41,14 @@ class AppSettings : public QObject
     Q_OBJECT
 public:
     explicit AppSettings(QObject *parent = 0);
+
+    /*! Reporting level, affects mainly the amount of status updates sent as signals,
+      as well some debug output on the console. */
+    enum ReportingLevel {
+        DebugReporting,
+        FullReporting,
+        OnlyImportantReporting
+    };
     
 signals:
     
@@ -56,10 +64,11 @@ public slots:
     void setDeleteTagBeforeWriting(const bool deleteTagBeforeWriting);
     bool deleteTagBeforeWriting() const;
 
+    // Peer to peer
     void setUseSnep(const bool useSnep);
     bool useSnep() const;
 
-    // Peer to peer
+    // Raw peer to peer
     void setUseConnectionLess(const bool useConnectionLess);
     bool useConnectionLess() const;
     void setNfcUri(const QString& nfcUri);

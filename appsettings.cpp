@@ -16,7 +16,11 @@ AppSettings::AppSettings(QObject *parent) :
     m_logNdefToFile(true),
     m_logNdefDir(DEFAULT_NDEF_LOG_DIR),
     m_deleteTagBeforeWriting(false),
+#if defined(MEEGO_EDITION_HARMATTAN)
+    m_useSnep(false),   // MeeGo: not allowed to use SNEP port
+#else
     m_useSnep(true),
+#endif
     m_useConnectionLess(false),
     m_nfcUri(LLCP_CONNECTIONORIENTED_SERVICENAME),
     m_nfcPort(LLCP_CONNECTIONLESS_PORT),
@@ -31,7 +35,6 @@ void AppSettings::setUseConnectionLess(const bool useConnectionLess)
 {
     if (useConnectionLess != m_useConnectionLess) {
         m_useConnectionLess = useConnectionLess;
-        saveSettings();
     }
 }
 
@@ -44,7 +47,6 @@ void AppSettings::setNfcUri(const QString &nfcUri)
 {
     if (nfcUri != m_nfcUri) {
         m_nfcUri = nfcUri;
-        saveSettings();
     }
 }
 
@@ -57,7 +59,6 @@ void AppSettings::setNfcPort(const int nfcPort)
 {
     if (nfcPort != m_nfcPort) {
         m_nfcPort = nfcPort;
-        saveSettings();
     }
 }
 
@@ -70,7 +71,6 @@ void AppSettings::setSendThroughServerSocket(const bool sendThroughServerSocket)
 {
     if (sendThroughServerSocket != m_sendThroughServerSocket) {
         m_sendThroughServerSocket = sendThroughServerSocket;
-        saveSettings();
     }
 }
 
@@ -83,7 +83,6 @@ void AppSettings::setConnectClientSocket(const bool connectClientSocket)
 {
     if (connectClientSocket != m_connectClientSocket) {
         m_connectClientSocket = connectClientSocket;
-        saveSettings();
     }
 }
 
@@ -96,7 +95,6 @@ void AppSettings::setConnectServerSocket(const bool connectServerSocket)
 {
     if (connectServerSocket != m_connectServerSocket) {
         m_connectServerSocket = connectServerSocket;
-        saveSettings();
     }
 }
 
@@ -109,7 +107,6 @@ void AppSettings::setLogNdefToFile(const bool logNdefToFile)
 {
     if (logNdefToFile != m_logNdefToFile) {
         m_logNdefToFile = logNdefToFile;
-        saveSettings();
     }
 }
 
@@ -122,7 +119,6 @@ void AppSettings::setLogNdefDir(const QString &logNdefDir)
 {
     if (logNdefDir != m_logNdefDir) {
         m_logNdefDir = logNdefDir;
-        saveSettings();
     }
 }
 
@@ -140,7 +136,6 @@ void AppSettings::setDeleteTagBeforeWriting(const bool deleteTagBeforeWriting)
 {
     if (deleteTagBeforeWriting != m_deleteTagBeforeWriting) {
         m_deleteTagBeforeWriting = deleteTagBeforeWriting;
-        saveSettings();
     }
 }
 
@@ -153,7 +148,6 @@ void AppSettings::setUseSnep(const bool useSnep)
 {
     if (useSnep != m_useSnep) {
         m_useSnep = useSnep;
-        saveSettings();
     }
 }
 
@@ -164,13 +158,18 @@ bool AppSettings::useSnep() const
 
 void AppSettings::saveSettings()
 {
-    // TODO: add peer to peer settings
     QSettings settings(SETTINGS_ORG, SETTINGS_APP, this);
     settings.setValue("settingsversion", SETTINGS_VERSION);
     settings.setValue("logNdefToFile", m_logNdefToFile);
     settings.setValue("logNdefDir", m_logNdefDir);
     settings.setValue("deleteTags", m_deleteTagBeforeWriting);
     settings.setValue("useSnep", m_useSnep);
+    settings.setValue("useConnectionLess", m_useConnectionLess);
+    settings.setValue("nfcUri", m_nfcUri);
+    settings.setValue("nfcPort", m_nfcPort);
+    settings.setValue("sendThroughServerSocket", m_sendThroughServerSocket);
+    settings.setValue("connectClientSocket", m_connectClientSocket);
+    settings.setValue("connectServerSocket", m_connectServerSocket);
 }
 
 void AppSettings::loadSettings()
@@ -181,7 +180,17 @@ void AppSettings::loadSettings()
         m_logNdefToFile = settings.value("logNdefToFile", true).toBool();
         m_logNdefDir = settings.value("logNdefDir", DEFAULT_NDEF_LOG_DIR).toString();
         m_deleteTagBeforeWriting = settings.value("deleteTags", false).toBool();
+#if defined(MEEGO_EDITION_HARMATTAN)
+        m_useSnep = settings.value("useSnep", false).toBool();      // MeeGo: not allowed to use SNEP port
+#else
         m_useSnep = settings.value("useSnep", true).toBool();
+#endif
+        m_useConnectionLess = settings.value("useConnectionLess", true).toBool();
+        m_nfcUri = settings.value("nfcUri", LLCP_CONNECTIONORIENTED_SERVICENAME).toString();
+        m_nfcPort = settings.value("nfcPort", LLCP_CONNECTIONLESS_PORT).toInt();
+        m_sendThroughServerSocket = settings.value("sendThroughServerSocket", true).toBool();
+        m_connectClientSocket = settings.value("connectClientSocket", true).toBool();
+        m_connectServerSocket = settings.value("connectServerSocket", true).toBool();
     }
 }
 
