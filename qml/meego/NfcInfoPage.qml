@@ -95,7 +95,8 @@ Page {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    if (nfcDataFileName && settings.logNdefToFile) {
+                    // Clicked on an item
+                    if (messageModel.get(index).nfcDataFileName && settings.logNdefToFile) {
                         itemMenu.open()
                         messageView.currentIndex = index
                         console.log(nfcDataFileName);
