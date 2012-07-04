@@ -105,6 +105,9 @@ PageStackWindow {
     Connections {
         target: nfcInfo
 
+        onNfcInitialized: {
+            timerPages.restart();
+        }
         onNfcStatusUpdate: {
             logMessage(nfcStatusText, "aliceblue", "nfcSymbolInfo.png");
         }
@@ -183,15 +186,23 @@ PageStackWindow {
 	
     Component.onCompleted: {
         // Start loading the sub-pages
-        timer.restart();
+        timerInit.restart();
     }
 
     Timer {
-        id: timer
-        interval: 50
+        id: timerInit
+        interval: 100
         repeat: false
         onTriggered: {
             nfcInfo.initAndStartNfcAsync();
+        }
+    }
+
+    Timer {
+        id: timerPages
+        interval: 100
+        repeat: false
+        onTriggered: {
             instructionsLoader.source = Qt.resolvedUrl("InstructionsPage.qml");
             writeTagPageLoader.source = Qt.resolvedUrl("WriteTagPage.qml");
             composeTagPageLoader.source = Qt.resolvedUrl("ComposeTagPage.qml");
