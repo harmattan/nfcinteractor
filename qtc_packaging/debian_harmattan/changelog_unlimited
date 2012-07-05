@@ -1,9 +1,10 @@
 nfcinteractorunlimited (4.0.0) unstable; urgency=low
   * Peer-to-peer communication for sending and receiving SNEP messages.
+  * Low level peer-to-peer connection-oriented and connection-less LLCP sockets for sending raw NDEF messages.
 
  -- Andreas Jakl <>  Wed, 06 Jun 2012 17:15:13 +0300
 
- nfcinteractorunlimited (3.0.0) unstable; urgency=low
+nfcinteractorunlimited (3.0.0) unstable; urgency=low
   * Cloning tags supported (long-press on read tag contents -> Clone).
   * Eiting tags supported (long-press on read tag contents -> Edit).
   * Stores all collected tags to the data directory for later reuse.
@@ -12,7 +13,7 @@ nfcinteractorunlimited (4.0.0) unstable; urgency=low
 
  -- Andreas Jakl <>  Sun, 06 May 2012 23:44:33 +0200
 
- nfcinteractorunlimited (2.1.0) unstable; urgency=low
+nfcinteractorunlimited (2.1.0) unstable; urgency=low
   * Added support for writing Foursquare tags.
   * Print raw payload for external tag types.
   * Updated In-App-Advertising library version.

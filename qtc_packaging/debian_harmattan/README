@@ -15,6 +15,9 @@ The app supports the following content: Smart Poster, URI, Text,
 Geo, SMS, social networks, MIME/vCard (business cards), MIME/image, 
 app store links and custom records.
 
+Peer-to-peer support between NFC devices for sending messages through
+the standardized SNEP protocol, or with raw LLCP socket connections.
+
 This tool is made for enthusiasts and developers.
 
  -- Andreas Jakl <>  Mon, 08 Aug 2011 18:00:46 +0300

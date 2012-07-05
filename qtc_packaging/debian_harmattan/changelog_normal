@@ -1,9 +1,10 @@
-nfcinteractorunlimited (4.0.0) unstable; urgency=low
+nfcinteractor (4.0.0) unstable; urgency=low
   * Peer-to-peer communication for sending and receiving SNEP messages.
+  * Low level peer-to-peer connection-oriented and connection-less LLCP sockets for sending raw NDEF messages.
 
  -- Andreas Jakl <>  Wed, 06 Jun 2012 17:15:13 +0300
 
- nfcinteractorunlimited (3.0.0) unstable; urgency=low
+nfcinteractor (3.0.0) unstable; urgency=low
   * Cloning tags supported (long-press on read tag contents -> Clone).
   * Eiting tags supported (long-press on read tag contents -> Edit).
   * Stores all collected tags to the data directory for later reuse.

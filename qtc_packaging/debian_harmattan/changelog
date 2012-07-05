@@ -1,5 +1,6 @@
 nfcinteractorunlimited (4.0.0) unstable; urgency=low
-  * <Add change description here>
+  * Peer-to-peer communication for sending and receiving SNEP messages.
+  * Low level peer-to-peer connection-oriented and connection-less LLCP sockets for sending raw NDEF messages.
 
  -- Andreas Jakl <>  Wed, 06 Jun 2012 17:15:13 +0300
 
