@@ -16,7 +16,7 @@ AppSettings::AppSettings(QObject *parent) :
     m_logNdefToFile(true),
     m_logNdefDir(DEFAULT_NDEF_LOG_DIR),
     m_deleteTagBeforeWriting(false),
-#if defined(MEEGO_EDITION_HARMATTAN)
+#if defined(MEEGO_EDITION_HARMATTAN) && !defined(USE_SNEP)
     m_useSnep(false),   // MeeGo: not allowed to use SNEP port
 #else
     m_useSnep(true),
@@ -180,7 +180,7 @@ void AppSettings::loadSettings()
         m_logNdefToFile = settings.value("logNdefToFile", true).toBool();
         m_logNdefDir = settings.value("logNdefDir", DEFAULT_NDEF_LOG_DIR).toString();
         m_deleteTagBeforeWriting = settings.value("deleteTags", false).toBool();
-#if defined(MEEGO_EDITION_HARMATTAN)
+#if defined(MEEGO_EDITION_HARMATTAN) && !defined(USE_SNEP)
         m_useSnep = settings.value("useSnep", false).toBool();      // MeeGo: not allowed to use SNEP port
 #else
         m_useSnep = settings.value("useSnep", true).toBool();

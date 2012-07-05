@@ -11,7 +11,11 @@ DEFINES += UNLIMITED_VERSION
 # For self signed versions, remove / comment the following line.
 # Note: IAA on Symbian requires DEPLOY_VERSION to be set.
 # Use a developer certificate during development for Symbian IAA.
-#DEFINES += DEPLOY_VERSION
+DEFINES += DEPLOY_VERSION
+
+# Use SNEP on MeeGo Harmattan (always activated on Symbian).
+# Only works for N9 PR 1.2+, library not present on 1.0 & 1.1.
+#DEFINES += USE_SNEP
 
 # Define for detecting Harmattan in .cpp files.
 # Only needed for experimental / beta Harmattan SDKs.
@@ -291,8 +295,18 @@ contains(MEEGO_EDITION,harmattan) {
     # Temp
     DEFINES += MEEGO_EDITION_HARMATTAN
 
-    # Speed up launching on MeeGo/Harmattan when using applauncherd daemon
-    CONFIG += qdeclarative-boostable
+    # LibNDEFpush for SNEP sending
+    # Needs installation to the SDK - see release_notes.txt for instructions
+    contains(DEFINES,USE_SNEP) {
+        CONFIG += link_pkgconfig
+        PKGCONFIG += libndefpush-1.0
+        SOURCES += snepmanagermeego.cpp
+        HEADERS += snepmanagermeego.h
+    } else {
+        # Speed up launching on MeeGo/Harmattan when using applauncherd daemon
+        # For some reason doesn't work when including the Lib NDEF Push library
+        CONFIG += qdeclarative-boostable
+    }
 
     OTHER_FILES += qtc_packaging/debian_harmattan/changelog \
         qtc_packaging/debian_harmattan/compat \

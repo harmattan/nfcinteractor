@@ -26,6 +26,11 @@ NfcPeerToPeer::NfcPeerToPeer(QObject *parent) :
 {
     m_snepManager = new SnepManager(this);
     connect(m_snepManager, SIGNAL(nfcSnepSuccess()), this, SIGNAL(nfcSendNdefSuccess()));
+
+#if defined(MEEGO_EDITION_HARMATTAN) && defined(USE_SNEP)
+    m_snepManagerMeego = new SnepManagerMeego(this);
+    connect(m_snepManagerMeego, SIGNAL(nfcSnepSuccess()), this, SIGNAL(nfcSendNdefSuccess()));
+#endif
 }
 
 NfcPeerToPeer::~NfcPeerToPeer()
@@ -397,6 +402,11 @@ void NfcPeerToPeer::sendData(const QByteArray data)
 
 void NfcPeerToPeer::sendNdefMessage(const QNdefMessage *message)
 {
+#if defined(MEEGO_EDITION_HARMATTAN) && defined(USE_SNEP)
+    if (m_snepManagerMeego) {
+        m_snepManagerMeego->pushNdef(message);
+    }
+#else
     if (m_appSettings && m_appSettings->useSnep()) {
         // Wrap in SNEP protocol
         m_sendDataQueue = m_snepManager->wrapNdefInSnepPut(message);
@@ -407,6 +417,7 @@ void NfcPeerToPeer::sendNdefMessage(const QNdefMessage *message)
     if (!sendCachedText()) {
         emit statusMessage("Message enqueued");
     }
+#endif
 }
 
 bool NfcPeerToPeer::sendCachedText()
@@ -489,7 +500,16 @@ void NfcPeerToPeer::clientSocketError(QLlcpSocket::SocketError socketError)
 {
     // While resetting the sockets, error smight occur. Hide them from the UI.
     if (!m_isResetting) {
+#if defined(MEEGO_EDITION_HARMATTAN) && defined(USE_SNEP)
+        if (socketError == QLlcpSocket::SocketAccessError) {
+            // Ignore the error, as sending won't be handled by our LLCP implementation,
+            // but instead the LibNDEFpush library
+        } else {
+            emit statusMessage("Client socket error: " + convertSocketErrorToString(socketError));
+        }
+#else
         emit statusMessage("Client socket error: " + convertSocketErrorToString(socketError));
+#endif
     } else {
         qDebug() << "Client socket error: " + convertSocketErrorToString(socketError);
     }

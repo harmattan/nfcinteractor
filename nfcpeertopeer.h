@@ -19,6 +19,9 @@
 #include <qllcpsocket.h>
 #include "appsettings.h"
 #include "snepmanager.h"
+#if defined(MEEGO_EDITION_HARMATTAN) && defined(USE_SNEP)
+#include "snepmanagermeego.h"
+#endif
 
 QTM_USE_NAMESPACE   // Use Qt Mobility namespace
 
@@ -121,6 +124,10 @@ private:
     bool m_connectServerSocket;
 
     bool m_isBusy;
+
+#if defined(MEEGO_EDITION_HARMATTAN) && defined(USE_SNEP)
+    SnepManagerMeego* m_snepManagerMeego;
+#endif
 };
 
 #endif // NFCPEERTOPEER_H

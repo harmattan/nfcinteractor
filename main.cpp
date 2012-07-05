@@ -99,6 +99,14 @@ int main(int argc, char *argv[])
     viewer.setOrientation(QmlApplicationViewer::ScreenOrientationAuto);
     viewer.rootContext()->setContextProperty("platform", platformId);
 
+    // On MeeGo, only allow activating SNEP if compiled with the library support
+    // (not permitted otherwise).
+    bool useSnep = true;
+#if defined(MEEGO_EDITION_HARMATTAN) && !defined(USE_SNEP)
+    useSnep = false;
+#endif
+    viewer.rootContext()->setContextProperty("allowSnep", QVariant(useSnep));
+
     AppSettings* settings = new AppSettings();  // Ownership will be transferred to NfcInfo*
     viewer.rootContext()->setContextProperty("settings", settings);
 

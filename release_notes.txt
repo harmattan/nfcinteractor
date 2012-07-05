@@ -8,7 +8,7 @@ Touch an NFC tag to analyze its format and its contents. Nfc Interactor parses a
 
 Compose your own NDEF messages by combining one or more NDEF records using the dynamic editor interface. Various templates assist you, allowing you to concentrate on the content instead of the format. While editing, Nfc Interactor will always show you the current size. Once your message is finalized, write it to as many tags as you like.
 
-Send and receive NDEF messages through a peer-to-peer connection between devices, either using standardized SNEP (Symbian only) or a raw LLCP connection with freely defined settings.
+Send and receive NDEF messages through a peer-to-peer connection between devices, either using standardized SNEP or a raw LLCP connection with freely defined settings.
 
 Nfc Interactor is written in Qt and works on Nokia Anna / Belle as well as on MeeGo Harmattan (Nokia N9). As an open source example project, it also showcases the use of Qt Quick Components, as well as the integration of C++ with QML.
 
@@ -52,7 +52,7 @@ Tag writing:
   - Custom records: Choose the type name format and optionally add a type name and payload. Also useful for application autostart tags.
 
 Peer to peer:
-- SNEP support (Simple NDEF Exchange Protocol) [Symbian only]
+- SNEP support (Simple NDEF Exchange Protocol)
 - Send and receive NDEF messages and raw data
 - Connection-oriented and connection-less mode supported
 - Define URI for connection-oriented mode or port for connection-less mode
@@ -63,8 +63,9 @@ Easily reusable code for developers including:
 - Tag-specifc access to read the tag size and lock status (for Tag Types 1 + 2**)
 
 Known bugs / issues:
-- No SNEP support on the N9 - would require higher privileges to register for urn:nfc:sn:snep.
-  Possible to use LibNDEFPush: http://harmattan-dev.nokia.com/downloads/QtSDK_additions/
+- No full SNEP support on the N9 - would require higher privileges to register for urn:nfc:sn:snep.
+  Instead, using LibNDEFPush: http://harmattan-dev.nokia.com/downloads/QtSDK_additions/ for SNEP on the N9.
+  Only works on PR 1.2+, only for sending SNEP messages and not for receiving.
 - Limited SNEP support on Symbian: only possible to use service name urn:nfc:sn:snep, as using a connection-oriented port of 4 is not supported by the Qt APIs
 - Settings: auto-scrolling of settings page when opening virtual keyboard on Symbian not behaving correctly
   
@@ -175,20 +176,25 @@ might not get rebuilt.
 COMPATIBILITY
 -------------------------------------------------------------------------------
 
-- Qt SDK 1.2
+- Qt SDK 1.2.x
 - QtMobility 1.2
-- Qt 4.7.4
+- Qt 4.7.4+
 - Qt Quick Components 1.1
 
 Tested on: 
 - Nokia C7-00 with Symbian Anna and Qt 4.7.4 / QtM 1.2
 - Nokia C7-00 and 701 with Nokia Belle
-- Nokia N9 PR 1.0 / 1.1 / 1.2
+- Nokia 808 PureView with Nokia Belle FP1
+- Nokia N9 PR 1.0 / 1.1 / 1.2 / 1.3
+  (no SNEP support on PR 1.0 / 1.1)
 
 
 CHANGE HISTORY
 --------------------------------------------------------------------------------
 
+4.0 Peer-to-peer support added, with SNEP support.
+    Low level connection-oriented and connection-less LLCP sockets for sending
+	raw NDEF messages.	
 3.0 Cloning tags supported (long-press on read tag contents -> Clone).
     Editing tags supported (long-press on read tag contents -> Edit).
 	Stores all collected tags to the data directory for later reuse.
