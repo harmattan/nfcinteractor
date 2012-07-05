@@ -207,20 +207,20 @@ bool NfcInfo::checkNfcStatus()
 
         if (nfcMode != NfcSettings::NfcModeOn) {
             // NFC is supported but not switched on, prompt the user to enable it.
-            emit nfcStatusError(tr("NFC hardware is available but currently switched off."));
+            emit nfcStatusError(tr("NFC hardware is available but currently switched off"));
             return false;
         } else {
-            emit nfcStatusUpdate(tr("NFC is supported and switched on."));
+            emit nfcStatusUpdate(tr("NFC is supported and switched on"));
             return true;
         }
     }
     else if (nfcFeature == NfcSettings::NfcFeatureSupportedViaFirmwareUpdate) {
         // Display message to user to update device firmware
-        emit nfcStatusError(tr("Update device firmware to enable NFC support."));
+        emit nfcStatusError(tr("Update device firmware to enable NFC support"));
         return false;
     } else {
         // Display message informing the user that NFC is not supported by this device.
-        emit nfcStatusError(tr("NFC not supported by this device."));
+        emit nfcStatusError(tr("NFC not supported by this device"));
         return false;
     }
 #endif
@@ -440,7 +440,7 @@ QString NfcInfo::storeNdefToFile(const QString& fileName, const QNdefMessage &me
             }
             fullFileName = writeDir + fullFileName;
         } else {
-            emit nfcStatusError("Unable to open data directory (" + writeDir + ") - please check the application settings.");
+            emit nfcStatusError("Unable to open data directory (" + writeDir + ") - please check the application settings");
             qDebug() << "Unable to set current directory to: " << writeDir;
         }
     }
@@ -665,7 +665,7 @@ bool NfcInfo::writeCachedNdefMessage()
                     if (m_appSettings->deleteTagBeforeWriting() && m_cachedRequestType != NfcNdefDeleting) {
                         // Write an empty message first
                         m_cachedRequestType = NfcNdefDeleting;
-                        emit nfcStatusUpdate("Writing empty message to the tag.");
+                        emit nfcStatusUpdate("Writing empty message to the tag");
                         // TODO: check if we need to add an empty record, or if
                         // formatting is also done like this.
                         m_cachedRequestId = m_cachedTarget->writeNdefMessages(QList<QNdefMessage>() << (QNdefMessage()));
@@ -674,7 +674,7 @@ bool NfcInfo::writeCachedNdefMessage()
                         // Either the empty message was already written, or
                         // configuration is not set to delete the message first.
                         m_cachedRequestType = NfcNdefWriting;
-                        emit nfcStatusUpdate("Writing message to the tag.");
+                        emit nfcStatusUpdate("Writing message to the tag");
                         m_cachedRequestId = m_cachedTarget->writeNdefMessages(QList<QNdefMessage>() << (*m_cachedNdefMessage));
                     }
                     success = true;
@@ -692,11 +692,11 @@ bool NfcInfo::writeCachedNdefMessage()
                 {
                     // -----------------------------------------------------
                     // Not in right mode / not right target
-                    emit nfcStatusUpdate("Please touch the tag again to write the message.");
+                    emit nfcStatusUpdate("Please touch the tag again to write the message");
                 }
             } else {
                 // Can't write - no cached target available
-                emit nfcStatusUpdate("Please touch a tag to write the message.");
+                emit nfcStatusUpdate("Please touch a tag to write the message");
             }
         }
     }
@@ -1081,23 +1081,23 @@ void NfcInfo::handleNfcModeChange(NfcSettings::NfcMode nfcMode)
         // on the value of the nfcMode parameter. The return value of
         // NfcSettings::nfcFeature() indicates whether a firmware update is
         // applicable to this device.
-        emit nfcStatusError(tr("NFC is not currently supported."));
+        emit nfcStatusError(tr("NFC is not currently supported"));
         break;
     case NfcSettings::NfcModeUnknown:
         // NFC is supported, but the current mode is unknown at this time.
-        emit nfcStatusError(tr("NFC is supported, but the current mode is unknown at this time."));
+        emit nfcStatusError(tr("NFC is supported, but the current mode is unknown at this time"));
         break;
     case NfcSettings::NfcModeOn:
         // NFC is supported and switched on.
-        emit nfcStatusUpdate(tr("NFC is supported and switched on."));
+        emit nfcStatusUpdate(tr("NFC is supported and switched on"));
         break;
     case NfcSettings::NfcModeCardOnly:
         // NFC hardware is available and currently in card emulation mode.
-        emit nfcStatusError(tr("NFC hardware is available and currently in card emulation mode."));
+        emit nfcStatusError(tr("NFC hardware is available and currently in card emulation mode"));
         break;
     case NfcSettings::NfcModeOff:
         // NFC hardware is available but currently switched off.
-        emit nfcStatusError(tr("NFC hardware is available but currently switched off."));
+        emit nfcStatusError(tr("NFC hardware is available but currently switched off"));
         break;
     default:
         break;
@@ -1116,23 +1116,23 @@ void NfcInfo::handleNfcError(NfcSettings::NfcError nfcError, int error)
     switch (nfcError) {
     case NfcSettings::NfcErrorFeatureSupportQuery:
         // Unable to query NFC feature support.
-        emit nfcStatusError(tr("Unable to query NFC feature support."));
+        emit nfcStatusError(tr("Unable to query NFC feature support"));
         break;
     case NfcSettings::NfcErrorSoftwareVersionQuery:
         // Unable to query device software version.
-        emit nfcStatusError(tr("Unable to query device software version."));
+        emit nfcStatusError(tr("Unable to query device software version"));
         break;
     case NfcSettings::NfcErrorModeChangeNotificationRequest:
         // Unable to request NFC mode change notifications.
-        emit nfcStatusError(tr("Unable to request NFC mode change notifications."));
+        emit nfcStatusError(tr("Unable to request NFC mode change notifications"));
         break;
     case NfcSettings::NfcErrorModeChangeNotification:
         // NFC mode change notification was received, but caused an error.
-        emit nfcStatusError(tr("NFC mode change notification was received, but caused an error."));
+        emit nfcStatusError(tr("NFC mode change notification was received, but caused an error"));
         break;
     case NfcSettings::NfcErrorModeRetrieval:
         // Unable to retrieve current NFC mode.
-        emit nfcStatusError(tr("Unable to retrieve current NFC mode."));
+        emit nfcStatusError(tr("Unable to retrieve current NFC mode"));
         break;
     default:
         break;
