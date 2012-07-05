@@ -29,7 +29,7 @@ Page {
     property alias logNdefToFile: logNdefToFileEdit.checked
     property alias logNdefDir: logNdefDirEdit.text
     property alias deleteTagBeforeWriting: deleteTagBeforeWritingEdit.checked
-    //property alias useSnep: useSnepEdit.checked
+    property alias useSnep: useSnepEdit.checked
 
     // - Raw peer to peer settings
     property alias useConnectionLess: connectionSwitch.checked
@@ -50,7 +50,7 @@ Page {
         logNdefToFile = settings.logNdefToFile;
         logNdefDir = settings.logNdefDir;
         deleteTagBeforeWriting = settings.deleteTagBeforeWriting;
-        //useSnep = settings.useSnep;
+        useSnep = settings.useSnep;
         useConnectionLess = settings.useConnectionLess;
         nfcPort = settings.nfcPort;
         nfcUri = settings.nfcUri;
@@ -66,7 +66,7 @@ Page {
         settings.setLogNdefDir(logNdefDir);
         settings.setDeleteTagBeforeWriting(deleteTagBeforeWriting);
 
-        //settings.setUseSnep(useSnep);
+        settings.setUseSnep(useSnep);
         settings.setUseConnectionLess(useConnectionLess);
         settings.setNfcPort(nfcPort);
         settings.setNfcUri(nfcUri);
@@ -208,29 +208,30 @@ Page {
 
             // --------------------------------------------------------------------------------
             // - SNEP (higher privileges required on MeeGo to register for urn:nfc:sn:snep)
-//            CheckBox {
-//                id: useSnepEdit
-//                checked: true
-//                text: "Use SNEP for peer-to-peer"
-//                onClicked: {
-//                    if (useSnepEdit.checked) {
-//                        // SNEP activated
-//                        useConnectionLess = false;
-//                        nfcUri = "urn:nfc:sn:snep";
-//                        connectClientSocket = true;
-//                        connectServerSocket = true;
-//                    } else {
-//                        // SNEP deactivated - no changes needed
-//                    }
-//                }
-//            }
+            CheckBox {
+                id: useSnepEdit
+                checked: true
+                text: "Use SNEP for peer-to-peer sending"
+                visible: allowSnep
+                onClicked: {
+                    if (useSnepEdit.checked) {
+                        // SNEP activated
+                        useConnectionLess = false;
+                        nfcUri = "urn:nfc:sn:snep";
+                        connectClientSocket = true;
+                        connectServerSocket = true;
+                    } else {
+                        // SNEP deactivated - no changes needed
+                    }
+                }
+            }
 
 
             // --------------------------------------------------------------------------------
             // - No SNEP: Direct peer-to-peer settings
             Column {
                 id: peerRawSettings
-                visible: true //!useSnepEdit.checked
+                visible: !useSnepEdit.checked || !allowSnep
                 spacing: customPlatformStyle.paddingMedium;
                 width: parent.width
 
