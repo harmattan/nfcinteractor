@@ -62,7 +62,7 @@ Page {
 
                 Text {
                     id: instructionsText2
-                    text: qsTr("v4.0.0 RC\n2011 - 2012 Andreas Jakl")
+                    text: qsTr("v4.0.0\n2011 - 2012 Andreas Jakl")
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     wrapMode: Text.WordWrap
@@ -79,7 +79,7 @@ Page {
 
                 Text {
                     id: instructionsText3
-                    text: qsTr("Touch NFC tags to analyze their contents.\nTap the 'write' toolbar button to compose your own NDEF message (consisting of one or more records), then tap the finish flag to finalize the contents. Now touch a tag to write the message to the tag.\nTap the read tag contents (blue text) to clone or edit a tag.")
+                    text: qsTr("\nTouch NFC tags to analyze their contents.\n\nTap the 'write' toolbar button to compose your own NDEF message (consisting of one or more records), then tap the finish flag to finalize the contents. Now touch a tag to write the message to the tag.\n\nIn the main view, tap the analyzed tag contents (blue text) to clone or edit a tag.\n\nChange peer to peer settings to configure device-to-device communication.")
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     wrapMode: Text.WordWrap

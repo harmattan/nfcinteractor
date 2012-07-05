@@ -150,7 +150,7 @@ PageStackWindow {
         }
 
         onNfcTagWritten: {
-            logMessage("Message written to the tag.", "aliceblue", "nfcSymbolSuccess.png");
+            logMessage("Message written to the tag / device", "aliceblue", "nfcSymbolSuccess.png");
             if (writeTagPageLoader.status === Loader.Ready) {
                 writeTagPageLoader.item.tagWritten();
             }
@@ -172,7 +172,7 @@ PageStackWindow {
                 // Reading; 1 would be writing, but the NfcInfo class will
                 // send out more detailed textual signals about the write status,
                 // so we won't print a message here to keep the amount of on-screen text down.
-                logMessage("Switched back to tag reading mode.", "aliceblue", "nfcSymbolInfo.png");
+                logMessage("Switched back to tag reading mode", "aliceblue", "nfcSymbolInfo.png");
             }
         }
 

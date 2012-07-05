@@ -63,7 +63,7 @@ Page {
         showHideBusy(false);
         writeStatusText.text = "Success";
         writeStatusText.color = "palegreen";
-        writeStatusDetails.text = "Message written to the tag.\nTouch another tag to write again, or go back to the edit page.";
+        writeStatusDetails.text = "Message written to the tag / device.\nTouch another tag to write again, or go back to the edit page.";
         writeStatusImage.source = "okLarge.svg";
         writeStatusBg.gradient = writeSuccessGradient;
         separator.gradient = writeSuccessGradient;
