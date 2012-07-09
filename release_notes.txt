@@ -120,11 +120,11 @@ BUILD & INSTALLATION INSTRUCTIONS
 
 MeeGo Harmattan
 ~~~~~~~~~~~~~~~
-The example will work out of the box with the Harmattan target 
-of the Qt SDK 1.2. Make sure you have the latest firmware version
-on your Nokia N9. The Nokia N950 doesn't support NFC.
+Make sure you have the latest firmware version on your Nokia N9. The 
+Nokia N950 doesn't support NFC.
+To compile the source code, use the Harmattan target of the Qt SDK 1.2.
 
-To install the LibNDEF Push for SNEP support:
+Install the LibNDEF Push for SNEP support:
 - Download the package and the dev-package from http://harmattan-dev.nokia.com/downloads/QtSDK_additions/
 - Open the MADDE terminal from the start menu
 - Check installed MeeGo targets: 
