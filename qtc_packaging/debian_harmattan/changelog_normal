@@ -4,7 +4,7 @@ nfcinteractor (4.1.0) unstable; urgency=low
 
  -- Andreas Jakl <>  Tue, 17 Jul 2012 17:22:26 +0200
 
- nfcinteractor (4.0.0) unstable; urgency=low
+nfcinteractor (4.0.0) unstable; urgency=low
   * Peer-to-peer communication for sending and receiving SNEP messages.
   * Low level peer-to-peer connection-oriented and connection-less LLCP sockets for sending raw NDEF messages.
 
