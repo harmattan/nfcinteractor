@@ -1,4 +1,10 @@
-nfcinteractor (4.0.0) unstable; urgency=low
+nfcinteractor (4.1.0) unstable; urgency=low
+  * Edit collected records with external RTD.
+  * Improved handling of raw payload in custom tags.
+
+ -- Andreas Jakl <>  Tue, 17 Jul 2012 17:22:26 +0200
+
+ nfcinteractor (4.0.0) unstable; urgency=low
   * Peer-to-peer communication for sending and receiving SNEP messages.
   * Low level peer-to-peer connection-oriented and connection-less LLCP sockets for sending raw NDEF messages.
 
@@ -6,7 +12,7 @@ nfcinteractor (4.0.0) unstable; urgency=low
 
 nfcinteractor (3.0.0) unstable; urgency=low
   * Cloning tags supported (long-press on read tag contents -> Clone).
-  * Eiting tags supported (long-press on read tag contents -> Edit).
+  * Editing tags supported (long-press on read tag contents -> Edit).
   * Stores all collected tags to the data directory for later reuse.
   * Extracts and saves images from tags (edit an existing tag, filename shown in the compose view).
   * Settings screen to enable/disable storing all collected tags and to choose the data directory.

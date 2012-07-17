@@ -128,6 +128,11 @@ QString NfcNdefParser::parseNdefMessage(const QNdefMessage &message)
             NdefNfcMimeVcardRecord vCardRecord(record);
             tagContents.append(parseVcardRecord(vCardRecord));
         }
+        else if (record.typeNameFormat() == QNdefRecord::ExternalRtd) {
+            // ------------------------------------------------
+            // External type according to NFC RTD
+            tagContents.append(parseCustomRecord(record));
+        }
         else if (record.isEmpty())
         {
             // ------------------------------------------------
@@ -520,6 +525,40 @@ bool NfcNdefParser::addContactDetailToModel(const QString& detailName, const QSt
     }
     return true;
 }
+
+
+
+/*!
+  \brief Create a textual description of the contents of the
+  external record type name format.
+
+  \param record the record to analyze
+  \return plain text description of the record contents.
+  */
+QString NfcNdefParser::parseCustomRecord(const QNdefRecord& record)
+{
+    QString tagContents("[External RTD]\n");
+    //tagContents.append("Type: " + record.type() + "\n");  // Already parsed for every record
+    tagContents.append("Payload (" + QString::number(record.payload().size()) + ")");
+    if (!record.isEmpty()) {
+        tagContents.append(": " + record.payload());
+    }
+    tagContents.append("\n");
+    if (!record.id().isNull() && !record.id().isEmpty()) {
+        tagContents.append("Id: " + record.id() + "\n");
+    }
+    if (m_parseToModel) {
+        m_nfcRecordModel->simpleAppendRecordHeaderItem(NfcTypes::MsgCustom, true);
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordTypeNameFormat, "4", false);
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordTypeName, record.type(), false);
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordRawPayload, record.payload(), false);
+        if (!record.id().isNull() && !record.id().isEmpty()) {
+            m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordId, record.id(), true);
+        }
+    }
+    return tagContents;
+}
+
 
 /*!
   \brief Return a textual description of the \a typeName of the NDEF record.

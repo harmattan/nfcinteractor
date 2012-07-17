@@ -192,6 +192,8 @@ Tested on:
 CHANGE HISTORY
 --------------------------------------------------------------------------------
 
+4.1 Edit collected records with external RTD.
+    Improved handling of raw payload in custom tags.
 4.0 Peer-to-peer support added, with SNEP support.
     Low level connection-oriented and connection-less LLCP sockets for sending
 	raw NDEF messages.	

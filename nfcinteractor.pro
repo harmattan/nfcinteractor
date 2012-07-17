@@ -15,7 +15,7 @@ DEFINES += DEPLOY_VERSION
 
 # Use SNEP on MeeGo Harmattan (always activated on Symbian).
 # Only works for N9 PR 1.2+, library not present on 1.0 & 1.1.
-#DEFINES += USE_SNEP
+DEFINES += USE_SNEP
 
 # Define for detecting Harmattan in .cpp files.
 # Only needed for experimental / beta Harmattan SDKs.
@@ -37,7 +37,7 @@ contains(DEFINES,UNLIMITED_VERSION) {
 } else {
     TARGET = nfcinteractor
 }
-VERSION = 4.00.0
+VERSION = 4.10.0
 
 
 symbian {
@@ -45,7 +45,7 @@ symbian {
         # In App Purchasing APIs only available on the Symbian platform
         DEFINES += USE_IAP
         # Enables test mode for IAP
-        DEFINES += IAP_TEST_MODE
+        #DEFINES += IAP_TEST_MODE
         # In App Advertising
         DEFINES += USE_IAA
     }
@@ -170,8 +170,8 @@ symbian {
     imagesFolderSymbian.target = qml
     DEPLOYMENTFOLDERS += imagesFolderSymbian
 
-    # Demo images for writing to tags
-    demoImages.sources = ./demoimages/minimal.gif ./demoimages/minimal.png ./demoimages/nokia.png
+    # Demo images and tags for writing to tags
+    demoImages.sources = ./demoimages/minimal.gif ./demoimages/minimal.png ./demoimages/nokia.png ./demoimages/Autostart.txt ./demoimages/SpNokia.txt
     demoImages.path = e:/nfc/
     DEPLOYMENT += demoImages
 

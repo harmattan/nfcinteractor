@@ -237,6 +237,9 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
         simpleAppendRecordHeaderItem(NfcTypes::MsgCustom, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeNameFormat, false, recordId);
         simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeName, true, recordId);
+        // Always need to specify the payload - if not set explicitely to empty when constructing
+        // a QNdefRecord, the payload might contain some random contents.
+        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordRawPayload, "", false, recordId);
         break;
     case NfcTypes::MsgCombination:
         simpleAppendRecordHeaderItem(NfcTypes::MsgCustom, true, recordId);
@@ -249,6 +252,7 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
         simpleAppendRecordHeaderItem(NfcTypes::MsgCustom, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeNameFormat, false, recordId);
         simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordTypeName, "nokia.com:nfcinteractor", true, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgCustom, NfcTypes::RecordRawPayload, "", false, recordId);
         simpleAppendRecordHeaderItem(NfcTypes::MsgStore, true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordStoreCustomName, "ni", true, recordId);
         simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordText, true,  recordId);

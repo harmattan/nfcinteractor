@@ -77,7 +77,7 @@ public:
     QString parseNdefMessage(const QNdefMessage &message);
 
     void setParseToModel(bool parseToModel);
-private:
+    private:
     QString parseUriRecord(const QNdefNfcUriRecord &record);
     QString parseTextRecord(const QNdefNfcTextRecord &record);
     QString textRecordToString(const QNdefNfcTextRecord &textRecord);
@@ -86,6 +86,9 @@ private:
     QString parseVcardRecord(NdefNfcMimeVcardRecord &record);
 
     bool addContactDetailToModel(const QString &detailName, const QString &detailValue);
+
+    QString parseCustomRecord(const QNdefRecord &record);
+
     QString convertRecordTypeNameToString(const QNdefRecord::TypeNameFormat typeName);
 
 private:
