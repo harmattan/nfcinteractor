@@ -2,7 +2,7 @@
 # normal version, also call the corresponding .bat
 # file if compiling for Harmattan, to change the
 # names in the debian package files!
-DEFINES += UNLIMITED_VERSION
+#DEFINES += UNLIMITED_VERSION
 
 # When compiling for publishing the app, activate this
 # to change to the 0x2... UID and the right UID for the
@@ -62,7 +62,7 @@ contains(MEEGO_EDITION,harmattan) {
 CONFIG += mobility qt-components
 # In App Purchasing
 contains(DEFINES,USE_IAP) {
-    symbian:CONFIG += inapppurchasing
+    symbian:CONFIG += inapppurchase
 }
 MOBILITY += sensors connectivity systeminfo versit contacts location
 
