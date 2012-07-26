@@ -135,10 +135,10 @@ if (preg_match('/symbian/i',$user_agent)) {
 	$ua_enc = 's';
 } elseif (preg_match('/meego/i',$user_agent)) {
 	$ua_enc = 'h';
-} elseif (preg_match('/nokia/i',$user_agent)) {
-	$ua_enc = 'f';
 } elseif (preg_match('/windows phone/i',$user_agent)) {
 	$ua_enc = 'w';
+} elseif (preg_match('/nokia/i',$user_agent)) {
+	$ua_enc = 'f';
 } elseif (preg_match('/android/i',$user_agent)) {
 	$ua_enc = 'a';
 } elseif (preg_match('/iphone/i',$user_agent) || preg_match('/ipad/i',$user_agent)) {
