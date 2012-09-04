@@ -72,6 +72,7 @@ Known bugs / issues:
 Ideas for future updates:
 - Write a contact from the address book
 - Write vCalendar records
+- Skype call / add contact tag: http://www.skype.com/intl/en/tell-a-friend/wizard/
 - Bluetooth pairing records
 - Lock tags (type 1, 2**)
 - Check composed record contents for errors according to specifications
