@@ -3,44 +3,42 @@
 **
 ** Copyright (C) 2012 Nokia Corporation and/or its subsidiary(-ies).
 ** All rights reserved.
-** Contact: Andreas Jakl (andreas.jakl@nokia.com)
 **
+** This file is part of the NDEF Library for Proximity APIs, as well as the
+** NFC Interactor project for Qt.
+** More information: 
+** http://ndef.codeplex.com/
+** https://projects.developer.nokia.com/nfcinteractor
 **
-** $QT_BEGIN_LICENSE:BSD$
-** You may use this file under the terms of the BSD license as follows:
+** GNU Lesser General Public License Usage
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this
+** file. Please review the following information to ensure the GNU Lesser
+** General Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** "Redistribution and use in source and binary forms, with or without
-** modification, are permitted provided that the following conditions are
-** met:
-**   * Redistributions of source code must retain the above copyright
-**     notice, this list of conditions and the following disclaimer.
-**   * Redistributions in binary form must reproduce the above copyright
-**     notice, this list of conditions and the following disclaimer in
-**     the documentation and/or other materials provided with the
-**     distribution.
-**   * Neither the name of Nokia Corporation and its Subsidiary(-ies) nor
-**     the names of its contributors may be used to endorse or promote
-**     products derived from this software without specific prior written
-**     permission.
+** In addition, as a special exception, Nokia gives you certain additional
+** rights. These rights are described in the Nokia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
 **
-** THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-** "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-** LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-** A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-** OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-** SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-** LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-** DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-** THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-** (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-** OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
-** $QT_END_LICENSE$
+** GNU General Public License Usage
+** Alternatively, this file may be used under the terms of the GNU General
+** Public License version 3.0 as published by the Free Software Foundation
+** and appearing in the file LICENSE.GPL included in the packaging of this
+** file. Please review the following information to ensure the GNU General
+** Public License version 3.0 requirements will be met:
+** http://www.gnu.org/copyleft/gpl.html.
+**
+** Other Usage
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
 **
 ****************************************************************************/
 
 /*
    Nfc Geo Tags Redirection Script
-   v1.1.0
+   v1.2.0
 
    Summary
    ---------------------------------------------------------------------------
@@ -60,9 +58,10 @@
    ---------------------------------------------------------------------------
    Some phones support the "geo:" URI scheme and connect that to a maps
    app on the phone (e.g., the Nokia N9 or Android).
-   Other phones do not support this URI scheme, and should be redirected
-   to a web-based maps client instead (e.g., Symbian). On Symbian, this
-   method also triggers the Nokia Maps application.
+   The default maps client on Windows 8 uses a bingmaps: URI scheme.
+   Other phones do not support URI scheme for opening maps, and should be 
+   redirected to a web-based maps client instead (e.g., Symbian).
+   On Symbian, this method also triggers the Nokia Maps application.
    
    To maximize compatibility of a tag to phones, you need to take the phone
    OS into account and use the supported URL scheme. However, it is still 
@@ -72,6 +71,12 @@
    detects the phone OS through its user agent, and will redirect it to
    the appropriate URL. This allows having a single tag, which is compatible
    to multiple mobile operating systems.
+   
+   Depending on the phone, the redirection method also differs. Redirecting
+   a MeeGo or Android phone to a geo: URI should be done by sending a HTTP 
+   header with the new location. Other phone browsers don't handle the 
+   geo URIs for this kind of redirect, and need to be redirected using
+   JavaScript (or a manual link in case JavaScript is deactivated).
    
    
    Usage
@@ -116,37 +121,6 @@
    
  */
 
-// Encoded platform names, in order or priority
-// c = Custom name, app id stored in PHP code
-// n = Nokia Store
-// s = Symbian
-// h = MeeGo Harmattan
-// f = Series 40
-// w = Windows Phone
-// a = Android
-// i = iPhone
-// b = RIM BlackBerry
-$allplatforms = array('n', 's', 'h', 'f', 'w', 'a', 'i', 'b');
-// Stores 1-letter, encoded platform name
-$ua_enc = '';
-// Check user agent and assign 1-letter, encoded platform name
-$user_agent = $_SERVER['HTTP_USER_AGENT'];
-if (preg_match('/symbian/i',$user_agent)) {
-	$ua_enc = 's';
-} elseif (preg_match('/meego/i',$user_agent)) {
-	$ua_enc = 'h';
-} elseif (preg_match('/windows phone/i',$user_agent)) {
-	$ua_enc = 'w';
-} elseif (preg_match('/nokia/i',$user_agent)) {
-	$ua_enc = 'f';
-} elseif (preg_match('/android/i',$user_agent)) {
-	$ua_enc = 'a';
-} elseif (preg_match('/iphone/i',$user_agent) || preg_match('/ipad/i',$user_agent)) {
-	$ua_enc = 'i';
-} elseif (preg_match('/blackberry/i',$user_agent)) {
-	$ua_enc = 'b';
-}
-
 // Default location: Nokia House, Espoo, Finland
 $location = "60.17,24.829";
 // Check if any coordinates are set in the URL
@@ -167,40 +141,76 @@ if (isset($_GET['l']) || isset($_GET['c'])) {
 		case "nokia":
 			$location = "60.17,24.829";
 			break;
-		case "nokiaworld":
-			// Excel, Nokia World, London, UK
-			$location = "51.508489,0.027337";
-			break;
-		case "qtdevdays":
-			// Qt Dev Days, Dolce Munich, Germany
-			$location = "48.2849983,11.5620476";
-			// Qt Dev Days, Hyatt Regency San Francisco Airport
-			//$location = "37.594231,-122.365317";
-			break;
 		}
 	}
 }
-if ($ua_enc == 'h' || $ua_enc == 'a') {
-	// Use the "geo:" URI scheme for MeeGo Harmattan and Android
-	// The phones support direct redirection by sending a new header.
-	header("Location: geo:".$location);
+
+// Encoded platform names
+// s = Symbian
+// h = MeeGo Harmattan
+// f = Series 40
+// w8 = Windows 8
+// wp8 = Windows Phone 8.x - will be added once SDK is available
+// wp7 = Windows Phone 7.x
+// a = Android
+// i = iPhone
+// b = RIM BlackBerry
+
+// Stores encoded platform name
+$ua_enc = '';
+// Check user agent and assign encoded platform name
+$user_agent = $_SERVER['HTTP_USER_AGENT'];
+$locationUri = "http://m.nokia.me/?c=".$location."&z=15";
+$redirectionMethod = 2;			// 1 = Header redirection, 2 = JavaScript
+if (preg_match('/symbian/i',$user_agent)) {
+	$ua_enc = 's';
+	$locationUri = "http://m.ovi.me/?c=".$location."&z=15";
+} elseif (preg_match('/meego/i',$user_agent)) {
+	$ua_enc = 'h';
+	$locationUri = "geo:".$location;
+	$redirectionMethod = 1;
+} elseif (preg_match('/Windows NT 6.2/i',$user_agent)) {
+	$ua_enc = 'w8';
+	$locationTilde = str_replace(',', '~', $location);
+	$locationUri = "bingmaps://?cp=".$locationTilde;
+} elseif (preg_match('/windows phone/i',$user_agent)) {
+	$ua_enc = 'wp7';
+	$locationSpace = str_replace(',', ' ', $location);
+	$locationUri = "maps:".$locationSpace;
+} elseif (preg_match('/nokia/i',$user_agent)) {
+	$ua_enc = 'f';
+} elseif (preg_match('/android/i',$user_agent)) {
+	$ua_enc = 'a';
+	$locationUri = "geo:".$location;
+	$redirectionMethod = 1;
+} elseif (preg_match('/iphone/i',$user_agent) || preg_match('/ipad/i',$user_agent)) {
+	$ua_enc = 'i';
+} elseif (preg_match('/blackberry/i',$user_agent)) {
+	$ua_enc = 'b';
+}
+
+
+if ($redirectionMethod == 1) {
+	// The phone supports direct redirection by sending a new header.
+	header("Location: ".$locationUri);
 	exit;
 }
-// For other phones (including Symbian), redirect the phone via a JavaScript
-// redirect (using the header redirection on Symbian would not trigger opening the
+
+// For other phones, redirect the phone via a JavaScript redirect
+// (e.g., using the header redirection on Symbian would not trigger opening the
 // Nokia Maps client).
 ?>
 <html>
 <head>
 <script type="text/javascript">
 <!--
-window.location = "http://m.ovi.me/?c=<?php echo $location; ?>&z=15";
+window.location = "<?php echo $locationUri; ?>";
 //-->
 </script>
 </head>
 <body>
-<noscript>
-<font face="Tahoma,Arial"><a href="http://m.ovi.me/?c=<?php echo $location; ?>&z=15">Open Nokia Maps</a></font>
-</noscript>
+<!--<noscript>-->
+<font face="Tahoma,Arial"><a href="<?php echo $locationUri; ?>&z=15">Open Maps</a></font>
+<!--</noscript>-->
 </body>
 </html>
