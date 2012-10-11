@@ -13,7 +13,8 @@ the contents.
 
 The app supports the following content: Smart Poster, URI, Text,
 Geo, SMS, social networks, MIME/vCard (business cards), MIME/image, 
-app store links and custom records.
+app store links, Windows LaunchApp, Android Application Record and
+custom records.
 
 Peer-to-peer support between NFC devices for sending messages through
 the standardized SNEP protocol, or with raw LLCP socket connections.

@@ -26,6 +26,8 @@
 #include "ndefnfcrecords/ndefnfcsmsrecord.h"
 #include "ndefnfcrecords/ndefnfcsocialrecord.h"
 #include "ndefnfcrecords/ndefnfcstorelinkrecord.h"
+#include "ndefnfcrecords/ndefnfclaunchapprecord.h"
+#include "ndefnfcrecords/ndefnfcandroidapprecord.h"
 #include "nfcstats.h"
 
 // Contact handling
@@ -68,6 +70,8 @@ private:
     NdefNfcStoreLinkRecord *convertStoreFromModel(const int startIndex, int &endIndex);
     NdefNfcStoreLinkRecord::AppStore appStoreFromRecordContentType(const NfcTypes::RecordContent contentType);
     QNdefRecord *convertCustomFromModel(const int startIndex, int &endIndex);
+    NdefNfcLaunchAppRecord *convertLaunchAppFromModel(const int startIndex, int &endIndex);
+    NdefNfcAndroidAppRecord *convertAndroidAppRecordFromModel(const int startIndex, int &endIndex);
 
 private:
     QList<NfcRecordItem*> &m_recordItems;    // Not owned by this class

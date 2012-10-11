@@ -49,7 +49,8 @@ public:
         Facebook,
         Xing,
         VKontakte,
-        Foursquare
+        Foursquare,
+        Skype
     };
 
 public:

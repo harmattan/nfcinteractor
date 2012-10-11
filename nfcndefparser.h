@@ -27,6 +27,7 @@
 #include "ndefnfcrecords/ndefnfcmimeimagerecord.h"
 #include "ndefnfcrecords/ndefnfcsprecord.h"
 #include "ndefnfcrecords/ndefnfcmimevcardrecord.h"
+#include "ndefnfcrecords/ndefnfcandroidapprecord.h"
 
 // Image handling
 #include <QImage>
@@ -84,6 +85,8 @@ public:
     QString parseSpRecord(const NdefNfcSpRecord &record);
     QString parseImageRecord(const NdefNfcMimeImageRecord &record);
     QString parseVcardRecord(NdefNfcMimeVcardRecord &record);
+    QString parseLaunchAppRecord(const NdefNfcLaunchAppRecord &record);
+    QString parseAndroidAppRecord(const NdefNfcAndroidAppRecord &record);
 
     bool addContactDetailToModel(const QString &detailName, const QString &detailValue);
 

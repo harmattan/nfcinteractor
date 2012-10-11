@@ -89,6 +89,12 @@ QNdefMessage* NfcModelToNdef::convertToNdefMessage()
             case NfcTypes::MsgCustom:
                 ndefMessage->append(*convertCustomFromModel(curRecordIndex, parseEndIndex));
                 break;
+            case NfcTypes::MsgLaunchApp:
+                ndefMessage->append(*convertLaunchAppFromModel(curRecordIndex, parseEndIndex));
+                break;
+            case NfcTypes::MsgAndroidAppRecord:
+                ndefMessage->append(*convertAndroidAppRecordFromModel(curRecordIndex, parseEndIndex));
+                break;
             default:
                 // MsgAnnotatedUrl, MsgCombination and a few others
                 // are just templates to add multiple records
@@ -752,5 +758,98 @@ QNdefRecord *NfcModelToNdef::convertCustomFromModel(const int startIndex, int &e
 
     endIndex = curIndex;
     //qDebug() << "Custom payload: (" << newRecord->payload().count() << "): " << newRecord->payload();
+    return newRecord;
+}
+
+NdefNfcLaunchAppRecord *NfcModelToNdef::convertLaunchAppFromModel(const int startIndex, int &endIndex)
+{
+    NdefNfcLaunchAppRecord* newRecord = new NdefNfcLaunchAppRecord();
+    if (m_recordItems[startIndex]->messageType() != NfcTypes::MsgLaunchApp ||
+            m_recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
+        return newRecord;
+    }
+    // Start at the next item after the header
+    int curIndex = startIndex + 1;
+    bool reachedRecordEnd = false;
+
+    while (curIndex < m_recordItems.size()) {
+        NfcRecordItem* curItem = m_recordItems[curIndex];
+        switch (curItem->recordContent()) {
+
+        case NfcTypes::RecordHeader:
+            // Next record starts - quit!
+            reachedRecordEnd = true;
+            break;
+        case NfcTypes::RecordLaunchAppArguments:
+            newRecord->setArguments(curItem->currentText());
+            break;
+        case NfcTypes::RecordLaunchAppWindows:
+            newRecord->addPlatformAppId("Windows", curItem->currentText());
+            break;
+        case NfcTypes::RecordLaunchAppWindowsPhone:
+            newRecord->addPlatformAppId("WindowsPhone", curItem->currentText());
+            break;
+        case NfcTypes::RecordLaunchAppPlatform:
+            {
+                QString platform = curItem->currentText();
+                curIndex++;
+                if (curIndex < m_recordItems.size()) {
+                    QString appId = m_recordItems[curIndex]->currentText();
+                    newRecord->addPlatformAppId(platform, appId);
+                } else {
+                    qDebug() << "Error in record model: LaunchApp platform without ID.";
+                    reachedRecordEnd = true;
+                }
+                break;
+            }
+        case NfcTypes::RecordLaunchAppId:
+            qDebug() << "Error in record model: LaunchApp App ID needs to be preceded by the platform name.";
+            break;
+        default:
+            // Unknown record content that doesn't belong to this record
+            reachedRecordEnd = true;
+            break;
+        }
+        if (reachedRecordEnd)
+            break;
+        curIndex ++;  // Already incremented by convert...() methods.
+    }
+    endIndex = curIndex;
+    return newRecord;
+}
+
+NdefNfcAndroidAppRecord *NfcModelToNdef::convertAndroidAppRecordFromModel(const int startIndex, int &endIndex)
+{
+    NdefNfcAndroidAppRecord* newRecord = new NdefNfcAndroidAppRecord();
+    if (m_recordItems[startIndex]->messageType() != NfcTypes::MsgAndroidAppRecord ||
+            m_recordItems[startIndex]->recordContent() != NfcTypes::RecordHeader) {
+        return newRecord;
+    }
+    // Start at the next item after the header
+    int curIndex = startIndex + 1;
+    bool reachedRecordEnd = false;
+
+    while (curIndex < m_recordItems.size()) {
+        NfcRecordItem* curItem = m_recordItems[curIndex];
+        switch (curItem->recordContent()) {
+
+        case NfcTypes::RecordHeader:
+            // Next record starts - quit!
+            reachedRecordEnd = true;
+            break;
+        case NfcTypes::RecordAndroidPackageName:
+            newRecord->setPackageName(curItem->currentText());
+            curIndex ++;
+            break;
+        default:
+            // Unknown record content that doesn't belong to this record
+            reachedRecordEnd = true;
+            break;
+        }
+        if (reachedRecordEnd)
+            break;
+        //curIndex ++;  // Already incremented by convert...() methods.
+    }
+    endIndex = curIndex;
     return newRecord;
 }

@@ -166,6 +166,8 @@ Page {
             ListElement { name: "Custom" }
             ListElement { name: "Combination" }
             ListElement { name: "Nfc Interactor Autostart" }
+            ListElement { name: "Windows LaunchApp" }
+            ListElement { name: "Android Application Record" }
         }
     }
 
@@ -210,6 +212,12 @@ Page {
             break;
         case "Nfc Interactor Autostart":
             newRecordType = NfcTypes.MsgNfcAutostart;
+            break;
+        case "Windows LaunchApp":
+            newRecordType = NfcTypes.MsgLaunchApp;
+            break;
+        case "Android Application Record":
+            newRecordType = NfcTypes.MsgAndroidAppRecord;
             break;
         }
 
@@ -259,6 +267,10 @@ Page {
             return qsTr("Store an image on a tag in any format. Note the images are usually very large and require a tag with enough writable space.");
         case NfcTypes.MsgCustom:
             return qsTr("Create a simple custom record by specifying the type name format, in most cases the type. Payload and ID are optional.");
+        case NfcTypes.MsgLaunchApp:
+            return qsTr("Directly launch an app by specifying the app ID for Windows and Windows Phone.");
+        case NfcTypes.MsgAndroidAppRecord:
+            return qsTr("Launch an app on Android by specifying its package name.");
         default:
             return qsTr("Sorry, no help available for this item.");
         }

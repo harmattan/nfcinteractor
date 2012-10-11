@@ -83,6 +83,9 @@ void NdefNfcSocialRecord::updatePayload()
     case Foursquare:
         uri = "http://m.foursquare.com/v/" + m_socialUserName;
         break;
+    case Skype:
+        uri = "skype:" + m_socialUserName + "?call";
+        break;
     }
 
     NdefNfcSmartUriRecord::setUri(uri);

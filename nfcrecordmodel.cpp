@@ -258,6 +258,15 @@ void NfcRecordModel::addCompleteRecordWithDefault(const int messageTypeInt)
         simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordText, true,  recordId);
         simpleAppendRecordItem(NfcTypes::MsgStore, NfcTypes::RecordTextLanguage, false, recordId);
         break;
+    case NfcTypes::MsgLaunchApp:
+        simpleAppendRecordHeaderItem(NfcTypes::MsgLaunchApp, true, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgLaunchApp, NfcTypes::RecordLaunchAppArguments, false, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgLaunchApp, NfcTypes::RecordLaunchAppWindowsPhone, true, recordId);
+        break;
+    case NfcTypes::MsgAndroidAppRecord:
+        simpleAppendRecordHeaderItem(NfcTypes::MsgAndroidAppRecord, false, recordId);
+        simpleAppendRecordItem(NfcTypes::MsgAndroidAppRecord, NfcTypes::RecordAndroidPackageName, false, recordId);
+        break;
     }
 }
 
@@ -345,6 +354,13 @@ void NfcRecordModel::addContentToRecord(int recordIndex, int messageTypeInt, int
         simpleInsertRecordItem(insertPosition, messageType, NfcTypes::RecordText, QString(), true, parentRecordId);
         break;
     }
+    case NfcTypes::RecordLaunchAppPlatform:
+        // Add two items for the launch app platform item, therefore handle it here
+        // and not in the generic simpleInsertRecordItem() method.
+        // (a platform is always together with the ID)
+        simpleInsertRecordItem(insertPosition, messageType, NfcTypes::RecordLaunchAppId, QString(), false, parentRecordId);
+        simpleInsertRecordItem(insertPosition, messageType, NfcTypes::RecordLaunchAppPlatform, QString(), true, parentRecordId);
+        break;
     case NfcTypes::RecordHeader:
         // Shouldn't be possible to add a header as content to an existing record
         qDebug() << "Error: attempt to add a header as a content for another record";
@@ -554,6 +570,12 @@ void NfcRecordModel::removeRecord(const int removeRecordIndex) {
             {
                 removeRecordFromModel(removeRecordIndex);
             }
+        } else if (recordContent == NfcTypes::RecordLaunchAppPlatform) {
+            // If we just deleted a text entry, also delete the following text language (if present)
+            if (m_recordItems.count() > removeRecordIndex && m_recordItems[removeRecordIndex]->recordContent() == NfcTypes::RecordLaunchAppId)
+            {
+                removeRecordFromModel(removeRecordIndex);
+            }
         }
 
         // Check if it is possible to add items to the record now
@@ -717,6 +739,16 @@ QList<QObject*> NfcRecordModel::possibleContentForRecord(int recordIndex)
         checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordId);
         break;
     }
+    case NfcTypes::MsgLaunchApp:
+    {
+        checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordLaunchAppArguments);
+        checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordLaunchAppWindows);
+        checkPossibleContentForRecord(possibleContent, true, recordIndex, messageType, NfcTypes::RecordLaunchAppWindowsPhone);
+        checkPossibleContentForRecord(possibleContent, false, recordIndex, messageType, NfcTypes::RecordLaunchAppPlatform);
+        break;
+    }
+    case NfcTypes::MsgAndroidAppRecord:
+        break;
     }
     //qDebug() << "Number of possible additional content items (C++): " << possibleContent.size();
     return possibleContent;

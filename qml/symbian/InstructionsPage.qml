@@ -63,7 +63,7 @@ Page {
 
                 Text {
                     id: instructionsText2
-                    text: qsTr("v4.1.0\n2011 - 2012 Andreas Jakl")
+                    text: qsTr("v4.2.0\n2011 - 2012 Andreas Jakl")
                     horizontalAlignment: Text.AlignHCenter
                     width: parent.width
                     wrapMode: Text.WordWrap

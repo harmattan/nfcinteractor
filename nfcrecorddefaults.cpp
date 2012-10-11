@@ -50,6 +50,12 @@ QString NfcRecordDefaults::itemHeaderTextDefault(const NfcTypes::MessageType mes
     case NfcTypes::MsgCustom:
         itemText = "Custom Record";
         break;
+    case NfcTypes::MsgLaunchApp:
+        itemText = "LaunchApp";
+        break;
+    case NfcTypes::MsgAndroidAppRecord:
+        itemText = "Android App Record";
+        break;
     default:
         qDebug() << "Unknown message type " << messageType << " in simpleAddRecordHeaderItem()";
         break;
@@ -258,6 +264,34 @@ void NfcRecordDefaults::itemContentDefault(const NfcTypes::MessageType msgType, 
         defaultTitle = "Registered app name";
         defaultContents = "ni";
         break;
+    // ----------------------------------------------------------------
+    // LaunchApp
+    case NfcTypes::RecordLaunchAppArguments:
+        defaultTitle = "Arguments";
+        defaultContents = "user=default";
+        break;
+    case NfcTypes::RecordLaunchAppWindows:
+        defaultTitle = "Windows proximity app ID";
+        defaultContents = "";
+        break;
+    case NfcTypes::RecordLaunchAppWindowsPhone:
+        defaultTitle = "Windows Phone Product ID";
+        defaultContents = "{5e506af4-4586-4c90-bc5f-428b12cf48bc}";
+        break;
+    case NfcTypes::RecordLaunchAppPlatform:
+        defaultTitle = "Custom platform name";
+        defaultContents = "";
+        break;
+    case NfcTypes::RecordLaunchAppId:
+        defaultTitle = "Custom platform app ID";
+        defaultContents = "";
+        break;
+    // ----------------------------------------------------------------
+    // Android Application Record
+    case NfcTypes::RecordAndroidPackageName:
+        defaultTitle = "Package name";
+        defaultContents = "com.twitter.android";
+        break;
     default:
         qDebug() << "Warning: don't have defaults for requested content type in NfcRecordModel::getDefaultsForRecordContent().";
         break;
@@ -293,6 +327,7 @@ QVariantList NfcRecordDefaults::itemSelectionDefault(const NfcTypes::RecordConte
         // vKontakte.ru
         selectionItems << QString::fromWCharArray(L"\x0412\x041A\x043E\x043D\x0442\x0430\x043A\x0442\x0435");
         selectionItems << "Foursquare";
+        selectionItems << "Skype";
         break;
     case NfcTypes::RecordTypeNameFormat:
         selectionItems << "Empty";

@@ -61,7 +61,9 @@ public:
         // If adding a new type that is included in stats, add it before here.
         MsgAnnotatedUrl,
         MsgCombination,
-        MsgNfcAutostart
+        MsgNfcAutostart,
+        MsgLaunchApp,
+        MsgAndroidAppRecord
     };
 
     /*!
@@ -141,7 +143,15 @@ public:
         RecordStoreAndroid,
         RecordStoreiOS,
         RecordStoreBlackberry,
-        RecordStoreCustomName
+        RecordStoreCustomName,
+
+        RecordLaunchAppArguments,
+        RecordLaunchAppWindows,
+        RecordLaunchAppWindowsPhone,
+        RecordLaunchAppPlatform,
+        RecordLaunchAppId,
+
+        RecordAndroidPackageName
     };
 
     /*!

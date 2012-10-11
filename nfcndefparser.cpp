@@ -128,6 +128,18 @@ QString NfcNdefParser::parseNdefMessage(const QNdefMessage &message)
             NdefNfcMimeVcardRecord vCardRecord(record);
             tagContents.append(parseVcardRecord(vCardRecord));
         }
+        else if (record.isRecordType<NdefNfcLaunchAppRecord>())
+        {
+            // ------------------------------------------------
+            // LaunchApp Record
+            tagContents.append(parseLaunchAppRecord(NdefNfcLaunchAppRecord(record)));
+        }
+        else if (record.isRecordType<NdefNfcAndroidAppRecord>())
+        {
+            // ------------------------------------------------
+            // Android Application Record
+            tagContents.append(parseAndroidAppRecord(NdefNfcAndroidAppRecord(record)));
+        }
         else if (record.typeNameFormat() == QNdefRecord::ExternalRtd) {
             // ------------------------------------------------
             // External type according to NFC RTD
@@ -372,7 +384,7 @@ QString NfcNdefParser::parseImageRecord(const NdefNfcMimeImageRecord& record)
 
 /*!
   \brief Create a textual description of the contents of the
-  Uri record.
+  VCard record.
 
   \param record the record to analyze
   \return plain text description of the record contents.
@@ -526,6 +538,72 @@ bool NfcNdefParser::addContactDetailToModel(const QString& detailName, const QSt
     return true;
 }
 
+/*!
+  \brief Create a textual description of the contents of the
+  LaunchApp record.
+
+  \param record the record to analyze
+  \return plain text description of the record contents.
+  */
+QString NfcNdefParser::parseLaunchAppRecord(const NdefNfcLaunchAppRecord& record)
+{
+    QString tagContents("[LaunchApp]\n");
+    tagContents.append("Arguments: " + record.arguments() + "\n");
+    tagContents.append("Defined platforms: " + QString::number(record.platformAppIdsCount()) + "\n");
+    QHashIterator<QString, QString> i(record.platformAppIds());
+    while (i.hasNext()) {
+        i.next();
+        tagContents.append("Platform: " + i.key() + "\n");
+        tagContents.append("App ID: " + i.value() + "\n");
+    }
+    if (!record.id().isNull() && !record.id().isEmpty()) {
+        tagContents.append("Record Id: " + record.id() + "\n");
+    }
+    if (m_parseToModel) {
+        m_nfcRecordModel->simpleAppendRecordHeaderItem(NfcTypes::MsgLaunchApp, true);
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordLaunchAppArguments, record.arguments(), false);
+        i.toFront();
+        while (i.hasNext()) {
+            i.next();
+            if (i.key() == "Windows") {
+                m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordLaunchAppWindows, i.value(), true);
+            } else if (i.key() == "WindowsPhone") {
+                m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordLaunchAppWindowsPhone, i.value(), true);
+            } else {
+                m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordLaunchAppPlatform, i.key(), true);
+                m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordLaunchAppId, i.value(), false);
+            }
+        }
+        if (!record.id().isNull() && !record.id().isEmpty()) {
+            m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordId, record.id(), true);
+        }
+    }
+    return tagContents;
+}
+
+/*!
+  \brief Create a textual description of the contents of the
+  Android Application Record.
+
+  \param record the record to analyze
+  \return plain text description of the record contents.
+  */
+QString NfcNdefParser::parseAndroidAppRecord(const NdefNfcAndroidAppRecord& record)
+{
+    QString tagContents("[Android Application Record]\n");
+    tagContents.append("Package name: " + record.packageName() + "\n");
+    if (!record.id().isNull() && !record.id().isEmpty()) {
+        tagContents.append("Id: " + record.id() + "\n");
+    }
+    if (m_parseToModel) {
+        m_nfcRecordModel->simpleAppendRecordHeaderItem(NfcTypes::MsgAndroidAppRecord, true);
+        m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordAndroidPackageName, record.packageName(), false);
+        if (!record.id().isNull() && !record.id().isEmpty()) {
+            m_nfcRecordModel->addContentToLastRecord(NfcTypes::RecordId, record.id(), true);
+        }
+    }
+    return tagContents;
+}
 
 
 /*!
@@ -558,6 +636,7 @@ QString NfcNdefParser::parseCustomRecord(const QNdefRecord& record)
     }
     return tagContents;
 }
+
 
 
 /*!

@@ -37,7 +37,7 @@ contains(DEFINES,UNLIMITED_VERSION) {
 } else {
     TARGET = nfcinteractor
 }
-VERSION = 4.10.0
+VERSION = 4.20.00
 
 
 symbian {
@@ -88,6 +88,7 @@ SOURCES += main.cpp \
     nfcstats.cpp \
     appsettings.cpp \
     nfcpeertopeer.cpp \
+    snepmanager.cpp \
     ndefnfcrecords/ndefnfcsprecord.cpp \
     ndefnfcrecords/ndefnfcmimeimagerecord.cpp \
     ndefnfcrecords/ndefnfcmimevcardrecord.cpp \
@@ -96,7 +97,8 @@ SOURCES += main.cpp \
     ndefnfcrecords/ndefnfcsmsrecord.cpp \
     ndefnfcrecords/ndefnfcsocialrecord.cpp \
     ndefnfcrecords/ndefnfcstorelinkrecord.cpp \
-    snepmanager.cpp
+    ndefnfcrecords/ndefnfcandroidapprecord.cpp \
+    ndefnfcrecords/ndefnfclaunchapprecord.cpp
 
 HEADERS += \
     nfcinfo.h \
@@ -112,6 +114,7 @@ HEADERS += \
     nfctypes.h \
     appsettings.h \
     nfcpeertopeer.h \
+    snepmanager.h \
     ndefnfcrecords/ndefnfcsprecord.h \
     ndefnfcrecords/ndefnfcmimeimagerecord.h \
     ndefnfcrecords/ndefnfcmimevcardrecord.h \
@@ -120,7 +123,8 @@ HEADERS += \
     ndefnfcrecords/ndefnfcsmsrecord.h \
     ndefnfcrecords/ndefnfcsocialrecord.h \
     ndefnfcrecords/ndefnfcstorelinkrecord.h \
-    snepmanager.h
+    ndefnfcrecords/ndefnfcandroidapprecord.h \
+    ndefnfcrecords/ndefnfclaunchapprecord.h
 
 simulator {
     # The simulator uses the QML and images from Symbian,
