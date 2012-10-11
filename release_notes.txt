@@ -68,6 +68,7 @@ Known bugs / issues:
   Only works on PR 1.2+, only for sending SNEP messages and not for receiving.
 - Limited SNEP support on Symbian: only possible to use service name urn:nfc:sn:snep, as using a connection-oriented port of 4 is not supported by the Qt APIs
 - Settings: auto-scrolling of settings page when opening virtual keyboard on Symbian not behaving correctly
+- Two records in a message, first has a payload, second no payload (length = 0, short record). Qt libraries keep the payload + size of the first record, instead of properly detecting an empty payload for the second record. See: https://bugreports.qt-project.org/browse/QTMOBILITY-2077
   
 Ideas for future updates:
 - Write a contact from the address book
