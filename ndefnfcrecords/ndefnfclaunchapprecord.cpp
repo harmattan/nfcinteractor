@@ -189,7 +189,7 @@ bool NdefNfcLaunchAppRecord::assemblePayload()
 {
     if (platformAppIdsCount() == 0)
     {
-        qDebug() << "Unable to assemble LaunchApp payload: at least one platform / AppID tuple is required.";
+        //qDebug() << "Unable to assemble LaunchApp payload: at least one platform / AppID tuple is required.";
         return false;
     }
 
