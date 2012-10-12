@@ -77,7 +77,7 @@ Page {
             errorMsg = qsTr("Please purchase the 'Advanced Tags' upgrade to write an unlimited number of advanced tag formats!");
         } else {
             // Harmattan - Full version in the Nokia Store
-            errorMsg = qsTr("Please purchase the unlimited version of the Nfc Interactor from the Nokia Store, to write an unlimited number of advanced messages to tags!");
+            errorMsg = qsTr("Please purchase the unlimited version of the Nfc Interactor from the Nokia Store to write an unlimited number of advanced messages to tags!");
         }
         upgradeAdvTagsButton.visible = true;
         tagWriteError(errorMsg);
@@ -270,7 +270,7 @@ Page {
                     visible: false
                     text: "Upgrade the App"
                     //iconSource: "buy.svg";    // When using the icon, the text is left-aligned, which doesn't look good here
-                    onClicked: Qt.openUrlExternally("http://www.nfcinteractor.com/dl.php?c=nfcinteractor")
+                    onClicked: Qt.openUrlExternally("http://www.nfcinteractor.com/dl.php?c=nfcinteractormeegoupgrade")
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
 
