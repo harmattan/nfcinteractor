@@ -155,6 +155,7 @@ void NdefNfcLaunchAppRecord::parsePayloadToData()
         char* platformRaw = new char[platformLength];
         int platformRawLength = ds.readRawData(platformRaw, platformLength);
         QString platformName = codec->toUnicode(platformRaw, platformRawLength);
+        delete[] platformRaw;
 
         // Length of the App Id
         quint8 appIdLength;
@@ -163,6 +164,7 @@ void NdefNfcLaunchAppRecord::parsePayloadToData()
         char* appIdRaw = new char[appIdLength];
         int appIdRawLength = ds.readRawData(appIdRaw, appIdLength);
         QString appId = codec->toUnicode(appIdRaw, appIdRawLength);
+        delete[] appIdRaw;
 
         // Add platform / app ID tuple to the dictionary
         m_platformAppIds.insert(platformName, appId);
@@ -176,6 +178,7 @@ void NdefNfcLaunchAppRecord::parsePayloadToData()
     char* argumentsRaw = new char[argumentsLength];
     int argumentsRawLength = ds.readRawData(argumentsRaw, argumentsLength);
     m_arguments = codec->toUnicode(argumentsRaw, argumentsRawLength);
+    delete[] argumentsRaw;
 }
 
 /*!
